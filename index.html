@@ -1,330 +1,1016 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Idle RPG v2.7</title><style>
-:root{font-family:system-ui,Arial;background:#101827;color:#e9eef8}*{box-sizing:border-box}body{margin:0}header{padding:15px 20px;background:#18263b;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}h1{font-size:21px;margin:0}button,select,input{font:inherit}button{background:#253b56;color:#fff;border:1px solid #45617f;border-radius:9px;padding:10px;cursor:pointer}button:hover,.selected{background:#34688a}button:disabled{opacity:.45;cursor:not-allowed}.layout{display:grid;grid-template-columns:210px minmax(0,1fr) 310px;gap:12px;padding:12px;max-width:1500px;margin:auto}.panel{background:#19263a;border:1px solid #2d4059;border-radius:12px;padding:14px;min-width:0}.nav{display:grid;gap:6px}.nav button{text-align:left}.stats{display:flex;gap:10px;flex-wrap:wrap;color:#b9cce2;font-size:13px}.action{border:1px solid #344e68;border-radius:10px;padding:12px;margin:9px 0;background:#1d3047;display:flex;justify-content:space-between;align-items:center;gap:8px}.action small{color:#b8cce0}.bar{height:17px;background:#0b1422;border-radius:20px;overflow:hidden;margin:12px 0}.fill{height:100%;width:0;background:linear-gradient(90deg,#1eab9c,#8cdb6a);transition:width .06s linear}.muted{color:#a8bad0}.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{flex:1}.item{display:flex;justify-content:space-between;border-bottom:1px solid #31445b;padding:8px 0;gap:6px;align-items:center}.item button{padding:5px 8px}.log{font-size:13px;max-height:200px;overflow:auto;color:#c0d2e7}.log div{padding:3px 0;border-bottom:1px solid #263950}.xpbar{height:7px;background:#0c1421;border-radius:5px;overflow:hidden;margin-top:5px}.xpbar div{height:100%;background:#78bbf5}.controls{display:flex;gap:6px;flex-wrap:wrap}.controls button{font-size:12px;padding:7px}input{width:100%;background:#101a29;border:1px solid #3c5773;border-radius:7px;padding:9px;color:white}h2{font-size:19px;margin:0 0 8px}h3{font-size:15px;margin:12px 0 6px}.pill{display:inline-block;background:#30475e;border-radius:20px;padding:4px 9px;font-size:12px;margin:3px}.hidden{display:none}.combat-styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.combat-choice{display:flex;flex-direction:column;text-align:left;gap:7px;min-width:0}.combat-choice span{font-size:12px}.health-panel{margin:14px 0;padding:12px;border:1px solid #36526f;background:#13283b;border-radius:10px}.health-panel h3:first-child{margin-top:0}.health-bar{height:10px;margin:7px 0}.health-bar .fill{background:linear-gradient(90deg,#e55465,#ff9b92)}#combatFood{display:flex;flex-wrap:wrap;gap:6px}#combatFood button{font-size:13px;padding:7px 9px}.combat-choice .xpbar{display:block;width:100%;margin:0}.combat-choice .xpbar span{display:block;height:100%;background:#78bbf5}@media(max-width:600px){.combat-styles{grid-template-columns:1fr}}@media(max-width:950px){.layout{grid-template-columns:170px minmax(0,1fr)}.right{grid-column:1/-1}}.mobile-skill-label,.mobile-skill-select{display:none}.mobile-skill-select{background:#101a29;color:#fff;border:1px solid #45617f;border-radius:9px;padding:12px;width:100%;font:inherit}@media(max-width:600px){.layout{grid-template-columns:1fr}.left{grid-column:1}.left .nav{display:none}.left h3{display:none}.mobile-skill-label,.mobile-skill-select{display:block}.mobile-skill-label{font-size:12px;color:#b9cce2;margin-bottom:6px}.right{grid-column:1}.panel{padding:11px}header{padding:12px}}
-#activityPanel{position:sticky;top:8px;z-index:15;background:#203a54;border:2px solid #64c8b6;border-radius:12px;padding:13px 15px;margin-bottom:16px;box-shadow:0 5px 18px #0006}#activityPanel .bar{height:27px;margin:9px 0;background:#091522;border:1px solid #446a80}#activityPanel .fill{background:linear-gradient(90deg,#20c8bb,#b4f579)}.activity-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700}.activity-status{font-size:14px;margin-top:4px;overflow-wrap:anywhere}.activity-footer{display:flex;align-items:center;justify-content:space-between;gap:10px}.activity-footer button{padding:5px 12px;font-size:12px}#progressText{font-weight:700;font-variant-numeric:tabular-nums}@media(max-width:600px){#activityPanel{top:4px;padding:10px}#activityPanel .bar{height:23px}}
-</style></head><body><header><div><h1>⚔️ Idle RPG <span class="muted">v2.9</span></h1><div class="stats" id="summary"></div></div><div class="controls"><button id="saveBtn">Save</button><button id="exportBtn">Export</button><button id="importBtn">Import</button><button id="resetBtn">Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header><div class="layout"><aside class="panel left"><h3>Skills</h3><nav class="nav" id="nav"></nav><label for="skillSelect" class="mobile-skill-label">Choose skill</label><select id="skillSelect" class="mobile-skill-select" aria-label="Choose skill"></select></aside><main class="panel"><section id="activityPanel" aria-label="Current activity"><div class="activity-heading"><span>⚡ Current Activity</span><span id="progressText">0%</span></div><div id="activityName" class="activity-status">Idle</div><div class="bar"><div class="fill" id="progressFill"></div></div><div class="activity-footer"><span class="muted">Action progress</span><button id="stopBtn">Stop</button></div></section><div id="main"></div></main><aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button></div><div id="sidebar"></div><h3>Activity log</h3><div class="log" id="log"></div></aside></div><script>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#101827">
+<title>Idle RPG – Skills & Adventure</title>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#e6eef9;background:#0c1422;color-scheme:dark;font-size:14px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 30% -20%,#253b54 0%,#0c1422 55%)}
+button,select,input{font:inherit}button{cursor:pointer;border:1px solid #3f5c77;background:#253c58;color:#ecf4fd;padding:9px 12px;border-radius:9px;transition:background .13s,border-color .13s}button:hover:not(:disabled){background:#335b7b;border-color:#6b96b3}button:disabled{opacity:.45;cursor:not-allowed}button.selected,.selected{background:#176477!important;border-color:#48c8c4!important;color:#fff}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #6cdbd1;outline-offset:2px}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:14px 22px;background:#16263a;border-bottom:1px solid #37506a;position:relative;z-index:2}
+h1{margin:0 0 5px;font-size:21px;letter-spacing:.2px}.version{font-size:11px;color:#a7bed5;font-weight:500}.stats{display:flex;gap:7px;flex-wrap:wrap}.stat{display:inline-flex;align-items:center;gap:5px;border:1px solid #3b536b;background:#102035;border-radius:14px;padding:5px 9px;font-size:12px;color:#c3d5e8}.top-controls{display:flex;gap:6px;flex-wrap:wrap}.top-controls button{padding:7px 9px;font-size:12px}
+.layout{display:grid;grid-template-columns:193px minmax(0,1fr) 320px;gap:13px;max-width:1600px;margin:0 auto;padding:13px;align-items:start}.panel{background:#19273a;border:1px solid #324a62;border-radius:13px;padding:14px;min-width:0;box-shadow:0 3px 12px #0002}.left,.right{position:sticky;top:9px;max-height:calc(100vh - 18px);overflow:auto;scrollbar-width:thin}.nav{display:grid;gap:5px}.nav button{text-align:left;width:100%;display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:600;padding:9px}.nav small{font-size:11px;color:#c1d7eb;font-weight:400;white-space:nowrap}.nav-divider{margin:11px 3px 7px;color:#87a7c1;letter-spacing:.1em;font-size:10px;font-weight:800;text-transform:uppercase}
+.main{min-height:680px}.right h3{margin-top:15px}.mobile-nav{display:none}.eyebrow{text-transform:uppercase;letter-spacing:.08em;color:#8db3c9;font-size:11px;font-weight:800;margin-bottom:5px}.heading{display:flex;gap:14px;align-items:start;justify-content:space-between;flex-wrap:wrap;margin-bottom:13px}.heading h2{margin:0 0 3px;font-size:23px}.subdued,.muted{color:#a6bcd3}.small{font-size:12px}.extra-small{font-size:11px}.section-title{font-size:16px;margin:17px 0 10px}.section-description{line-height:1.55;margin:6px 0 12px;color:#b0c7db}
+#activityPanel{position:sticky;top:8px;z-index:11;background:linear-gradient(125deg,#194055,#203651);border:2px solid #39baa9;border-radius:12px;padding:12px 15px;margin-bottom:17px;box-shadow:0 5px 19px #0007}.activity-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:800}.activity-info{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;color:#d7edf4}.activity-info span{overflow-wrap:anywhere}.bar{height:15px;background:#0a1727;border-radius:20px;overflow:hidden;border:1px solid #28455d;margin:9px 0}.bar.large{height:24px}.fill{height:100%;width:0;background:linear-gradient(90deg,#20b7bd,#b4ef75);transition:width .08s linear}.xpbar{height:8px;background:#0a1625;border-radius:12px;overflow:hidden;margin:7px 0 0}.xpbar .fill{background:linear-gradient(90deg,#3e93d7,#8dd4f4)}.healthbar .fill{background:linear-gradient(90deg,#d45560,#fb9a7c)}
+.activity-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center}.activity-bottom button{padding:5px 11px;font-size:12px}.activity-bottom small{font-size:11px;color:#b9d0d8}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0}.tabs button{padding:8px 10px;font-size:12px}.tabs button.selected{background:#197489}.skill-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:9px}.recipe-card{border:1px solid #38516b;border-radius:11px;padding:11px;background:#203149;display:flex;flex-direction:column;gap:7px;min-width:0}.recipe-card.is-locked{opacity:.7}.recipe-title{font-size:14px;font-weight:750}.recipe-detail{font-size:12px;color:#c0d0e0;line-height:1.5}.recipe-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}.recipe-bottom button{white-space:nowrap;padding:7px 10px}.recipe-badge{font-size:11px;border:1px solid #466783;background:#12263a;border-radius:12px;padding:3px 7px}.recipe-badge.level{color:#9bd9f9}.requirements{font-size:12px;display:flex;flex-wrap:wrap;gap:4px}.ingredient{background:#16273a;color:#d3e2ed;border:1px solid #33475d;border-radius:5px;padding:3px 5px}.ingredient.missing{border-color:#8c5260;color:#f4aaa9}
+.info-box{border:1px solid #34526c;background:#10263a;padding:11px 13px;border-radius:10px;margin:12px 0}.info-box p{margin:5px 0;font-size:12px}.gold{color:#f9d681}.positive{color:#8be9a6}.negative{color:#ff9aa6}.flexrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:8px}.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:8px;margin:11px 0}.stat-tile{background:#13273c;border:1px solid #365571;border-radius:10px;padding:10px}.stat-tile strong{display:block;font-size:17px;margin:4px 0}.stat-tile small{color:#a8c2d9;font-size:11px}
+input[type=search],input[type=number],input[type=text],select{width:100%;background:#101c2d;border:1px solid #47627e;border-radius:8px;color:#eef7ff;padding:9px 10px;min-width:0}select{cursor:pointer}.small-select{width:auto;min-width:105px}.shop-qty{max-width:92px}.form-label{display:block;font-size:12px;color:#b0cadc;margin:7px 0 4px}.checkbox-row{display:flex;align-items:center;gap:7px;font-size:13px;color:#dcebf8}.checkbox-row input{width:16px;height:16px}
+.bank-tools{display:grid;grid-template-columns:1fr auto;gap:7px}.bank-tools select{grid-column:1/-1}.bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px;align-items:start;margin-top:10px}.bank-grid.compact{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.bank-tile{position:relative;min-height:91px;padding:8px 4px 7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:5px;text-align:center;background:#172b40;border:1px solid #40576d;border-radius:9px;color:#e8f2fc;min-width:0}.bank-tile .item-name{font-size:10px;line-height:1.2;overflow-wrap:anywhere;max-width:100%}.bank-tile .stack{font-size:10px;border-radius:5px;background:#091b2f;padding:2px 5px;color:#ffd87f;font-variant-numeric:tabular-nums;max-width:100%;overflow:hidden;text-overflow:ellipsis}.bank-tile.active{outline:2px solid #5bd1ba;border-color:#5bd1ba}.bank-grid.compact .bank-tile{min-height:81px;padding:6px 2px}.bank-grid.compact .item-name{font-size:9px}.item-art{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;font-size:24px;background:#2e4961;box-shadow:inset 0 0 0 1px #ffffff0f}.item-art.tier-high{background:#51427c}.item-art.tier-rare{background:#79552c}.item-art.tier-epic{background:#613e66}.item-art.tier-basic{background:#244c58}.bank-grid.compact .item-art{width:29px;height:29px;font-size:21px}.bank-count{font-size:12px;color:#a7c3d9}.pager{display:flex;align-items:center;justify-content:center;gap:8px;margin:11px 0}.pager button{padding:5px 9px;font-size:12px}.pager span{font-variant-numeric:tabular-nums;font-size:11px;color:#bfd5e9}.selected-item{margin:11px 0;background:#10263b;border:1px solid #365671;border-radius:10px;padding:10px}.selected-item h4{margin:0 0 4px;font-size:13px}.selected-item p{font-size:12px;color:#b6cedd;margin:4px 0}.selected-item .controls{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.selected-item button{padding:5px 7px;font-size:11px}.selected-item .big-art{float:left;margin-right:10px}
+.gear-list{display:grid;grid-template-columns:1fr 1fr;gap:6px}.gear-slot{padding:8px;border:1px solid #37516a;border-radius:9px;background:#142a3c;min-width:0}.gear-slot .slot-name{display:block;font-size:10px;color:#8fb6ce;text-transform:uppercase;margin-bottom:4px}.gear-slot .slot-item{font-size:11px;overflow-wrap:anywhere;min-height:25px}.gear-slot button{padding:4px 6px;font-size:10px;margin-top:5px}.equipment-stats{font-size:12px;display:grid;gap:5px;margin:10px 0}.equipment-stats b{color:#91dfc8}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px}.shop-card{display:flex;gap:10px;align-items:start;padding:12px;background:#182f44;border:1px solid #38556e;border-radius:11px}.shop-card-content{flex:1;min-width:0}.shop-card h3{font-size:14px;margin:0 0 4px}.shop-card p{font-size:11px;color:#adc4d5;margin:5px 0 9px;line-height:1.4}.shop-card button{padding:6px 10px;font-size:12px}.sell-panel{margin-top:13px}.shop-owned{color:#a9c8db;font-size:11px}
+.fire-layout{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fire-tile{padding:11px;flex:1 1 190px;background:#3a3027;border:1px solid #8a6839;border-radius:10px}.fire-tile.out{background:#1a293b;border-color:#3c566e}.fire-tile h3{margin:0 0 4px}.fire-log-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:6px;flex:2 1 340px}.fire-log-grid button{padding:8px;text-align:left}.fire-log-grid button small{display:block;color:#afc7d6;font-size:11px;margin-top:3px}
+.combat-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.combat-choice{text-align:left;display:flex;flex-direction:column;gap:7px;min-width:0}.combat-choice span{font-size:12px}.health-box{margin:13px 0;padding:12px;background:#14283b;border:1px solid #3c5670;border-radius:10px}.health-box h3{margin:0 0 9px}.combat-monsters{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:8px}.monster{border:1px solid #39536c;background:#1b3146;padding:11px;border-radius:10px}.monster-name{font-size:14px;font-weight:800}.monster p{font-size:12px;line-height:1.55;color:#b7ccdf;margin:5px 0 9px}.monster button{padding:7px 11px}.food-controls{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.food-controls button{font-size:11px;padding:6px 8px}.buff-list{display:flex;flex-wrap:wrap;gap:5px}.buff-chip{background:#24495a;border:1px solid #477e83;border-radius:8px;padding:6px 9px;font-size:11px}
+.log{font-size:11px;line-height:1.4;max-height:210px;overflow:auto;color:#b9d0e3;scrollbar-width:thin}.log div{border-bottom:1px solid #2b4259;padding:5px 0}.log .level-msg{color:#f9d381}.log .loot-msg{color:#c0f0c2}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:50;padding:10px 18px;border-radius:10px;background:#204d5d;border:1px solid #58c3b4;box-shadow:0 8px 28px #0008;display:none;max-width:90vw;text-align:center}.toast.show{display:block}
+@media(max-width:1150px){.layout{grid-template-columns:160px minmax(0,1fr) 280px;gap:8px;padding:8px}.panel{padding:11px}.nav button{font-size:12px;padding:7px 6px}.bank-grid.compact{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:920px){.layout{grid-template-columns:155px minmax(0,1fr)}.right{position:relative;max-height:none;grid-column:2}.main{min-height:300px}}
+@media(max-width:650px){header{padding:12px}.layout{grid-template-columns:1fr;gap:8px;padding:8px}.left{position:relative;top:auto;max-height:none;padding:9px}.left .nav,.left .nav-divider{display:none}.mobile-nav{display:block}.right{grid-column:1}.main{padding:10px;min-height:240px}.heading h2{font-size:21px}.combat-choices{grid-template-columns:1fr}.combat-choice{flex-direction:row;flex-wrap:wrap;align-items:center}.combat-choice .xpbar{flex:1 1 100%}#activityPanel{top:4px;padding:10px}.skill-cards{grid-template-columns:1fr}.bank-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr))}.bank-grid.compact{grid-template-columns:repeat(5,minmax(0,1fr))}.right .panel{padding:10px}}
+@media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
+</style></head>
+<body>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.0 · Expanded World</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<div class="layout">
+<aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
+<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span>⚡ Current Activity</span><span id="progressText">0%</span></div><div class="activity-info"><span id="activityName">Idle · Choose an action</span></div><div class="bar large"><div class="fill" id="progressFill"></div></div><div class="activity-bottom"><small id="activityHint">All actions take 1 second while testing.</small><button id="stopBtn">Stop</button></div></section><div id="main"></div></main>
+<aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
+</div><div class="toast" id="toast" role="status"></div><script>
 'use strict';
-// Game content lives in data tables; adding a skill does not require rewriting the engine.
-const SKILLS={
-woodcutting:{icon:'🪓',actions:[['Normal Tree','Logs',1,10],['Oak Tree','Oak Logs',10,25],['Willow Tree','Willow Logs',25,45]]},
-fishing:{icon:'🎣',actions:[
- ['Shrimp Spot','Shrimp',1,10],['Sardine Shore','Sardine',5,15],['Herring Shoal','Herring',10,20],
- ['Trout Stream','Trout',15,30],['Salmon River','Salmon',25,45],['Tuna Deepwater','Tuna',35,65],
- ['Lobster Traps','Lobster',45,85],['Swordfish Grounds','Swordfish',55,110],
- ['Monkfish Lake','Monkfish',65,145],['Shark Waters','Shark',75,185],
- ['Manta Ray Reef','Manta Ray',85,245],['Leviathan Depths','Leviathan',95,330]]},
-mining:{icon:'⛏️',actions:[
- ['Copper Rock','Copper Ore',1,12],['Tin Rock','Tin Ore',1,12],
- ['Iron Rock','Iron Ore',15,35],['Coal Vein','Coal',25,42],
- ['Mithril Rock','Mithril Ore',40,75],['Rune Rock','Rune Ore',70,175]]},
-smithing:{icon:'🔨',actions:[
- ['Smelt Bronze Bar','Bronze Bar',1,25,{'Copper Ore':1,'Tin Ore':1}],
- ['Forge Bronze Sword','Bronze Sword',5,45,{'Bronze Bar':2}],
- ['Smelt Iron Bar','Iron Bar',15,45,{'Iron Ore':2}],
- ['Forge Iron Sword','Iron Sword',20,65,{'Iron Bar':3}],
- ['Smelt Steel Bar','Steel Bar',25,65,{'Iron Ore':2,'Coal':1}],
- ['Forge Steel Sword','Steel Sword',30,90,{'Steel Bar':3}],
- ['Smelt Mithril Bar','Mithril Bar',45,115,{'Mithril Ore':2,'Coal':2}],
- ['Forge Mithril Sword','Mithril Sword',50,165,{'Mithril Bar':4}],
- ['Smelt Rune Bar','Rune Bar',70,220,{'Rune Ore':2,'Coal':3}],
- ['Forge Rune Sword','Rune Sword',75,310,{'Rune Bar':5}]]},
-crafting:{icon:'🧵',actions:[
-['Craft Wooden Shield','Wooden Shield',1,25,{'Logs':3},'equipment'],
-['Craft Oak Shield','Oak Shield',10,50,{'Oak Logs':3},'equipment'],
-['Craft Iron Shield','Iron Shield',20,70,{'Iron Bar':3},'equipment'],
-['Craft Steel Shield','Steel Shield',35,105,{'Steel Bar':4},'equipment'],
-['Craft Mithril Shield','Mithril Shield',55,175,{'Mithril Bar':5},'equipment'],
-['Craft Rune Shield','Rune Shield',80,330,{'Rune Bar':6},'equipment'],
-['Spin Wool','Ball of Wool',1,15,{'Wool':2},'materials'],
-['Cut Opal','Opal',1,25,{'Uncut Opal':1},'gems'],
-['Cut Jade','Jade',5,35,{'Uncut Jade':1},'gems'],
-['Cut Red Topaz','Red Topaz',10,45,{'Uncut Red Topaz':1},'gems'],
-['Cut Sapphire','Sapphire',15,55,{'Uncut Sapphire':1},'gems'],
-['Cut Emerald','Emerald',25,70,{'Uncut Emerald':1},'gems'],
-['Cut Ruby','Ruby',35,90,{'Uncut Ruby':1},'gems'],
-['Cut Diamond','Diamond',45,115,{'Uncut Diamond':1},'gems'],
-['Cut Dragonstone','Dragonstone',55,140,{'Uncut Dragonstone':1},'gems'],
-['Cut Onyx','Onyx',70,180,{'Uncut Onyx':1},'gems'],
-['Cut Zenyte','Zenyte',85,240,{'Uncut Zenyte':1},'gems']
-]},
-cooking:{icon:'🍳',actions:[
- ['Cook Shrimp','Cooked Shrimp',1,20,{'Shrimp':1}],
- ['Cook Sardine','Cooked Sardine',5,28,{'Sardine':1}],
- ['Cook Herring','Cooked Herring',10,35,{'Herring':1}],
- ['Cook Trout','Cooked Trout',15,45,{'Trout':1}],
- ['Cook Salmon','Cooked Salmon',25,65,{'Salmon':1}],
- ['Cook Tuna','Cooked Tuna',35,85,{'Tuna':1}],
- ['Cook Lobster','Cooked Lobster',45,115,{'Lobster':1}],
- ['Cook Swordfish','Cooked Swordfish',55,150,{'Swordfish':1}],
- ['Cook Monkfish','Cooked Monkfish',65,200,{'Monkfish':1}],
- ['Cook Shark','Cooked Shark',75,260,{'Shark':1}],
- ['Cook Manta Ray','Cooked Manta Ray',85,350,{'Manta Ray':1}],
- ['Cook Leviathan','Cooked Leviathan',95,480,{'Leviathan':1}]]},
-agriculture:{icon:'🌱',actions:[['Grow Herbs','Herb',1,20],['Grow Potatoes','Potato',5,30],['Grow Berries','Berries',12,45],['Raise Chickens','Egg',1,20],['Tend Sheep','Wool',8,35],['Milk Cows','Milk',15,50]]},
-herblore:{icon:'🧪',actions:[['Brew Healing Potion','Healing Potion',1,45,{'Herb':2,'Berries':1}],['Brew Strength Potion','Strength Potion',10,70,{'Herb':3,'Potato':1}]]},
-attack:{icon:'🗡️',combat:true},strength:{icon:'💪',combat:true},defence:{icon:'🛡️',combat:true},hitpoints:{icon:'❤️',name:'Hitpoints',combat:true}
+// ──────────────────────────────────────────────────────────────────────────────
+// IDLE RPG v3.0 · CHANGE GAME SETTINGS HERE
+// ──────────────────────────────────────────────────────────────────────────────
+const GAME_CONFIG = {
+  actionMs: 1000,            // Testing speed: 1 second for every action
+  bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
+  bankPageSize: 48,
+  sidebarPageSize: 24,
+  treasureChance: 0.10,      // Base chance for a random gem per monster kill
+  shopSellMultiplier: 0.40,
+  maxFireSeconds: 7200
+};
+const COMBAT_CONFIG = {
+  maxLevel: 120,             // Change this when adding ranged, magic, prayer etc.
+  skillMaxLevel: 99,
+  skills: ['attack','strength','defence','hitpoints']
+};
+const FIRE_FUEL = {
+  'Logs':60, 'Oak Logs':120, 'Willow Logs':180, 'Maple Logs':240,
+  'Yew Logs':300, 'Magic Logs':420, 'Redwood Logs':600, 'Elder Logs':900
+};
+const TREASURE_TABLE = [
+  ['Uncut Opal',40],['Uncut Jade',24],['Uncut Red Topaz',17],
+  ['Uncut Sapphire',11],['Uncut Emerald',6],['Uncut Ruby',3],
+  ['Uncut Diamond',2],['Uncut Dragonstone',0.7],['Uncut Onyx',0.2],['Uncut Zenyte',0.1]
+];
+const TREASURE_CHANCE = GAME_CONFIG.treasureChance;
+const A=(name,output,level,xp,cost={},category='General',options={})=>({name,output,level,xp,cost,category,...options});
+const SKILLS = {
+ woodcutting:{icon:'🪓',description:'Gather wood for cooking fires, shields, bows, and workshop recipes.',actions:[
+   A('Normal Tree','Logs',1,10),A('Oak Tree','Oak Logs',10,25),
+   A('Willow Tree','Willow Logs',25,45),A('Maple Tree','Maple Logs',40,65),
+   A('Yew Tree','Yew Logs',55,105),A('Magic Tree','Magic Logs',75,250),
+   A('Redwood Tree','Redwood Logs',90,350),A('Elder Tree','Elder Logs',95,470)]},
+ fishing:{icon:'🎣',description:'Catch fish and seafood for Cooking, combat food, and shop income.',actions:[
+   A('Shrimp Spot','Shrimp',1,10),A('Sardine Shore','Sardine',5,15),
+   A('Crab Pots','Crab',8,18),A('Herring Shoal','Herring',10,20),
+   A('Trout Stream','Trout',15,30),A('Cod Banks','Cod',20,37),
+   A('Salmon River','Salmon',25,45),A('Eel Marsh','Eel',30,55),
+   A('Tuna Deepwater','Tuna',35,65),A('Lobster Traps','Lobster',45,85),
+   A('Swordfish Grounds','Swordfish',55,110),A('Monkfish Lake','Monkfish',65,145),
+   A('Shark Waters','Shark',75,185),A('Anglerfish Trench','Anglerfish',80,220),
+   A('Manta Ray Reef','Manta Ray',85,245),A('Leviathan Depths','Leviathan',95,330)]},
+ mining:{icon:'⛏️',description:'Mine ores for bars, gear, jewellery, and rare crafting materials.',actions:[
+   A('Clay Deposit','Clay',1,8),A('Copper Rock','Copper Ore',1,12),
+   A('Tin Rock','Tin Ore',1,12),A('Limestone Ridge','Limestone',8,20),
+   A('Iron Rock','Iron Ore',15,35),A('Silver Vein','Silver Ore',20,40),
+   A('Coal Vein','Coal',25,42),A('Gold Vein','Gold Ore',35,60),
+   A('Mithril Rock','Mithril Ore',40,75),A('Obsidian Formation','Obsidian',50,95),
+   A('Adamant Rock','Adamant Ore',55,115),A('Rune Rock','Rune Ore',70,175),
+   A('Ancient Crystal Vein','Ancient Crystal',85,260),A('Dragonite Ore','Dragonite Ore',95,350)]},
+ smithing:{icon:'🔨',description:'Smelt metal bars, forge armour, swords, shields, tools, and arrowheads.',actions:[]},
+ crafting:{icon:'🧵',description:'Cut gems, process hides and wool, craft armour, amulets, and powerful rings.',actions:[]},
+ cooking:{icon:'🍳',description:'Cook fish and meals over a lit wood fire. Fuel burns for real time, even while you train another skill.',actions:[]},
+ agriculture:{icon:'🌱',description:'Grow crops, herbs and animal feed. Care for animals for wool, hides, milk, meat and eggs.',actions:[
+   A('Gather Common Herbs','Herb',1,20,{},'Crops'),
+   A('Harvest Potatoes','Potato',5,28,{},'Crops'),
+   A('Grow Wheat','Wheat',8,30,{},'Crops'),
+   A('Gather Berries','Berries',12,40,{},'Crops'),
+   A('Grow Carrots','Carrot',16,55,{'Carrot Seed':1},'Crops',{quantity:3}),
+   A('Grow Flax','Flax',22,70,{'Flax Seed':1},'Crops',{quantity:3}),
+   A('Grow Mushrooms','Mushroom',30,90,{'Mushroom Spores':1},'Crops',{quantity:2}),
+   A('Grow Corn','Corn',40,125,{'Corn Seed':1},'Crops',{quantity:3}),
+   A('Grow Highland Herb','Highland Herb',55,170,{'Highland Seed':1},'Crops',{quantity:2}),
+   A('Grow Mystic Herbs','Mystic Herb',70,230,{'Mystic Seed':1},'Crops',{quantity:2}),
+   A('Grow Sunfruit','Sunfruit',85,320,{'Sunfruit Seed':1},'Crops',{quantity:2}),
+   A('Gather Chicken Eggs','Egg',1,18,{'Wheat':1},'Animals',{quantity:2}),
+   A('Collect Chicken Meat','Raw Chicken',5,30,{'Wheat':2},'Animals'),
+   A('Shear Sheep','Wool',8,35,{'Wheat':1},'Animals',{quantity:2}),
+   A('Milk Cow','Milk',15,50,{'Wheat':2},'Animals',{quantity:2}),
+   A('Raise Cattle','Raw Beef',20,65,{'Wheat':3},'Animals',{bonus:{'Cowhide':1}}),
+   A('Feed Lambs','Raw Lamb',25,75,{'Wheat':2},'Animals',{bonus:{'Wool':1}}),
+   A('Collect Feathers','Feather',35,90,{'Wheat':2},'Animals',{quantity:5}),
+   A('Raise Mountain Goats','Goat Horn',55,145,{'Corn':2},'Animals',{bonus:{'Milk':2}}),
+   A('Breed Exotic Cattle','Thick Hide',75,255,{'Corn':3,'Sunfruit':1},'Animals')
+ ]},
+ herblore:{icon:'🧪',description:'Turn herbs, farm produce, rare drops and gems into healing and temporary boosts.',actions:[
+   A('Brew Healing Potion','Healing Potion',1,45,{'Herb':2,'Berries':1},'Healing'),
+   A('Brew Greater Healing Potion','Greater Healing Potion',25,95,{'Herb':3,'Mushroom':1},'Healing'),
+   A('Brew Superior Healing Potion','Superior Healing Potion',55,175,{'Highland Herb':2,'Sunfruit':1},'Healing'),
+   A('Brew Ultimate Healing Potion','Ultimate Healing Potion',85,310,{'Mystic Herb':2,'Dragon Scale':1},'Healing'),
+   A('Brew Strength Potion','Strength Potion',10,70,{'Herb':3,'Potato':1},'Combat'),
+   A('Brew Accuracy Potion','Accuracy Potion',18,85,{'Herb':2,'Carrot':1},'Combat'),
+   A('Brew Defence Potion','Defence Potion',25,105,{'Herb':2,'Mushroom':1},'Combat'),
+   A('Brew Battle Potion','Battle Potion',45,170,{'Strength Potion':1,'Accuracy Potion':1,'Defence Potion':1},'Combat'),
+   A('Brew Master Battle Potion','Master Battle Potion',80,300,{'Battle Potion':1,'Mystic Herb':3,'Dragon Scale':1},'Combat'),
+   A('Brew Wisdom Potion','Wisdom Potion',35,130,{'Highland Herb':1,'Berries':2},'Utility'),
+   A('Brew Greater Wisdom Potion','Greater Wisdom Potion',75,285,{'Mystic Herb':2,'Ancient Crystal':1},'Utility'),
+   A('Brew Luck Potion','Luck Potion',50,190,{'Highland Herb':2,'Jade':1},'Utility'),
+   A('Brew Greater Luck Potion','Greater Luck Potion',85,350,{'Mystic Herb':2,'Dragonstone':1},'Utility'),
+   A('Brew Gathering Potion','Gathering Potion',40,155,{'Highland Herb':2,'Flax':1},'Utility')
+ ]},
+ attack:{icon:'🗡️',combat:true},strength:{icon:'💪',combat:true},
+ defence:{icon:'🛡️',combat:true},hitpoints:{icon:'❤️',combat:true}
+};
+// More smithing is generated from a small, editable metal progression table.
+const METALS = [
+ {name:'Bronze',level:1,forge:5,xp:25,cost:{'Copper Ore':1,'Tin Ore':1},ingot:1},
+ {name:'Iron',level:15,forge:20,xp:45,cost:{'Iron Ore':2},ingot:1},
+ {name:'Steel',level:25,forge:30,xp:65,cost:{'Iron Ore':2,'Coal':1},ingot:1},
+ {name:'Mithril',level:45,forge:50,xp:115,cost:{'Mithril Ore':2,'Coal':2},ingot:1},
+ {name:'Adamant',level:55,forge:60,xp:155,cost:{'Adamant Ore':2,'Coal':3},ingot:1},
+ {name:'Rune',level:70,forge:75,xp:220,cost:{'Rune Ore':2,'Coal':4},ingot:1},
+ {name:'Dragonite',level:92,forge:95,xp:370,cost:{'Dragonite Ore':2,'Coal':6,'Ancient Crystal':1},ingot:1}
+];
+const EQUIPMENT = {};
+function registerGear(item,stats){EQUIPMENT[item]=stats}
+for(const metal of METALS){
+ const m=metal.name,bar=m+' Bar',basic=Math.max(1,metal.forge),forge=SKILLS.smithing.actions;
+ forge.push(A('Smelt '+bar,bar,metal.level,metal.xp,metal.cost,'Bars'));
+ const specs=[['Sword',3,'weapon'],['Shield',3,'shield'],['Helm',2,'head'],['Chestplate',5,'body'],['Platelegs',4,'legs'],['Axe',2,'axe'],['Pickaxe',2,'pickaxe'],['Arrowheads',1,null]];
+ for(const [kind,bars,slot] of specs){
+  const item=m+' '+kind;
+  const level=Math.min(99,basic+({Sword:0,Shield:1,Helm:2,Chestplate:4,Platelegs:3,Axe:0,Pickaxe:1,Arrowheads:0}[kind]||0));
+  forge.push(A('Forge '+item,item,level,Math.round(metal.xp*(.65+bars*.54)),{[bar]:bars},'Gear',{quantity:kind==='Arrowheads'?20:1}));
+  if(slot){
+    const tier=METALS.indexOf(metal),v=[4,9,17,30,39,46,61][tier],def=[4,14,24,38,47,58,75][tier];
+    const stat={slot,requiredLevel:[1,10,20,35,50,65,80][METALS.indexOf(metal)]};
+    if(slot==='weapon')Object.assign(stat,{attack:v,strength:Math.round(v*.38)});
+    if(slot==='shield')Object.assign(stat,{defence:def,block:Math.ceil(def*.21)});
+    if(slot==='head'||slot==='body'||slot==='legs')Object.assign(stat,{defence:Math.round(def*(slot==='body'?1.4:slot==='legs'?.85:.55))});
+    if(slot==='axe')stat.woodcuttingYield=.03+tier*.035;
+    if(slot==='pickaxe')stat.miningYield=.03+tier*.035;
+    registerGear(item,stat);
+  }
+ }
+}
+SKILLS.smithing.actions.push(
+ A('Smelt Silver Bar','Silver Bar',20,55,{'Silver Ore':2},'Bars'),
+ A('Smelt Gold Bar','Gold Bar',35,90,{'Gold Ore':2},'Bars'),
+ A('Forge Silver Wire','Silver Wire',25,60,{'Silver Bar':1},'Materials',{quantity:3}),
+ A('Forge Silver Ring Blank','Silver Ring Blank',28,65,{'Silver Bar':1},'Materials'),
+ A('Forge Gold Ring Blank','Gold Ring Blank',40,95,{'Gold Bar':1},'Materials'),
+ A('Forge Gold Amulet Blank','Gold Amulet Blank',42,105,{'Gold Bar':1},'Materials'),
+ A('Forge Steel Nails','Steel Nails',35,75,{'Steel Bar':1},'Materials',{quantity:10}),
+ A('Forge Rune Nails','Rune Nails',80,220,{'Rune Bar':1},'Materials',{quantity:10})
+);
+// Wood shields and craftable leather gear retain the original game progression.
+SKILLS.crafting.actions.push(
+ A('Craft Wooden Shield','Wooden Shield',1,25,{'Logs':3},'Armour'),
+ A('Craft Oak Shield','Oak Shield',10,50,{'Oak Logs':3},'Armour'),
+ A('Weave Linen','Linen',15,45,{'Flax':2},'Materials',{quantity:2}),
+ A('Spin Wool','Ball of Wool',1,15,{'Wool':2},'Materials'),
+ A('Tan Cowhide','Leather',12,40,{'Cowhide':1},'Materials'),
+ A('Tan Thick Hide','Hard Leather',55,130,{'Thick Hide':1},'Materials'),
+ A('Craft Leather Gloves','Leather Gloves',15,55,{'Leather':2},'Armour'),
+ A('Craft Leather Body','Leather Body',20,80,{'Leather':4,'Linen':1},'Armour'),
+ A('Craft Hard Leather Body','Hard Leather Body',58,180,{'Hard Leather':4,'Linen':2},'Armour'),
+ A('Craft Adventurer Cape','Adventurer Cape',20,85,{'Linen':4,'Ball of Wool':2},'Armour'),
+ A('Craft Explorer Cape','Explorer Cape',65,255,{'Linen':8,'Hard Leather':2,'Ancient Token':1},'Armour'),
+ A('Craft Oak Staff','Oak Staff',20,70,{'Oak Logs':2,'Silver Wire':1},'Armour'),
+ A('Craft Magic Staff','Magic Staff',75,270,{'Magic Logs':2,'Ancient Crystal':1},'Armour'),
+ A('Make Woodland Charm','Woodland Charm',25,90,{'Willow Logs':1,'Ball of Wool':1,'Herb':1},'Jewellery')
+);
+registerGear('Wooden Shield',{slot:'shield',defence:4,block:1});
+registerGear('Oak Shield',{slot:'shield',defence:8,block:2});
+registerGear('Leather Gloves',{slot:'gloves',defence:3});
+registerGear('Leather Body',{slot:'body',defence:12});
+registerGear('Hard Leather Body',{slot:'body',defence:26});
+registerGear('Adventurer Cape',{slot:'cape',defence:3,xpBonus:.02});
+registerGear('Explorer Cape',{slot:'cape',defence:11,xpBonus:.05});
+registerGear('Oak Staff',{slot:'weapon',attack:9,strength:5});
+registerGear('Magic Staff',{slot:'weapon',attack:35,strength:17});
+registerGear('Woodland Charm',{slot:'amulet',woodcuttingYield:.10,agricultureYield:.10});
+const GEMS=['Opal','Jade','Red Topaz','Sapphire','Emerald','Ruby','Diamond','Dragonstone','Onyx','Zenyte'];
+GEMS.forEach((gem,i)=>SKILLS.crafting.actions.push(A('Cut '+gem,gem,[1,5,10,15,25,35,45,55,70,85][i],[25,35,45,55,70,90,115,140,180,240][i],{['Uncut '+gem]:1},'Gems')));
+// Specific amulet / ring effects are shown in the Equipment panel and applied in combat/XP.
+const JEWELLERY = [
+ ['Strength Amulet','Ruby','Gold Amulet Blank',30,130,{strengthPct:.10}],
+ ['Defence Amulet','Emerald','Gold Amulet Blank',30,130,{defencePct:.10}],
+ ['Accuracy Amulet','Sapphire','Gold Amulet Blank',30,130,{attackPct:.10}],
+ ['Power Amulet','Diamond','Gold Amulet Blank',50,220,{strengthPct:.10,attackPct:.10,defencePct:.10}],
+ ['Wisdom Amulet','Dragonstone','Gold Amulet Blank',70,280,{xpBonus:.08}],
+ ['Guardian Amulet','Onyx','Gold Amulet Blank',85,410,{defencePct:.16,strengthPct:.06}],
+ ['Lucky Ring','Jade','Silver Ring Blank',18,95,{luckBonus:.25}],
+ ["Scholar's Ring",'Emerald','Gold Ring Blank',45,180,{xpBonus:.10}],
+ ['Warrior Ring','Ruby','Gold Ring Blank',55,225,{strengthPct:.07}],
+ ['Protector Ring','Sapphire','Gold Ring Blank',55,225,{defencePct:.07}],
+ ['Precision Ring','Diamond','Gold Ring Blank',65,260,{attackPct:.07}],
+ ['Gatherer Ring','Dragonstone','Gold Ring Blank',75,310,{gatherBonus:.12}],
+ ['Mastery Ring','Zenyte','Gold Ring Blank',95,520,{xpBonus:.15,attackPct:.05,strengthPct:.05,defencePct:.05}]
+];
+for(const [item,gem,blank,lvl,xp,buffs] of JEWELLERY){
+ const cost={[blank]:1,[gem]:1};if(item.includes('Amulet'))cost['Ball of Wool']=1;
+ SKILLS.crafting.actions.push(A('Craft '+item,item,lvl,xp,cost,'Jewellery'));
+ registerGear(item,{slot:item.includes('Amulet')?'amulet':'ring',...buffs});
+}
+// Upgrades for rare monster uniques. They are deliberately NOT in the shop.
+registerGear('Fortune Ring',{slot:'ring',luckBonus:.75});
+registerGear('Ancient Scholar Charm',{slot:'amulet',xpBonus:.12});
+registerGear('Abyssal Blade',{slot:'weapon',attack:64,strength:27});
+registerGear('Dragonheart Amulet',{slot:'amulet',strengthPct:.15,attackPct:.15,defencePct:.15});
+registerGear('Forest Guardian Shield',{slot:'shield',defence:35,block:8,agricultureYield:.10});
+registerGear('Troll King Ring',{slot:'ring',strengthPct:.12});
+registerGear('Voidborn Cape',{slot:'cape',xpBonus:.08,defence:17});
+SKILLS.crafting.actions.push(
+ A('Reinforce Forest Guardian Shield','Forest Guardian Shield',60,230,{'Wooden Shield':1,'Ancient Token':3,'Mithril Bar':2},'Rare Gear'),
+ A('Craft Voidborn Cape','Voidborn Cape',90,380,{'Explorer Cape':1,'Abyss Shard':3,'Onyx':1},'Rare Gear'),
+ A('Craft Dragon Scale Armour','Dragon Scale Body',95,450,{'Dragon Scale':5,'Hard Leather':3,'Rune Bar':2},'Rare Gear'),
+ A('Weave Spirit Thread','Spirit Thread',80,230,{'Mystic Herb':2,'Ball of Wool':2,'Ancient Crystal':1},'Materials')
+);
+registerGear('Dragon Scale Body',{slot:'body',defence:95});
+const FOOD={
+ 'Cooked Shrimp':4,'Cooked Sardine':6,'Cooked Crab':7,'Cooked Herring':8,
+ 'Cooked Trout':12,'Cooked Cod':15,'Cooked Salmon':18,'Cooked Eel':22,
+ 'Cooked Tuna':28,'Cooked Lobster':45,'Cooked Swordfish':70,'Cooked Monkfish':95,
+ 'Cooked Shark':135,'Cooked Anglerfish':160,'Cooked Manta Ray':185,'Cooked Leviathan':250,
+ 'Cooked Chicken':10,'Cooked Beef':25,'Cooked Lamb':32,
+ 'Baked Potato':14,'Bread':20,'Carrot Soup':28,'Fish Stew':55,'Meat Pie':75,
+ 'Seafood Platter':130,'Royal Feast':250,
+ 'Potato':6,'Berries':4,'Egg':5,'Milk':8,'Carrot':8,'Sunfruit':40
+};
+const FISH_TO_COOK=['Shrimp','Sardine','Crab','Herring','Trout','Cod','Salmon','Eel','Tuna','Lobster','Swordfish','Monkfish','Shark','Anglerfish','Manta Ray','Leviathan'];
+FISH_TO_COOK.forEach((fish,i)=>SKILLS.cooking.actions.push(A('Cook '+fish,'Cooked '+fish,[1,5,8,10,15,20,25,30,35,45,55,65,75,80,85,95][i],[20,28,30,35,45,50,65,72,85,115,150,200,260,310,350,480][i],{[fish]:1},'Fish',{requiresFire:true})));
+SKILLS.cooking.actions.push(
+ A('Roast Chicken','Cooked Chicken',5,28,{'Raw Chicken':1},'Meat',{requiresFire:true}),
+ A('Roast Beef','Cooked Beef',20,65,{'Raw Beef':1},'Meat',{requiresFire:true}),
+ A('Roast Lamb','Cooked Lamb',30,90,{'Raw Lamb':1},'Meat',{requiresFire:true}),
+ A('Bake Potato','Baked Potato',10,32,{'Potato':1},'Meals',{requiresFire:true}),
+ A('Bake Bread','Bread',20,55,{'Wheat':2,'Milk':1},'Meals',{requiresFire:true}),
+ A('Make Carrot Soup','Carrot Soup',35,115,{'Carrot':2,'Milk':1,'Mushroom':1},'Meals',{requiresFire:true}),
+ A('Make Fish Stew','Fish Stew',45,160,{'Cooked Cod':1,'Potato':2,'Carrot':1},'Meals',{requiresFire:true}),
+ A('Bake Meat Pie','Meat Pie',55,215,{'Cooked Beef':2,'Wheat':2,'Egg':1},'Meals',{requiresFire:true}),
+ A('Make Seafood Platter','Seafood Platter',75,335,{'Cooked Shark':1,'Cooked Lobster':1,'Carrot':2},'Meals',{requiresFire:true}),
+ A('Prepare Royal Feast','Royal Feast',95,600,{'Cooked Leviathan':1,'Cooked Anglerfish':1,'Cooked Beef':2,'Sunfruit':2},'Meals',{requiresFire:true})
+);
+const POTIONS={
+ 'Healing Potion':{heal:30,description:'Instantly restores 30 HP'},
+ 'Greater Healing Potion':{heal:90,description:'Instantly restores 90 HP'},
+ 'Superior Healing Potion':{heal:220,description:'Instantly restores 220 HP'},
+ 'Ultimate Healing Potion':{heal:500,description:'Instantly restores 500 HP'},
+ 'Strength Potion':{buff:'strengthPct',value:.15,duration:300,description:'+15% Strength for 5 minutes'},
+ 'Accuracy Potion':{buff:'attackPct',value:.15,duration:300,description:'+15% Accuracy for 5 minutes'},
+ 'Defence Potion':{buff:'defencePct',value:.15,duration:300,description:'+15% Defence for 5 minutes'},
+ 'Battle Potion':{buffs:{strengthPct:.15,attackPct:.15,defencePct:.15},duration:300,description:'+15% all combat stats for 5 minutes'},
+ 'Master Battle Potion':{buffs:{strengthPct:.25,attackPct:.25,defencePct:.25},duration:300,description:'+25% all combat stats for 5 minutes'},
+ 'Wisdom Potion':{buff:'xpBonus',value:.15,duration:300,description:'+15% XP for 5 minutes'},
+ 'Greater Wisdom Potion':{buff:'xpBonus',value:.25,duration:300,description:'+25% XP for 5 minutes'},
+ 'Luck Potion':{buff:'luckBonus',value:.25,duration:300,description:'+25% treasure chance for 5 minutes'},
+ 'Greater Luck Potion':{buff:'luckBonus',value:.60,duration:300,description:'+60% treasure chance for 5 minutes'},
+ 'Gathering Potion':{buff:'gatherBonus',value:.15,duration:300,description:'+15% extra gathering chance for 5 minutes'}
 };
 const MONSTERS=[
- {name:'Rat',level:1,hp:10,def:1,atk:1,maxHit:2,loot:{'Rat Tail':1},xp:12},
- {name:'Goblin',level:8,hp:35,def:7,atk:8,maxHit:5,loot:{'Coins':8},xp:30},
- {name:'Skeleton',level:18,hp:85,def:16,atk:18,maxHit:10,loot:{'Bones':2},xp:65},
- {name:'Forest Guardian',level:30,hp:165,def:28,atk:30,maxHit:18,loot:{'Ancient Token':1},xp:140},
- {name:'Cave Troll',level:50,hp:300,def:46,atk:50,maxHit:28,loot:{'Troll Fang':1,'Coins':35},xp:240},
- {name:'Abyss Warden',level:70,hp:520,def:68,atk:70,maxHit:44,loot:{'Abyss Shard':1,'Coins':75},xp:480},
- {name:'Ancient Dragon',level:90,hp:850,def:87,atk:90,maxHit:64,loot:{'Dragon Scale':2,'Coins':150},xp:800}
+ {name:'Rat',level:1,hp:10,def:1,atk:1,maxHit:2,loot:{'Rat Tail':1,'Coins':3},unique:null},
+ {name:'Chicken',level:2,hp:14,def:2,atk:2,maxHit:2,loot:{'Feather':3,'Raw Chicken':1,'Coins':4},unique:null},
+ {name:'Goblin',level:8,hp:35,def:7,atk:8,maxHit:5,loot:{'Coins':8,'Goblin Ear':1},unique:null},
+ {name:'Skeleton',level:18,hp:85,def:16,atk:18,maxHit:10,loot:{'Bones':2,'Coins':15},unique:null},
+ {name:'Bandit',level:22,hp:120,def:21,atk:24,maxHit:13,loot:{'Coins':35,'Leather':1},unique:null},
+ {name:'Forest Guardian',level:30,hp:165,def:28,atk:30,maxHit:18,loot:{'Ancient Token':1,'Oak Logs':2,'Coins':45},unique:{item:'Ancient Scholar Charm',chance:.005}},
+ {name:'Swamp Witch',level:36,hp:210,def:30,atk:33,maxHit:21,loot:{'Herb':3,'Highland Herb':1,'Coins':50},unique:{item:'Fortune Ring',chance:.004}},
+ {name:'Cave Troll',level:50,hp:300,def:46,atk:50,maxHit:28,loot:{'Troll Fang':1,'Coins':60},unique:{item:'Troll King Ring',chance:.004}},
+ {name:'Mithril Golem',level:58,hp:380,def:55,atk:51,maxHit:32,loot:{'Mithril Ore':3,'Coal':3,'Coins':80},unique:null},
+ {name:'Abyss Warden',level:70,hp:520,def:68,atk:70,maxHit:44,loot:{'Abyss Shard':1,'Coins':100},unique:{item:'Abyssal Blade',chance:.003}},
+ {name:'Crystal Sentinel',level:80,hp:640,def:75,atk:77,maxHit:50,loot:{'Ancient Crystal':1,'Coins':130},unique:null},
+ {name:'Ancient Dragon',level:90,hp:850,def:87,atk:90,maxHit:64,loot:{'Dragon Scale':2,'Coins':180},unique:{item:'Dragonheart Amulet',chance:.002}},
+ {name:'Void Overlord',level:105,hp:1250,def:100,atk:105,maxHit:83,loot:{'Abyss Shard':2,'Ancient Crystal':2,'Coins':300},unique:{item:'Voidborn Cape',chance:.0025}}
 ];
-const TREASURE_TABLE=[['Uncut Opal',40],['Uncut Jade',24],['Uncut Red Topaz',17],['Uncut Sapphire',11],['Uncut Emerald',6],['Uncut Ruby',3],['Uncut Diamond',2],['Uncut Dragonstone',0.7],['Uncut Onyx',0.2],['Uncut Zenyte',0.1]];
-const TREASURE_CHANCE=0.10; // 10% per monster kill; weights above decide which gem.
-// Heals are scaled for 10 HP at level 1 and up to 990 HP at level 99.
-const FOOD={
- 'Cooked Shrimp':4,'Cooked Sardine':6,'Cooked Herring':8,
- 'Cooked Trout':12,'Cooked Salmon':18,'Cooked Tuna':28,
- 'Cooked Lobster':45,'Cooked Swordfish':70,'Cooked Monkfish':95,
- 'Cooked Shark':135,'Cooked Manta Ray':185,'Cooked Leviathan':250,
- 'Potato':6,'Berries':4,'Egg':5,'Milk':8
-};
-const EQUIPMENT={
- 'Bronze Sword':{slot:'weapon',attack:4,strength:2},
- 'Iron Sword':{slot:'weapon',attack:9,strength:4},
- 'Steel Sword':{slot:'weapon',attack:17,strength:7},
- 'Mithril Sword':{slot:'weapon',attack:30,strength:11},
- 'Rune Sword':{slot:'weapon',attack:46,strength:16},
- 'Wooden Shield':{slot:'shield',defence:4,block:1},
- 'Oak Shield':{slot:'shield',defence:8,block:2},
- 'Iron Shield':{slot:'shield',defence:14,block:3},
- 'Steel Shield':{slot:'shield',defence:24,block:5},
- 'Mithril Shield':{slot:'shield',defence:38,block:8},
- 'Rune Shield':{slot:'shield',defence:58,block:13}
-};
-const SAVE_KEY='idle-rpg-v2-save';const newGame=()=>({xp:Object.fromEntries(Object.keys(SKILLS).map(k=>[k,0])),bank:{},equipment:{weapon:null,shield:null},hp:10,monsterHp:null,monsterIndex:0,combatStyle:'attack',autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},active:null,progress:0,actionMs:1000,log:[],lastSaved:Date.now()});let state=newGame(),currentSkill='combat',agricultureTab='crops',craftingTab='equipment',sidebarTab='bank',lastTick=performance.now();
-const levelFromXp=xp=>{let lvl=1,total=0;while(lvl<99){let needed=Math.floor(100*Math.pow(1.13,lvl-1));if(xp<total+needed)break;total+=needed;lvl++}return lvl};
-const xpForLevel=lvl=>{let n=0;for(let i=1;i<lvl;i++)n+=Math.floor(100*Math.pow(1.13,i-1));return n};
-// COMBAT LEVEL SETTINGS: edit these values when adding new combat skills.
-const COMBAT_CONFIG = {
-  maxLevel: 120,                    // Change this to increase/decrease the combat level cap.
-  skillMaxLevel: 99,                // Current maximum level for each combat skill.
-  skills: ['attack', 'strength', 'defence', 'hitpoints'] // Add 'ranged', 'magic', 'prayer' here once implemented.
-};
-// Scales the combined skill levels from combat level 1 up to COMBAT_CONFIG.maxLevel.
-const combatLevel=()=>{
-  const skills=COMBAT_CONFIG.skills;
-  const total=skills.reduce((sum,skill)=>sum+levelFromXp(state.xp[skill]||0),0);
-  const possible=skills.length*(COMBAT_CONFIG.skillMaxLevel-1);
-  return possible>0 ? Math.min(COMBAT_CONFIG.maxLevel,1+Math.floor((total-skills.length)*(COMBAT_CONFIG.maxLevel-1)/possible)) : 1;
-};
-const maxHp=()=>Math.min(990,levelFromXp(state.xp.hitpoints||0)*10);
-const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const SHOP_ITEMS=[
+ {name:'Logs',price:20,category:'Supplies'},{name:'Oak Logs',price:55,category:'Supplies'},
+ {name:'Wheat',price:15,category:'Supplies'},{name:'Herb',price:30,category:'Supplies'},
+ {name:'Ball of Wool',price:90,category:'Supplies'},{name:'Coal',price:65,category:'Supplies'},
+ {name:'Copper Ore',price:25,category:'Ores'},{name:'Tin Ore',price:25,category:'Ores'},
+ {name:'Iron Ore',price:60,category:'Ores'},{name:'Silver Ore',price:85,category:'Ores'},
+ {name:'Gold Ore',price:130,category:'Ores'},{name:'Mithril Ore',price:180,category:'Ores'},
+ {name:'Carrot Seed',price:20,category:'Seeds'},{name:'Flax Seed',price:35,category:'Seeds'},
+ {name:'Mushroom Spores',price:60,category:'Seeds'},{name:'Corn Seed',price:110,category:'Seeds'},
+ {name:'Highland Seed',price:160,category:'Seeds'},{name:'Mystic Seed',price:360,category:'Seeds'},
+ {name:'Sunfruit Seed',price:550,category:'Seeds'},
+ {name:'Cooked Shrimp',price:65,category:'Food'},{name:'Bread',price:240,category:'Food'},
+ {name:'Cooked Salmon',price:230,category:'Food'},{name:'Cooked Lobster',price:620,category:'Food'},
+ {name:'Healing Potion',price:300,category:'Potions'},{name:'Strength Potion',price:480,category:'Potions'},
+ {name:'Accuracy Potion',price:480,category:'Potions'},{name:'Defence Potion',price:480,category:'Potions'},
+ {name:'Bronze Sword',price:200,category:'Gear'},{name:'Bronze Axe',price:150,category:'Gear'},
+ {name:'Bronze Pickaxe',price:150,category:'Gear'},{name:'Bronze Shield',price:180,category:'Gear'},
+ {name:'Iron Sword',price:620,category:'Gear'},{name:'Iron Axe',price:500,category:'Gear'},
+ {name:'Iron Pickaxe',price:500,category:'Gear'},{name:'Steel Sword',price:1300,category:'Gear'},
+ {name:'Steel Axe',price:1050,category:'Gear'},{name:'Steel Pickaxe',price:1050,category:'Gear'},
+ {name:'Uncut Opal',price:120,category:'Gems'},{name:'Uncut Jade',price:175,category:'Gems'},
+ {name:'Uncut Sapphire',price:420,category:'Gems'},
+ {name:'Gold Bar',price:400,category:'Materials'},
+ {name:'Silver Ring Blank',price:280,category:'Materials'},
+ {name:'Gold Ring Blank',price:630,category:'Materials'},
+ {name:'Gold Amulet Blank',price:710,category:'Materials'}
+];
+// Journal objectives provide longer-term progression and Coins for shopping.
+const QUESTS=[
+ {id:'forest-start',title:'Into the Woods',text:'Chop 25 trees',test:s=>(s.stats.bySkill.woodcutting||0)>=25,coins:180},
+ {id:'fishing-start',title:'First Catch',text:'Catch 20 fish',test:s=>(s.stats.bySkill.fishing||0)>=20,coins:180},
+ {id:'campfire',title:'Campfire Cook',text:'Burn 3 logs in your fire',test:s=>s.stats.logsBurned>=3,coins:150},
+ {id:'cooked-food',title:'Camp Cook',text:'Complete 15 Cooking actions',test:s=>(s.stats.bySkill.cooking||0)>=15,coins:240},
+ {id:'miner',title:'Miner Apprentice',text:'Mine 30 times',test:s=>(s.stats.bySkill.mining||0)>=30,coins:300},
+ {id:'forge',title:'Forge Your Future',text:'Forge 10 items or bars',test:s=>(s.stats.bySkill.smithing||0)>=10,coins:420},
+ {id:'metal-sword',title:'Arms Dealer',text:'Craft your first metal sword',test:s=>Object.keys(s.stats.produced).some(x=>x.endsWith(' Sword')&&s.stats.produced[x]>=1),coins:320},
+ {id:'farmer',title:'Green Thumb',text:'Complete 40 Agriculture actions',test:s=>(s.stats.bySkill.agriculture||0)>=40,coins:450},
+ {id:'brewer',title:'Potion Maker',text:'Brew 10 potions',test:s=>(s.stats.bySkill.herblore||0)>=10,coins:500},
+ {id:'goblin',title:'Goblin Hunter',text:'Defeat 10 Goblins',test:s=>(s.stats.kills.Goblin||0)>=10,coins:550},
+ {id:'jeweller',title:'Gem Collector',text:'Cut 5 gems',test:s=>GEMS.reduce((n,g)=>n+(s.stats.produced[g]||0),0)>=5,coins:650},
+ {id:'fashion',title:'Well Equipped',text:'Equip a weapon, shield, armour and an amulet',test:s=>['weapon','shield','body','amulet'].every(x=>s.equipment[x]),coins:850},
+ {id:'treasure',title:'Glittering Fortune',text:'Receive 5 treasure gems from monsters',test:s=>s.stats.treasures>=5,coins:950},
+ {id:'wealth',title:'Your First Fortune',text:'Earn 10,000 Coins in total',test:s=>s.stats.coinsEarned>=10000,coins:2200},
+ {id:'master',title:'The Long Adventure',text:'Complete 1,000 skill actions',test:s=>Object.values(s.stats.bySkill).reduce((a,b)=>a+b,0)>=1000,coins:5000}
+];
 
-const label=s=>SKILLS[s].name||s.replace(/([A-Z])/g,' $1').replace(/^./,c=>c.toUpperCase());
-const count=item=>state.bank[item]||0;const add=(item,n=1)=>{state.bank[item]=Math.max(0,count(item)+n);if(!state.bank[item])delete state.bank[item]};
-const canPay=cost=>!cost||Object.entries(cost).every(([item,n])=>count(item)>=n);
-function note(msg){state.log.unshift(msg);state.log=state.log.slice(0,35);renderLog()}
-function gainXp(skill,n){
- const before=levelFromXp(state.xp[skill]||0);
- state.xp[skill]=(state.xp[skill]||0)+n;
- const after=levelFromXp(state.xp[skill]);
- if(after>before){
-  if(skill==='hitpoints')state.hp=Math.min(after*10,state.hp+(after-before)*10);
-  note(`✨ ${label(skill)} reached level ${after}!`);
- }
+// ── Item database: icons, stacking, prices, and readable tooltips ────────────
+const ITEM_META={};
+const ICON_BY_FISH=['🦐','🐟','🦀','🐟','🐟','🐟','🐠','🐍','🐟','🦞','🐟','🐟','🦈','🐡','🐟','🐉'];
+function itemIcon(item){
+ if(item==='Coins')return '🪙';
+ if(FISH_TO_COOK.includes(item))return ICON_BY_FISH[FISH_TO_COOK.indexOf(item)];
+ if(item.startsWith('Cooked ')){const raw=item.slice(7);if(FISH_TO_COOK.includes(raw))return '🍣';if(raw.includes('Chicken'))return '🍗';if(raw.includes('Beef')||raw.includes('Lamb'))return '🥩'}
+ if(item.includes('Logs'))return '🪵';if(item.includes('Ore')||item==='Coal'||item==='Obsidian')return '🪨';
+ if(item.endsWith('Bar'))return '🧱';if(item.includes('Sword')||item.includes('Blade'))return '⚔️';
+ if(item.includes('Shield'))return '🛡️';if(item.includes('Helm'))return '🪖';
+ if(item.includes('Chestplate')||item.includes('Body'))return '🥋';if(item.includes('Platelegs'))return '👖';
+ if(item.includes('Axe'))return '🪓';if(item.includes('Pickaxe'))return '⛏️';
+ if(item.includes('Amulet')||item.includes('Charm'))return '📿';if(item.includes('Ring'))return '💍';
+ if(item.includes('Potion'))return '🧪';if(item.startsWith('Uncut ')||GEMS.includes(item))return '💎';
+ if(item.includes('Seed')||item.includes('Spores'))return '🌰';if(item.includes('Herb'))return '🌿';
+ if(item==='Wheat'||item==='Flax')return '🌾';if(item==='Carrot')return '🥕';if(item==='Potato')return '🥔';
+ if(item==='Berries'||item==='Sunfruit')return '🍇';if(item==='Mushroom')return '🍄';if(item==='Milk')return '🥛';
+ if(item==='Egg')return '🥚';if(item==='Wool'||item==='Ball of Wool')return '🧶';
+ if(item.includes('Leather')||item.includes('Hide'))return '🧥';if(item.includes('Cape'))return '🧣';
+ if(item.includes('Feather'))return '🪶';if(item.includes('Bread')||item.includes('Pie'))return '🥧';
+ if(item.includes('Stew')||item.includes('Soup'))return '🍲';if(item==='Baked Potato')return '🥔';
+ if(item.includes('Feast')||item.includes('Platter'))return '🍽️';if(item.includes('Staff'))return '🪄';
+ if(item.includes('Crystal'))return '🔮';if(item.includes('Scale'))return '🐉';
+ if(item.includes('Arrow'))return '🏹';if(item.includes('Nail'))return '🔩';if(item.includes('Token'))return '🏅';
+ return '📦';
 }
-function save(){state.lastSaved=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
+function itemCategory(item){
+ if(item==='Coins')return 'Currency';if(item in EQUIPMENT)return 'Equipment';
+ if(item in POTIONS)return 'Potions';if(item in FOOD)return 'Food';
+ if(FISH_TO_COOK.includes(item))return 'Fish';if(item.startsWith('Uncut ')||GEMS.includes(item))return 'Gems';
+ if(item.includes('Logs'))return 'Wood';if(item.endsWith('Bar'))return 'Bars';
+ if(item.endsWith(' Ore')||['Coal','Clay','Limestone','Obsidian'].includes(item))return 'Ores';
+ if(item.includes('Seed')||item.includes('Spores'))return 'Seeds';
+ if(['Herb','Highland Herb','Mystic Herb','Potato','Berries','Wheat','Carrot','Flax','Mushroom','Corn','Sunfruit','Milk','Egg','Wool','Raw Chicken','Raw Beef','Raw Lamb','Feather','Cowhide','Thick Hide','Goat Horn'].includes(item))return 'Farming';
+ if(item.includes('Token')||item.includes('Scale')||item.includes('Tail')||item.includes('Troll')||item.includes('Shard')||item.includes('Bone')||item.includes('Goblin'))return 'Loot';
+ return 'Materials';
+}
+const SPECIAL_SELL_PRICES={
+ 'Rat Tail':2,'Goblin Ear':12,'Bones':16,'Ancient Token':120,
+ 'Troll Fang':180,'Abyss Shard':580,'Dragon Scale':1100,
+ 'Ancient Crystal':490,'Cowhide':35,'Thick Hide':220,
+ 'Fortune Ring':40000,'Ancient Scholar Charm':20000,
+ 'Abyssal Blade':85000,'Dragonheart Amulet':150000,
+ 'Troll King Ring':35000,'Voidborn Cape':55000
+};
+function baseSellPrice(item){
+ const shop=SHOP_ITEMS.find(x=>x.name===item);if(shop)return Math.max(1,Math.floor(shop.price*GAME_CONFIG.shopSellMultiplier));
+ if(SPECIAL_SELL_PRICES[item])return SPECIAL_SELL_PRICES[item];
+ for(const skill of Object.values(SKILLS)){
+  if(!skill.actions)continue;
+  const recipe=skill.actions.find(a=>a.output===item);
+  if(recipe)return Math.max(1,Math.round(recipe.level*.9+recipe.xp*.25+3));
+ }
+ return 15;
+}
+function itemTier(item){
+ if(/Dragonite|Zenyte|Dragonheart|Voidborn|Abyssal|Onyx|Elder|Leviathan|Ancient Scholar|Fortune Ring/.test(item))return 'tier-epic';
+ if(/Rune|Diamond|Dragonstone|Magic|Redwood|Adamant|Mastery|Manta Ray|Royal/.test(item))return 'tier-rare';
+ if(/Mithril|Gold|Ruby|Sapphire|Emerald|Yew|Anglerfish|Scholar|Power/.test(item))return 'tier-high';
+ return 'tier-basic';
+}
+for(const skill of Object.values(SKILLS))for(const a of skill.actions||[])ITEM_META[a.output]={category:itemCategory(a.output)};
+for(const monster of MONSTERS){for(const item of Object.keys(monster.loot))ITEM_META[item]??={category:itemCategory(item)};if(monster.unique)ITEM_META[monster.unique.item]??={category:itemCategory(monster.unique.item)}}
+for(const item of [...Object.keys(EQUIPMENT),...Object.keys(FOOD),...Object.keys(POTIONS),...Object.keys(FIRE_FUEL),...SHOP_ITEMS.map(x=>x.name),'Coins',...TREASURE_TABLE.map(x=>x[0])])ITEM_META[item]??={category:itemCategory(item)};
+function itemArt(item,large=false){return `<span class="item-art ${itemTier(item)} ${large?'big-art':''}" aria-hidden="true">${itemIcon(item)}</span>`}
+const esc=x=>String(x).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const fmt=n=>Math.floor(n||0).toLocaleString('en-US');
+const pct=n=>{const value=n*100,decimals=value>0&&value<1?3:1;return value.toFixed(decimals).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'')+'%'};
+const timeFmt=secs=>{secs=Math.max(0,Math.ceil(secs));return `${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`};
+const el=id=>document.getElementById(id);
+const SAVE_KEY='idle-rpg-v2-save'; // Same key as v2.9: old saved progress stays available.
+const EQUIP_SLOTS=['weapon','shield','head','body','legs','gloves','cape','amulet','ring','axe','pickaxe'];
+const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,coinsEarned:0,potionsUsed:0});
+function newGame(){return {
+ xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
+ bank:{'Coins':250},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
+ hp:10,monsterIndex:0,monsterHp:null,combatStyle:'attack',
+ autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
+ active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
+ fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
+ log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now()
+}}
+let state=newGame();
+const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}}};
+let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
+const levelFromXp=xp=>{let lvl=1,total=0;while(lvl<99){const need=Math.floor(100*Math.pow(1.13,lvl-1));if(xp<total+need)break;total+=need;lvl++}return lvl};
+const xpForLevel=lvl=>{let n=0;for(let i=1;i<Math.min(100,lvl);i++)n+=Math.floor(100*Math.pow(1.13,i-1));return n};
+const label=s=>SKILLS[s]?.name||s.replace(/^./,c=>c.toUpperCase());
+const maxHp=()=>levelFromXp(state.xp.hitpoints||0)*10;
+const clamp=(x,lo,hi)=>Math.max(lo,Math.min(hi,x));
+function combatLevel(){
+ const skills=COMBAT_CONFIG.skills.filter(s=>s in SKILLS),sum=skills.reduce((a,s)=>a+levelFromXp(state.xp[s]||0),0);
+ const possible=skills.length*(COMBAT_CONFIG.skillMaxLevel-1);
+ return possible>0?clamp(1+Math.floor((sum-skills.length)*(COMBAT_CONFIG.maxLevel-1)/possible),1,COMBAT_CONFIG.maxLevel):1;
+}
+const count=item=>Math.max(0,Number(state.bank[item])||0);
+const bankUsed=()=>Object.values(state.bank).filter(x=>Number(x)>0).length;
+const bankCanHold=item=>count(item)>0||bankUsed()<GAME_CONFIG.bankSlots;
+function add(item,n=1){
+ if(!item||!Number.isFinite(Number(n)))return false;
+ n=Number(n);
+ if(n>0&&!bankCanHold(item))return false;
+ const result=Math.max(0,count(item)+n);
+ if(result)state.bank[item]=result;else delete state.bank[item];
+ return true;
+}
+const canPay=cost=>Object.entries(cost||{}).every(([item,n])=>count(item)>=n);
+function buyOrCraft(cost,output,amount){
+ if(!canPay(cost))return false;
+ const old={...state.bank};
+ for(const [item,n] of Object.entries(cost||{}))add(item,-n);
+ if(!add(output,amount)){state.bank=old;return false}
+ return true;
+}
+function note(msg){state.log.unshift(msg);state.log=state.log.slice(0,80);renderLog()}
+function toast(msg){const box=el('toast');box.textContent=msg;box.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>box.classList.remove('show'),2600)}
+function save(){try{state.lastSaved=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(err){console.warn('Save error',err);toast('Could not save. Browser storage may be full.')}}
 function restore(){
  try{
-  const s=JSON.parse(localStorage.getItem(SAVE_KEY));
-  if(!s||!s.xp||!s.bank)return;
+  const raw=JSON.parse(localStorage.getItem(SAVE_KEY));if(!raw||!raw.xp||!raw.bank)return;
   const base=newGame();
-  state={...base,...s,xp:{...base.xp,...s.xp},equipment:{...base.equipment,...s.equipment},autoEat:{...base.autoEat,...(s.autoEat||{})},active:null,progress:0,monsterHp:null};
-  // Existing saves: former Farming / Animal Husbandry XP becomes Agriculture XP.
-  if(s.xp.agriculture===undefined&&(s.xp.farming!==undefined||s.xp.animalHusbandry!==undefined)){
-   state.xp.agriculture=(s.xp.farming||0)+(s.xp.animalHusbandry||0);
-  }
+  const stats=raw.stats||{};
+  state={...base,...raw,xp:{...base.xp,...raw.xp},
+   bank:{...raw.bank},equipment:{...base.equipment,...(raw.equipment||{})},
+   autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
+   stats:{...emptyStats(),...stats,bySkill:{...(stats.bySkill||{})},produced:{...(stats.produced||{})},kills:{...(stats.kills||{})}},
+   claimed:Array.isArray(raw.claimed)?raw.claimed:[],active:null,progress:0,monsterHp:null};
+  // Historic saves had Farming and Animal Husbandry before they became Agriculture.
+  if(raw.xp.agriculture===undefined&&(raw.xp.farming!==undefined||raw.xp.animalHusbandry!==undefined))state.xp.agriculture=(raw.xp.farming||0)+(raw.xp.animalHusbandry||0);
   delete state.xp.farming;delete state.xp.animalHusbandry;
-  // Older games had 100 max HP and no Hitpoints skill: preserve their HP percentage.
-  if(s.xp.hitpoints===undefined){
-   state.xp.hitpoints=((s.xp.attack||0)+(s.xp.strength||0)+(s.xp.defence||0))*0.25;
-   state.hp=Math.max(1,Math.round((Number(s.hp)||100)/100*maxHp()));
-  }
+  if(raw.xp.hitpoints===undefined){state.xp.hitpoints=((raw.xp.attack||0)+(raw.xp.strength||0)+(raw.xp.defence||0))*.25;state.hp=Math.max(1,Math.round((Number(raw.hp)||100)/100*maxHp()))}
   state.hp=clamp(Number(state.hp)||1,1,maxHp());
   if(!['attack','strength','defence'].includes(state.combatStyle))state.combatStyle='attack';
-  if(!MONSTERS[state.monsterIndex])state.monsterIndex=0;
+  state.monsterIndex=MONSTERS[state.monsterIndex]?state.monsterIndex:0;
   if(!FOOD[state.autoEat.food])state.autoEat.food='Cooked Shrimp';
   if(![15,30,50].includes(Number(state.autoEat.threshold)))state.autoEat.threshold=30;
-  const away=Math.min(8*3600,Math.max(0,(Date.now()-(s.lastSaved||Date.now()))/1000));
-  if(away>60)note(`Welcome back! You were away for ${Math.floor(away/60)} minutes. Offline actions are paused in this prototype.`);
- }catch(e){console.warn('Save could not be read',e)}
+  state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
+  if(!Number.isFinite(state.fireUntil))state.fireUntil=0;
+  for(const [item,n] of Object.entries(state.bank))if(!Number.isFinite(Number(n))||n<=0)delete state.bank[item];
+  const away=Math.floor(Math.max(0,(Date.now()-(raw.lastSaved||Date.now()))/1000));
+  if(away>60)note('Welcome back! Training was paused while away. Fire and potion timers continue in real time.');
+ }catch(e){console.warn('Could not restore game',e)}
 }
-function startAction(skill,index){let a=SKILLS[skill].actions[index];if(levelFromXp(state.xp[skill])<a[2])return;if(!canPay(a[4])){note('Missing ingredients.');return}state.active={type:'skill',skill,index};state.progress=0;render()}
-function startCombat(index){state.monsterIndex=index;state.monsterHp=MONSTERS[index].hp;state.active={type:'combat'};state.progress=0;note(`⚔️ Fighting ${MONSTERS[index].name}`);render()}
-function eat(item){
- if(!FOOD[item]||count(item)<1){note('No food available.');return}
- const limit=maxHp();
- if(state.hp>=limit){note('Already at full HP.');return}
- add(item,-1);
- const healed=Math.min(FOOD[item],limit-state.hp);
- state.hp+=healed;
- note(`🍽️ Ate ${item}: +${healed} HP`);
- save();renderDynamic();
-}
-function tryAutoEat(){
- const cfg=state.autoEat,limit=maxHp();
- if(!cfg?.enabled||!FOOD[cfg.food]||state.hp<=0)return;
- while(state.hp/limit*100<=Number(cfg.threshold)&&state.hp<limit&&count(cfg.food)>0){
-  const healed=Math.min(FOOD[cfg.food],limit-state.hp);
-  add(cfg.food,-1);state.hp+=healed;
-  note(`🍽️ Auto Eat: ${cfg.food} +${healed} HP`);
+function gearMods(){
+ const mods={attackPct:0,strengthPct:0,defencePct:0,xpBonus:0,luckBonus:0,gatherBonus:0,woodcuttingYield:0,miningYield:0,defence:0,block:0,attack:0,strength:0};
+ for(const name of Object.values(state.equipment)){const piece=EQUIPMENT[name]||{};for(const key of Object.keys(mods))mods[key]+=Number(piece[key]||0)}
+ for(const buff of Object.values(state.buffs||{})){
+  if(buff?.until>Date.now()&&buff.effects)for(const [key,value] of Object.entries(buff.effects))mods[key]=(mods[key]||0)+Number(value||0);
  }
+ return mods;
 }
-function rollTreasure(){if(Math.random()>=TREASURE_CHANCE)return null;const total=TREASURE_TABLE.reduce((n,row)=>n+row[1],0);let roll=Math.random()*total;for(const [gem,weight] of TREASURE_TABLE){roll-=weight;if(roll<0)return gem}return TREASURE_TABLE.at(-1)[0]}
-function stop(){state.active=null;state.progress=0;render()}
+function gainXp(skill,base){
+ const before=levelFromXp(state.xp[skill]||0);
+ const amount=Math.max(0,base*(1+gearMods().xpBonus));
+ state.xp[skill]=(state.xp[skill]||0)+amount;
+ const after=levelFromXp(state.xp[skill]);
+ if(after>before){
+  if(skill==='hitpoints')state.hp=Math.min(maxHp(),state.hp+(after-before)*10);
+  note(`✨ ${label(skill)} reached level ${after}!`);
+  if(['attack','strength','defence','hitpoints'].includes(skill))note(`⚔️ Combat level ${combatLevel()}/${COMBAT_CONFIG.maxLevel}`);
+ }
+ return amount;
+}
+function lightFire(item){
+ if(!(item in FIRE_FUEL)||count(item)<1){note('No logs available.');return}
+ const remaining=Math.max(0,(state.fireUntil-Date.now())/1000);
+ if(remaining+FIRE_FUEL[item]>GAME_CONFIG.maxFireSeconds){note('Fire cannot hold more than 2 hours of fuel.');return}
+ add(item,-1);state.fireUntil=Math.max(Date.now(),state.fireUntil)+FIRE_FUEL[item]*1000;
+ state.fireLastFuel=item;state.stats.logsBurned++;
+ note(`🔥 Added ${item}: +${timeFmt(FIRE_FUEL[item])} fire time.`);
+ refreshDynamic();save();
+}
+const fireRemaining=()=>Math.max(0,(state.fireUntil-Date.now())/1000);
+const fireBurning=()=>fireRemaining()>0;
+function startAction(skill,index){
+ const action=SKILLS[skill]?.actions?.[index];if(!action)return;
+ if(levelFromXp(state.xp[skill]||0)<action.level){note('Skill level too low.');return}
+ if(action.requiresFire&&!fireBurning()){note('🔥 Cooking requires a lit fire. Add logs in the Cooking menu.');return}
+ if(!canPay(action.cost)){note('Not enough ingredients. Check the recipe.');return}
+ state.active={type:'skill',skill,index};state.progress=0;note(`▶ ${action.name}`);renderProgress();refreshDynamic();save();
+}
+function startCombat(index){
+ if(!MONSTERS[index])return;
+ state.monsterIndex=index;state.monsterHp=MONSTERS[index].hp;
+ state.active={type:'combat'};state.progress=0;note(`⚔️ Fighting ${MONSTERS[index].name}`);renderProgress();refreshDynamic();save();
+}
+function stop(silent=false){state.active=null;state.progress=0;if(!silent)note('⏹ Activity stopped.');refreshDynamic();renderProgress();save()}
+function extraGatherChance(skill){const mods=gearMods();return clamp((mods.gatherBonus||0)+(mods[skill+'Yield']||0),0,.95)}
+function completeSkill(){
+ const {skill,index}=state.active||{};
+ const action=SKILLS[skill]?.actions?.[index];if(!action){stop(true);return}
+ if(action.requiresFire&&!fireBurning()){note('🔥 Fire went out. Add logs to continue cooking.');stop(true);return}
+ if(!canPay(action.cost)){note('Out of materials. Action stopped.');stop(true);return}
+ let quantity=action.quantity||1;
+ if(['woodcutting','mining','fishing','agriculture'].includes(skill)&&Math.random()<extraGatherChance(skill))quantity++;
+ if(!buyOrCraft(action.cost,action.output,quantity)){note('🏦 Bank full: 1000 unique stacks. Free a slot to continue.');stop(true);return}
+ const bonuses=[];
+ if(action.bonus)for(const [item,n] of Object.entries(action.bonus)){
+  if(add(item,n))bonuses.push(`${n} ${item}`);else note(`🏦 Extra ${item} could not fit in bank.`);
+ }
+ const xp=gainXp(skill,action.xp);
+ state.stats.bySkill[skill]=(state.stats.bySkill[skill]||0)+1;
+ state.stats.produced[action.output]=(state.stats.produced[action.output]||0)+quantity;
+ note(`+${fmt(quantity)} ${action.output}${bonuses.length?' + '+bonuses.join(', '):''} · +${Math.round(xp)} ${label(skill)} XP`);
+}
+function treasureChance(){return clamp(TREASURE_CHANCE*(1+gearMods().luckBonus),0,.95)}
+function rollTreasure(){
+ if(Math.random()>=treasureChance())return null;
+ const total=TREASURE_TABLE.reduce((n,row)=>n+row[1],0);
+ let roll=Math.random()*total;
+ for(const [gem,w] of TREASURE_TABLE){roll-=w;if(roll<0)return gem}
+ return TREASURE_TABLE.at(-1)[0];
+}
+function applyMonsterLoot(m){
+ const drops=[];
+ for(const [item,amount] of Object.entries(m.loot||{})){
+  const isCoins=item==='Coins';
+  if(isCoins||Math.random()<.65){
+   const qty=isCoins?Math.max(1,Math.floor(amount*(.6+.4*Math.random()))):Math.max(1,Math.ceil(Math.random()*amount));
+   if(add(item,qty)){drops.push(`${qty} ${item}`);if(isCoins)state.stats.coinsEarned+=qty}
+   else note(`🏦 Bank full; missed ${item} drop.`);
+  }
+ }
+ const treasure=rollTreasure();
+ if(treasure){if(add(treasure,1)){drops.push(treasure);state.stats.treasures++}else note('🏦 Bank full; missed a gem drop.')}
+ if(m.unique&&Math.random()<clamp(m.unique.chance*(1+gearMods().luckBonus),0,.95)){
+  if(add(m.unique.item,1)){drops.push(`🌟 UNIQUE: ${m.unique.item}`);note(`🌟 RARE DROP! ${m.unique.item}`)}
+  else note(`🏦 Bank full; missed unique ${m.unique.item}.`);
+ }
+ return drops;
+}
+function completeCombat(){
+ const m=MONSTERS[state.monsterIndex],mods=gearMods();
+ const attack=levelFromXp(state.xp.attack||0),strength=levelFromXp(state.xp.strength||0),defence=levelFromXp(state.xp.defence||0);
+ const accuracy=clamp((.62+.008*(attack+mods.attack-m.def))*(1+mods.attackPct),.12,.98);
+ const playerMaxHit=Math.max(1,Math.floor((2+Math.floor((strength-1)/7)+mods.strength)*(1+mods.strengthPct)));
+ const damage=Math.random()<accuracy?1+Math.floor(Math.random()*playerMaxHit):0;
+ const actualDamage=Math.min(damage,state.monsterHp);
+ state.monsterHp=Math.max(0,state.monsterHp-damage);
+ const combatXp=actualDamage*5;
+ if(combatXp>0){gainXp(state.combatStyle,combatXp);gainXp('hitpoints',combatXp/4)}
+ if(state.monsterHp<=0){
+  state.stats.kills[m.name]=(state.stats.kills[m.name]||0)+1;
+  const drops=applyMonsterLoot(m);
+  note(`🏆 Defeated ${m.name}! Loot: ${drops.join(', ')||'Nothing'}`);
+  state.monsterHp=m.hp;
+ }else{
+  const effectiveDefence=defence*(1+mods.defencePct)+mods.defence;
+  const hitChance=clamp(.65+.008*(m.atk-effectiveDefence),.10,.94);
+  const rawHit=Math.random()<hitChance?1+Math.floor(Math.random()*m.maxHit):0;
+  const mitigation=Math.floor((defence-1)/8)*(1+mods.defencePct)+(mods.block||0);
+  const incoming=Math.max(0,rawHit-Math.floor(mitigation));
+  state.hp=Math.max(0,state.hp-incoming);
+ }
+ tryAutoEat();
+ if(state.hp<=0){state.hp=maxHp();note(`💔 Defeated by ${m.name}! Respawned at full HP.`);stop(true)}
+}
 function complete(){
  if(!state.active)return;
- if(state.active.type==='skill'){
-  const {skill,index}=state.active,a=SKILLS[skill].actions[index];
-  if(!canPay(a[4])){note('Not enough materials. Action stopped.');stop();return}
-  for(const [item,n] of Object.entries(a[4]||{}))add(item,-n);
-  add(a[1]);gainXp(skill,a[3]);
-  note(`+1 ${a[1]} · +${a[3]} ${label(skill)} XP`);
+ if(state.active.type==='skill')completeSkill();else completeCombat();
+ refreshDynamic();save();
+}
+function eat(item,auto=false){
+ if(!FOOD[item]||count(item)<1)return false;
+ if(state.hp>=maxHp())return false;
+ const heal=Math.min(FOOD[item],maxHp()-state.hp);
+ add(item,-1);state.hp+=heal;
+ note(`🍽️ ${auto?'Auto Eat':'Ate'}: ${item} +${heal} HP`);
+ return true;
+}
+function tryAutoEat(){
+ const cfg=state.autoEat;if(!cfg.enabled||state.hp<=0||!FOOD[cfg.food])return;
+ while(state.hp/maxHp()*100<=Number(cfg.threshold)&&state.hp<maxHp()&&count(cfg.food)>0)eat(cfg.food,true);
+}
+function usePotion(item){
+ const pot=POTIONS[item];if(!pot||count(item)<1)return;
+ if(pot.heal){
+  if(state.hp>=maxHp()){note('Already at full HP.');return}
+  const amount=Math.min(pot.heal,maxHp()-state.hp);add(item,-1);state.hp+=amount;note(`🧪 ${item} restored ${amount} HP.`);
  }else{
-  const m=MONSTERS[state.monsterIndex];
-  const weapon=EQUIPMENT[state.equipment.weapon]||{};
-  const shield=EQUIPMENT[state.equipment.shield]||{};
-  const attack=levelFromXp(state.xp.attack),strength=levelFromXp(state.xp.strength),defence=levelFromXp(state.xp.defence);
-  // One action is one attack exchange. Better gear can offset lower levels.
-  const accuracy=clamp(.62+.008*(attack+(weapon.attack||0)-m.def),.12,.94);
-  const playerMaxHit=2+Math.floor((strength-1)/7)+(weapon.strength||0);
-  const damage=Math.random()<accuracy?1+Math.floor(Math.random()*playerMaxHit):0;
-  const actualDamage=Math.min(damage,state.monsterHp);
-  state.monsterHp=Math.max(0,state.monsterHp-damage);
-  // Successful damage awards the selected combat skill XP; HP gains exactly 25% of it.
-  const combatXp=actualDamage*5;
-  if(combatXp>0){gainXp(state.combatStyle,combatXp);gainXp('hitpoints',combatXp/4)}
-  // A defeated monster cannot retaliate on its killing blow.
-  if(state.monsterHp<=0){
-   const drops=[];
-   for(const [item,n] of Object.entries(m.loot)){
-    if(Math.random()<.65){const qty=Math.max(1,Math.floor(n*(.5+Math.random())));add(item,qty);drops.push(`${qty} ${item}`)}
-   }
-   const gem=rollTreasure();if(gem){add(gem);drops.push(gem)}
-   note(`🏆 Defeated ${m.name}! Loot: ${drops.join(', ')||'Nothing'}`);
-   state.monsterHp=m.hp;
-  }else{
-   const defenceRating=defence+(shield.defence||0);
-   const enemyAccuracy=clamp(.65+.008*(m.atk-defenceRating),.10,.94);
-   const rawHit=Math.random()<enemyAccuracy?1+Math.floor(Math.random()*m.maxHit):0;
-   const mitigation=Math.floor((defence-1)/8)+(shield.block||0);
-   const incoming=Math.max(0,rawHit-mitigation);
-   state.hp=Math.max(0,state.hp-incoming);
-  }
-  // Food is used only after the exchange and only while the player is still alive.
-  tryAutoEat();
-  if(state.hp<=0){
-   state.hp=maxHp();
-   note(`💔 Defeated by ${m.name}! Respawned at full HP.`);
-   stop();return;
-  }
+  const effects=pot.buffs||{[pot.buff]:pot.value};
+  // Same category replaces (instead of infinitely stacking) an existing potion buff.
+  const key=Object.keys(effects).sort().join(':');
+  state.buffs[key]={name:item,until:Date.now()+pot.duration*1000,effects};
+  add(item,-1);note(`🧪 Used ${item}: ${pot.description}.`);
  }
- renderDynamic();save();
+ state.stats.potionsUsed++;
+ refreshDynamic();save();
 }
-function tick(t){let dt=Math.min(250,t-lastTick);lastTick=t;if(state.active){state.progress+=dt/state.actionMs*100;if(state.progress>=100){state.progress-=100;complete()}renderProgress()}requestAnimationFrame(tick)}
-const el=id=>document.getElementById(id);
-const NAV_SKILLS=['combat',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en'))];
+function equip(item){
+ const info=EQUIPMENT[item];if(!info||count(item)<1)return;
+ const slot=info.slot,old=state.equipment[slot];
+ const required=info.requiredLevel||1;
+ const requiredSkill=slot==='weapon'?'attack':slot==='axe'?'woodcutting':slot==='pickaxe'?'mining':(['shield','head','body','legs','gloves','cape'].includes(slot)?'defence':null);
+ if(requiredSkill&&levelFromXp(state.xp[requiredSkill]||0)<required){note(`${label(requiredSkill)} level ${required} is required to equip ${item}.`);return}
+ // Removing one of the item first may free a stack for the replaced equipment.
+ add(item,-1);
+ if(old&&!add(old,1)){add(item,1);note('🏦 Bank full. Cannot swap equipment.');return}
+ state.equipment[slot]=item;
+ note(`🛡️ Equipped ${item} (${slot}).`);refreshDynamic();save();
+}
+function unequip(slot){
+ if(!EQUIP_SLOTS.includes(slot))return;
+ const item=state.equipment[slot];if(!item)return;
+ if(!add(item,1)){note('🏦 Bank full. Free a stack before unequipping.');return}
+ state.equipment[slot]=null;note(`Unequipped ${item}.`);refreshDynamic();save();
+}
+function sellPrice(item){return Math.max(1,baseSellPrice(item))}
+function sell(item,qty){
+ if(!count(item)||item==='Coins')return;
+ qty=qty==='all'?count(item):Math.min(count(item),Math.max(1,Math.floor(Number(qty)||1)));
+ const old={...state.bank};add(item,-qty);
+ if(!add('Coins',sellPrice(item)*qty)){state.bank=old;note('🏦 No space for Coins.');return}
+ const coins=sellPrice(item)*qty;state.stats.coinsEarned+=coins;
+ note(`🪙 Sold ${qty} ${item} for ${fmt(coins)} Coins.`);refreshDynamic();save();
+}
+function buy(item,qty){
+ const offer=SHOP_ITEMS.find(x=>x.name===item);if(!offer)return;
+ qty=Math.min(1000,Math.max(1,Math.floor(Number(qty)||1)));
+ const total=offer.price*qty;
+ if(count('Coins')<total){note(`Need ${fmt(total-count('Coins'))} more Coins.`);toast('Not enough Coins');return}
+ if(!buyOrCraft({Coins:total},item,qty)){note('🏦 Cannot buy: bank is full.');toast('Bank is full');return}
+ note(`🛒 Bought ${fmt(qty)} ${item} for ${fmt(total)} Coins.`);refreshDynamic();save();
+}
+function claimQuest(id){
+ const quest=QUESTS.find(x=>x.id===id);if(!quest||state.claimed.includes(id)||!quest.test(state))return;
+ if(!add('Coins',quest.coins)){note('Free a bank slot to receive your reward.');return}
+ state.claimed.push(id);state.stats.coinsEarned+=quest.coins;
+ note(`🏅 Quest complete: ${quest.title}! +${fmt(quest.coins)} Coins.`);refreshDynamic();if(ui.view==='journal')renderMain();save();
+}
+// ── Presentation / navigation ─────────────────────────────────────────────────
+const NAV_VIEWS=['combat',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
+const NAV_META={combat:['⚔️','Combat'],bank:['🏦','Bank'],shop:['🛒','Shop'],journal:['📜','Journal']};
+function viewLabel(v){return NAV_META[v]?.[1]||label(v)}
+function navIcon(v){return NAV_META[v]?.[0]||SKILLS[v]?.icon||'🔹'}
 function renderNav(){
- el('nav').innerHTML=NAV_SKILLS.map(k=>`<button class=\"${currentSkill===k?'selected':''}\" data-skill=\"${k}\">${k==='combat'?'⚔️':SKILLS[k].icon} ${k==='combat'?'Combat':label(k)} <small>${k==='combat'?'4 skills':'Lv '+levelFromXp(state.xp[k])}</small></button>`).join('');
- document.querySelectorAll('[data-skill]').forEach(b=>b.onclick=()=>{currentSkill=b.dataset.skill;render()});
- const select=el('skillSelect');
- if(!select.options.length){select.innerHTML=NAV_SKILLS.map(k=>`<option value=\"${k}\">${k==='combat'?'⚔️ Combat':SKILLS[k].icon+' '+label(k)}</option>`).join('');select.onchange=()=>{currentSkill=select.value;render()}}
- select.value=currentSkill;
+ el('nav').innerHTML=`<div class="nav-divider">Adventure</div>`+NAV_VIEWS.map((v,i)=>
+ `${i===1?'<div class="nav-divider">Skills</div>':''}${v==='bank'?'<div class="nav-divider">Inventory & Goals</div>':''}
+ <button class="${ui.view===v?'selected':''}" data-nav="${esc(v)}"><span>${navIcon(v)} ${viewLabel(v)}</span><small data-nav-lvl="${esc(v)}">${v==='combat'?'Lv '+combatLevel():SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':''}</small></button>`).join('');
+ const select=el('mobileSelect');select.innerHTML=NAV_VIEWS.map(v=>`<option value="${v}">${navIcon(v)} ${viewLabel(v)}</option>`).join('');select.value=ui.view;
 }
-function renderMain(){if(currentSkill==='combat'){renderCombatMain();return}let skill=SKILLS[currentSkill],lvl=levelFromXp(state.xp[currentSkill]),xp=state.xp[currentSkill],min=xpForLevel(lvl),max=xpForLevel(Math.min(99,lvl+1));let html=`<h2>${skill.icon} ${label(currentSkill)}</h2><div class="muted" id="skillXpText">Level ${lvl} · ${Math.floor(xp)} XP ${lvl<99?`· ${Math.floor(max-xp)} XP to next level`:'· MAX LEVEL'}</div><div class="xpbar"><div id="skillXpFill" style="width:${lvl===99?100:(xp-min)/(max-min)*100}%"></div></div>`;
-if(skill.combat){html+=`<p class="muted">Attack improves accuracy, Strength improves damage, Defence reduces incoming damage.</p><label>Train combat skill</label><select id="combatStyle">${['attack','strength','defence'].map(k=>`<option value="${k}" ${state.combatStyle===k?'selected':''}>${label(k)}</option>`).join('')}</select><h3>Monsters</h3>`+MONSTERS.map((m,i)=>`<div class="action"><div><b>${m.name}</b><br><small>Level ${m.level} · ${m.hp} HP · Loot: ${Object.keys(m.loot).join(', ')}</small></div><button data-monster="${i}">Fight</button></div>`).join('');}else{if(currentSkill==='agriculture'){html+=`<div class="tabs"><button id="cropsTab" class="${agricultureTab==='crops'?'selected':''}">🌾 Crops</button><button id="animalsTab" class="${agricultureTab==='animals'?'selected':''}">🐑 Animals</button></div>`}
-if(currentSkill==='crafting'){html+=`<div class="tabs"><button id="equipmentCraftTab" class="${craftingTab==='equipment'?'selected':''}">🛡️ Gear</button><button id="gemsCraftTab" class="${craftingTab==='gems'?'selected':''}">💎 Gems</button><button id="materialsCraftTab" class="${craftingTab==='materials'?'selected':''}">🧶 Materials</button></div>`}html+=`<p class="muted">Each action takes 1 second (testing speed). Resources are added to your bank automatically.</p>`+skill.actions.map((a,i)=>({a,i})).filter(({a,i})=>(currentSkill!=='agriculture'||(agricultureTab==='crops'?i<3:i>=3))&&(currentSkill!=='crafting'||a[5]===craftingTab)).map(({a,i})=>`<div class="action"><div><b>${a[0]}</b><br><small>Lv ${a[2]} · +${a[3]} XP · +1 ${a[1]}</small>${a[4]?`<br><small>Requires: ${Object.entries(a[4]).map(([item,n])=>`${n} ${item}`).join(', ')}</small>`:''}</div><button data-action="${i}" data-req-level="${a[2]}" ${lvl<a[2]?'disabled':''}>${lvl<a[2]?'Locked':'Start'}</button></div>`).join('')}
-el('main').innerHTML=html;document.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>startAction(currentSkill,+b.dataset.action));document.querySelectorAll('[data-monster]').forEach(b=>b.onclick=()=>startCombat(+b.dataset.monster));let style=el('combatStyle');if(style)style.onchange=e=>state.combatStyle=e.target.value;if(currentSkill==='agriculture'){el('cropsTab').onclick=()=>{agricultureTab='crops';renderMain()};el('animalsTab').onclick=()=>{agricultureTab='animals';renderMain()}}
-if(currentSkill==='crafting'){
- el('equipmentCraftTab').onclick=()=>{craftingTab='equipment';renderMain()};
- el('gemsCraftTab').onclick=()=>{craftingTab='gems';renderMain()};
- el('materialsCraftTab').onclick=()=>{craftingTab='materials';renderMain()};
-}renderProgress()}
-function renderCombatMain(){
- const hpLevel=levelFromXp(state.xp.hitpoints),hpXp=state.xp.hitpoints||0;
- const hpMin=xpForLevel(hpLevel),hpNext=xpForLevel(Math.min(99,hpLevel+1));
- let html=`<h2>⚔️ Combat · Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2><p class="muted">Combat Level is based on Attack, Strength, Defence and Hitpoints. When all configured combat skills reach their maximum level, Combat Level reaches ${COMBAT_CONFIG.maxLevel}.</p><p class="muted">Choose which combat skill to train. Hitpoints always gains 25% of the XP earned in Attack, Strength or Defence.</p><div class="combat-styles">`;
- for(const k of ['attack','strength','defence']){
-  const xp=state.xp[k]||0,lvl=levelFromXp(xp),min=xpForLevel(lvl),max=xpForLevel(Math.min(99,lvl+1));
-  html+=`<button class="combat-choice ${state.combatStyle===k?'selected':''}" data-style="${k}"><strong>${SKILLS[k].icon} ${label(k)}</strong><span data-combat-xp="${k}">Level ${lvl} · ${Math.floor(xp)} XP</span><span class="xpbar"><span style="width:${lvl===99?100:(xp-min)/(max-min)*100}%"></span></span>${state.combatStyle===k?'✓ Training':'Train '+label(k)}</button>`;
+function refreshNavLevels(){
+ for(const node of document.querySelectorAll('[data-nav-lvl]')){
+  const v=node.dataset.navLvl;
+  node.textContent=v==='combat'?'Lv '+combatLevel():SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':'';
  }
- html+=`</div><div class="health-panel"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${hpLevel}</span></h3><div class="muted" id="hitpointsXpText">${Math.floor(hpXp)} XP ${hpLevel<99?'· '+Math.ceil(hpNext-hpXp)+' XP to next level':'· MAX LEVEL'}</div><div class="xpbar"><div id="hitpointsXpFill" style="width:${hpLevel===99?100:(hpXp-hpMin)/(hpNext-hpMin)*100}%"></div></div><h3>❤️ Health: <span id="combatHp">${state.hp}/${maxHp()}</span></h3><div class="bar health-bar"><div class="fill" id="healthFill" style="width:${state.hp/maxHp()*100}%"></div></div></div>`;
- html+=`<p class="muted">Each Hitpoints level adds 10 maximum HP (10 at level 1, 990 at level 99). Cooking provides stronger food as your HP increases.</p><div id="combatFood"></div><h3>Auto Eat</h3><div class="action" style="display:block"><label><input id="autoEatEnabled" type="checkbox" style="width:auto"> Enable Auto Eat</label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:9px"><label style="flex:1;min-width:130px">Food<select id="autoEatFood" style="display:block;width:100%;padding:8px"></select></label><label style="flex:1;min-width:130px">Eat at HP<select id="autoEatThreshold" style="display:block;width:100%;padding:8px"><option value="15">15%</option><option value="30">30%</option><option value="50">50%</option></select></label></div><small class="muted">Uses chosen food from your bank after taking damage when HP is at or below the selected percentage. You can still die from a big hit.</small></div>`;
- html+=`<h3>Monsters</h3>`+MONSTERS.map((m,i)=>`<div class="action"><div><b>${m.name}</b><br><small>Level ${m.level} · ${m.hp} HP · Max hit ${m.maxHit} · Loot: ${Object.keys(m.loot).join(', ')}</small></div><button data-monster="${i}">Fight</button></div>`).join('');
- html+=`<details><summary>💎 Treasure Table (${(TREASURE_CHANCE*100).toFixed(1).replace(/\.0$/,'')}% chance per kill)</summary><p class="muted">One random gem when the treasure roll succeeds. Relative weights are editable in TREASURE_TABLE. The percentages below are normalized probabilities conditional on a treasure drop.</p>${TREASURE_TABLE.map(([gem,weight])=>`<div class="item"><span>${gem}</span><span>${(weight/TREASURE_TABLE.reduce((sum,row)=>sum+row[1],0)*100).toFixed(2)}% of treasure drops</span></div>`).join('')}</details>`;
- 
+}
+function navigate(view){if(!NAV_VIEWS.includes(view))return;ui.view=view;renderNav();renderMain();refreshDynamic()}
+function xpText(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return `Level ${lvl} · ${fmt(xp)} XP${lvl>=99?' · MAX LEVEL':' · '+fmt(xpForLevel(lvl+1)-xp)+' to next level'}`}
+function xpFill(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return lvl>=99?100:clamp((xp-xpForLevel(lvl))/(xpForLevel(lvl+1)-xpForLevel(lvl))*100,0,100)}
+function xpStrip(skill){return `<div class="subdued" id="skillXpText">${xpText(skill)}</div><div class="xpbar"><div class="fill" id="skillXpFill" style="width:${xpFill(skill)}%"></div></div>`}
+function recipeCard(action,index,skill){
+ const level=levelFromXp(state.xp[skill]||0),locked=level<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning();
+ const already=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===index;
+ const requirements=Object.entries(action.cost||{}).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
+ return `<article class="recipe-card ${locked?'is-locked':''}" data-recipe="${index}">
+ <div class="between"><span class="recipe-title">${itemIcon(action.output)} ${esc(action.name)}</span><span class="recipe-badge level">Lv ${action.level}</span></div>
+ <div class="recipe-detail">Produces <b>×${action.quantity||1} ${esc(action.output)}</b> · <span class="positive">+${action.xp} XP</span>${action.requiresFire?' · 🔥 Fire':''}</div>
+ ${requirements?`<div class="requirements" data-ingredients="${index}">${requirements}</div>`:''}
+ <div class="recipe-bottom"><span class="recipe-badge">${esc(action.category)}</span><button data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button></div></article>`;
+}
+function renderFirePanel(){
+ return `<section class="info-box" style="border-color:#8a663f"><div class="between"><h3 style="margin:0">🔥 Cooking Fire</h3><span class="recipe-badge">1 second / cooking action</span></div>
+ <p>Cooking needs an active fire. Each log adds real-world burn time. You can keep chopping, mining or fighting while it burns.</p>
+ <div class="fire-layout"><div class="fire-tile ${fireBurning()?'':'out'}" id="fireTile"><h3 id="fireStatus">${fireBurning()?'🔥 Burning':'💨 Unlit'}</h3><b id="fireTimer">${timeFmt(fireRemaining())}</b><div class="small" id="fireFuelInfo">${fireBurning()?'Cooking available':'Add logs to light the fire'}</div></div>
+ <div class="fire-log-grid">${Object.entries(FIRE_FUEL).map(([item,seconds])=>`<button data-burn="${esc(item)}" ${count(item)<1?'disabled':''}>${itemIcon(item)} ${esc(item)} <span data-fuel-own="${esc(item)}">×${fmt(count(item))}</span><small>+${timeFmt(seconds)} burn time</small></button>`).join('')}</div></div></section>`;
+}
+function updateFireUi(){
+ const tile=el('fireTile');if(tile){
+  tile.classList.toggle('out',!fireBurning());
+  el('fireStatus').textContent=fireBurning()?'🔥 Burning':'💨 Unlit';
+  el('fireTimer').textContent=timeFmt(fireRemaining());
+  el('fireFuelInfo').textContent=fireBurning()?'You can cook while the fire burns':'Add logs to light the fire';
+ }
+ for(const btn of document.querySelectorAll('[data-burn]')){
+  const item=btn.dataset.burn;btn.disabled=count(item)<1||fireRemaining()+FIRE_FUEL[item]>GAME_CONFIG.maxFireSeconds;
+  const own=btn.querySelector('[data-fuel-own]');if(own)own.textContent='×'+fmt(count(item));
+ }
+}
+function renderSkillMain(skill){
+ const def=SKILLS[skill],categories=[...new Set(def.actions.map(a=>a.category))];
+ ui.skillTab[skill]??='All';
+ let chosen=ui.skillTab[skill];if(chosen!=='All'&&!categories.includes(chosen)){chosen='All';ui.skillTab[skill]='All'}
+ let html=`<div class="heading"><div><div class="eyebrow">Skill training</div><h2>${def.icon} ${label(skill)}</h2><p class="section-description">${esc(def.description)}</p></div><span class="recipe-badge level">Max Lv 99</span></div>${xpStrip(skill)}`;
+ if(skill==='cooking')html+=renderFirePanel();
+ if(categories.length>1)html+=`<div class="tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
+ html+=`<p class="small subdued">${def.actions.length} available recipes and activities · Each action takes 1 second for testing · Items go straight to your bank.</p>`;
+ const actions=def.actions.map((a,i)=>({a,i})).filter(({a})=>chosen==='All'||a.category===chosen);
+ html+=`<div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div>`;
  el('main').innerHTML=html;
- document.querySelectorAll('[data-style]').forEach(b=>b.onclick=()=>{state.combatStyle=b.dataset.style;save();renderMain()});
- document.querySelectorAll('[data-monster]').forEach(b=>b.onclick=()=>startCombat(+b.dataset.monster));
- 
- renderFood();
- const enabled=el('autoEatEnabled'),food=el('autoEatFood'),threshold=el('autoEatThreshold');
- enabled.checked=state.autoEat.enabled;
- food.innerHTML=Object.keys(FOOD).map(k=>`<option value="${k}">${k} (+${FOOD[k]} HP) · owned ${count(k)}</option>`).join('');
- food.value=state.autoEat.food;threshold.value=String(state.autoEat.threshold);
- enabled.onchange=()=>{state.autoEat.enabled=enabled.checked;save()};
- food.onchange=()=>{state.autoEat.food=food.value;save()};
- threshold.onchange=()=>{state.autoEat.threshold=Number(threshold.value);save()};
+}
+function renderCombatMain(){
+ const mods=gearMods();
+ let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2><p class="section-description">Combat level combines Attack, Strength, Defence and Hitpoints. ${COMBAT_CONFIG.maxLevel} is the configurable maximum, and each combat skill caps at 99.</p></div></div>`;
+ html+=`<div class="combat-choices">${['attack','strength','defence'].map(skill=>`<button data-combat-style="${skill}" class="combat-choice ${state.combatStyle===skill?'selected':''}"><b>${SKILLS[skill].icon} ${label(skill)}</b><span data-combat-xp="${skill}">${xpText(skill)}</span><div class="xpbar" style="width:100%"><div class="fill" style="width:${xpFill(skill)}%"></div></div><span>${state.combatStyle===skill?'✓ Training':'Train '+label(skill)}</span></button>`).join('')}</div>`;
+ html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><div class="bar healthbar"><div class="fill" id="healthFill" style="width:${state.hp/maxHp()*100}%"></div></div><small class="subdued">Each Hitpoints level gives 10 max HP. Combat attacks give 5 XP per damage to your chosen skill and 25% of that to Hitpoints.</small></div>`;
+ html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
+ html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
+ <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food</span><select id="autoEatFood">${Object.keys(FOOD).map(item=>`<option value="${esc(item)}" ${state.autoEat.food===item?'selected':''}>${esc(item)} (+${FOOD[item]} HP)</option>`).join('')}</select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued">Auto Eat uses food from the bank after each monster attack. Large hits can still kill you.</small></div>`;
+ html+=`<h3 class="section-title">⚔️ Monsters (${MONSTERS.length})</h3><div class="combat-monsters">${MONSTERS.map((m,i)=>`<div class="monster"><div class="between"><span class="monster-name">${i>8?'🐉':i>4?'👹':'👾'} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div><p>${fmt(m.hp)} HP · Defence ${m.def} · Max hit ${m.maxHit}<br>Loot: ${Object.keys(m.loot).map(x=>`${itemIcon(x)} ${esc(x)}`).join(', ')||'None'}${m.unique?`<br><span class="gold">🌟 ${esc(m.unique.item)} · ${pct(m.unique.chance)} base unique drop</span>`:''}</p><div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div>`).join('')}</div>`;
+ const total=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
+ html+=`<details class="info-box"><summary>💎 Treasure Table · <strong id="treasureRateText">${pct(TREASURE_CHANCE)} base chance per kill</strong></summary><p>Each kill rolls for a gem. If successful, gem type is selected by relative weight. Luck gear and potions raise the initial treasure chance and unique drop rates.</p><div class="bank-count">Current effective treasure chance: <b id="treasureCurrent">${pct(treasureChance())}</b>. Conditional gem odds below add up to 100%.</div>${TREASURE_TABLE.map(([gem,weight])=>`<div class="between" style="padding:5px 0;border-bottom:1px solid #39526a"><span>${itemIcon(gem)} ${esc(gem)}</span><span class="small">${pct(weight/total)} of gems · <span data-gem-chance="${weight}">${pct(treasureChance()*weight/total)}</span> per kill</span></div>`).join('')}</details>`;
+ html+=`<h3 class="section-title">🧪 Active buffs</h3><div id="buffList"></div>`;
+ el('main').innerHTML=html;renderFood();renderBuffs();
+}
+function renderFood(){
+ const box=el('combatFood');if(!box)return;
+ const owned=Object.entries(FOOD).filter(([name])=>count(name)>0);
+ box.innerHTML=owned.length?owned.map(([item,hp])=>`<button data-eat="${esc(item)}" ${state.hp>=maxHp()?'disabled':''}>${itemIcon(item)} ${esc(item)} ×${fmt(count(item))} · +${hp} HP</button>`).join(''):'<span class="small subdued">No food yet. Catch fish, chop logs for fire, then cook it – or buy food in the Shop.</span>';
+}
+function renderBuffs(){
+ const box=el('buffList');if(!box)return;
+ const buffs=Object.values(state.buffs).filter(x=>x?.until>Date.now());
+ box.innerHTML=buffs.length?`<div class="buff-list">${buffs.map(x=>`<span class="buff-chip">🧪 ${esc(x.name)} · ${timeFmt((x.until-Date.now())/1000)}</span>`).join('')}</div>`:'<span class="small subdued">No active potion buffs. Craft or buy potions and use them from your bank.</span>';
+}
+function renderCombatLive(){
+ if(ui.view!=='combat')return;
+ const c=el('combatLevelDisplay');if(c)c.textContent=combatLevel();
+ for(const skill of ['attack','strength','defence']){
+  const xp=el('main').querySelector(`[data-combat-xp="${skill}"]`);
+  if(xp){xp.textContent=xpText(skill);const bar=xp.parentElement.querySelector('.xpbar .fill');if(bar)bar.style.width=xpFill(skill)+'%'}
+ }
+ if(el('hitpointsLevel'))el('hitpointsLevel').textContent=levelFromXp(state.xp.hitpoints);
+ if(el('hitpointsXpText'))el('hitpointsXpText').textContent=xpText('hitpoints');
+ if(el('hitpointsXpFill'))el('hitpointsXpFill').style.width=xpFill('hitpoints')+'%';
+ if(el('combatHp'))el('combatHp').textContent=`${state.hp}/${maxHp()} HP`;
+ if(el('healthFill'))el('healthFill').style.width=clamp(state.hp/maxHp()*100,0,100)+'%';
+ const mods=gearMods();for(const [id,value] of [['boostAccuracy',mods.attackPct],['boostStrength',mods.strengthPct],['boostDefence',mods.defencePct]])if(el(id))el(id).textContent='+'+pct(value);
+ if(el('boostTreasure'))el('boostTreasure').textContent=pct(treasureChance());
+ if(el('treasureCurrent'))el('treasureCurrent').textContent=pct(treasureChance());
+ const totalWeight=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
+ for(const node of el('main').querySelectorAll('[data-gem-chance]'))node.textContent=pct(treasureChance()*Number(node.dataset.gemChance)/totalWeight);
+ for(const node of el('main').querySelectorAll('[data-kill-count]'))node.textContent=fmt(state.stats.kills[node.dataset.killCount]||0);
+ renderFood();renderBuffs();
+}
+function renderSkillLive(){
+ if(!SKILLS[ui.view]||SKILLS[ui.view].combat)return;
+ if(el('skillXpText'))el('skillXpText').textContent=xpText(ui.view);
+ if(el('skillXpFill'))el('skillXpFill').style.width=xpFill(ui.view)+'%';
+ for(const card of el('main').querySelectorAll('[data-recipe]')){
+  const i=Number(card.dataset.recipe),action=SKILLS[ui.view].actions[i],button=card.querySelector('[data-action]');
+  if(!action||!button)continue;
+  const locked=levelFromXp(state.xp[ui.view]||0)<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning();
+  const already=state.active?.type==='skill'&&state.active.skill===ui.view&&state.active.index===i;
+  button.disabled=locked||missing||fireNeeded;
+  button.textContent=locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start';
+  card.classList.toggle('is-locked',locked);
+  const req=card.querySelector('[data-ingredients]');
+  if(req)req.innerHTML=Object.entries(action.cost).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
+ }
+ if(ui.view==='cooking')updateFireUi();
+}
+const BANK_CATEGORIES=['All','Currency','Wood','Fish','Food','Ores','Bars','Farming','Seeds','Gems','Equipment','Potions','Loot','Materials'];
+function bankItems(scope){
+ const filter=ui.bank[scope];return Object.entries(state.bank).filter(([item,qty])=>qty>0&&(filter.category==='All'||itemCategory(item)===filter.category)&&item.toLowerCase().includes(filter.search.toLowerCase())).sort(([a],[b])=>a.localeCompare(b,'en'));
+}
+function renderBankShell(scope){
+ const filters=ui.bank[scope];return `<div class="between"><h3 style="margin:0">🏦 ${scope==='side'?'Bank':'Your Bank'}</h3><span class="bank-count" id="${scope}BankCapacity">${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks</span></div>
+ <div class="bank-tools" style="margin-top:8px"><input type="search" id="${scope}BankSearch" data-bank-search="${scope}" placeholder="Search items..." value="${esc(filters.search)}"><select data-bank-category="${scope}" id="${scope}BankCategory">${BANK_CATEGORIES.map(x=>`<option value="${x}" ${filters.category===x?'selected':''}>${x}</option>`).join('')}</select></div>
+ <div class="small subdued" id="${scope}BankCount" style="margin-top:8px"></div><div id="${scope}BankGrid" class="bank-grid ${scope==='side'?'compact':''}"></div><div class="pager" id="${scope}BankPager"></div><div id="${scope}BankDetail"></div>`;
+}
+function renderBankGrid(scope){
+ const settings=ui.bank[scope],items=bankItems(scope),per=scope==='side'?GAME_CONFIG.sidebarPageSize:GAME_CONFIG.bankPageSize;
+ const maxPage=Math.max(0,Math.ceil(items.length/per)-1);settings.page=clamp(settings.page,0,maxPage);
+ const grid=el(scope+'BankGrid');if(!grid)return;
+ const slice=items.slice(settings.page*per,(settings.page+1)*per);
+ grid.innerHTML=slice.length?slice.map(([item,amount])=>`<button class="bank-tile ${settings.selected===item?'active':''}" data-bank-select="${scope}" data-item="${esc(item)}" title="${esc(item)} · ${fmt(amount)} owned">${itemArt(item)}<span class="item-name">${esc(item)}</span><span class="stack">×${fmt(amount)}</span></button>`).join(''):'<p class="subdued small">No matching items in the bank.</p>';
+ const pager=el(scope+'BankPager');if(pager)pager.innerHTML=`<button data-bank-page="${scope}" data-delta="-1" ${settings.page<=0?'disabled':''}>←</button><span>Page ${settings.page+1} / ${maxPage+1}</span><button data-bank-page="${scope}" data-delta="1" ${settings.page>=maxPage?'disabled':''}>→</button>`;
+ const counter=el(scope+'BankCount');if(counter)counter.textContent=`${items.length} unique stacks shown · ${fmt(Object.values(state.bank).reduce((a,b)=>a+Number(b),0))} total items`;
+ const capacity=el(scope+'BankCapacity');if(capacity)capacity.textContent=`${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks`;
+ renderBankDetail(scope);
+}
+function gearDescription(info){
+ if(!info)return 'Equipment';
+ const rows=[];
+ for(const [key,val] of Object.entries(info)){
+  if(key==='slot'||key==='requiredLevel')continue;
+  const names={attack:'Accuracy',strength:'Damage',defence:'Defence',block:'Block',attackPct:'Accuracy',strengthPct:'Strength',defencePct:'Defence',xpBonus:'All skill XP',luckBonus:'Treasure & unique luck',gatherBonus:'Gathering bonus',woodcuttingYield:'Woodcutting yield',miningYield:'Mining yield',agricultureYield:'Agriculture yield'};
+  if(names[key])rows.push(`${names[key]} +${key.endsWith('Pct')||key.endsWith('Bonus')||key.endsWith('Yield')?pct(val):val}`);
+ }
+ return rows.join(' · ')||'Equipment';
+}
+function renderBankDetail(scope){
+ const box=el(scope+'BankDetail');if(!box)return;
+ const item=ui.bank[scope].selected;
+ if(!item||count(item)<1){box.innerHTML='<p class="subdued small">Select an item to equip, eat, use or sell it.</p>';return}
+ const equipment=EQUIPMENT[item],potion=POTIONS[item],food=FOOD[item],fuel=FIRE_FUEL[item];
+ const detail=equipment?gearDescription(equipment):potion?potion.description:food?`Restores ${food} HP`:fuel?`Burns for ${timeFmt(fuel)} in your Cooking fire`:`Stackable ${itemCategory(item).toLowerCase()} item`;
+ box.innerHTML=`<div class="selected-item">${itemArt(item,true)}<h4>${esc(item)} ×${fmt(count(item))}</h4><p>${esc(detail)}</p><p class="gold">Sell value: ${fmt(sellPrice(item))} Coins each</p><div class="controls">
+ ${equipment?`<button data-equip="${esc(item)}">Equip</button>`:''}
+ ${food?`<button data-eat="${esc(item)}" ${state.hp>=maxHp()?'disabled':''}>Eat +${food} HP</button>`:''}
+ ${potion?`<button data-use-potion="${esc(item)}">Use potion</button>`:''}
+ ${fuel?`<button data-burn="${esc(item)}">🔥 Add to fire</button>`:''}
+ ${item!=='Coins'?`<button data-sell="${esc(item)}" data-qty="1">Sell 1</button><button data-sell="${esc(item)}" data-qty="10">Sell 10</button><button data-sell="${esc(item)}" data-qty="all">Sell all</button>`:''}
+ </div></div>`;
+}
+function renderBankMain(){
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Inventory</div><h2>🏦 Bank</h2><p class="section-description">Your bank has <strong>${fmt(GAME_CONFIG.bankSlots)} unique stack slots</strong>. A stack can hold any quantity: 1, 100, or even 1 million of the same item. Browse categories and pages below.</p></div></div><div id="mainBankRoot">${renderBankShell('main')}</div>`;
+ renderBankGrid('main');
+}
+function renderGearSidebar(){
+ const mods=gearMods();
+ el('sidebar').innerHTML=`<h3 style="margin:0 0 11px">🛡️ Equipment</h3><div class="gear-list">${EQUIP_SLOTS.map(slot=>{
+  const item=state.equipment[slot];return `<div class="gear-slot"><span class="slot-name">${esc(slot)}</span><div class="slot-item">${item?itemIcon(item)+' '+esc(item):'— Empty —'}</div>${item?`<button data-unequip="${slot}">Unequip</button>`:''}</div>`;
+ }).join('')}</div><div class="equipment-stats"><b>Active bonuses</b>${gearDescription(mods).split(' · ').filter(x=>!x.endsWith('+0')&&!x.endsWith('+0%')).map(x=>`<span>• ${esc(x)}</span>`).join('')||'<span class="subdued">No bonuses equipped yet.</span>'}</div><h3 class="section-title">Available gear (${Object.keys(state.bank).filter(x=>count(x)>0&&EQUIPMENT[x]).length})</h3><div class="selected-item">${Object.entries(state.bank).filter(([name,n])=>n>0&&EQUIPMENT[name]).sort(([a],[b])=>a.localeCompare(b)).map(([name,n])=>`<div class="between" style="margin:6px 0;gap:5px"><span class="small">${itemIcon(name)} ${esc(name)} ×${fmt(n)}</span><button data-equip="${esc(name)}" style="font-size:11px;padding:5px 7px">Equip</button></div>`).join('')||'<span class="subdued small">Find or craft equipment to equip it here.</span>'}</div>`;
+}
+function renderSidebar(){
+ el('bankTab').classList.toggle('selected',ui.sidebarTab==='bank');el('gearTab').classList.toggle('selected',ui.sidebarTab==='gear');
+ if(ui.sidebarTab==='bank'){
+  el('sidebar').innerHTML=renderBankShell('side');renderBankGrid('side');
+ }else renderGearSidebar();
+}
+function renderShopMain(){
+ const categories=['All',...new Set(SHOP_ITEMS.map(x=>x.category))];
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Trading Post</div><h2>🛒 General Shop</h2><p class="section-description">Buy tools, supplies, seeds, early equipment, food and potions. Sell your gathered or crafted goods from the bank to earn more Coins. Rare uniques are monster drops, not shop items.</p></div><div class="stat-tile"><small>Your Coins</small><strong class="gold" id="shopCoins">🪙 ${fmt(count('Coins'))}</strong></div></div>
+ <div class="flexrow"><label class="small" for="shopQty">Buy quantity</label><select class="small-select shop-qty" id="shopQty"><option value="1" ${ui.shopQty===1?'selected':''}>1</option><option value="10" ${ui.shopQty===10?'selected':''}>10</option><option value="100" ${ui.shopQty===100?'selected':''}>100</option></select></div>
+ <div class="tabs" id="shopTabs">${categories.map(x=>`<button data-shop-cat="${esc(x)}" class="${ui.shopCategory===x?'selected':''}">${esc(x)}</button>`).join('')}</div>
+ <div class="shop-grid" id="shopGrid"></div><div class="info-box"><b>💰 How selling works</b><p>Select an item in your Bank (the sidebar stays open while you visit the Shop), then choose Sell 1, Sell 10, or Sell All. Sell prices are shown on the selected item.</p></div>`;
+ renderShopItems();
+}
+function renderShopItems(){
+ const grid=el('shopGrid');if(!grid)return;
+ if(el('shopCoins'))el('shopCoins').textContent='🪙 '+fmt(count('Coins'));
+ grid.innerHTML=SHOP_ITEMS.filter(x=>ui.shopCategory==='All'||x.category===ui.shopCategory).map(x=>{
+  const cost=x.price*ui.shopQty;
+  const gear=EQUIPMENT[x.name],pot=POTIONS[x.name];
+  const desc=gear?gearDescription(gear):pot?pot.description:`${x.category} · bank item`;
+  return `<div class="shop-card">${itemArt(x.name)}<div class="shop-card-content"><h3>${esc(x.name)}</h3><p>${esc(desc)}</p><div class="between"><div><div class="gold">🪙 ${fmt(x.price)} each · ${fmt(cost)} total</div><span class="shop-owned">Owned: ${fmt(count(x.name))}</span></div><button data-buy="${esc(x.name)}" ${count('Coins')<cost||(!bankCanHold(x.name)&&!(cost===count('Coins')))?'disabled':''}>Buy ×${ui.shopQty}</button></div></div></div>`;
+ }).join('');
+}
+function renderJournalMain(){
+ const completed=QUESTS.filter(q=>state.claimed.includes(q.id)).length;
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Milestones & Rewards</div><h2>📜 Adventurer's Journal</h2><p class="section-description">Complete goals using different skills. Claim your Coins to fund new tools, supplies and equipment.</p></div><span class="recipe-badge level">${completed} / ${QUESTS.length} claimed</span></div>
+ <div class="stat-grid"><div class="stat-tile"><small>Total skill actions</small><strong>${fmt(Object.values(state.stats.bySkill).reduce((a,b)=>a+b,0))}</strong></div><div class="stat-tile"><small>Monsters defeated</small><strong>${fmt(Object.values(state.stats.kills).reduce((a,b)=>a+b,0))}</strong></div><div class="stat-tile"><small>Treasure gems found</small><strong>${fmt(state.stats.treasures)}</strong></div><div class="stat-tile"><small>Lifetime Coins earned</small><strong>${fmt(state.stats.coinsEarned)}</strong></div></div>
+ <div class="skill-cards">${QUESTS.map(q=>{
+  const claimed=state.claimed.includes(q.id),ready=q.test(state);
+  return `<div class="recipe-card"><div class="between"><strong>${claimed?'✅':ready?'🎉':'📜'} ${esc(q.title)}</strong><span class="gold">🪙 ${fmt(q.coins)}</span></div><div class="small subdued">${esc(q.text)}</div><div class="recipe-bottom"><span class="recipe-badge">${claimed?'Claimed':ready?'Ready to claim':'In progress'}</span><button data-claim="${q.id}" ${claimed||!ready?'disabled':''}>${claimed?'Done':ready?'Claim reward':'Locked'}</button></div></div>`
+ }).join('')}</div>`;
+}
+function renderMain(){
+ if(ui.view==='combat')renderCombatMain();
+ else if(ui.view==='bank')renderBankMain();
+ else if(ui.view==='shop')renderShopMain();
+ else if(ui.view==='journal')renderJournalMain();
+ else renderSkillMain(ui.view);
+ updateFireUi();renderProgress();
+}
+function renderLog(){
+ const box=el('log');if(!box)return;
+ box.innerHTML=state.log.slice(0,35).map(x=>`<div class="${x.includes('reached level')?'level-msg':x.includes('RARE DROP')||x.includes('Defeated')?'loot-msg':''}">${esc(x)}</div>`).join('');
+}
+function renderProgress(){
+ const current=state.active;
+ let name='Idle · Choose an action';
+ if(current?.type==='skill'){
+  const action=SKILLS[current.skill]?.actions[current.index];
+  name=action?`${SKILLS[current.skill].icon} ${action.name} · ${label(current.skill)}`:'Idle';
+ }else if(current?.type==='combat'){
+  const mob=MONSTERS[state.monsterIndex];
+  name=`⚔️ ${mob.name} · Enemy ${Math.ceil(Math.max(0,state.monsterHp))}/${mob.hp} HP · You ${state.hp}/${maxHp()} HP`;
+ }
+ el('activityName').textContent=name;el('progressFill').style.width=clamp(state.progress||0,0,100)+'%';
+ el('progressText').textContent=Math.floor(clamp(state.progress||0,0,100))+'%';
+ el('stopBtn').disabled=!current;
+}
+function refreshSummary(){
+ el('summary').innerHTML=`<span class="stat">⚔️ Combat <b>${combatLevel()}/${COMBAT_CONFIG.maxLevel}</b></span><span class="stat">❤️ <b>${Math.ceil(state.hp)}/${maxHp()}</b> HP</span><span class="stat">🪙 <b>${fmt(count('Coins'))}</b></span><span class="stat">🏦 <b>${fmt(bankUsed())}/${GAME_CONFIG.bankSlots}</b> stacks</span><span class="stat">${state.active?'⚡ Working':'💤 Idle'}</span>`;
+}
+function refreshDynamic(){
+ refreshSummary();refreshNavLevels();
+ if(ui.view==='combat')renderCombatLive();
+ else if(SKILLS[ui.view]&&!SKILLS[ui.view].combat)renderSkillLive();
+ else if(ui.view==='bank')renderBankGrid('main');
+ else if(ui.view==='shop')renderShopItems();
+ if(ui.sidebarTab==='bank')renderBankGrid('side');
+ else{
+  const right=el('sidebar');const parent=el('sidebar').closest('.right');const scroll=parent.scrollTop;
+  renderGearSidebar();parent.scrollTop=scroll;
+ }
  renderProgress();
 }
-function renderFood(){let box=el('combatFood');if(!box)return;let foods=Object.entries(FOOD).filter(([item])=>count(item)>0);box.innerHTML=foods.length?foods.map(([item,hp])=>`<button data-eat="${item}" ${state.hp>=maxHp()?'disabled':''}>🍽️ ${item} ×${count(item)} (+${hp} HP)</button>`).join(' '):'<p class="muted">No food yet. Catch fish and cook it, or harvest crops.</p>';box.querySelectorAll('[data-eat]').forEach(b=>b.onclick=()=>eat(b.dataset.eat))}
-function renderProgress(){
- let name='Idle';
+function render(){renderNav();renderMain();renderSidebar();renderLog();refreshDynamic()}
+// ── Interaction via event delegation: controls remain functional after redraw ──
+function handleClick(e){
+ const b=e.target.closest('button');if(!b||b.disabled)return;
+ if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
+ if(b.hasAttribute('data-action'))return startAction(ui.view,Number(b.dataset.action));
+ if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));
+ if(b.hasAttribute('data-combat-style')){
+  state.combatStyle=b.dataset.combatStyle;save();renderMain();refreshDynamic();return;
+ }
+ if(b.hasAttribute('data-skill-tab')){ui.skillTab[ui.view]=b.dataset.skillTab;renderMain();refreshDynamic();return}
+ if(b.hasAttribute('data-shop-cat')){ui.shopCategory=b.dataset.shopCat;renderMain();refreshDynamic();return}
+ if(b.hasAttribute('data-buy'))return buy(b.dataset.buy,ui.shopQty);
+ if(b.hasAttribute('data-burn'))return lightFire(b.dataset.burn);
+ if(b.hasAttribute('data-equip'))return equip(b.dataset.equip);
+ if(b.hasAttribute('data-unequip'))return unequip(b.dataset.unequip);
+ if(b.hasAttribute('data-eat')){if(!eat(b.dataset.eat))note('Cannot eat now.');refreshDynamic();save();return}
+ if(b.hasAttribute('data-use-potion'))return usePotion(b.dataset.usePotion);
+ if(b.hasAttribute('data-sell'))return sell(b.dataset.sell,b.dataset.qty);
+ if(b.hasAttribute('data-claim'))return claimQuest(b.dataset.claim);
+ if(b.hasAttribute('data-bank-select')){
+  const scope=b.dataset.bankSelect;ui.bank[scope].selected=b.dataset.item;
+  renderBankGrid(scope);return;
+ }
+ if(b.hasAttribute('data-bank-page')){
+  const scope=b.dataset.bankPage;ui.bank[scope].page+=Number(b.dataset.delta);renderBankGrid(scope);return;
+ }
+}
+function handleInput(e){
+ const t=e.target;
+ if(t.hasAttribute('data-bank-search')){
+  const scope=t.dataset.bankSearch;ui.bank[scope].search=t.value;ui.bank[scope].page=0;renderBankGrid(scope);
+ }
+ if(t.hasAttribute('data-bank-category')){
+  const scope=t.dataset.bankCategory;ui.bank[scope].category=t.value;ui.bank[scope].page=0;renderBankGrid(scope);
+ }
+ if(t.id==='shopQty'){ui.shopQty=Number(t.value);renderShopItems()}
+ if(t.id==='autoEatEnabled'){state.autoEat.enabled=t.checked;save()}
+ if(t.id==='autoEatFood'){state.autoEat.food=t.value;save()}
+ if(t.id==='autoEatThreshold'){state.autoEat.threshold=Number(t.value);save()}
+}
+el('main').addEventListener('click',handleClick);
+el('sidebar').addEventListener('click',handleClick);
+el('nav').addEventListener('click',handleClick);
+el('main').addEventListener('input',handleInput);
+el('sidebar').addEventListener('input',handleInput);
+el('main').addEventListener('change',handleInput);
+el('sidebar').addEventListener('change',handleInput);
+el('mobileSelect').onchange=ev=>navigate(ev.target.value);
+el('stopBtn').onclick=()=>stop();
+el('bankTab').onclick=()=>{ui.sidebarTab='bank';renderSidebar()};
+el('gearTab').onclick=()=>{ui.sidebarTab='gear';renderSidebar()};
+el('saveBtn').onclick=()=>{save();note('💾 Game saved.')};
+el('exportBtn').onclick=()=>{
+ save();const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;
+ anchor.download='idle-rpg-save.json';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),3000);
+};
+el('importBtn').onclick=()=>el('fileInput').click();
+el('fileInput').onchange=async e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ try{
+  const data=JSON.parse(await file.text());if(!data.xp||!data.bank||typeof data.xp!=='object'||typeof data.bank!=='object')throw Error('Invalid save file');
+  localStorage.setItem(SAVE_KEY,JSON.stringify(data));restore();render();note('💾 Save imported successfully.');
+ }catch(err){alert('Could not import save: '+err.message)}e.target.value='';
+};
+el('resetBtn').onclick=()=>{
+ if(confirm('Reset all progress, bank items, equipment, quests and Coins? This cannot be undone unless you exported a save.')){
+  state=newGame();save();render();note('New adventure started!');
+ }
+};
+function tick(t){
+ let dt=clamp(t-lastTick,0,250);lastTick=t;
  if(state.active){
-  if(state.active.type==='skill'){
-   const a=SKILLS[state.active.skill].actions[state.active.index];
-   name=`${SKILLS[state.active.skill].icon} ${a[0]}`;
-  }else{
-   name=`⚔️ ${MONSTERS[state.monsterIndex].name} · Enemy HP ${Math.max(0,state.monsterHp)}/${MONSTERS[state.monsterIndex].hp} · Your HP ${state.hp}/${maxHp()}`;
+  state.progress+=dt/(Number(state.actionMs)||GAME_CONFIG.actionMs)*100;
+  if(state.progress>=100){state.progress-=100;complete()}
+  renderProgress();
+ }
+ // Potion / fire counters use wall time. Updating once per second avoids excess DOM churn.
+ if(t-lastUiPulse>1000){lastUiPulse=t;
+  if(ui.view==='cooking')updateFireUi();
+  if(ui.view==='combat'){
+   if(el('boostTreasure'))el('boostTreasure').textContent=pct(treasureChance());
+   if(el('treasureCurrent'))el('treasureCurrent').textContent=pct(treasureChance());
+   const weightSum=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
+   for(const node of el('main').querySelectorAll('[data-gem-chance]'))node.textContent=pct(treasureChance()*Number(node.dataset.gemChance)/weightSum);
+   renderBuffs();
   }
  }
- el('activityName').textContent=name;
- el('progressFill').style.width=state.progress+'%';
- el('progressText').textContent=Math.floor(state.progress)+'%';
- if(el('combatHp'))el('combatHp').textContent=`${state.hp}/${maxHp()}`;
- if(el('healthFill'))el('healthFill').style.width=(state.hp/maxHp()*100)+'%';
+ if(t-lastSavedFrame>15000){lastSavedFrame=t;save()}
+ requestAnimationFrame(tick);
 }
-function renderSidebar(){el('bankTab').className=sidebarTab==='bank'?'selected':'';el('gearTab').className=sidebarTab==='gear'?'selected':'';if(sidebarTab==='bank'){el('sidebar').innerHTML=`<input id="searchBank" placeholder="Search bank items..."><div id="bankItems"></div>`;el('searchBank').oninput=renderBankItems;renderBankItems()}else{el('sidebar').innerHTML=`<div class="item">Weapon: ${state.equipment.weapon||'None'} ${state.equipment.weapon?'<button data-unequip="weapon">Unequip</button>':''}</div><div class="item">Shield: ${state.equipment.shield||'None'} ${state.equipment.shield?'<button data-unequip="shield">Unequip</button>':''}</div><h3>Available equipment</h3>`+Object.entries(state.bank).filter(([k,n])=>n>0&&EQUIPMENT[k]).map(([k,n])=>`<div class="item"><span>${k} ×${n}</span><button data-equip="${k}">Equip</button></div>`).join('');document.querySelectorAll('[data-equip]').forEach(b=>b.onclick=()=>{let item=b.dataset.equip,slot=EQUIPMENT[item].slot;if(state.equipment[slot])add(state.equipment[slot]);add(item,-1);state.equipment[slot]=item;renderSidebar();save()});document.querySelectorAll('[data-unequip]').forEach(b=>b.onclick=()=>{let slot=b.dataset.unequip;add(state.equipment[slot]);state.equipment[slot]=null;renderSidebar();save()})}}
-function renderBankItems(){let search=(el('searchBank')?.value||'').toLowerCase();let items=Object.entries(state.bank).filter(([k,n])=>n>0&&k.toLowerCase().includes(search)).sort(([a],[b])=>a.localeCompare(b));el('bankItems').innerHTML=items.length?items.map(([k,n])=>`<div class="item"><span>${k}</span><b>×${n}</b>${FOOD[k]?`<button data-eat="${k}" ${state.hp>=maxHp()?'disabled':''}>Eat +${FOOD[k]} HP</button>`:''}</div>`).join(''):'<p class="muted">No items found.</p>';el('bankItems').querySelectorAll('[data-eat]').forEach(b=>b.onclick=()=>eat(b.dataset.eat))}
-function renderLog(){el('log').innerHTML=state.log.slice(0,25).map(x=>`<div>${x.replaceAll('&','&amp;').replaceAll('<','&lt;')}</div>`).join('')}
-// Keep the currently visible XP information in sync after each completed action.
-// Update only the counters/bars: rebuilding the entire main panel would reset tabs and controls.
-function renderLiveXp(){
- if(currentSkill==='combat'){
-  for(const skill of ['attack','strength','defence']){
-   const counter=document.querySelector(`[data-combat-xp="${skill}"]`);
-   if(!counter)continue;
-   const xp=state.xp[skill]||0,lvl=levelFromXp(xp);
-   const min=xpForLevel(lvl),max=xpForLevel(Math.min(99,lvl+1));
-   const fill=counter.parentElement.querySelector('.xpbar > span');
-   counter.textContent=`Level ${lvl} · ${Math.floor(xp)} XP`;
-   if(fill)fill.style.width=(lvl===99?100:(xp-min)/(max-min)*100)+'%';
-  }
-  const hpXp=state.xp.hitpoints||0,hpLvl=levelFromXp(hpXp);
-  const hpMin=xpForLevel(hpLvl),hpNext=xpForLevel(Math.min(99,hpLvl+1));
-  if(el('hitpointsLevel'))el('hitpointsLevel').textContent=hpLvl;
-  if(el('hitpointsXpText'))el('hitpointsXpText').textContent=`${Math.floor(hpXp)} XP ${hpLvl<99?'· '+Math.ceil(hpNext-hpXp)+' XP to next level':'· MAX LEVEL'}`;
-  if(el('hitpointsXpFill'))el('hitpointsXpFill').style.width=(hpLvl===99?100:(hpXp-hpMin)/(hpNext-hpMin)*100)+'%';
- }else{
-  const counter=el('skillXpText'),fill=el('skillXpFill');
-  if(!counter||!fill)return;
-  const xp=state.xp[currentSkill]||0,lvl=levelFromXp(xp);
-  const min=xpForLevel(lvl),max=xpForLevel(Math.min(99,lvl+1));
-  counter.textContent=`Level ${lvl} · ${Math.floor(xp)} XP ${lvl<99?`· ${Math.floor(max-xp)} XP to next level`:'· MAX LEVEL'}`;
-  fill.style.width=(lvl===99?100:(xp-min)/(max-min)*100)+'%';
-  // Unlock newly available actions immediately on level-up.
-  document.querySelectorAll('#main [data-action][data-req-level]').forEach(button=>{
-   const locked=lvl<Number(button.dataset.reqLevel);
-   button.disabled=locked;
-   button.textContent=locked?'Locked':'Start';
-  });
- }
-}
-function renderDynamic(){renderNav();const combatLevelEl=el('combatLevelDisplay');if(combatLevelEl)combatLevelEl.textContent=combatLevel();renderLiveXp();renderSidebar();renderFood();renderProgress();el('summary').textContent=`⚔️ Combat Lv ${combatLevel()}/${COMBAT_CONFIG.maxLevel} · ❤️ ${state.hp}/${maxHp()} HP (Lv ${levelFromXp(state.xp.hitpoints)}) · 🎒 ${Object.values(state.bank).reduce((a,b)=>a+b,0)} items · ${state.active?'Training':'Idle'}`}
-function render(){renderNav();renderMain();renderSidebar();renderLog();renderDynamic()}
-el('stopBtn').onclick=stop;el('bankTab').onclick=()=>{sidebarTab='bank';renderSidebar()};el('gearTab').onclick=()=>{sidebarTab='gear';renderSidebar()};el('saveBtn').onclick=()=>{save();note('💾 Game saved.')};el('exportBtn').onclick=()=>{save();let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='idle-rpg-v2-save.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};el('importBtn').onclick=()=>el('fileInput').click();el('fileInput').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let s=JSON.parse(await f.text());if(!s.xp||!s.bank)throw Error('Invalid save');localStorage.setItem(SAVE_KEY,JSON.stringify(s));restore();render();note('Save imported.')}catch(err){alert('Could not import save: '+err.message)}e.target.value=''};el('resetBtn').onclick=()=>{if(confirm('Delete your progress and start a new game?')){state=newGame();save();render()}};restore();render();requestAnimationFrame(tick);setInterval(save,15000);
+restore();render();requestAnimationFrame(tick);
+// Export a small test-only API without changing the game or its save format.
+window.IdleRPGDebug={getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate};
+
 </script></body></html>

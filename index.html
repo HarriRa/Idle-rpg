@@ -9,21 +9,43 @@ header{display:flex;align-items:center;justify-content:space-between;gap:14px;fl
 h1{margin:0 0 5px;font-size:21px;letter-spacing:.2px}.version{font-size:11px;color:#a7bed5;font-weight:500}.stats{display:flex;gap:7px;flex-wrap:wrap}.stat{display:inline-flex;align-items:center;gap:5px;border:1px solid #3b536b;background:#102035;border-radius:14px;padding:5px 9px;font-size:12px;color:#c3d5e8}.top-controls{display:flex;gap:6px;flex-wrap:wrap}.top-controls button{padding:7px 9px;font-size:12px}
 .layout{display:grid;grid-template-columns:193px minmax(0,1fr) 320px;gap:13px;max-width:1600px;margin:0 auto;padding:13px;align-items:start}.panel{background:#19273a;border:1px solid #324a62;border-radius:13px;padding:14px;min-width:0;box-shadow:0 3px 12px #0002}.left,.right{position:sticky;top:9px;max-height:calc(100vh - 18px);overflow:auto;scrollbar-width:thin}.nav{display:grid;gap:5px}.nav button{text-align:left;width:100%;display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:600;padding:9px}.nav small{font-size:11px;color:#c1d7eb;font-weight:400;white-space:nowrap}.nav-divider{margin:11px 3px 7px;color:#87a7c1;letter-spacing:.1em;font-size:10px;font-weight:800;text-transform:uppercase}
 .main{min-height:680px}.right h3{margin-top:15px}.mobile-nav{display:none}.eyebrow{text-transform:uppercase;letter-spacing:.08em;color:#8db3c9;font-size:11px;font-weight:800;margin-bottom:5px}.heading{display:flex;gap:14px;align-items:start;justify-content:space-between;flex-wrap:wrap;margin-bottom:13px}.heading h2{margin:0 0 3px;font-size:23px}.subdued,.muted{color:#a6bcd3}.small{font-size:12px}.extra-small{font-size:11px}.section-title{font-size:16px;margin:17px 0 10px}.section-description{line-height:1.55;margin:6px 0 12px;color:#b0c7db}
-#activityPanel{position:sticky;top:8px;z-index:11;background:linear-gradient(125deg,#194055,#203651);border:2px solid #39baa9;border-radius:12px;padding:12px 15px;margin-bottom:17px;box-shadow:0 5px 19px #0007}.activity-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:800}.activity-info{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;color:#d7edf4}.activity-info span{overflow-wrap:anywhere}.bar{height:15px;background:#0a1727;border-radius:20px;overflow:hidden;border:1px solid #28455d;margin:9px 0}.bar.large{height:24px}.fill{height:100%;width:0;background:linear-gradient(90deg,#20b7bd,#b4ef75);transition:width .08s linear}.xpbar{height:8px;background:#0a1625;border-radius:12px;overflow:hidden;margin:7px 0 0}.xpbar .fill{background:linear-gradient(90deg,#3e93d7,#8dd4f4)}.healthbar .fill{background:linear-gradient(90deg,#d45560,#fb9a7c)}
-.activity-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center}.activity-bottom button{padding:5px 11px;font-size:12px}.activity-bottom small{font-size:11px;color:#b9d0d8}
-/* Melvor-style live rewards: one row per XP skill or item. Each row has its own 5s inactivity clock. */
-.activity-feed{margin:11px 0 10px;padding:9px;background:#0e2639;border:1px solid #3d7481;border-radius:10px}
-.activity-feed[hidden]{display:none}.activity-feed-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;color:#a9cedb;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.085em}
-.activity-feed-list{display:flex;flex-direction:column;gap:5px;max-height:225px;overflow-y:auto;scrollbar-width:thin}
-.activity-reward{display:flex;align-items:center;gap:9px;padding:6px 9px;background:#18374b;border:1px solid #355969;border-radius:8px;min-width:0;opacity:1;transition:opacity 1.1s ease,transform 1.1s ease}
-.activity-reward.fading{opacity:0;transform:translateY(-3px);pointer-events:none}
-.activity-reward .reward-icon{flex:none;width:29px;height:29px;display:grid;place-items:center;background:#254b5f;border-radius:7px;font-size:19px}
-.activity-reward .item-art{flex:none;width:29px;height:29px;font-size:20px;border-radius:7px}
-.activity-reward .reward-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px}
-.activity-reward .reward-name{font-weight:700;font-size:12px;overflow-wrap:anywhere}
-.activity-reward .reward-bank{font-size:10px;color:#a1c3d1}
-.activity-reward .reward-amount{font-size:14px;color:#95e6ba;font-weight:850;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
-.activity-reward.reward-xp .reward-amount{color:#a4d7ff}
+/* Compact, transparent, sticky activity status. Drops float outside its layout. */
+#activityPanel{position:sticky;top:5px;z-index:11;margin-bottom:11px;padding:6px 9px 5px;border:1px solid #7298ac44;border-radius:9px;background:rgba(9,21,34,.18);backdrop-filter:blur(5px);box-shadow:none}
+.activity-head{display:flex;align-items:center;gap:9px;min-width:0;font-weight:700}
+.activity-kicker{font-size:11px;color:#9acbd0;white-space:nowrap;flex:none}
+.activity-name{flex:1;min-width:0;color:#d9e9ef;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.activity-percent{font-size:11px;color:#b7d8dc;white-space:nowrap;font-variant-numeric:tabular-nums}
+#stopBtn{font-size:10px;padding:3px 7px;border-radius:6px;background:#162a3bb5;border-color:#49667888;flex:none}
+.bar{height:15px;background:#0a1727;border-radius:20px;overflow:hidden;border:1px solid #28455d;margin:9px 0}
+.bar.large{height:24px}
+.bar.activity-track{height:5px;margin:6px 0 0;background:#0a1e2ca1;border:0}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#20b7bd,#b4ef75);transition:width .08s linear}
+.xpbar{height:8px;background:#0a1625;border-radius:12px;overflow:hidden;margin:7px 0 0}.xpbar .fill{background:linear-gradient(90deg,#3e93d7,#8dd4f4)}.healthbar .fill{background:linear-gradient(90deg,#d45560,#fb9a7c)}
+.activity-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* Lightweight floating reward strips. Never stretch Current Activity or block game controls. */
+.activity-feed{position:absolute;top:calc(100% + 5px);right:1px;z-index:12;width:min(465px,calc(100vw - 30px));padding:0;margin:0;background:transparent;border:0;box-shadow:none;pointer-events:none}
+.activity-feed[hidden]{display:none}
+.activity-feed-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;align-items:start}
+.activity-reward{display:flex;align-items:center;gap:6px;min-width:0;min-height:27px;padding:3px 7px;background:rgba(13,34,49,.88);border:1px solid #5b82926b;border-radius:7px;box-shadow:0 2px 7px #0003;backdrop-filter:blur(5px);opacity:1;transition:opacity 1.1s ease,transform 1.1s ease}
+.activity-reward.fading{opacity:0;transform:translateY(-4px)}
+.activity-reward .reward-icon{flex:none;width:19px;height:19px;display:grid;place-items:center;border-radius:4px;background:#32526760;font-size:14px}
+.activity-reward .item-art{flex:none;width:19px;height:19px;font-size:14px;border-radius:4px;padding:0}
+.activity-reward .reward-info{min-width:0;flex:1}
+.activity-reward .reward-name{display:block;font-size:11px;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.activity-reward .reward-bank{display:none}
+.activity-reward .reward-amount{font-size:11px;color:#9debc4;font-weight:850;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+.activity-reward.reward-xp .reward-amount{color:#9ed4ff}
+.activity-reward-more{justify-content:center;min-height:27px;font-size:11px;color:#bdcdda;background:rgba(15,34,47,.80);border-style:dashed}
+@media(max-width:650px){
+ #activityPanel{top:3px;padding:5px 7px}
+ .activity-head{gap:6px}
+ .activity-kicker{font-size:10px}
+ .activity-name{font-size:10px}
+ #stopBtn{padding:2px 6px}
+ .activity-feed{width:min(260px,calc(100vw - 24px));right:0}
+ .activity-feed-list{grid-template-columns:minmax(0,1fr);gap:3px}
+ .activity-reward{min-height:25px;padding:2px 6px}
+}
 @media(prefers-reduced-motion:reduce){.activity-reward{transition:none}}
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0}.tabs button{padding:8px 10px;font-size:12px}.tabs button.selected{background:#197489}.skill-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:9px}.recipe-card{border:1px solid #38516b;border-radius:11px;padding:11px;background:#203149;display:flex;flex-direction:column;gap:7px;min-width:0}.recipe-card.is-locked{opacity:.7}.recipe-title{font-size:14px;font-weight:750}.recipe-detail{font-size:12px;color:#c0d0e0;line-height:1.5}.recipe-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}.recipe-bottom button{white-space:nowrap;padding:7px 10px}.recipe-badge{font-size:11px;border:1px solid #466783;background:#12263a;border-radius:12px;padding:3px 7px}.recipe-badge.level{color:#9bd9f9}.recipe-stock{display:flex;align-items:center;flex-wrap:wrap;gap:5px 9px;padding:8px 9px;background:#132b3c;border:1px solid #386479;border-radius:8px;font-size:12px}.recipe-stock-label{color:#b5d2e4;font-weight:650;white-space:nowrap}.recipe-stock-items{display:flex;flex-wrap:wrap;gap:5px;min-width:0}.recipe-stock-item{display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;color:#dceaf8;overflow-wrap:anywhere}.recipe-stock-item strong{color:#9cf0cb;font-size:13px;font-variant-numeric:tabular-nums}.recipe-stock-item.bonus{color:#c1b2e4;font-size:11px}.requirements{font-size:12px;display:flex;flex-wrap:wrap;gap:4px}.ingredient{background:#16273a;color:#d3e2ed;border:1px solid #33475d;border-radius:5px;padding:3px 5px}.ingredient.missing{border-color:#8c5260;color:#f4aaa9}
 /* Expanded journal: reward chips, progress and compact category navigation. */
@@ -101,17 +123,17 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 @media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.10 · Live Activity Rewards</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.11 · Compact Activity</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
-<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span>⚡ Current Activity</span><span id="progressText">0%</span></div><div class="activity-info"><span id="activityName">Idle · Choose an action</span></div><div class="bar large"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div class="activity-feed-heading"><span>✦ Live Rewards</span><span>Last 5 seconds</span></div><div id="activityFeedList" class="activity-feed-list"></div></div><div class="activity-bottom"><small id="activityHint">All actions take 1 second while testing.</small><button id="stopBtn">Stop</button></div></section><div id="main"></div></main>
+<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><div id="main"></div></main>
 <aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
 </div><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.10 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.11 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -980,8 +1002,9 @@ let state=newGame();
 const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}},journalCategory:'All',gearSlot:null};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
-const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRows:25};
+const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRowsDesktop:6,maxRowsMobile:3};
 const activityRewards=new Map(); // Transient UI only; never added to save or replayed offline.
+addEventListener('resize',()=>{if(activityRewards.size)renderActivityFeed()});
 let activityRewardBatch=null;
 function queueActivityReward(kind,name,amount){
  if(offlineRunning||!activityRewardBatch||!(Number(amount)>0))return;
@@ -1002,11 +1025,13 @@ function renderActivityFeed(now=performance.now()){
  const panel=el('activityFeed'),list=el('activityFeedList');if(!panel||!list)return;
  for(const [key,reward] of activityRewards)if(now-reward.updatedAt>=ACTIVITY_FEED_CONFIG.lifetimeMs)activityRewards.delete(key);
  if(!activityRewards.size){panel.hidden=true;list.replaceChildren();return}
- // XP at the top, then items in stable order, so existing rows don't jump on every action.
- const rows=[...activityRewards.entries()].sort((a,b)=>{
+ // Prioritize XP and the latest items; show a small overflow indicator for busy combat.
+ const all=[...activityRewards.entries()].sort((a,b)=>{
   if(a[1].kind!==b[1].kind)return a[1].kind==='xp'?-1:1;
-  return a[1].createdAt-b[1].createdAt;
- }).slice(0,ACTIVITY_FEED_CONFIG.maxRows);
+  return b[1].updatedAt-a[1].updatedAt || b[1].createdAt-a[1].createdAt;
+ });
+ const maxRows=innerWidth<=650?ACTIVITY_FEED_CONFIG.maxRowsMobile:ACTIVITY_FEED_CONFIG.maxRowsDesktop;
+ const rows=all.slice(0,maxRows),hiddenCount=all.length-rows.length;
  list.innerHTML=rows.map(([key,reward])=>{
   const xp=reward.kind==='xp',remaining=ACTIVITY_FEED_CONFIG.lifetimeMs-(now-reward.updatedAt);
   const fading=remaining<=ACTIVITY_FEED_CONFIG.fadeMs;
@@ -1015,8 +1040,8 @@ function renderActivityFeed(now=performance.now()){
   const title=xp?`${esc(label(reward.name))} XP`:esc(reward.name);
   const sub=xp?'Experience gained':`Bank: ${fmt(count(reward.name))}`;
   const val=xp?Number(reward.amount.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2}):fmt(reward.amount);
-  return `<div class="activity-reward ${xp?'reward-xp':'reward-item'} ${fading?'fading':''}" data-reward="${esc(key)}">${icon}<span class="reward-info"><span class="reward-name">${title}</span><span class="reward-bank">${sub}</span></span><span class="reward-amount">+${val}${xp?' XP':''}</span></div>`;
- }).join('');
+  return `<div class="activity-reward ${xp?'reward-xp':'reward-item'} ${fading?'fading':''}" data-reward="${esc(key)}" title="${title}: +${val}${xp?' XP':''}${xp?'':` · ${sub}`}">${icon}<span class="reward-info"><span class="reward-name">${title}</span></span><span class="reward-amount">+${val}${xp?' XP':''}</span></div>`;
+ }).join('')+(hiddenCount?`<div class="activity-reward activity-reward-more">+${hiddenCount} more rewards</div>`:'');
  panel.hidden=false;
 }
 function updateActivityFeed(now=performance.now()){
@@ -1864,7 +1889,7 @@ function renderProgress(){
   const mob=MONSTERS[state.monsterIndex];
   name=`⚔️ ${mob.name} · Enemy ${Math.ceil(Math.max(0,state.monsterHp))}/${mob.hp} HP · You ${state.hp}/${maxHp()} HP`;
  }
- el('activityName').textContent=name;el('progressFill').style.width=clamp(state.progress||0,0,100)+'%';
+ el('activityName').textContent=name;el('activityName').title=name;el('progressFill').style.width=clamp(state.progress||0,0,100)+'%';
  el('progressText').textContent=Math.floor(clamp(state.progress||0,0,100))+'%';
  el('stopBtn').disabled=!current;
 }

@@ -28,7 +28,7 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 @media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.1 · Offline Progress</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.2 · Auto Fire & Offline Progress</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span>⚡ Current Activity</span><span id="progressText">0%</span></div><div class="activity-info"><span id="activityName">Idle · Choose an action</span></div><div class="bar large"><div class="fill" id="progressFill"></div></div><div class="activity-bottom"><small id="activityHint">All actions take 1 second while testing.</small><button id="stopBtn">Stop</button></div></section><div id="main"></div></main>
@@ -37,7 +37,7 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.1 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.2 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -46,7 +46,9 @@ const GAME_CONFIG = {
   sidebarPageSize: 24,
   treasureChance: 0.10,      // Base chance for a random gem per monster kill
   shopSellMultiplier: 0.40,
-  maxFireSeconds: 7200
+  maxFireSeconds: 7200,
+  autoRelightCookingFire: true,  // Automatically burn another log if Cooking needs a fire
+  preferLastFirewood: true        // Use the last burned log type first, then other logs
 };
 // Offline progression replays the SAME action/combat code as online play.
 const OFFLINE_CONFIG = {
@@ -525,11 +527,29 @@ function lightFire(item){
 }
 const fireRemaining=()=>Math.max(0,(state.fireUntil-gameNow())/1000);
 const fireBurning=()=>fireRemaining()>0;
+// Relight only when a Cooking action needs heat. This uses simulated gameNow()
+// during offline catch-up, so fuel durations and bank consumption work identically.
+function nextAutoFuel(){
+ if(!GAME_CONFIG.autoRelightCookingFire)return null;
+ const previous=state.fireLastFuel;
+ if(GAME_CONFIG.preferLastFirewood&&Object.hasOwn(FIRE_FUEL,previous)&&count(previous)>0)return previous;
+ return Object.keys(FIRE_FUEL).find(item=>count(item)>0)||null;
+}
+function ensureCookingFire(){
+ if(fireBurning())return true;
+ const item=nextAutoFuel();
+ if(!item||!add(item,-1))return false;
+ state.fireUntil=gameNow()+FIRE_FUEL[item]*1000;
+ state.fireLastFuel=item;
+ state.stats.logsBurned++;
+ note(`🔥 Automatically lit ${item} · ${timeFmt(FIRE_FUEL[item])} burn time.`);
+ return true;
+}
 function startAction(skill,index){
  const action=SKILLS[skill]?.actions?.[index];if(!action)return;
  if(levelFromXp(state.xp[skill]||0)<action.level){note('Skill level too low.');return}
- if(action.requiresFire&&!fireBurning()){note('🔥 Cooking requires a lit fire. Add logs in the Cooking menu.');return}
  if(!canPay(action.cost)){note('Not enough ingredients. Check the recipe.');return}
+ if(action.requiresFire&&!ensureCookingFire()){note('🔥 Cooking needs logs in your bank to light the fire.');return}
  state.active={type:'skill',skill,index};state.progress=0;note(`▶ ${action.name}`);renderProgress();refreshDynamic();save();
 }
 function startCombat(index){
@@ -542,8 +562,8 @@ function extraGatherChance(skill){const mods=gearMods();return clamp((mods.gathe
 function completeSkill(){
  const {skill,index}=state.active||{};
  const action=SKILLS[skill]?.actions?.[index];if(!action){stop(true);return}
- if(action.requiresFire&&!fireBurning()){note('🔥 Fire went out. Add logs to continue cooking.');stop(true);return}
  if(!canPay(action.cost)){note('Out of materials. Action stopped.');stop(true);return}
+ if(action.requiresFire&&!ensureCookingFire()){note('🔥 Out of logs! Cooking paused until you get more firewood.');stop(true);return}
  let quantity=action.quantity||1;
  if(['woodcutting','mining','fishing','agriculture'].includes(skill)&&Math.random()<extraGatherChance(skill))quantity++;
  if(!buyOrCraft(action.cost,action.output,quantity)){note('🏦 Bank full: 1000 unique stacks. Free a slot to continue.');stop(true);return}
@@ -703,19 +723,19 @@ function xpText(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return `L
 function xpFill(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return lvl>=99?100:clamp((xp-xpForLevel(lvl))/(xpForLevel(lvl+1)-xpForLevel(lvl))*100,0,100)}
 function xpStrip(skill){return `<div class="subdued" id="skillXpText">${xpText(skill)}</div><div class="xpbar"><div class="fill" id="skillXpFill" style="width:${xpFill(skill)}%"></div></div>`}
 function recipeCard(action,index,skill){
- const level=levelFromXp(state.xp[skill]||0),locked=level<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning();
+ const level=levelFromXp(state.xp[skill]||0),locked=level<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning()&&!nextAutoFuel();
  const already=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===index;
  const requirements=Object.entries(action.cost||{}).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
  return `<article class="recipe-card ${locked?'is-locked':''}" data-recipe="${index}">
  <div class="between"><span class="recipe-title">${itemIcon(action.output)} ${esc(action.name)}</span><span class="recipe-badge level">Lv ${action.level}</span></div>
- <div class="recipe-detail">Produces <b>×${action.quantity||1} ${esc(action.output)}</b> · <span class="positive">+${action.xp} XP</span>${action.requiresFire?' · 🔥 Fire':''}</div>
+ <div class="recipe-detail">Produces <b>×${action.quantity||1} ${esc(action.output)}</b> · <span class="positive">+${action.xp} XP</span>${action.requiresFire?' · 🔥 Fire (auto-relight)':''}</div>
  ${requirements?`<div class="requirements" data-ingredients="${index}">${requirements}</div>`:''}
  <div class="recipe-bottom"><span class="recipe-badge">${esc(action.category)}</span><button data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button></div></article>`;
 }
 function renderFirePanel(){
  return `<section class="info-box" style="border-color:#8a663f"><div class="between"><h3 style="margin:0">🔥 Cooking Fire</h3><span class="recipe-badge">1 second / cooking action</span></div>
- <p>Cooking needs an active fire. Each log adds real-world burn time. You can keep chopping, mining or fighting while it burns.</p>
- <div class="fire-layout"><div class="fire-tile ${fireBurning()?'':'out'}" id="fireTile"><h3 id="fireStatus">${fireBurning()?'🔥 Burning':'💨 Unlit'}</h3><b id="fireTimer">${timeFmt(fireRemaining())}</b><div class="small" id="fireFuelInfo">${fireBurning()?'Cooking available':'Add logs to light the fire'}</div></div>
+ <p>Cooking burns logs for real-world time. <strong>Auto-relight:</strong> while Cooking, a new log is lit automatically when the fire runs out. The last log type is preferred; another available type is used if needed. Cooking stops when you run out of ingredients or logs.</p>
+ <div class="fire-layout"><div class="fire-tile ${fireBurning()?'':'out'}" id="fireTile"><h3 id="fireStatus">${fireBurning()?'🔥 Burning':'💨 Unlit'}</h3><b id="fireTimer">${timeFmt(fireRemaining())}</b><div class="small" id="fireFuelInfo">${fireBurning()?'Cooking available':nextAutoFuel()?'Auto-relight ready':'Add logs to light the fire'}</div></div>
  <div class="fire-log-grid">${Object.entries(FIRE_FUEL).map(([item,seconds])=>`<button data-burn="${esc(item)}" ${count(item)<1?'disabled':''}>${itemIcon(item)} ${esc(item)} <span data-fuel-own="${esc(item)}">×${fmt(count(item))}</span><small>+${timeFmt(seconds)} burn time</small></button>`).join('')}</div></div></section>`;
 }
 function updateFireUi(){
@@ -723,7 +743,7 @@ function updateFireUi(){
   tile.classList.toggle('out',!fireBurning());
   el('fireStatus').textContent=fireBurning()?'🔥 Burning':'💨 Unlit';
   el('fireTimer').textContent=timeFmt(fireRemaining());
-  el('fireFuelInfo').textContent=fireBurning()?'You can cook while the fire burns':'Add logs to light the fire';
+  el('fireFuelInfo').textContent=fireBurning()?'Cooking available · auto-relight ready':nextAutoFuel()?`Auto-relight ready: ${nextAutoFuel()} ×${fmt(count(nextAutoFuel()))}`:'Out of logs · gather or buy firewood';
  }
  for(const btn of document.querySelectorAll('[data-burn]')){
   const item=btn.dataset.burn;btn.disabled=count(item)<1||fireRemaining()+FIRE_FUEL[item]>GAME_CONFIG.maxFireSeconds;
@@ -749,12 +769,31 @@ function renderCombatMain(){
  html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><div class="bar healthbar"><div class="fill" id="healthFill" style="width:${state.hp/maxHp()*100}%"></div></div><small class="subdued">Each Hitpoints level gives 10 max HP. Combat attacks give 5 XP per damage to your chosen skill and 25% of that to Hitpoints.</small></div>`;
  html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
  html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
- <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food</span><select id="autoEatFood">${Object.keys(FOOD).map(item=>`<option value="${esc(item)}" ${state.autoEat.food===item?'selected':''}>${esc(item)} (+${FOOD[item]} HP)</option>`).join('')}</select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued">Auto Eat uses food from the bank after each monster attack. Large hits can still kill you.</small></div>`;
+ <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote">Only food you own is shown, with remaining quantities. When the selected food runs out, select a new one.</small></div>`;
  html+=`<h3 class="section-title">⚔️ Monsters (${MONSTERS.length})</h3><div class="combat-monsters">${MONSTERS.map((m,i)=>`<div class="monster"><div class="between"><span class="monster-name">${i>8?'🐉':i>4?'👹':'👾'} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div><p>${fmt(m.hp)} HP · Defence ${m.def} · Max hit ${m.maxHit}<br>Loot: ${Object.keys(m.loot).map(x=>`${itemIcon(x)} ${esc(x)}`).join(', ')||'None'}${m.unique?`<br><span class="gold">🌟 ${esc(m.unique.item)} · ${pct(m.unique.chance)} base unique drop</span>`:''}</p><div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div>`).join('')}</div>`;
  const total=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
  html+=`<details class="info-box"><summary>💎 Treasure Table · <strong id="treasureRateText">${pct(TREASURE_CHANCE)} base chance per kill</strong></summary><p>Each kill rolls for a gem. If successful, gem type is selected by relative weight. Luck gear and potions raise the initial treasure chance and unique drop rates.</p><div class="bank-count">Current effective treasure chance: <b id="treasureCurrent">${pct(treasureChance())}</b>. Conditional gem odds below add up to 100%.</div>${TREASURE_TABLE.map(([gem,weight])=>`<div class="between" style="padding:5px 0;border-bottom:1px solid #39526a"><span>${itemIcon(gem)} ${esc(gem)}</span><span class="small">${pct(weight/total)} of gems · <span data-gem-chance="${weight}">${pct(treasureChance()*weight/total)}</span> per kill</span></div>`).join('')}</details>`;
  html+=`<h3 class="section-title">🧪 Active buffs</h3><div id="buffList"></div>`;
- el('main').innerHTML=html;renderFood();renderBuffs();
+ el('main').innerHTML=html;renderFood();renderAutoEatOptions();renderBuffs();
+}
+function renderAutoEatOptions(){
+ const box=el('autoEatFood');if(!box)return;
+ const owned=Object.entries(FOOD).filter(([item])=>count(item)>0);
+ const selected=owned.some(([item])=>item===state.autoEat.food)?state.autoEat.food:'';
+ // Keep the actual preferred food stored in the save. If it runs out, pause
+ // Auto Eat rather than silently consuming another, potentially rare meal.
+ const signature=JSON.stringify([owned.map(([name])=>[name,count(name)]),selected]);
+ if(box.dataset.signature!==signature){
+  box.innerHTML=(selected?'':`<option value="" selected disabled>${owned.length?'Choose owned food...':'No food in bank'}</option>`)+
+   owned.map(([name,heal])=>`<option value="${esc(name)}" ${selected===name?'selected':''}>${itemIcon(name)} ${esc(name)} ×${fmt(count(name))} · +${heal} HP</option>`).join('');
+  box.dataset.signature=signature;
+ }
+ box.disabled=owned.length===0;
+ const tip=el('autoEatFoodNote');if(tip){
+  tip.textContent=!owned.length?'No food in your bank yet. Cook or buy some to enable Auto Eat.':
+   !selected?'Your selected food has run out. Choose an available food to continue Auto Eat.':
+   `Selected: ${state.autoEat.food} ×${fmt(count(state.autoEat.food))} remaining. Auto Eat does not switch foods without your choice.`;
+ }
 }
 function renderFood(){
  const box=el('combatFood');if(!box)return;
@@ -784,7 +823,7 @@ function renderCombatLive(){
  const totalWeight=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
  for(const node of el('main').querySelectorAll('[data-gem-chance]'))node.textContent=pct(treasureChance()*Number(node.dataset.gemChance)/totalWeight);
  for(const node of el('main').querySelectorAll('[data-kill-count]'))node.textContent=fmt(state.stats.kills[node.dataset.killCount]||0);
- renderFood();renderBuffs();
+ renderFood();renderAutoEatOptions();renderBuffs();
 }
 function renderSkillLive(){
  if(!SKILLS[ui.view]||SKILLS[ui.view].combat)return;
@@ -793,7 +832,7 @@ function renderSkillLive(){
  for(const card of el('main').querySelectorAll('[data-recipe]')){
   const i=Number(card.dataset.recipe),action=SKILLS[ui.view].actions[i],button=card.querySelector('[data-action]');
   if(!action||!button)continue;
-  const locked=levelFromXp(state.xp[ui.view]||0)<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning();
+  const locked=levelFromXp(state.xp[ui.view]||0)<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning()&&!nextAutoFuel();
   const already=state.active?.type==='skill'&&state.active.skill===ui.view&&state.active.index===i;
   button.disabled=locked||missing||fireNeeded;
   button.textContent=locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start';
@@ -970,7 +1009,7 @@ function handleInput(e){
  }
  if(t.id==='shopQty'){ui.shopQty=Number(t.value);renderShopItems()}
  if(t.id==='autoEatEnabled'){state.autoEat.enabled=t.checked;save()}
- if(t.id==='autoEatFood'){state.autoEat.food=t.value;save()}
+ if(t.id==='autoEatFood'){if(count(t.value)>0&&Object.hasOwn(FOOD,t.value)){state.autoEat.food=t.value;renderAutoEatOptions();save()}}
  if(t.id==='autoEatThreshold'){state.autoEat.threshold=Number(t.value);save()}
 }
 el('main').addEventListener('click',handleClick);

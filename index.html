@@ -36,7 +36,45 @@ h1{margin:0 0 5px;font-size:21px;letter-spacing:.2px}.version{font-size:11px;col
 .info-box{border:1px solid #34526c;background:#10263a;padding:11px 13px;border-radius:10px;margin:12px 0}.info-box p{margin:5px 0;font-size:12px}.gold{color:#f9d681}.positive{color:#8be9a6}.negative{color:#ff9aa6}.flexrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:8px}.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:8px;margin:11px 0}.stat-tile{background:#13273c;border:1px solid #365571;border-radius:10px;padding:10px}.stat-tile strong{display:block;font-size:17px;margin:4px 0}.stat-tile small{color:#a8c2d9;font-size:11px}
 input[type=search],input[type=number],input[type=text],select{width:100%;background:#101c2d;border:1px solid #47627e;border-radius:8px;color:#eef7ff;padding:9px 10px;min-width:0}select{cursor:pointer}.small-select{width:auto;min-width:105px}.shop-qty{max-width:92px}.form-label{display:block;font-size:12px;color:#b0cadc;margin:7px 0 4px}.checkbox-row{display:flex;align-items:center;gap:7px;font-size:13px;color:#dcebf8}.checkbox-row input{width:16px;height:16px}
 .bank-tools{display:grid;grid-template-columns:1fr auto;gap:7px}.bank-tools select{grid-column:1/-1}.bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px;align-items:start;margin-top:10px}.bank-grid.compact{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.bank-tile{position:relative;min-height:91px;padding:8px 4px 7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:5px;text-align:center;background:#172b40;border:1px solid #40576d;border-radius:9px;color:#e8f2fc;min-width:0}.bank-tile .item-name{font-size:10px;line-height:1.2;overflow-wrap:anywhere;max-width:100%}.bank-tile .stack{font-size:10px;border-radius:5px;background:#091b2f;padding:2px 5px;color:#ffd87f;font-variant-numeric:tabular-nums;max-width:100%;overflow:hidden;text-overflow:ellipsis}.bank-tile.active{outline:2px solid #5bd1ba;border-color:#5bd1ba}.bank-grid.compact .bank-tile{min-height:81px;padding:6px 2px}.bank-grid.compact .item-name{font-size:9px}.item-art{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;font-size:24px;background:#2e4961;box-shadow:inset 0 0 0 1px #ffffff0f}.item-art.tier-high{background:#51427c}.item-art.tier-rare{background:#79552c}.item-art.tier-epic{background:#613e66}.item-art.tier-basic{background:#244c58}.bank-grid.compact .item-art{width:29px;height:29px;font-size:21px}.bank-count{font-size:12px;color:#a7c3d9}.pager{display:flex;align-items:center;justify-content:center;gap:8px;margin:11px 0}.pager button{padding:5px 9px;font-size:12px}.pager span{font-variant-numeric:tabular-nums;font-size:11px;color:#bfd5e9}.selected-item{margin:11px 0;background:#10263b;border:1px solid #365671;border-radius:10px;padding:10px}.selected-item h4{margin:0 0 4px;font-size:13px}.selected-item p{font-size:12px;color:#b6cedd;margin:4px 0}.selected-item .controls{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.selected-item button{padding:5px 7px;font-size:11px}.selected-item .big-art{float:left;margin-right:10px}
-.gear-list{display:grid;grid-template-columns:1fr 1fr;gap:6px}.gear-slot{padding:8px;border:1px solid #37516a;border-radius:9px;background:#142a3c;min-width:0}.gear-slot .slot-name{display:block;font-size:10px;color:#8fb6ce;text-transform:uppercase;margin-bottom:4px}.gear-slot .slot-item{font-size:11px;overflow-wrap:anywhere;min-height:25px}.gear-slot button{padding:4px 6px;font-size:10px;margin-top:5px}.equipment-stats{font-size:12px;display:grid;gap:5px;margin:10px 0}.equipment-stats b{color:#91dfc8}
+/* OSRS-inspired equipment slots: clickable whether occupied or empty. */
+.gear-intro{color:#adc8d8;font-size:12px;line-height:1.45;margin:0 0 12px}
+.gear-doll{background:radial-gradient(circle at 50% 40%,#24435a 0%,#142638 65%);border:1px solid #3c5c75;border-radius:14px;padding:11px 8px}
+.gear-paper-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:'. head .' 'cape amulet quiver' 'weapon body shield' '. legs .' 'gloves . ring';gap:6px;max-width:310px;margin:auto;justify-items:stretch}
+.gear-paper-slot{position:relative;min-width:0;min-height:78px;border:1px solid #476782;border-radius:10px;background:linear-gradient(155deg,#25415a,#14263a);padding:6px 3px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#eaf6ff;text-align:center}
+.gear-paper-slot:hover:not(:disabled){background:linear-gradient(155deg,#315d79,#193448);border-color:#6ed2c5}
+.gear-paper-slot .gear-symbol{font-size:25px;line-height:1.1;filter:grayscale(.55);opacity:.65}
+.gear-paper-slot.occupied .gear-symbol{opacity:1;filter:none}
+.gear-paper-slot .gear-name{font-size:9px;line-height:1.15;color:#bfd2e3;max-width:100%;overflow-wrap:anywhere}
+.gear-paper-slot.occupied .gear-name{color:#f7fafc;font-weight:700}
+.gear-paper-slot .gear-caption{font-size:9px;line-height:1;color:#97b6ce;text-transform:capitalize}
+.gear-paper-slot.occupied{border-color:#5b9d98;background:linear-gradient(145deg,#28505a,#1d3549)}
+.gear-toolbelt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px}
+.gear-toolbelt .gear-paper-slot{min-height:70px}.gear-toolbelt > div{grid-area:auto!important}
+.gear-tools-title{text-align:center;text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:#91aec8;margin-top:13px;margin-bottom:6px;font-weight:800}
+.gear-small-note{font-size:11px;color:#9bb9d1;margin:9px 1px 0;text-align:center}
+.gear-unequip-mini{position:absolute;right:2px;top:2px;background:#14273df0;border:1px solid #577a8a;border-radius:5px;padding:0;width:18px;height:18px;font-size:12px;line-height:16px;z-index:1;color:#efc8c0}
+.gear-unequip-mini:hover{background:#7f3841}
+.equipment-stats{font-size:12px;display:grid;gap:5px;margin:13px 0}.equipment-stats b{color:#91dfc8}
+.gear-dialog-overlay{position:fixed;inset:0;z-index:95;background:#040c17de;display:flex;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(5px)}
+.gear-dialog-overlay[hidden]{display:none}
+.gear-dialog{width:min(620px,100%);max-height:min(760px,calc(100dvh - 28px));overflow:auto;background:linear-gradient(160deg,#223850,#101f33);border:1px solid #6a9caa;border-radius:16px;box-shadow:0 18px 70px #000c;padding:17px}
+.gear-dialog-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.gear-dialog-heading h2{margin:0;font-size:19px}
+.gear-dialog-close{font-size:19px;padding:5px 11px;min-width:38px}
+.gear-equipped-card{padding:11px;border:1px solid #43657b;background:#173248;border-radius:11px;margin:12px 0;display:flex;gap:11px;align-items:center}
+.gear-equipped-card .gear-current-details{min-width:0;flex:1;overflow-wrap:anywhere}
+.gear-current-details strong{font-size:13px}
+.gear-current-details small{display:block;font-size:11px;color:#bfd2df;margin-top:4px;line-height:1.4}
+.gear-picker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:8px;margin-top:10px}
+.gear-pick-item{border:1px solid #415d75;background:#172d43;border-radius:11px;padding:10px;display:flex;align-items:flex-start;gap:9px;min-width:0}
+.gear-pick-item .gear-pick-details{min-width:0;flex:1}
+.gear-pick-item .gear-pick-details strong{font-size:12px;overflow-wrap:anywhere;display:block}
+.gear-pick-item .gear-pick-details small{font-size:10px;color:#adcadb;line-height:1.4;display:block;margin:3px 0 7px}
+.gear-pick-item .gear-pick-details button{font-size:11px;padding:5px 9px;width:100%}
+.gear-pick-item.locked{opacity:.65}
+.gear-picker-empty{background:#152b3c;border:1px dashed #55758c;border-radius:10px;padding:20px;color:#b9cbda;font-size:13px;margin:12px 0}
+@media(max-width:650px){.gear-dialog{padding:12px}.gear-picker-grid{grid-template-columns:1fr}.gear-doll{max-width:350px;margin:auto}}
+
 .shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px}.shop-card{display:flex;gap:10px;align-items:start;padding:12px;background:#182f44;border:1px solid #38556e;border-radius:11px}.shop-card-content{flex:1;min-width:0}.shop-card h3{font-size:14px;margin:0 0 4px}.shop-card p{font-size:11px;color:#adc4d5;margin:5px 0 9px;line-height:1.4}.shop-card button{padding:6px 10px;font-size:12px}.sell-panel{margin-top:13px}.shop-owned{color:#a9c8db;font-size:11px}
 .fire-layout{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fire-tile{padding:11px;flex:1 1 190px;background:#3a3027;border:1px solid #8a6839;border-radius:10px}.fire-tile.out{background:#1a293b;border-color:#3c566e}.fire-tile h3{margin:0 0 4px}.fire-log-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:6px;flex:2 1 340px}.fire-log-grid button{padding:8px;text-align:left}.fire-log-grid button small{display:block;color:#afc7d6;font-size:11px;margin-top:3px}
 .combat-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}.combat-resource-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}.combat-resource-grid h3{margin:0 0 8px}.combat-resource-grid select{width:100%;margin-bottom:8px}.combat-resource-count{color:#bbd7e8;font-size:12px;margin:9px 0}.charge-btn{font-size:11px;padding:7px}.quest-ready{order:-1}.combat-choice{text-align:left;display:flex;flex-direction:column;gap:7px;min-width:0}.combat-choice span{font-size:12px}.health-box{margin:13px 0;padding:12px;background:#14283b;border:1px solid #3c5670;border-radius:10px}.health-box h3{margin:0 0 9px}.combat-monsters{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:8px}.monster{border:1px solid #39536c;background:#1b3146;padding:11px;border-radius:10px}.monster-name{font-size:14px;font-weight:800}.monster p{font-size:12px;line-height:1.55;color:#b7ccdf;margin:5px 0 9px}.monster button{padding:7px 11px}.food-controls{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.food-controls button{font-size:11px;padding:6px 8px}.buff-list{display:flex;flex-wrap:wrap;gap:5px}.buff-chip{background:#24495a;border:1px solid #477e83;border-radius:8px;padding:6px 9px;font-size:11px}
@@ -49,16 +87,17 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 @media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.8 · Ranged & Arcane</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.9 · Equipment Loadout</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span>⚡ Current Activity</span><span id="progressText">0%</span></div><div class="activity-info"><span id="activityName">Idle · Choose an action</span></div><div class="bar large"><div class="fill" id="progressFill"></div></div><div class="activity-bottom"><small id="activityHint">All actions take 1 second while testing.</small><button id="stopBtn">Stop</button></div></section><div id="main"></div></main>
 <aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
 </div><div class="toast" id="toast" role="status"></div>
+<div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.8 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.9 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -924,7 +963,7 @@ function newGame(){return {
  log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}},journalCategory:'All'};
+const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}},journalCategory:'All',gearSlot:null};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const gameNow=()=>simulatedTime===null?Date.now():simulatedTime;
@@ -1298,23 +1337,28 @@ function usePotion(item){
  state.stats.potionsUsed++;
  refreshDynamic();save();
 }
+function gearRequirement(item){
+ const info=EQUIPMENT[item];if(!info)return {skill:null,level:1,met:false};
+ const slot=info.slot,skill=info.requiredSkill||(slot==='weapon'?'attack':slot==='axe'?'woodcutting':slot==='pickaxe'?'mining':(['shield','head','body','legs','gloves','cape'].includes(slot)?'defence':null));
+ const level=info.requiredLevel||1;
+ return {skill,level,met:!skill||levelFromXp(state.xp[skill]||0)>=level};
+}
 function equip(item){
  const info=EQUIPMENT[item];if(!info||count(item)<1)return;
  const slot=info.slot,old=state.equipment[slot];
- const required=info.requiredLevel||1;
- const requiredSkill=info.requiredSkill||(slot==='weapon'?'attack':slot==='axe'?'woodcutting':slot==='pickaxe'?'mining':(['shield','head','body','legs','gloves','cape'].includes(slot)?'defence':null));
- if(requiredSkill&&levelFromXp(state.xp[requiredSkill]||0)<required){note(`${label(requiredSkill)} level ${required} is required to equip ${item}.`);return}
+ const requirement=gearRequirement(item);
+ if(!requirement.met){note(`${label(requirement.skill)} level ${requirement.level} is required to equip ${item}.`);return}
  // Removing one of the item first may free a stack for the replaced equipment.
  add(item,-1);
  if(old&&!add(old,1)){add(item,1);note('🏦 Bank full. Cannot swap equipment.');return}
  state.equipment[slot]=item;
- note(`🛡️ Equipped ${item} (${slot}).`);refreshDynamic();save();
+ note(`🛡️ Equipped ${item} (${slot}).`);refreshDynamic();renderGearPicker();save();
 }
 function unequip(slot){
  if(!EQUIP_SLOTS.includes(slot))return;
  const item=state.equipment[slot];if(!item)return;
  if(!add(item,1)){note('🏦 Bank full. Free a stack before unequipping.');return}
- state.equipment[slot]=null;note(`Unequipped ${item}.`);refreshDynamic();save();
+ state.equipment[slot]=null;note(`Unequipped ${item}.`);refreshDynamic();renderGearPicker();save();
 }
 function sellPrice(item){return Math.max(1,baseSellPrice(item))}
 function sell(item,qty){
@@ -1613,11 +1657,49 @@ function renderBankMain(){
  el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Inventory</div><h2>🏦 Bank</h2><p class="section-description">Your bank has <strong>${fmt(GAME_CONFIG.bankSlots)} unique stack slots</strong>. A stack can hold any quantity: 1, 100, or even 1 million of the same item. Browse categories and pages below.</p></div></div><div id="mainBankRoot">${renderBankShell('main')}</div>`;
  renderBankGrid('main');
 }
+const GEAR_SLOT_UI={
+ head:{icon:'🪖',label:'Head'},cape:{icon:'🧣',label:'Cape'},amulet:{icon:'📿',label:'Amulet'},quiver:{icon:'🏹',label:'Quiver'},
+ weapon:{icon:'⚔️',label:'Weapon'},body:{icon:'🥋',label:'Body'},shield:{icon:'🛡️',label:'Shield'},
+ legs:{icon:'👖',label:'Legs'},gloves:{icon:'🧤',label:'Gloves'},ring:{icon:'💍',label:'Ring'},
+ axe:{icon:'🪓',label:'Axe'},pickaxe:{icon:'⛏️',label:'Pickaxe'}
+};
+function gearSlotButton(slot){
+ const item=state.equipment[slot],info=GEAR_SLOT_UI[slot]||{icon:'📦',label:slot};
+ return `<div style="position:relative;grid-area:${slot}"><button type="button" class="gear-paper-slot ${item?'occupied':''}" style="width:100%;height:100%" data-gear-slot="${slot}" title="${esc(info.label)}: ${item?esc(item):'Empty – click to choose'}" aria-label="${esc(info.label)} slot: ${item?esc(item):'empty'}. Choose equipment">
+ <span class="gear-symbol" aria-hidden="true">${item?itemIcon(item):info.icon}</span><span class="gear-caption">${esc(info.label)}</span><span class="gear-name">${item?esc(item):'Empty'}</span></button>${item?`<button type="button" class="gear-unequip-mini" data-unequip="${slot}" title="Unequip ${esc(item)}" aria-label="Unequip ${esc(item)}">×</button>`:''}</div>`;
+}
 function renderGearSidebar(){
  const mods=gearMods();
- el('sidebar').innerHTML=`<h3 style="margin:0 0 11px">🛡️ Equipment</h3><div class="gear-list">${EQUIP_SLOTS.map(slot=>{
-  const item=state.equipment[slot];return `<div class="gear-slot"><span class="slot-name">${esc(slot)}</span><div class="slot-item">${item?itemIcon(item)+' '+esc(item)+(MAGIC_STAVES[item]?' · '+fmt(state.staffCharges[item]||0)+' charges':''):'— Empty —'}</div>${item?`<button data-unequip="${slot}">Unequip</button>`:''}</div>`;
- }).join('')}</div><div class="equipment-stats"><b>Active bonuses</b>${gearDescription(mods).split(' · ').filter(x=>!x.endsWith('+0')&&!x.endsWith('+0%')).map(x=>`<span>• ${esc(x)}</span>`).join('')||'<span class="subdued">No bonuses equipped yet.</span>'}</div><h3 class="section-title">Available gear (${Object.keys(state.bank).filter(x=>count(x)>0&&EQUIPMENT[x]).length})</h3><div class="selected-item">${Object.entries(state.bank).filter(([name,n])=>n>0&&EQUIPMENT[name]).sort(([a],[b])=>a.localeCompare(b)).map(([name,n])=>`<div class="between" style="margin:6px 0;gap:5px"><span class="small">${itemIcon(name)} ${esc(name)} ×${fmt(n)}</span><button data-equip="${esc(name)}" style="font-size:11px;padding:5px 7px">Equip</button></div>`).join('')||'<span class="subdued small">Find or craft equipment to equip it here.</span>'}</div>`;
+ const paperSlots=['head','cape','amulet','quiver','weapon','body','shield','legs','gloves','ring'];
+ el('sidebar').innerHTML=`<div class="between"><h3 style="margin:0 0 10px">🛡️ Equipment</h3><span class="small subdued">${EQUIP_SLOTS.filter(slot=>!!state.equipment[slot]).length}/${EQUIP_SLOTS.length} equipped</span></div>
+ <p class="gear-intro">Click any equipment slot to choose items from your bank, or use × to unequip.</p>
+ <div class="gear-doll"><div class="gear-paper-grid">${paperSlots.map(gearSlotButton).join('')}</div><div class="gear-tools-title">Toolbelt</div><div class="gear-toolbelt">${['axe','pickaxe'].map(gearSlotButton).join('')}</div></div>
+ <div class="gear-small-note">Empty slots can be clicked too · Gear is returned to your bank when removed</div>
+ <div class="equipment-stats"><b>Active bonuses</b>${gearDescription(mods).split(' · ').filter(x=>!x.endsWith('+0')&&!x.endsWith('+0%')).map(x=>`<span>• ${esc(x)}</span>`).join('')||'<span class="subdued">No bonuses equipped yet.</span>'}</div>`;
+}
+function renderGearPicker(){
+ const slot=ui.gearSlot,overlay=el('gearOverlay');
+ if(!slot||overlay.hidden)return;
+ const info=GEAR_SLOT_UI[slot]||{icon:'📦',label:slot};
+ el('gearDialogTitle').textContent=info.icon+' '+info.label+' slot';
+ const current=state.equipment[slot];
+ const options=Object.entries(state.bank).filter(([name,qty])=>qty>0&&EQUIPMENT[name]?.slot===slot)
+  .sort(([a],[b])=>Number(gearRequirement(b).met)-Number(gearRequirement(a).met)||gearRequirement(a).level-gearRequirement(b).level||a.localeCompare(b));
+ const currentHtml=current?`<div class="gear-equipped-card">${itemArt(current,true)}<div class="gear-current-details"><strong>${esc(current)}</strong><small>${esc(gearDescription(EQUIPMENT[current]))}${MAGIC_STAVES[current]?' · '+fmt(state.staffCharges[current]||0)+' charges':''}</small></div><button data-unequip="${slot}">Unequip</button></div>`:'<div class="gear-picker-empty">Nothing equipped in this slot yet.</div>';
+ const availableHtml=options.length?`<div class="gear-picker-grid">${options.map(([name,qty])=>{
+  const req=gearRequirement(name),reqText=req.skill?`${label(req.skill)} level ${req.level}`:'No level requirement';
+  return `<div class="gear-pick-item ${req.met?'':'locked'}">${itemArt(name)}<div class="gear-pick-details"><strong>${esc(name)} <span class="gold">×${fmt(qty)}</span></strong><small>${esc(gearDescription(EQUIPMENT[name]))} · ${esc(reqText)}${req.met?'':' 🔒'}</small><button data-equip="${esc(name)}" ${req.met?'':'disabled'}>${req.met?'Equip':'Level too low'}</button></div></div>`;
+ }).join('')}</div>`:'<div class="gear-picker-empty">No items for this slot in your bank yet. Find, craft or buy equipment and it will appear here.</div>';
+ el('gearDialogContent').innerHTML=`<div class="eyebrow" style="margin-top:15px">Currently equipped</div>${currentHtml}<div class="between" style="margin-top:17px"><strong>Available in bank</strong><span class="small subdued">${options.length} types</span></div>${availableHtml}`;
+}
+function openGearSlot(slot){
+ if(!EQUIP_SLOTS.includes(slot))return;
+ ui.gearSlot=slot;el('gearOverlay').hidden=false;renderGearPicker();
+ el('gearOverlay').querySelector('[data-gear-close]').focus();
+}
+function closeGearSlot(){
+ const slot=ui.gearSlot;ui.gearSlot=null;el('gearOverlay').hidden=true;
+ if(ui.sidebarTab==='gear'&&slot)el('sidebar').querySelector(`[data-gear-slot="${slot}"]`)?.focus();
 }
 function renderSidebar(){
  el('bankTab').classList.toggle('selected',ui.sidebarTab==='bank');el('gearTab').classList.toggle('selected',ui.sidebarTab==='gear');
@@ -1729,6 +1811,7 @@ function refreshDynamic(){
   const right=el('sidebar');const parent=el('sidebar').closest('.right');const scroll=parent.scrollTop;
   renderGearSidebar();parent.scrollTop=scroll;
  }
+ if(!el('gearOverlay').hidden)renderGearPicker();
  renderProgress();
 }
 function render(){renderNav();renderMain();renderSidebar();renderLog();refreshDynamic()}
@@ -1746,6 +1829,7 @@ function handleClick(e){
  if(b.hasAttribute('data-shop-cat')){ui.shopCategory=b.dataset.shopCat;renderMain();refreshDynamic();return}
  if(b.hasAttribute('data-buy'))return buy(b.dataset.buy,ui.shopQty);
  if(b.hasAttribute('data-burn'))return lightFire(b.dataset.burn);
+ if(b.hasAttribute('data-gear-slot'))return openGearSlot(b.dataset.gearSlot);
  if(b.hasAttribute('data-equip'))return equip(b.dataset.equip);
  if(b.hasAttribute('data-unequip'))return unequip(b.dataset.unequip);
  if(b.hasAttribute('data-eat')){if(!eat(b.dataset.eat))note('Cannot eat now.');refreshDynamic();save();return}
@@ -1777,6 +1861,14 @@ function handleInput(e){
 }
 el('main').addEventListener('click',handleClick);
 el('sidebar').addEventListener('click',handleClick);
+el('gearOverlay').addEventListener('click',e=>{
+ if(e.target===el('gearOverlay'))return closeGearSlot();
+ const btn=e.target.closest('button');if(!btn||btn.disabled)return;
+ if(btn.hasAttribute('data-gear-close'))return closeGearSlot();
+ if(btn.hasAttribute('data-equip'))return equip(btn.dataset.equip);
+ if(btn.hasAttribute('data-unequip'))return unequip(btn.dataset.unequip);
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('gearOverlay').hidden)closeGearSlot()});
 el('nav').addEventListener('click',handleClick);
 el('main').addEventListener('input',handleInput);
 el('sidebar').addEventListener('input',handleInput);

@@ -12,6 +12,27 @@ h1{margin:0 0 5px;font-size:21px;letter-spacing:.2px}.version{font-size:11px;col
 #activityPanel{position:sticky;top:8px;z-index:11;background:linear-gradient(125deg,#194055,#203651);border:2px solid #39baa9;border-radius:12px;padding:12px 15px;margin-bottom:17px;box-shadow:0 5px 19px #0007}.activity-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:800}.activity-info{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px;color:#d7edf4}.activity-info span{overflow-wrap:anywhere}.bar{height:15px;background:#0a1727;border-radius:20px;overflow:hidden;border:1px solid #28455d;margin:9px 0}.bar.large{height:24px}.fill{height:100%;width:0;background:linear-gradient(90deg,#20b7bd,#b4ef75);transition:width .08s linear}.xpbar{height:8px;background:#0a1625;border-radius:12px;overflow:hidden;margin:7px 0 0}.xpbar .fill{background:linear-gradient(90deg,#3e93d7,#8dd4f4)}.healthbar .fill{background:linear-gradient(90deg,#d45560,#fb9a7c)}
 .activity-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center}.activity-bottom button{padding:5px 11px;font-size:12px}.activity-bottom small{font-size:11px;color:#b9d0d8}
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0}.tabs button{padding:8px 10px;font-size:12px}.tabs button.selected{background:#197489}.skill-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:9px}.recipe-card{border:1px solid #38516b;border-radius:11px;padding:11px;background:#203149;display:flex;flex-direction:column;gap:7px;min-width:0}.recipe-card.is-locked{opacity:.7}.recipe-title{font-size:14px;font-weight:750}.recipe-detail{font-size:12px;color:#c0d0e0;line-height:1.5}.recipe-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}.recipe-bottom button{white-space:nowrap;padding:7px 10px}.recipe-badge{font-size:11px;border:1px solid #466783;background:#12263a;border-radius:12px;padding:3px 7px}.recipe-badge.level{color:#9bd9f9}.recipe-stock{display:flex;align-items:center;flex-wrap:wrap;gap:5px 9px;padding:8px 9px;background:#132b3c;border:1px solid #386479;border-radius:8px;font-size:12px}.recipe-stock-label{color:#b5d2e4;font-weight:650;white-space:nowrap}.recipe-stock-items{display:flex;flex-wrap:wrap;gap:5px;min-width:0}.recipe-stock-item{display:inline-flex;align-items:center;flex-wrap:wrap;gap:5px;color:#dceaf8;overflow-wrap:anywhere}.recipe-stock-item strong{color:#9cf0cb;font-size:13px;font-variant-numeric:tabular-nums}.recipe-stock-item.bonus{color:#c1b2e4;font-size:11px}.requirements{font-size:12px;display:flex;flex-wrap:wrap;gap:4px}.ingredient{background:#16273a;color:#d3e2ed;border:1px solid #33475d;border-radius:5px;padding:3px 5px}.ingredient.missing{border-color:#8c5260;color:#f4aaa9}
+/* Expanded journal: reward chips, progress and compact category navigation. */
+.journal-stats{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 12px}
+.journal-filter{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 16px}
+.journal-filter button{font-size:12px;padding:7px 10px}
+.journal-card{gap:10px}.journal-card.quest-ready{border-color:#3eaa8f;background:#1d3948}
+.journal-card.quest-tier-locked{background:#152439;border-color:#334459;opacity:.65}
+.journal-card.quest-tier-locked .quest-progress-bar .fill{width:0!important}
+.journal-card.quest-tier-locked .quest-rewards{filter:saturate(.5)}
+.journal-tier-label{font-size:11px;color:#e2c48b;border:1px solid #796344;border-radius:10px;padding:3px 7px;background:#392f2a;white-space:nowrap}
+.journal-tier-locked-label{color:#a7b4c5;border-color:#43546b;background:#1d2b3c}
+.journal-chain-note{color:#9fb5c9;font-size:11px;line-height:1.35}
+.journal-card .quest-type{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#a7cadd}
+.quest-rewards{display:flex;flex-wrap:wrap;gap:5px;margin:3px 0 6px}
+.quest-reward{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:5px 7px;border:1px solid #3f6077;border-radius:7px;background:#132a3c;color:#daeafa;line-height:1.2}
+.quest-reward.soul{border-color:#785db1;background:#35264a;color:#efdefe}
+.quest-reward.experience{border-color:#357d7b;background:#183c42;color:#a9ede1}
+.quest-reward.money{color:#ffe0a0}
+.quest-progress-line{display:flex;justify-content:space-between;gap:6px;color:#b5cedf;font-size:11px}
+.quest-progress-bar{height:7px;border-radius:5px;background:#0d2134;overflow:hidden;border:1px solid #39516b}
+.quest-progress-bar .fill{background:linear-gradient(90deg,#247bba,#66d5b1);height:100%}
+.journal-empty{padding:23px;text-align:center;border:1px dashed #476681;background:#14283d;border-radius:12px;color:#bed4e4}
 .info-box{border:1px solid #34526c;background:#10263a;padding:11px 13px;border-radius:10px;margin:12px 0}.info-box p{margin:5px 0;font-size:12px}.gold{color:#f9d681}.positive{color:#8be9a6}.negative{color:#ff9aa6}.flexrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.between{display:flex;justify-content:space-between;align-items:center;gap:8px}.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:8px;margin:11px 0}.stat-tile{background:#13273c;border:1px solid #365571;border-radius:10px;padding:10px}.stat-tile strong{display:block;font-size:17px;margin:4px 0}.stat-tile small{color:#a8c2d9;font-size:11px}
 input[type=search],input[type=number],input[type=text],select{width:100%;background:#101c2d;border:1px solid #47627e;border-radius:8px;color:#eef7ff;padding:9px 10px;min-width:0}select{cursor:pointer}.small-select{width:auto;min-width:105px}.shop-qty{max-width:92px}.form-label{display:block;font-size:12px;color:#b0cadc;margin:7px 0 4px}.checkbox-row{display:flex;align-items:center;gap:7px;font-size:13px;color:#dcebf8}.checkbox-row input{width:16px;height:16px}
 .bank-tools{display:grid;grid-template-columns:1fr auto;gap:7px}.bank-tools select{grid-column:1/-1}.bank-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px;align-items:start;margin-top:10px}.bank-grid.compact{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.bank-tile{position:relative;min-height:91px;padding:8px 4px 7px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:5px;text-align:center;background:#172b40;border:1px solid #40576d;border-radius:9px;color:#e8f2fc;min-width:0}.bank-tile .item-name{font-size:10px;line-height:1.2;overflow-wrap:anywhere;max-width:100%}.bank-tile .stack{font-size:10px;border-radius:5px;background:#091b2f;padding:2px 5px;color:#ffd87f;font-variant-numeric:tabular-nums;max-width:100%;overflow:hidden;text-overflow:ellipsis}.bank-tile.active{outline:2px solid #5bd1ba;border-color:#5bd1ba}.bank-grid.compact .bank-tile{min-height:81px;padding:6px 2px}.bank-grid.compact .item-name{font-size:9px}.item-art{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;font-size:24px;background:#2e4961;box-shadow:inset 0 0 0 1px #ffffff0f}.item-art.tier-high{background:#51427c}.item-art.tier-rare{background:#79552c}.item-art.tier-epic{background:#613e66}.item-art.tier-basic{background:#244c58}.bank-grid.compact .item-art{width:29px;height:29px;font-size:21px}.bank-count{font-size:12px;color:#a7c3d9}.pager{display:flex;align-items:center;justify-content:center;gap:8px;margin:11px 0}.pager button{padding:5px 9px;font-size:12px}.pager span{font-variant-numeric:tabular-nums;font-size:11px;color:#bfd5e9}.selected-item{margin:11px 0;background:#10263b;border:1px solid #365671;border-radius:10px;padding:10px}.selected-item h4{margin:0 0 4px;font-size:13px}.selected-item p{font-size:12px;color:#b6cedd;margin:4px 0}.selected-item .controls{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.selected-item button{padding:5px 7px;font-size:11px}.selected-item .big-art{float:left;margin-right:10px}
@@ -28,7 +49,7 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 @media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.4 · Live Bank Counts</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.7 · Cumulative Journal</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span>⚡ Current Activity</span><span id="progressText">0%</span></div><div class="activity-info"><span id="activityName">Idle · Choose an action</span></div><div class="bar large"><div class="fill" id="progressFill"></div></div><div class="activity-bottom"><small id="activityHint">All actions take 1 second while testing.</small><button id="stopBtn">Stop</button></div></section><div id="main"></div></main>
@@ -37,7 +58,7 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.4 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.6 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -488,6 +509,207 @@ const QUESTS=[
  {id:'wealth',title:'Your First Fortune',text:'Earn 10,000 Coins in total',test:s=>s.stats.coinsEarned>=10000,coins:2200},
  {id:'master',title:'The Long Adventure',text:'Complete 1,000 skill actions',test:s=>Object.values(s.stats.bySkill).reduce((a,b)=>a+b,0)>=1000,coins:5000}
 ];
+// v3.5 Journal: reward definitions remain data-driven so new rewards and
+// categories can be added without modifying the claim or rendering functions.
+// IMPORTANT: Do not change old quest IDs: they are stored in existing saves.
+const ORIGINAL_QUEST_UPGRADES={
+ 'forest-start':{category:'Gathering',xp:{woodcutting:220},items:{'Faded Soul Gem':2}},
+ 'fishing-start':{category:'Gathering',xp:{fishing:220},items:{'Faded Soul Gem':2}},
+ campfire:{category:'Production',xp:{cooking:180},items:{'Herb':3}},
+ 'cooked-food':{category:'Production',xp:{cooking:360},items:{'Faded Soul Gem':1}},
+ miner:{category:'Gathering',xp:{mining:350},items:{'Faded Soul Gem':2}},
+ forge:{category:'Production',xp:{smithing:460},items:{'Copper Ore':8,'Tin Ore':8}},
+ 'metal-sword':{category:'Production',xp:{smithing:340},items:{'Faded Soul Gem':1}},
+ farmer:{category:'Gathering',xp:{agriculture:540},items:{'Carrot Seed':6}},
+ brewer:{category:'Production',xp:{alchemy:520},items:{'Herb':10}},
+ fletcher:{category:'Production',xp:{fletching:650},items:{'Feather':35}},
+ enchanter:{category:'Soulbound',xp:{enchanting:1900},items:{'Verdant Soul Gem':2}},
+ souls:{category:'Soulbound',xp:{enchanting:620},items:{'Faded Soul Gem':8}},
+ dwarf:{category:'Combat',xp:{attack:1450,defence:900},items:{'Verdant Soul Gem':2}},
+ mythic:{category:'Soulbound',xp:{enchanting:35000},items:{'Solar Soul Gem':4,'Violet Soul Gem':10}},
+ goblin:{category:'Combat',xp:{strength:600},items:{'Faded Soul Gem':2}},
+ jeweller:{category:'Production',xp:{crafting:750},items:{'Uncut Sapphire':2}},
+ fashion:{category:'Milestones',xp:{defence:1000},items:{'Verdant Soul Gem':1}},
+ treasure:{category:'Combat',xp:{crafting:700},items:{'Uncut Emerald':1}},
+ wealth:{category:'Milestones',xp:{crafting:1500},items:{'Verdant Soul Gem':2}},
+ master:{category:'Milestones',xp:{enchanting:2500,crafting:2500},items:{'Azure Soul Gem':1}}
+};
+for(const quest of QUESTS)Object.assign(quest,ORIGINAL_QUEST_UPGRADES[quest.id]||{});
+const questSkillActions=(s,skill)=>s.stats.bySkill[skill]||0;
+const questProduced=(s,item)=>s.stats.produced[item]||0;
+const questKills=(s,name)=>s.stats.kills[name]||0;
+const questTotalActions=s=>Object.values(s.stats.bySkill).reduce((total,n)=>total+n,0);
+const questTotalKills=s=>Object.values(s.stats.kills).reduce((total,n)=>total+n,0);
+const questGemCuts=s=>GEMS.reduce((n,gem)=>n+questProduced(s,gem),0);
+const questSouls=(s,item)=>(s.stats.soulsByTier||{})[item]||0;
+// milestone helpers: all rewards are defined once, with live progress values
+// and a unique ID, so claimed achievements never reappear on reload.
+function milestone(id,title,description,category,progress,target,coins,xp={},items={}){
+ return {id,title,text:description,category,progress,target,coins,xp,items,test:s=>progress(s)>=target};
+}
+// Tier milestones use cumulative lifetime counts. A single action contributes
+// to every future tier, although only the current unlocked tier reveals progress.
+// Rewards must still be claimed in order.
+const JOURNAL_ACTION_LABELS={
+ woodcutting:['Chop Any Tree','trees'],fishing:['Catch Any Fish','fish'],
+ mining:['Mine Any Ore','ores'],agriculture:['Any Agriculture Action','agriculture actions'],
+ cooking:['Cook Any Food','cooking actions'],smithing:['Smith Any Item','smithing actions'],
+ crafting:['Craft Any Item','crafting actions'],fletching:['Fletch Any Item','fletching actions'],
+ alchemy:['Brew Any Potion','alchemy actions'],enchanting:['Enchant Any Item','enchanting actions']
+};
+function tierMilestone(id,title,description,category,progress,target,coins,xp,items,chain,tier){
+ const q=milestone(id,title,description,category,progress,target,coins,xp,items);
+ q.chain=chain;q.tier=tier;q.progressSource=progress;
+ return q;
+}
+function skillMilestones(skill,category,stages){
+ const [name,units]=JOURNAL_ACTION_LABELS[skill]||[labelSkillForQuest(skill),'actions'];
+ const longStages=skill==='enchanting'?
+  [[1500,120000,135000,3,'Violet Soul Gem'],[5000,500000,600000,6,'Violet Soul Gem'],[15000,1600000,1800000,2,'Solar Soul Gem'],[50000,6000000,8000000,6,'Solar Soul Gem']]:
+  [[10000,65000,85000,3,'Violet Soul Gem'],[25000,175000,230000,6,'Violet Soul Gem'],[50000,425000,550000,2,'Solar Soul Gem'],[100000,1000000,1300000,5,'Solar Soul Gem']];
+ return [...stages,...longStages].map(([amount,coins,xp,gemCount,gemName='Faded Soul Gem'],index)=>
+  tierMilestone(`skill-${skill}-${amount}`,name,
+   `Complete ${fmtQuestTarget(amount)} ${units} in total`,category,
+   s=>questSkillActions(s,skill),amount,coins,{[skill]:xp},gemCount?{[gemName]:gemCount}:{},
+   `skill-${skill}`,index+1));
+}
+function labelSkillForQuest(skill){return skill.charAt(0).toUpperCase()+skill.slice(1)}
+function fmtQuestTarget(n){return Number(n).toLocaleString('en-US')}
+const JOURNAL_EXTRA_QUESTS=[
+ // Every main non-combat skill has a short-to-long chain of repeatable activity goals.
+ ...skillMilestones('woodcutting','Gathering',[[100,500,850,2],[500,2400,4500,4,'Verdant Soul Gem'],[2000,10000,21000,3,'Azure Soul Gem']]),
+ ...skillMilestones('fishing','Gathering',[[100,500,850,2],[500,2400,4500,4,'Verdant Soul Gem'],[2000,10000,21000,3,'Azure Soul Gem']]),
+ ...skillMilestones('mining','Gathering',[[100,650,900,3],[500,3000,5000,4,'Verdant Soul Gem'],[2000,12000,22000,3,'Azure Soul Gem']]),
+ ...skillMilestones('agriculture','Gathering',[[100,600,900,2],[500,2600,4900,4,'Verdant Soul Gem'],[2000,11000,23000,3,'Azure Soul Gem']]),
+ ...skillMilestones('cooking','Production',[[100,650,850,2],[500,2700,4800,3,'Verdant Soul Gem'],[2000,12000,22000,3,'Azure Soul Gem']]),
+ ...skillMilestones('smithing','Production',[[100,850,1100,2],[500,3800,6500,4,'Verdant Soul Gem'],[2000,18000,28000,3,'Azure Soul Gem']]),
+ ...skillMilestones('crafting','Production',[[100,800,1050,2],[500,3600,6200,4,'Verdant Soul Gem'],[2000,17000,28000,3,'Azure Soul Gem']]),
+ ...skillMilestones('fletching','Production',[[100,700,950,2],[500,3200,5500,4,'Verdant Soul Gem'],[2000,15000,26000,3,'Azure Soul Gem']]),
+ ...skillMilestones('alchemy','Production',[[100,850,1050,2],[500,3800,6000,4,'Verdant Soul Gem'],[2000,17000,27000,3,'Azure Soul Gem']]),
+ ...skillMilestones('enchanting','Soulbound',[[15,1800,2200,3,'Verdant Soul Gem'],[75,8000,11500,3,'Azure Soul Gem'],[300,34000,50000,2,'Violet Soul Gem']]),
+ // Cross-skill production objectives encourage linking gathering and crafting.
+ milestone('oak-harvest','Oak Grove','Gather 150 Oak Logs','Gathering',s=>questProduced(s,'Oak Logs'),150,1200,{woodcutting:1250},{'Faded Soul Gem':4}),
+ milestone('magic-harvest','Arcane Lumber','Gather 100 Magic Logs','Gathering',s=>questProduced(s,'Magic Logs'),100,9000,{woodcutting:8500},{'Azure Soul Gem':2}),
+ milestone('fisher-lobster','Lobster Season','Catch 100 Lobsters','Gathering',s=>questProduced(s,'Lobster'),100,1800,{fishing:1600},{'Verdant Soul Gem':1}),
+ milestone('fisher-shark','Shark Hunter','Catch 60 Sharks','Gathering',s=>questProduced(s,'Shark'),60,8500,{fishing:9000},{'Azure Soul Gem':2}),
+ milestone('firekeeper','Keeper of the Flame','Burn 50 logs to cook meals','Production',s=>s.stats.logsBurned||0,50,1200,{cooking:1500},{'Faded Soul Gem':3}),
+ milestone('eternal-flame','The Endless Kitchen','Burn 500 logs','Production',s=>s.stats.logsBurned||0,500,14500,{cooking:14500},{'Azure Soul Gem':2}),
+ milestone('lobster-chef','Seafood Chef','Cook 75 Lobsters','Production',s=>questProduced(s,'Cooked Lobster'),75,2600,{cooking:2500},{'Verdant Soul Gem':3}),
+ milestone('shark-chef','Master Chef','Cook 75 Sharks','Production',s=>questProduced(s,'Cooked Shark'),75,12000,{cooking:12500},{'Azure Soul Gem':2}),
+ milestone('iron-worker','Ironworks','Mine 150 Iron Ore','Gathering',s=>questProduced(s,'Iron Ore'),150,1300,{mining:1400},{'Faded Soul Gem':4}),
+ milestone('rune-worker','Rune Prospector','Mine 80 Rune Ore','Gathering',s=>questProduced(s,'Rune Ore'),80,8500,{mining:9000},{'Azure Soul Gem':2}),
+ milestone('bronze-smelter','Bronze Beginnings','Smelt 70 Bronze Bars','Production',s=>questProduced(s,'Bronze Bar'),70,1400,{smithing:1700},{'Faded Soul Gem':3}),
+ milestone('steel-smelter','Steel Empire','Smelt 150 Steel Bars','Production',s=>questProduced(s,'Steel Bar'),150,5600,{smithing:5800},{'Verdant Soul Gem':3}),
+ milestone('rune-blacksmith','Legendary Blacksmith','Forge a Rune Sword','Production',s=>questProduced(s,'Rune Sword'),1,16000,{smithing:14500},{'Azure Soul Gem':3}),
+ milestone('farm-corn','Golden Harvest','Harvest 150 Corn','Gathering',s=>questProduced(s,'Corn'),150,2500,{agriculture:2400},{'Carrot Seed':25,'Faded Soul Gem':2}),
+ milestone('farm-mystic','Mystic Harvest','Gather 100 Mystic Herbs','Gathering',s=>questProduced(s,'Mystic Herb'),100,9000,{agriculture:8800},{'Azure Soul Gem':2}),
+ milestone('cut-25','Gem Polisher','Cut 25 gems','Production',questGemCuts,25,1500,{crafting:1600},{'Uncut Ruby':2}),
+ milestone('cut-150','Master Jeweller','Cut 150 gems','Production',questGemCuts,150,9800,{crafting:9100},{'Azure Soul Gem':2}),
+ milestone('power-amulet','Balanced Power','Craft a Power Amulet','Production',s=>questProduced(s,'Power Amulet'),1,3900,{crafting:4100},{'Verdant Soul Gem':3}),
+ milestone('lucky-ring','A Bit of Luck','Craft a Lucky Ring','Production',s=>questProduced(s,'Lucky Ring'),1,1900,{crafting:2000},{'Faded Soul Gem':5}),
+ milestone('arrows-bronze','Arrow Maker','Make 200 Bronze Arrows','Production',s=>questProduced(s,'Bronze Arrows'),200,1400,{fletching:1600},{'Feather':50}),
+ milestone('arrows-rune','Rune Fletcher','Make 400 Rune Arrows','Production',s=>questProduced(s,'Rune Arrows'),400,14000,{fletching:16000},{'Azure Soul Gem':2}),
+ milestone('heal-25','Field Medic','Brew 25 Healing Potions','Production',s=>questProduced(s,'Healing Potion'),25,1500,{alchemy:1700},{'Herb':15,'Faded Soul Gem':2}),
+ milestone('spirit-brew','Spirit Alchemist','Brew a Spirit Sense Potion','Soulbound',s=>questProduced(s,'Spirit Sense Potion'),1,4200,{alchemy:4500},{'Verdant Soul Gem':3}),
+ milestone('awaken-tool','First Awakening','Enchant an Awakened Bronze Pickaxe','Soulbound',s=>questProduced(s,'Awakened Bronze Pickaxe'),1,1800,{enchanting:2100},{'Faded Soul Gem':4}),
+ milestone('artisan-enchant','Artisan of Souls','Enchant 25 equipment pieces','Soulbound',s=>questSkillActions(s,'enchanting'),25,4600,{enchanting:4500},{'Verdant Soul Gem':3}),
+ // Independent Soul Gem drop progress, including one-time achievements for higher tiers.
+ milestone('soul-100','Soul Seeker','Find 100 Soul Gems from skills or combat','Soulbound',s=>s.stats.soulsCollected||0,100,1900,{enchanting:1750},{'Faded Soul Gem':8}),
+ milestone('soul-500','Soul Harvester','Find 500 Soul Gems','Soulbound',s=>s.stats.soulsCollected||0,500,9000,{enchanting:9000},{'Azure Soul Gem':2}),
+ milestone('soul-2500','The Soul Collector','Find 2,500 Soul Gems','Soulbound',s=>s.stats.soulsCollected||0,2500,42000,{enchanting:45000},{'Violet Soul Gem':3}),
+ milestone('azure-spirit','Azure Awakening','Find an Azure Soul Gem','Soulbound',s=>questSouls(s,'Azure Soul Gem'),1,2200,{enchanting:2000},{'Faded Soul Gem':5}),
+ milestone('violet-spirit','Violet Awakening','Find a Violet Soul Gem','Soulbound',s=>questSouls(s,'Violet Soul Gem'),1,7000,{enchanting:6500},{'Azure Soul Gem':2}),
+ milestone('solar-spirit','Solar Awakening','Find a Solar Soul Gem','Soulbound',s=>questSouls(s,'Solar Soul Gem'),1,35000,{enchanting:22000},{'Violet Soul Gem':3}),
+ milestone('prismatic-spirit','Prismatic Miracle','Find a Prismatic Soul Gem','Soulbound',s=>questSouls(s,'Prismatic Soul Gem'),1,120000,{enchanting:90000},{'Solar Soul Gem':5}),
+ // Combat and longer-term adventure objectives.
+ milestone('combat-25','First Blood','Defeat 25 monsters','Combat',questTotalKills,25,600,{attack:420,strength:420},{'Faded Soul Gem':2}),
+ milestone('combat-100','Monster Slayer','Defeat 100 monsters','Combat',questTotalKills,100,2600,{attack:1800,strength:1800},{'Verdant Soul Gem':2}),
+ milestone('combat-500','Veteran Slayer','Defeat 500 monsters','Combat',questTotalKills,500,14500,{attack:9000,strength:9000,defence:9000},{'Azure Soul Gem':3}),
+ milestone('combat-2000','Legendary Slayer','Defeat 2,000 monsters','Combat',questTotalKills,2000,60000,{attack:40000,strength:40000,defence:40000},{'Violet Soul Gem':3}),
+ milestone('combat-10000','Mythic Slayer','Defeat 10,000 monsters in total','Combat',questTotalKills,10000,230000,{attack:130000,strength:130000,defence:130000},{'Violet Soul Gem':8}),
+ milestone('combat-25000','Eternal Slayer','Defeat 25,000 monsters in total','Combat',questTotalKills,25000,650000,{attack:350000,strength:350000,defence:350000},{'Solar Soul Gem':2}),
+ milestone('combat-50000','Worldbreaker','Defeat 50,000 monsters in total','Combat',questTotalKills,50000,1450000,{attack:750000,strength:750000,defence:750000},{'Solar Soul Gem':4}),
+ milestone('combat-100000','The Immortal Hunter','Defeat 100,000 monsters in total','Combat',questTotalKills,100000,3500000,{attack:1750000,strength:1750000,defence:1750000},{'Solar Soul Gem':9}),
+ milestone('rat-40','Rat Exterminator','Defeat 40 Rats','Combat',s=>questKills(s,'Rat'),40,450,{defence:700},{'Faded Soul Gem':2}),
+ milestone('peasant-50','Roadside Trouble','Defeat 50 Wandering Peasants','Combat',s=>questKills(s,'Wandering Peasant'),50,1100,{attack:1100},{'Carrot Seed':20}),
+ milestone('dwarf-100','Dwarven Nemesis','Defeat 100 Dwarven Miners','Combat',s=>questKills(s,'Dwarven Miner'),100,6500,{strength:5700},{'Azure Soul Gem':2}),
+ milestone('guardian-25','The Fallen Forest','Defeat 25 Forest Guardians','Combat',s=>questKills(s,'Forest Guardian'),25,4600,{defence:4300},{'Verdant Soul Gem':4}),
+ milestone('dragon-10','Dragonslayer','Defeat 10 Ancient Dragons','Combat',s=>questKills(s,'Ancient Dragon'),10,28000,{strength:20000,hitpoints:10000},{'Violet Soul Gem':2}),
+ milestone('overlord-10','Beyond the Void','Defeat 10 Void Overlords','Combat',s=>questKills(s,'Void Overlord'),10,52000,{attack:25000,defence:25000},{'Violet Soul Gem':4}),
+ milestone('treasure-25','Gem Raider','Find 25 treasure gems from monsters','Combat',s=>s.stats.treasures||0,25,5300,{crafting:5100},{'Uncut Diamond':2}),
+ milestone('treasure-150','Treasure Hoarder','Find 150 treasure gems from monsters','Combat',s=>s.stats.treasures||0,150,29000,{crafting:28000},{'Azure Soul Gem':3}),
+ milestone('wealth-50000','Merchant Prince','Earn 50,000 Coins in total','Milestones',s=>s.stats.coinsEarned||0,50000,5000,{crafting:4000},{'Verdant Soul Gem':3}),
+ milestone('wealth-250000','Merchant King','Earn 250,000 Coins in total','Milestones',s=>s.stats.coinsEarned||0,250000,26000,{crafting:25000},{'Violet Soul Gem':1}),
+ milestone('actions-5000','A Lifetime of Skills','Complete 5,000 skill actions','Milestones',questTotalActions,5000,22000,{alchemy:6500,crafting:6500,enchanting:6500},{'Azure Soul Gem':3}),
+ milestone('actions-25000','Living Legend','Complete 25,000 skill actions','Milestones',questTotalActions,25000,110000,{alchemy:22000,crafting:22000,enchanting:22000},{'Violet Soul Gem':4}),
+ milestone('actions-50000','A Master of Everything','Complete 50,000 skill actions in total','Milestones',questTotalActions,50000,460000,{alchemy:125000,crafting:125000,enchanting:125000},{'Solar Soul Gem':2}),
+ milestone('actions-100000','The Endless Adventure','Complete 100,000 skill actions in total','Milestones',questTotalActions,100000,1200000,{alchemy:350000,crafting:350000,enchanting:350000},{'Solar Soul Gem':5}),
+ milestone('combat-lvl-30','Aspiring Warrior','Reach Combat Level 30','Combat',s=>combatLevel(),30,3500,{attack:2200,defence:2200},{'Verdant Soul Gem':3}),
+ milestone('combat-lvl-60','Seasoned Warrior','Reach Combat Level 60','Combat',s=>combatLevel(),60,14000,{attack:9000,defence:9000},{'Azure Soul Gem':2}),
+ milestone('combat-lvl-100','Champion of the Realm','Reach Combat Level 100','Combat',s=>combatLevel(),100,52000,{attack:25000,strength:25000,defence:25000},{'Violet Soul Gem':3}),
+ milestone('combat-lvl-max','Combat Legend','Reach maximum Combat Level','Combat',s=>combatLevel(),COMBAT_CONFIG.maxLevel,200000,{attack:60000,strength:60000,defence:60000},{'Solar Soul Gem':1})
+];
+QUESTS.push(...JOURNAL_EXTRA_QUESTS);
+// Progress indicators for the original 20 achievements as well.
+const ORIGINAL_QUEST_PROGRESS={
+ 'forest-start':[s=>questSkillActions(s,'woodcutting'),25],
+ 'fishing-start':[s=>questSkillActions(s,'fishing'),20],
+ campfire:[s=>s.stats.logsBurned||0,3],
+ 'cooked-food':[s=>questSkillActions(s,'cooking'),15],
+ miner:[s=>questSkillActions(s,'mining'),30],
+ forge:[s=>questSkillActions(s,'smithing'),10],
+ 'metal-sword':[s=>Object.keys(s.stats.produced).some(x=>x.endsWith(' Sword')&&s.stats.produced[x]>=1)?1:0,1],
+ farmer:[s=>questSkillActions(s,'agriculture'),40],
+ brewer:[s=>questSkillActions(s,'alchemy'),10],
+ fletcher:[s=>questSkillActions(s,'fletching'),30],
+ enchanter:[s=>questSkillActions(s,'enchanting'),5],
+ souls:[s=>s.stats.soulsCollected||0,25],
+ dwarf:[s=>questKills(s,'Dwarven Miner'),25],
+ mythic:[s=>questProduced(s,'Eternal Soul Crown'),1],
+ goblin:[s=>questKills(s,'Goblin'),10],
+ jeweller:[questGemCuts,5],
+ fashion:[s=>['weapon','shield','body','amulet'].filter(slot=>s.equipment[slot]).length,4],
+ treasure:[s=>s.stats.treasures||0,5],
+ wealth:[s=>s.stats.coinsEarned||0,10000],
+ master:[questTotalActions,1000]
+};
+for(const q of QUESTS){
+ if(!q.progress&&ORIGINAL_QUEST_PROGRESS[q.id]){
+  [q.progress,q.target]=ORIGINAL_QUEST_PROGRESS[q.id];
+ }
+}
+// The combat and all-actions milestones are also strict tier chains.
+const JOURNAL_OTHER_CHAINS={
+ 'combat-kills':['combat-25','combat-100','combat-500','combat-2000','combat-10000','combat-25000','combat-50000','combat-100000'],
+ 'all-actions':['actions-5000','actions-25000','actions-50000','actions-100000']
+};
+for(const [chain,ids] of Object.entries(JOURNAL_OTHER_CHAINS)){
+ ids.forEach((id,index)=>{
+  const quest=QUESTS.find(q=>q.id===id);
+  if(!quest)throw Error('Missing journal tier: '+id);
+  quest.chain=chain;quest.tier=index+1;quest.progressSource=quest.progress;
+  quest.title=chain==='combat-kills'?'Defeat Any Monster':'Complete Any Skill Action';
+  quest.text=`Complete ${fmtQuestTarget(quest.target)} ${chain==='combat-kills'?'monster kills':'skill actions'} in total`;
+ });
+}
+const JOURNAL_CHAINS={};
+for(const q of QUESTS)if(q.chain)(JOURNAL_CHAINS[q.chain]??=[]).push(q);
+for(const chain of Object.values(JOURNAL_CHAINS))chain.sort((a,b)=>a.tier-b.tier);
+const journalTierName=tier=>['I','II','III','IV','V','VI','VII','VIII','IX','X'][tier-1]||String(tier);
+function journalTierUnlocked(q,s){
+ if(!q.chain)return true;
+ const chain=JOURNAL_CHAINS[q.chain]||[];
+ return chain.every(prev=>prev.tier>=q.tier||s.claimed.includes(prev.id));
+}
+function journalQuestProgress(q,s){
+ // Lifetime totals count toward all tiers; locked tiers conceal progress in the UI.
+ // journalTierUnlocked still prevents claiming rewards out of order.
+ const source=q.progressSource||q.progress;
+ return Math.max(0,Number(source?.(s)||0));
+}
+for(const q of QUESTS)if(q.chain)q.test=s=>
+ journalTierUnlocked(q,s)&&journalQuestProgress(q,s)>=q.target;
+
 
 // ── Item database: icons, stacking, prices, and readable tooltips ────────────
 const ITEM_META={};
@@ -573,7 +795,7 @@ const timeFmt=secs=>{secs=Math.max(0,Math.ceil(secs));return `${Math.floor(secs/
 const el=id=>document.getElementById(id);
 const SAVE_KEY='idle-rpg-v2-save'; // Same key as v2.9: old saved progress stays available.
 const EQUIP_SLOTS=['weapon','shield','head','body','legs','gloves','cape','amulet','ring','axe','pickaxe'];
-const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,coinsEarned:0,potionsUsed:0,soulsCollected:0,soulsBySource:{}});
+const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,coinsEarned:0,potionsUsed:0,soulsCollected:0,soulsBySource:{},soulsByTier:{}});
 function newGame(){return {
  xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
  bank:{'Coins':250},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
@@ -584,7 +806,7 @@ function newGame(){return {
  log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}}};
+const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}},journalCategory:'All'};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const gameNow=()=>simulatedTime===null?Date.now():simulatedTime;
@@ -633,7 +855,7 @@ function restore(){
   state={...base,...raw,xp:{...base.xp,...raw.xp},
    bank:{...raw.bank},equipment:{...base.equipment,...(raw.equipment||{})},
    autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
-   stats:{...emptyStats(),...migratedStats,bySkill:{...migratedStats.bySkill},produced:{...(stats.produced||{})},kills:{...(stats.kills||{})},soulsBySource:{...(stats.soulsBySource||{})}},
+   stats:{...emptyStats(),...migratedStats,bySkill:{...migratedStats.bySkill},produced:{...(stats.produced||{})},kills:{...(stats.kills||{})},soulsBySource:{...(stats.soulsBySource||{})},soulsByTier:{...(stats.soulsByTier||Object.fromEntries(SOUL_GEMS.map(g=>[g.name,Math.max(0,Number(raw.bank[g.name]||0))]))) }},
    claimed:Array.isArray(raw.claimed)?raw.claimed:[],
    active:validSavedActivity(raw.active)?raw.active:null,
    progress:clamp(Number(raw.progress)||0,0,99.999),
@@ -651,6 +873,8 @@ function restore(){
   state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
   if(!Number.isFinite(state.fireUntil))state.fireUntil=0;
   for(const [item,n] of Object.entries(state.bank))if(!Number.isFinite(Number(n))||n<=0)delete state.bank[item];
+  // Old saves may carry v3.6 tier baselines; they are no longer used.
+  delete state.journalTierBases;
   // Offline catch-up runs after restore, before the live animation starts.
  }catch(e){console.warn('Could not restore game',e)}
 }
@@ -663,9 +887,11 @@ function gearMods(){
  }
  return mods;
 }
-function gainXp(skill,base){
+function gainXp(skill,base,applyBonuses=true){
  const before=levelFromXp(state.xp[skill]||0);
- const mods=gearMods();const amount=Math.max(0,base*(1+mods.xpBonus+(mods[skill+'XpBonus']||0)));
+ const mods=applyBonuses?gearMods():null;
+ // Quest XP is fixed; gear and potion bonuses only affect trained XP.
+ const amount=Math.max(0,applyBonuses?base*(1+mods.xpBonus+(mods[skill+'XpBonus']||0)):base);
  state.xp[skill]=(state.xp[skill]||0)+amount;
  const after=levelFromXp(state.xp[skill]);
  if(after>before){
@@ -767,6 +993,7 @@ function rollSoulGem(source){
  const gem=weightedPick(SOUL_GEMS);
  if(!gem||!add(gem.name,1))return null;
  state.stats.soulsCollected=(state.stats.soulsCollected||0)+1;
+ state.stats.soulsByTier[gem.name]=(state.stats.soulsByTier[gem.name]||0)+1;
  state.stats.soulsBySource[source]=(state.stats.soulsBySource[source]||0)+1;
  if(gem.name==='Prismatic Soul Gem')note('🌈 MYTHIC SOUL! Found the 1/3000 Prismatic Soul Gem!');
  else if(gem.weight<=29)note(`🌟 ${gem.name} found from ${label(source)}!`);
@@ -898,11 +1125,46 @@ function buy(item,qty){
  if(!buyOrCraft({Coins:total},item,qty)){note('🏦 Cannot buy: bank is full.');toast('Bank is full');return}
  note(`🛒 Bought ${fmt(qty)} ${item} for ${fmt(total)} Coins.`);refreshDynamic();save();
 }
+function questItemRewards(quest){
+ const rewards={...(quest.items||{})};
+ if(quest.coins>0)rewards.Coins=(rewards.Coins||0)+quest.coins;
+ return rewards;
+}
+function questRewardSummary(quest){
+ const parts=[];
+ if(quest.coins>0)parts.push(`+${fmt(quest.coins)} Coins`);
+ for(const [skill,n] of Object.entries(quest.xp||{}))if(n>0)parts.push(`+${fmt(n)} ${label(skill)} XP`);
+ for(const [item,n] of Object.entries(quest.items||{}))if(n>0)parts.push(`+${fmt(n)} ${item}`);
+ return parts.join(' · ');
+}
 function claimQuest(id){
- const quest=QUESTS.find(x=>x.id===id);if(!quest||state.claimed.includes(id)||!quest.test(state))return;
- if(!add('Coins',quest.coins)){note('Free a bank slot to receive your reward.');return}
- state.claimed.push(id);state.stats.coinsEarned+=quest.coins;
- note(`🏅 Quest complete: ${quest.title}! +${fmt(quest.coins)} Coins.`);refreshDynamic();if(ui.view==='journal')renderMain();save();
+ const quest=QUESTS.find(x=>x.id===id);
+ if(!quest||state.claimed.includes(id)||!quest.test(state))return;
+ const items=questItemRewards(quest);
+ const newStacks=Object.entries(items).filter(([item,n])=>n>0&&count(item)===0).length;
+ if(bankUsed()+newStacks>GAME_CONFIG.bankSlots){
+  note(`🏦 Need ${bankUsed()+newStacks-GAME_CONFIG.bankSlots} free bank slot(s) to claim all rewards.`);
+  toast('Free a bank slot for quest rewards');
+  return;
+ }
+ const beforeBank={...state.bank};
+ for(const [item,n] of Object.entries(items)){
+  if(n<=0)continue;
+  if(!add(item,n)){
+   state.bank=beforeBank;
+   note('🏦 Could not claim all rewards. Bank unchanged.');
+   return;
+  }
+ }
+ // Claiming unlocks the next tier. Its progress uses the same lifetime total,
+ // so previously completed actions count automatically toward higher tiers.
+ // Never reward XP until all items are safely deposited.
+ for(const [skill,amount] of Object.entries(quest.xp||{}))if(amount>0)gainXp(skill,amount,false);
+ state.claimed.push(quest.id);
+ state.stats.coinsEarned=(state.stats.coinsEarned||0)+(quest.coins||0);
+ note(`🏅 Journal completed: ${quest.title}! ${questRewardSummary(quest)}`);
+ refreshDynamic(); // Journal redraw removes claimed card immediately.
+ save();
 }
 // ── Presentation / navigation ─────────────────────────────────────────────────
 const NAV_VIEWS=['combat',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
@@ -1138,14 +1400,46 @@ function renderShopItems(){
   return `<div class="shop-card">${itemArt(x.name)}<div class="shop-card-content"><h3>${esc(x.name)}</h3><p>${esc(desc)}</p><div class="between"><div><div class="gold">🪙 ${fmt(x.price)} each · ${fmt(cost)} total</div><span class="shop-owned">Owned: ${fmt(count(x.name))}</span></div><button data-buy="${esc(x.name)}" ${count('Coins')<cost||(!bankCanHold(x.name)&&!(cost===count('Coins')))?'disabled':''}>Buy ×${ui.shopQty}</button></div></div></div>`;
  }).join('');
 }
+function questRewardHtml(quest){
+ let html='';
+ if(quest.coins>0)html+=`<span class="quest-reward money">🪙 ${fmt(quest.coins)} Coins</span>`;
+ for(const [skill,n] of Object.entries(quest.xp||{}))if(n>0){
+  const icon=SKILLS[skill]?.icon||'✨';
+  html+=`<span class="quest-reward experience">${icon} +${fmt(n)} ${esc(label(skill))} XP</span>`;
+ }
+ for(const [item,n] of Object.entries(quest.items||{}))if(n>0){
+  html+=`<span class="quest-reward ${NONTRADEABLE_ITEMS.has(item)?'soul':''}">${esc(itemIcon(item))} ×${fmt(n)} ${esc(item)}${NONTRADEABLE_ITEMS.has(item)?' 🔒':''}</span>`;
+ }
+ return html;
+}
 function renderJournalMain(){
- const completed=QUESTS.filter(q=>state.claimed.includes(q.id)).length;
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Milestones & Rewards</div><h2>📜 Adventurer's Journal</h2><p class="section-description">Complete goals using different skills. Claim your Coins to fund new tools, supplies and equipment.</p></div><span class="recipe-badge level">${completed} / ${QUESTS.length} claimed</span></div>
- <div class="stat-grid"><div class="stat-tile"><small>Total skill actions</small><strong>${fmt(Object.values(state.stats.bySkill).reduce((a,b)=>a+b,0))}</strong></div><div class="stat-tile"><small>Monsters defeated</small><strong>${fmt(Object.values(state.stats.kills).reduce((a,b)=>a+b,0))}</strong></div><div class="stat-tile"><small>Treasure gems found</small><strong>${fmt(state.stats.treasures)}</strong></div><div class="stat-tile"><small>Soul Gems found</small><strong>${fmt(state.stats.soulsCollected||0)}</strong></div><div class="stat-tile"><small>Lifetime Coins earned</small><strong>${fmt(state.stats.coinsEarned)}</strong></div></div>
- <div class="skill-cards">${QUESTS.map(q=>{
-  const claimed=state.claimed.includes(q.id),ready=q.test(state);
-  return `<div class="recipe-card"><div class="between"><strong>${claimed?'✅':ready?'🎉':'📜'} ${esc(q.title)}</strong><span class="gold">🪙 ${fmt(q.coins)}</span></div><div class="small subdued">${esc(q.text)}</div><div class="recipe-bottom"><span class="recipe-badge">${claimed?'Claimed':ready?'Ready to claim':'In progress'}</span><button data-claim="${q.id}" ${claimed||!ready?'disabled':''}>${claimed?'Done':ready?'Claim reward':'Locked'}</button></div></div>`
- }).join('')}</div>`;
+ const claimed=new Set(state.claimed);
+ const completed=QUESTS.filter(q=>claimed.has(q.id)).length;
+ const available=QUESTS.filter(q=>!claimed.has(q.id));
+ const ready=available.filter(q=>q.test(state)).length;
+ const categories=['All','Ready','Gathering','Production','Combat','Soulbound','Milestones'];
+ if(!categories.includes(ui.journalCategory))ui.journalCategory='All';
+ const visible=available.filter(q=>ui.journalCategory==='All'||
+  (ui.journalCategory==='Ready'?q.test(state):q.category===ui.journalCategory));
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Achievements · Tiered challenges</div><h2>📜 Adventurer's Journal</h2><p class="section-description">Claim Coins, XP, Soul Gems and supplies. Tiered challenges go up to 100,000 lifetime actions. Your actions count toward every tier, but only the current unlocked tier shows progress. Claim each tier in order to reveal the next one. Claimed quests disappear.</p></div><span class="recipe-badge level">${completed} / ${QUESTS.length} claimed</span></div>
+ <div class="stat-grid"><div class="stat-tile"><small>Rewards ready</small><strong class="positive">🎁 ${ready}</strong></div><div class="stat-tile"><small>Quests remaining</small><strong>${available.length}</strong></div><div class="stat-tile"><small>Total skill actions</small><strong>${fmt(questTotalActions(state))}</strong></div><div class="stat-tile"><small>Monsters defeated</small><strong>${fmt(questTotalKills(state))}</strong></div><div class="stat-tile"><small>Soul Gems found</small><strong>${fmt(state.stats.soulsCollected||0)}</strong></div></div>
+ <div class="journal-filter">${categories.map(cat=>`<button class="${ui.journalCategory===cat?'selected':''}" data-journal-category="${cat}">${cat==='Ready'?'🎁 Ready ('+ready+')':cat}</button>`).join('')}</div>
+ ${visible.length?`<div class="skill-cards">${visible.map(q=>{
+  const locked=!!q.chain&&!journalTierUnlocked(q,state);
+  const isReady=!locked&&q.test(state),progress=journalQuestProgress(q,state);
+  const goal=Math.max(1,Number(q.target||1));
+  const fraction=clamp(progress/goal,0,1)*100;
+  const tierText=q.chain?`Tier ${journalTierName(q.tier)} / ${JOURNAL_CHAINS[q.chain].length}`:'';
+  const previous=q.chain?JOURNAL_CHAINS[q.chain].find(p=>p.tier===q.tier-1):null;
+  return `<div class="recipe-card journal-card ${isReady?'quest-ready':''} ${locked?'quest-tier-locked':''}">
+   <div class="between"><strong>${locked?'🔒':isReady?'🎁':'📜'} ${esc(q.title)}</strong>${q.chain?`<span class="journal-tier-label ${locked?'journal-tier-locked-label':''}">${tierText}</span>`:`<span class="quest-type">${esc(q.category||'Milestones')}</span>`}</div>
+   <div class="recipe-detail">${esc(q.text)}</div>
+   ${locked?`<div class="journal-chain-note">🔒 Claim ${esc(previous?.title||'the previous tier')} · Tier ${journalTierName(q.tier-1)} to reveal your cumulative progress.</div>`:`<div class="quest-progress-line"><span>${q.chain?'Total actions':'Progress'}</span><b>${fmt(Math.min(progress,goal))} / ${fmt(goal)}</b></div>
+   <div class="quest-progress-bar" role="progressbar" aria-valuenow="${Math.floor(fraction)}" aria-valuemin="0" aria-valuemax="100" aria-label="${esc(q.title)}${q.chain?' tier '+q.tier:''} progress"><div class="fill" style="width:${fraction.toFixed(2)}%"></div></div>
+   ${q.chain?`<div class="journal-chain-note">${isReady?'Claim rewards to unlock the next tier.':'Earlier actions already count toward higher tiers.'}</div>`:''}` }
+   <div class="quest-rewards">${questRewardHtml(q)}</div>
+   <div class="recipe-bottom"><span class="recipe-badge ${isReady?'level':''}">${locked?'🔒 Locked':isReady?'Ready to claim':'In progress'}</span><button data-claim="${esc(q.id)}" ${isReady?'':'disabled'}>${isReady?'🎁 Claim rewards':locked?'🔒 Locked':'In progress'}</button></div></div>`;
+ }).join('')}</div>`:`<div class="journal-empty">${available.length===0?'🏆 All journal quests completed!':'No quests in this category right now. Try All or another category.'}</div>`}`;
 }
 function renderMain(){
  if(ui.view==='combat')renderCombatMain();
@@ -1182,6 +1476,7 @@ function refreshDynamic(){
  else if(SKILLS[ui.view]&&!SKILLS[ui.view].combat)renderSkillLive();
  else if(ui.view==='bank')renderBankGrid('main');
  else if(ui.view==='shop')renderShopItems();
+ else if(ui.view==='journal')renderJournalMain();
  if(ui.sidebarTab==='bank')renderBankGrid('side');
  else{
   const right=el('sidebar');const parent=el('sidebar').closest('.right');const scroll=parent.scrollTop;
@@ -1209,6 +1504,7 @@ function handleClick(e){
  if(b.hasAttribute('data-use-potion'))return usePotion(b.dataset.usePotion);
  if(b.hasAttribute('data-sell'))return sell(b.dataset.sell,b.dataset.qty);
  if(b.hasAttribute('data-claim'))return claimQuest(b.dataset.claim);
+ if(b.hasAttribute('data-journal-category')){ui.journalCategory=b.dataset.journalCategory;renderJournalMain();return;}
  if(b.hasAttribute('data-bank-select')){
   const scope=b.dataset.bankSelect;ui.bank[scope].selected=b.dataset.item;
   renderBankGrid(scope);return;

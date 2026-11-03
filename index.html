@@ -20,21 +20,24 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 .fire-layout{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.fire-tile{padding:11px;flex:1 1 190px;background:#3a3027;border:1px solid #8a6839;border-radius:10px}.fire-tile.out{background:#1a293b;border-color:#3c566e}.fire-tile h3{margin:0 0 4px}.fire-log-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:6px;flex:2 1 340px}.fire-log-grid button{padding:8px;text-align:left}.fire-log-grid button small{display:block;color:#afc7d6;font-size:11px;margin-top:3px}
 .combat-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.combat-choice{text-align:left;display:flex;flex-direction:column;gap:7px;min-width:0}.combat-choice span{font-size:12px}.health-box{margin:13px 0;padding:12px;background:#14283b;border:1px solid #3c5670;border-radius:10px}.health-box h3{margin:0 0 9px}.combat-monsters{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:8px}.monster{border:1px solid #39536c;background:#1b3146;padding:11px;border-radius:10px}.monster-name{font-size:14px;font-weight:800}.monster p{font-size:12px;line-height:1.55;color:#b7ccdf;margin:5px 0 9px}.monster button{padding:7px 11px}.food-controls{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.food-controls button{font-size:11px;padding:6px 8px}.buff-list{display:flex;flex-wrap:wrap;gap:5px}.buff-chip{background:#24495a;border:1px solid #477e83;border-radius:8px;padding:6px 9px;font-size:11px}
 .log{font-size:11px;line-height:1.4;max-height:210px;overflow:auto;color:#b9d0e3;scrollbar-width:thin}.log div{border-bottom:1px solid #2b4259;padding:5px 0}.log .level-msg{color:#f9d381}.log .loot-msg{color:#c0f0c2}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:50;padding:10px 18px;border-radius:10px;background:#204d5d;border:1px solid #58c3b4;box-shadow:0 8px 28px #0008;display:none;max-width:90vw;text-align:center}.toast.show{display:block}
+.afk-overlay{position:fixed;inset:0;background:#05101ce8;z-index:100;display:flex;align-items:center;justify-content:center;padding:14px;overflow:auto;backdrop-filter:blur(7px)}
+.afk-overlay[hidden]{display:none}.afk-dialog{width:min(560px,100%);max-height:calc(100vh - 30px);overflow:auto;border:1px solid #4c918e;border-radius:19px;background:linear-gradient(160deg,#1e344c,#102238);padding:22px;box-shadow:0 20px 80px #000c}.afk-dialog h2{margin:0;font-size:25px}.afk-hero{text-align:center;background:#132b40;border:1px solid #33566e;border-radius:13px;padding:17px;margin:16px 0}.afk-time{font-size:27px;color:#a0efca;font-weight:850;font-variant-numeric:tabular-nums;margin:8px 0}.afk-section{margin:14px 0}.afk-section h3{font-size:14px;margin:0 0 8px;color:#cce9f3}.afk-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:6px}.afk-item{display:flex;gap:8px;align-items:center;padding:9px;border:1px solid #355570;border-radius:9px;background:#142c42;min-width:0}.afk-item .detail{flex:1;min-width:0;font-size:12px;overflow-wrap:anywhere}.afk-item b{white-space:nowrap;color:#a2f0b9;font-size:12px}.afk-item.used b{color:#ffb9ab}.afk-continue{width:100%;padding:13px;font-weight:800;background:#207d73;margin-top:10px}.afk-progress{height:11px;background:#0d1c2c;border-radius:8px;overflow:hidden;margin:11px 0}.afk-progress div{height:100%;background:#67d5b3;width:0;transition:width .15s}
 @media(max-width:1150px){.layout{grid-template-columns:160px minmax(0,1fr) 280px;gap:8px;padding:8px}.panel{padding:11px}.nav button{font-size:12px;padding:7px 6px}.bank-grid.compact{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:920px){.layout{grid-template-columns:155px minmax(0,1fr)}.right{position:relative;max-height:none;grid-column:2}.main{min-height:300px}}
 @media(max-width:650px){header{padding:12px}.layout{grid-template-columns:1fr;gap:8px;padding:8px}.left{position:relative;top:auto;max-height:none;padding:9px}.left .nav,.left .nav-divider{display:none}.mobile-nav{display:block}.right{grid-column:1}.main{padding:10px;min-height:240px}.heading h2{font-size:21px}.combat-choices{grid-template-columns:1fr}.combat-choice{flex-direction:row;flex-wrap:wrap;align-items:center}.combat-choice .xpbar{flex:1 1 100%}#activityPanel{top:4px;padding:10px}.skill-cards{grid-template-columns:1fr}.bank-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr))}.bank-grid.compact{grid-template-columns:repeat(5,minmax(0,1fr))}.right .panel{padding:10px}}
 @media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.0 · Expanded World</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.1 · Offline Progress</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span>⚡ Current Activity</span><span id="progressText">0%</span></div><div class="activity-info"><span id="activityName">Idle · Choose an action</span></div><div class="bar large"><div class="fill" id="progressFill"></div></div><div class="activity-bottom"><small id="activityHint">All actions take 1 second while testing.</small><button id="stopBtn">Stop</button></div></section><div id="main"></div></main>
 <aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
-</div><div class="toast" id="toast" role="status"></div><script>
+</div><div class="toast" id="toast" role="status"></div>
+<div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.0 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.1 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -44,6 +47,13 @@ const GAME_CONFIG = {
   treasureChance: 0.10,      // Base chance for a random gem per monster kill
   shopSellMultiplier: 0.40,
   maxFireSeconds: 7200
+};
+// Offline progression replays the SAME action/combat code as online play.
+const OFFLINE_CONFIG = {
+  enabled: true,
+  maxHours: 24,            // Maximum rewarded time per return
+  minAwaySeconds: 10,      // Minimum gap before opening the AFK report
+  chunkActions: 1500      // Actions per UI-friendly simulation batch
 };
 const COMBAT_CONFIG = {
   maxLevel: 120,             // Change this when adding ranged, magic, prayer etc.
@@ -416,11 +426,13 @@ function newGame(){return {
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
  fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
- log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now()
+ log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
 const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}}};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
+let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
+const gameNow=()=>simulatedTime===null?Date.now():simulatedTime;
 const levelFromXp=xp=>{let lvl=1,total=0;while(lvl<99){const need=Math.floor(100*Math.pow(1.13,lvl-1));if(xp<total+need)break;total+=need;lvl++}return lvl};
 const xpForLevel=lvl=>{let n=0;for(let i=1;i<Math.min(100,lvl);i++)n+=Math.floor(100*Math.pow(1.13,i-1));return n};
 const label=s=>SKILLS[s]?.name||s.replace(/^./,c=>c.toUpperCase());
@@ -450,9 +462,9 @@ function buyOrCraft(cost,output,amount){
  if(!add(output,amount)){state.bank=old;return false}
  return true;
 }
-function note(msg){state.log.unshift(msg);state.log=state.log.slice(0,80);renderLog()}
+function note(msg){if(offlineRunning){offlineLogCount++;return}state.log.unshift(msg);state.log=state.log.slice(0,80);renderLog()}
 function toast(msg){const box=el('toast');box.textContent=msg;box.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>box.classList.remove('show'),2600)}
-function save(){try{state.lastSaved=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(err){console.warn('Save error',err);toast('Could not save. Browser storage may be full.')}}
+function save(){if(offlineRunning)return;try{state.lastSaved=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(err){console.warn('Save error',err);toast('Could not save. Browser storage may be full.')}}
 function restore(){
  try{
   const raw=JSON.parse(localStorage.getItem(SAVE_KEY));if(!raw||!raw.xp||!raw.bank)return;
@@ -462,7 +474,11 @@ function restore(){
    bank:{...raw.bank},equipment:{...base.equipment,...(raw.equipment||{})},
    autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
    stats:{...emptyStats(),...stats,bySkill:{...(stats.bySkill||{})},produced:{...(stats.produced||{})},kills:{...(stats.kills||{})}},
-   claimed:Array.isArray(raw.claimed)?raw.claimed:[],active:null,progress:0,monsterHp:null};
+   claimed:Array.isArray(raw.claimed)?raw.claimed:[],
+   active:validSavedActivity(raw.active)?raw.active:null,
+   progress:clamp(Number(raw.progress)||0,0,99.999),
+   monsterHp:Number.isFinite(Number(raw.monsterHp))&&Number(raw.monsterHp)>0?Number(raw.monsterHp):MONSTERS[raw.monsterIndex]?.hp};
+  state.lastProcessedAt=Number(raw.lastProcessedAt)||Number(raw.lastSaved)||Date.now();
   // Historic saves had Farming and Animal Husbandry before they became Agriculture.
   if(raw.xp.agriculture===undefined&&(raw.xp.farming!==undefined||raw.xp.animalHusbandry!==undefined))state.xp.agriculture=(raw.xp.farming||0)+(raw.xp.animalHusbandry||0);
   delete state.xp.farming;delete state.xp.animalHusbandry;
@@ -475,15 +491,14 @@ function restore(){
   state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
   if(!Number.isFinite(state.fireUntil))state.fireUntil=0;
   for(const [item,n] of Object.entries(state.bank))if(!Number.isFinite(Number(n))||n<=0)delete state.bank[item];
-  const away=Math.floor(Math.max(0,(Date.now()-(raw.lastSaved||Date.now()))/1000));
-  if(away>60)note('Welcome back! Training was paused while away. Fire and potion timers continue in real time.');
+  // Offline catch-up runs after restore, before the live animation starts.
  }catch(e){console.warn('Could not restore game',e)}
 }
 function gearMods(){
  const mods={attackPct:0,strengthPct:0,defencePct:0,xpBonus:0,luckBonus:0,gatherBonus:0,woodcuttingYield:0,miningYield:0,defence:0,block:0,attack:0,strength:0};
  for(const name of Object.values(state.equipment)){const piece=EQUIPMENT[name]||{};for(const key of Object.keys(mods))mods[key]+=Number(piece[key]||0)}
  for(const buff of Object.values(state.buffs||{})){
-  if(buff?.until>Date.now()&&buff.effects)for(const [key,value] of Object.entries(buff.effects))mods[key]=(mods[key]||0)+Number(value||0);
+  if(buff?.until>gameNow()&&buff.effects)for(const [key,value] of Object.entries(buff.effects))mods[key]=(mods[key]||0)+Number(value||0);
  }
  return mods;
 }
@@ -501,14 +516,14 @@ function gainXp(skill,base){
 }
 function lightFire(item){
  if(!(item in FIRE_FUEL)||count(item)<1){note('No logs available.');return}
- const remaining=Math.max(0,(state.fireUntil-Date.now())/1000);
+ const remaining=Math.max(0,(state.fireUntil-gameNow())/1000);
  if(remaining+FIRE_FUEL[item]>GAME_CONFIG.maxFireSeconds){note('Fire cannot hold more than 2 hours of fuel.');return}
- add(item,-1);state.fireUntil=Math.max(Date.now(),state.fireUntil)+FIRE_FUEL[item]*1000;
+ add(item,-1);state.fireUntil=Math.max(gameNow(),state.fireUntil)+FIRE_FUEL[item]*1000;
  state.fireLastFuel=item;state.stats.logsBurned++;
  note(`🔥 Added ${item}: +${timeFmt(FIRE_FUEL[item])} fire time.`);
  refreshDynamic();save();
 }
-const fireRemaining=()=>Math.max(0,(state.fireUntil-Date.now())/1000);
+const fireRemaining=()=>Math.max(0,(state.fireUntil-gameNow())/1000);
 const fireBurning=()=>fireRemaining()>0;
 function startAction(skill,index){
  const action=SKILLS[skill]?.actions?.[index];if(!action)return;
@@ -619,7 +634,7 @@ function usePotion(item){
   const effects=pot.buffs||{[pot.buff]:pot.value};
   // Same category replaces (instead of infinitely stacking) an existing potion buff.
   const key=Object.keys(effects).sort().join(':');
-  state.buffs[key]={name:item,until:Date.now()+pot.duration*1000,effects};
+  state.buffs[key]={name:item,until:gameNow()+pot.duration*1000,effects};
   add(item,-1);note(`🧪 Used ${item}: ${pot.description}.`);
  }
  state.stats.potionsUsed++;
@@ -988,13 +1003,108 @@ el('resetBtn').onclick=()=>{
   state=newGame();save();render();note('New adventure started!');
  }
 };
+function validSavedActivity(active){
+ if(!active||typeof active!=='object')return false;
+ if(active.type==='combat')return true;
+ return active.type==='skill'&&!!SKILLS[active.skill]?.actions?.[active.index];
+}
+function offlineSnapshot(){
+ return {bank:{...state.bank},xp:{...state.xp},kills:{...state.stats.kills},combat:combatLevel(),
+         level:Object.fromEntries(Object.keys(state.xp).map(k=>[k,levelFromXp(state.xp[k]||0)]))};
+}
+const afkDuration=seconds=>{
+ seconds=Math.floor(Math.max(0,seconds));
+ const h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;
+ return `${h}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+};
+function afkCard(name,qty,negative=false){
+ const q=negative?'-':'+';
+ return `<div class="afk-item ${negative?'used':''}">${itemArt(name)}<div class="detail">${esc(name)}</div><b>${q}${fmt(Math.abs(qty))}</b></div>`;
+}
+function afkSection(title,items){return items.length?`<section class="afk-section"><h3>${title}</h3><div class="afk-list">${items.join('')}</div></section>`:''}
+function showOfflineReport(before,seconds,rewarded,actionName,actions){
+ const after=offlineSnapshot(),added=[],spent=[],xp=[],levels=[],kills=[];
+ for(const item of new Set([...Object.keys(before.bank),...Object.keys(after.bank)])){
+  const delta=(after.bank[item]||0)-(before.bank[item]||0);
+  if(delta>0)added.push([item,delta]);else if(delta<0)spent.push([item,-delta]);
+ }
+ for(const skill of Object.keys(after.xp)){
+  const delta=(after.xp[skill]||0)-(before.xp[skill]||0);
+  if(delta>0)xp.push([skill,delta]);
+  if((after.level[skill]||1)>(before.level[skill]||1))levels.push([skill,before.level[skill],after.level[skill]]);
+ }
+ for(const name of Object.keys(after.kills)){
+  const delta=(after.kills[name]||0)-(before.kills[name]||0);
+  if(delta>0)kills.push([name,delta]);
+ }
+ added.sort((a,b)=>b[1]-a[1]);spent.sort((a,b)=>b[1]-a[1]);
+ el('afkReport').innerHTML=`<div class="afk-hero"><div class="subdued small">TIME AWAY</div><div class="afk-time">${afkDuration(seconds)}</div><strong>${esc(actionName)}</strong><p class="small subdued">${fmt(actions)} actions completed · ${afkDuration(rewarded)} rewarded${seconds>rewarded?' (24-hour limit)':''}</p></div>`+
+ afkSection('🎒 Items collected',added.map(([n,v])=>afkCard(n,v)))+
+ afkSection('✨ Experience earned',xp.map(([n,v])=>`<div class="afk-item"><span>${SKILLS[n]?.icon||'⭐'}</span><div class="detail">${esc(label(n))}</div><b>+${Number(v.toFixed(2)).toLocaleString('en-US')} XP</b></div>`))+
+ afkSection('🎉 Level ups',levels.map(([n,a,b])=>`<div class="afk-item"><span>${SKILLS[n]?.icon||'⭐'}</span><div class="detail">${esc(label(n))}</div><b>Lv ${a} → ${b}</b></div>`))+
+ (after.combat>before.combat?`<div class="info-box">⚔️ Combat Level ${before.combat} → <strong>${after.combat}</strong></div>`:'')+
+ afkSection('🏆 Monsters defeated',kills.map(([n,v])=>`<div class="afk-item"><span>⚔️</span><div class="detail">${esc(n)}</div><b>×${fmt(v)}</b></div>`))+
+ afkSection('📦 Materials / food consumed',spent.map(([n,v])=>afkCard(n,v,true)))+
+ (!added.length&&!xp.length?'<p class="section-description">No rewards collected. You may have run out of supplies, fire, or health.</p>':'')+
+ `<p class="small subdued">Rewards are already in your bank. ${state.active?'Your previous action will continue.':'Your activity stopped while you were away.'}</p>`;
+ el('afkOverlay').hidden=false;
+}
+async function catchUpOffline(){
+ if(offlineRunning||!OFFLINE_CONFIG.enabled)return;
+ const now=Date.now(),start=Number(state.lastProcessedAt)||now;
+ const gap=Math.max(0,now-start),minMs=OFFLINE_CONFIG.minAwaySeconds*1000;
+ if(gap<minMs||!state.active){state.lastProcessedAt=now;return}
+ const capMs=Math.max(0,OFFLINE_CONFIG.maxHours)*3600000;
+ const rewardedMs=Math.min(gap,capMs),end=start+rewardedMs;
+ const actionName=state.active.type==='combat'?`⚔️ ${MONSTERS[state.monsterIndex]?.name||'Combat'}`:
+    `${SKILLS[state.active.skill]?.icon||'⚡'} ${SKILLS[state.active.skill]?.actions[state.active.index]?.name||'Activity'}`;
+ const before=offlineSnapshot(),actionMs=Math.max(100,Number(state.actionMs)||GAME_CONFIG.actionMs);
+ let completed=0,clock=start,progressMs=(Number(state.progress)||0)/100*actionMs;
+ offlineRunning=true;simulatedTime=clock;
+ el('afkOverlay').hidden=false;
+ el('afkReport').innerHTML=`<div class="afk-hero"><h3>Calculating offline progress…</h3><div class="afk-progress"><div id="afkCalcFill"></div></div><div class="subdued small" id="afkCalcText">0%</div></div>`;
+ el('afkContinue').hidden=true;
+ try{
+  let i=0;
+  while(clock<end&&state.active){
+   const remaining=actionMs-progressMs;
+   const next=clock+remaining;
+   if(next>end){progressMs+=end-clock;clock=end;break}
+   clock=next;simulatedTime=clock;
+   // Shared completion routines: loot rolls, XP, buffs, costs, auto-eat and death.
+   if(state.active.type==='skill')completeSkill();else completeCombat();
+   completed++;progressMs=0;
+   if(++i>=OFFLINE_CONFIG.chunkActions){
+    i=0;
+    const percent=Math.floor((clock-start)/Math.max(1,rewardedMs)*100);
+    if(el('afkCalcFill'))el('afkCalcFill').style.width=percent+'%';
+    if(el('afkCalcText'))el('afkCalcText').textContent=percent+'%';
+    await new Promise(resolve=>setTimeout(resolve,0));
+   }
+  }
+  state.progress=state.active?clamp(progressMs/actionMs*100,0,99.999):0;
+  state.lastProcessedAt=now;
+ }finally{
+  simulatedTime=null;offlineRunning=false;
+  lastTick=performance.now();lastUiPulse=lastTick;
+ }
+ note(`🌙 Offline: ${fmt(completed)} actions while away (${afkDuration(rewardedMs/1000)} rewarded).`);
+ save();render();
+ showOfflineReport(before,gap/1000,rewardedMs/1000,actionName,completed);
+ el('afkContinue').hidden=false;
+}
+el('afkContinue').onclick=()=>{el('afkOverlay').hidden=true;el('afkContinue').hidden=false;};
 function tick(t){
+ if(offlineRunning){lastTick=t;requestAnimationFrame(tick);return}
+ const wallGap=Date.now()-(state.lastProcessedAt||Date.now());
+ if(wallGap>=OFFLINE_CONFIG.minAwaySeconds*1000&&state.active){catchUpOffline();lastTick=t;requestAnimationFrame(tick);return}
  let dt=clamp(t-lastTick,0,250);lastTick=t;
  if(state.active){
   state.progress+=dt/(Number(state.actionMs)||GAME_CONFIG.actionMs)*100;
   if(state.progress>=100){state.progress-=100;complete()}
   renderProgress();
  }
+ state.lastProcessedAt=Date.now();
  // Potion / fire counters use wall time. Updating once per second avoids excess DOM churn.
  if(t-lastUiPulse>1000){lastUiPulse=t;
   if(ui.view==='cooking')updateFireUi();
@@ -1009,7 +1119,11 @@ function tick(t){
  if(t-lastSavedFrame>15000){lastSavedFrame=t;save()}
  requestAnimationFrame(tick);
 }
-restore();render();requestAnimationFrame(tick);
+// Persist the precise time of the last simulated game tick when leaving.
+window.addEventListener('pagehide',save);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
+async function boot(){restore();render();if(state.active)await catchUpOffline();lastTick=performance.now();requestAnimationFrame(tick)}
+boot();
 // Export a small test-only API without changing the game or its save format.
 window.IdleRPGDebug={getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate};
 

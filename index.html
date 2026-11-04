@@ -754,9 +754,28 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 .combat-max-row b{font-size:11px;white-space:nowrap;color:#cfdbc9}.combat-max-row strong{font-size:17px;color:#ffdb96;margin-left:3px}
 @media(max-width:650px){.item-tooltip{width:min(310px,calc(100vw - 20px));max-height:65dvh}.combat-max-row{gap:8px}.combat-max-row>span{width:100%}}
 
+
+/* v3.28 weapon-controlled combat: training options affect XP only */
+.combat-training{margin:10px 0 13px;padding:13px 15px}
+.combat-training-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.combat-training-heading p{margin:3px 0 0}
+.combat-auto-style{font-size:11px;color:#a2d9d0;border:1px solid #487a71;border-radius:50px;padding:4px 8px}
+.combat-train-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-top:12px}
+.combat-train-option{display:flex;gap:9px;align-items:center;padding:9px 10px;border-radius:9px;border:1px solid #49606a;background:#172e35;cursor:pointer;min-width:0}
+.combat-train-option.is-checked{border-color:#66a69a;background:#1e423d}
+.combat-train-option.is-fixed{cursor:default}
+.combat-train-option input{width:17px;height:17px;accent-color:#71d4b4;flex:none;margin:0}
+.combat-train-label{font-size:13px;font-weight:700;flex:1;min-width:0}
+.combat-train-level{font-size:11px;color:#b2cfc8;white-space:nowrap}
+.combat-split-note{font-size:12px;color:#b6c8c0;margin:10px 0 0}
+.combat-xp-details{margin:0 0 11px}
+.combat-xp-details summary{cursor:pointer;font-weight:700}
+.combat-xp-details .combat-choices{margin-top:12px}
+.combat-xp-details .combat-choice{padding:8px;border:1px solid #47606c;border-radius:8px;background:#162c35}
+@media(max-width:650px){.combat-train-options{grid-template-columns:1fr}.combat-training{padding:11px}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.27 · Combat Tooltips</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.28 · Weapon Combat & XP</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -802,7 +821,7 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.27 · COMBAT TOOLTIPS · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.28 · WEAPON COMBAT & XP · CHANGE GAME SETTINGS HERE
 const GAME_CONFIG = {
   actionMs: 1000,            // Base action duration in milliseconds
   bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
@@ -1359,6 +1378,36 @@ const MONSTER_WEAKNESSES={
 };
 for(const m of MONSTERS)m.weakness=m.weakness||MONSTER_WEAKNESSES[m.name]||'melee';
 const combatType=style=>style==='ranged'?'ranged':style==='magic'?'magic':'melee';
+// Combat style is determined only by the equipped weapon. XP allocation never changes damage.
+function equippedCombatStyle(equipment=state.equipment){
+ const weapon=EQUIPMENT[equipment?.weapon];
+ return weapon?.combatType==='ranged'?'ranged':weapon?.combatType==='magic'?'magic':'melee';
+}
+const XP_TRAINING_SKILLS={melee:['attack','strength','defence'],ranged:['ranged','defence'],magic:['magic','defence']};
+function normalizeCombatTraining(data,legacy='attack'){
+ const oldMelee=['attack','strength','defence'].includes(legacy)?legacy:'attack';
+ const value=data&&typeof data==='object'?data:{};
+ const melee=Array.isArray(value.melee)?XP_TRAINING_SKILLS.melee.filter(s=>value.melee.includes(s)):[oldMelee];
+ const ranged=Array.isArray(value.ranged)&&value.ranged.includes('defence')?['ranged','defence']:['ranged'];
+ const magic=Array.isArray(value.magic)&&value.magic.includes('defence')?['magic','defence']:['magic'];
+ return {melee:melee.length?melee:[oldMelee],ranged,magic};
+}
+function combatXpTargets(style=equippedCombatStyle()){
+ const options=normalizeCombatTraining(state.combatTraining,state.combatStyle);
+ return options[style]||options.melee;
+}
+function toggleCombatXpSkill(skill,enabled){
+ const style=equippedCombatStyle(),available=XP_TRAINING_SKILLS[style];
+ if(!available.includes(skill))return false;
+ if((style==='ranged'&&skill==='ranged')||(style==='magic'&&skill==='magic'))return false;
+ state.combatTraining=normalizeCombatTraining(state.combatTraining,state.combatStyle);
+ const selected=new Set(state.combatTraining[style]);
+ if(enabled)selected.add(skill);else selected.delete(skill);
+ if(!selected.size)return false;
+ state.combatTraining[style]=available.filter(k=>selected.has(k));
+ save();return true;
+}
+
 const weaknessLabel=style=>({melee:'🗡️ Melee',ranged:'🏹 Ranged',magic:'🪄 Magic'})[style]||style;
 
 
@@ -1470,8 +1519,9 @@ function belrothEntryRequirement(){
  if(levelFromXp(state.xp.hitpoints||0)<RAID_CONFIG.belrothHitpointsLevel)problems.push('Hitpoints '+RAID_CONFIG.belrothHitpointsLevel);
  if(gearMods().defence<RAID_CONFIG.belrothArmourDefence)problems.push(RAID_CONFIG.belrothArmourDefence+'+ armour defence');
  const weapon=state.equipment.weapon;
- const adequate={melee:['Dragonite Sword','Abyssal Blade','Deepmountain Greatsword'],ranged:['Dragonbone Bow','Deepmountain Warbow'],magic:['Dragonfire Staff','Voidcaller Staff','Deepmountain Soulstaff']}[combatType(state.combatStyle)];
- if(!adequate.includes(weapon))problems.push('near-endgame '+combatType(state.combatStyle)+' weapon');
+ const style=equippedCombatStyle();
+ const adequate={melee:['Dragonite Sword','Abyssal Blade','Deepmountain Greatsword'],ranged:['Dragonbone Bow','Deepmountain Warbow'],magic:['Dragonfire Staff','Voidcaller Staff','Deepmountain Soulstaff']}[style];
+ if(!adequate.includes(weapon))problems.push('near-endgame '+style+' weapon');
  return problems;
 }
 function startRaidWave(){
@@ -1480,7 +1530,7 @@ function startRaidWave(){
  if(wave.boss){const needs=belrothEntryRequirement();if(needs.length){note('🔒 Belroth requires '+needs.join(', '));toast('Belroth requires stronger gear and levels');return}}
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
  clearActivityFeed();state.active={type:'raid'};state.monsterHp=wave.hp;state.progress=0;
- note(`⛰️ Wave ${raid.wave+1}/${RAID_WAVES.length}: ${wave.name} · Weak to ${combatType(state.combatStyle)===wave.weakness?'your style':wave.weakness}`);
+ note(`⛰️ Wave ${raid.wave+1}/${RAID_WAVES.length}: ${wave.name} · Weak to ${equippedCombatStyle()===wave.weakness?'your style':wave.weakness}`);
  renderProgress();renderMain();refreshDynamic();save();
 }
 function awardRaidChest(){
@@ -2200,7 +2250,7 @@ function newGame(){return {
  xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
  recipeLayoutVersion:25,
- hp:10,monsterIndex:0,monsterHp:null,raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',rangedAmmo:'Bronze Arrows',staffCharges:{},
+ hp:10,monsterIndex:0,monsterHp:null,raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
  fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
@@ -2395,6 +2445,7 @@ function restore(){
   if(raw.xp.hitpoints===undefined){state.xp.hitpoints=((raw.xp.attack||0)+(raw.xp.strength||0)+(raw.xp.defence||0))*.25;state.hp=Math.max(1,Math.round((Number(raw.hp)||100)/100*maxHp()))}
   state.hp=clamp(Number(state.hp)||1,1,maxHp());
   if(!['attack','strength','defence','ranged','magic'].includes(state.combatStyle))state.combatStyle='attack';
+  state.combatTraining=normalizeCombatTraining(raw.combatTraining,raw.combatStyle);
   // Move older saves with a quiver equipped as a cape into the dedicated slot.
   if(state.equipment.cape&&EQUIPMENT[state.equipment.cape]?.slot==='quiver'){
    if(!state.equipment.quiver)state.equipment.quiver=state.equipment.cape;
@@ -2626,16 +2677,16 @@ function magicStaffEquipped(){
  return name&&MAGIC_STAVES[name]?name:null;
 }
 function combatSupplyError(){
- if(state.combatStyle==='ranged'){
+ if(equippedCombatStyle()==='ranged'){
   const bow=state.equipment.weapon;
-  if(EQUIPMENT[bow]?.combatType!=='ranged')return 'Equip a Bow from your bank to train Ranged.';
+  if(EQUIPMENT[bow]?.combatType!=='ranged')return 'Equip a Bow from your bank to use Ranged.';
   const ammo=RANGED_AMMO[state.rangedAmmo];
   if(!ammo||count(state.rangedAmmo)<1)return 'No selected arrows in your bank. Fletch or buy arrows.';
   if(levelFromXp(state.xp.ranged||0)<ammo.level)return `Need Ranged level ${ammo.level} for ${state.rangedAmmo}.`;
  }
- if(state.combatStyle==='magic'){
+ if(equippedCombatStyle()==='magic'){
   const staff=magicStaffEquipped();
-  if(!staff)return 'Equip a Magic Staff to train Magic.';
+  if(!staff)return 'Equip a Magic Staff to use Magic.';
   if((state.staffCharges[staff]||0)<1)return `${staff} is out of charges. Use Soul Shards to recharge it.`;
  }
  return null;
@@ -2682,7 +2733,7 @@ function completeCombat(){
  if(!m){stop(true);return}
  const supplyError=combatSupplyError();
  if(supplyError){note('⏹ '+supplyError);stop(true);return}
- const style=state.combatStyle,defence=levelFromXp(state.xp.defence||0);
+ const style=equippedCombatStyle(),defence=levelFromXp(state.xp.defence||0);
  const {accuracy,maxHit}=combatPreview(style,state.equipment,m);
  if(style==='ranged'){
   add(state.rangedAmmo,-1);state.stats.arrowsFired=(state.stats.arrowsFired||0)+1;
@@ -2693,7 +2744,11 @@ function completeCombat(){
  const actualDamage=Math.min(damage,state.monsterHp);
  state.monsterHp=Math.max(0,state.monsterHp-damage);
  const combatXp=actualDamage*5;
- if(combatXp>0){gainXp(style,combatXp);gainXp('hitpoints',combatXp/4)}
+ if(combatXp>0){
+  const targets=combatXpTargets(style),share=combatXp/targets.length;
+  for(const skill of targets)gainXp(skill,share);
+  gainXp('hitpoints',combatXp/4);
+ }
  if(state.monsterHp<=0){
   if(raidFight){finishRaidWave(m)}
   else{
@@ -2867,7 +2922,7 @@ function visibleSkillLedger(){
 function skillLedgerRow(r){
  const combat=!!SKILLS[r.skill].combat;
  const active=state.active?.type==='skill'&&state.active.skill===r.skill||
-  (combat&&(state.active?.type==='combat'||state.active?.type==='raid')&&(r.skill===state.combatStyle||r.skill==='hitpoints'));
+  (combat&&(state.active?.type==='combat'||state.active?.type==='raid')&&(combatXpTargets().includes(r.skill)||r.skill==='hitpoints'));
  return `<article class="skills-ledger-row ${r.max?'is-max':''} ${active?'is-active':''}" data-ledger-skill="${esc(r.skill)}">
   <div class="skills-ledger-identity"><span class="skills-ledger-icon" aria-hidden="true">${SKILLS[r.skill].icon}</span><div style="min-width:0"><strong>${esc(label(r.skill))}</strong><small><span class="skills-ledger-level" data-ledger-level>Lv ${r.level}</span> / ${XP_CONFIG.maxLevel}${r.max?' ★':''}</small></div></div>
   <div class="skills-ledger-stats"><div class="skills-ledger-numbers"><b data-ledger-xp>${fmt(r.xp)} XP</b><span data-ledger-next>${r.max?'MAX LEVEL':fmt(r.needed)+' XP to next'}</span></div>
@@ -2919,7 +2974,7 @@ function refreshSkillsOverview(){
   const node=existing.get(r.skill);
   node.classList.toggle('is-max',r.max);
   const active=state.active?.type==='skill'&&state.active.skill===r.skill||
-   (SKILLS[r.skill].combat&&(state.active?.type==='combat'||state.active?.type==='raid')&&(r.skill===state.combatStyle||r.skill==='hitpoints'));
+   (SKILLS[r.skill].combat&&(state.active?.type==='combat'||state.active?.type==='raid')&&(combatXpTargets().includes(r.skill)||r.skill==='hitpoints'));
   node.classList.toggle('is-active',!!active);
   node.querySelector('[data-ledger-level]').textContent='Lv '+r.level;
   node.querySelector('[data-ledger-xp]').textContent=fmt(r.xp)+' XP';
@@ -3181,10 +3236,41 @@ function inspectMonster(index,raid=false){
  overlay.hidden=false;
 }
 function closeMonsterInspect(){el('monsterInspectOverlay').hidden=true}
+function combatTrainingHtml(){
+ const style=equippedCombatStyle(),selected=combatXpTargets(style);
+ const weapon=state.equipment.weapon||'Unarmed';
+ const styleName={melee:'⚔️ Melee',ranged:'🏹 Ranged',magic:'🪄 Magic'}[style];
+ const primary=style==='ranged'?'ranged':style==='magic'?'magic':null;
+ const choices=XP_TRAINING_SKILLS[style].map(skill=>{
+  const required=skill===primary,checked=selected.includes(skill);
+  return `<label class="combat-train-option ${checked?'is-checked':''} ${required?'is-fixed':''}">
+   <input type="checkbox" data-combat-xp-select="${skill}" ${checked?'checked':''} ${required?'disabled':''}>
+   <span class="combat-train-label">${SKILLS[skill].icon} ${esc(label(skill))}</span>
+   <span class="combat-train-level">Lv ${levelFromXp(state.xp[skill]||0)}</span>
+  </label>`;
+ }).join('');
+ const percent=Math.round(1000/selected.length)/10;
+ return `<section class="combat-training info-box" id="combatTrainingPanel" data-training-style="${style}" data-training-selection="${selected.join(',')}">
+  <div class="combat-training-heading"><div><strong>⚔️ Combat XP</strong><p class="small subdued">${styleName} · ${esc(weapon)}</p></div><span class="combat-auto-style">Auto from weapon</span></div>
+  <div class="combat-train-options">${choices}</div>
+  <p class="combat-split-note">${selected.length===1?`100% combat XP → ${esc(label(selected[0]))}`:`Combat XP split equally: ${selected.map(skill=>esc(label(skill))).join(' + ')} (${percent}% each)`}. Hitpoints XP is earned separately.</p>
+ </section>`;
+}
+function refreshCombatTraining(){
+ const box=el('combatTrainingPanel');if(!box)return;
+ const style=equippedCombatStyle(),chosen=combatXpTargets(style).join(',');
+ if(box.dataset.trainingStyle!==style||box.dataset.trainingSelection!==chosen){box.outerHTML=combatTrainingHtml();return}
+ // Show fresh skill levels without rebuilding checkbox controls during combat.
+ for(const opt of box.querySelectorAll('[data-combat-xp-select]')){
+  const level=opt.closest('.combat-train-option')?.querySelector('.combat-train-level');
+  if(level)level.textContent='Lv '+levelFromXp(state.xp[opt.dataset.combatXpSelect]||0);
+ }
+}
 function renderCombatMain(){
  const mods=gearMods();
  let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2></div></div>`;
- html+=`<div class="combat-choices">${['attack','strength','defence','ranged','magic'].map(skill=>`<button data-combat-style="${skill}" class="combat-choice ${state.combatStyle===skill?'selected':''}"><b>${SKILLS[skill].icon} ${label(skill)}</b><span data-combat-xp="${skill}">${xpText(skill)}</span><div class="xpbar" style="width:100%"><div class="fill" style="width:${xpFill(skill)}%"></div></div><span>${state.combatStyle===skill?'✓ Training':'Train '+label(skill)}</span></button>`).join('')}</div>`;
+ html+=combatTrainingHtml();
+ html+=`<details class="info-box combat-xp-details"><summary>Combat skill progress</summary><div class="combat-choices">${['attack','strength','defence','ranged','magic'].map(skill=>`<div class="combat-choice"><b>${SKILLS[skill].icon} ${label(skill)}</b><span data-combat-xp="${skill}">${xpText(skill)}</span><div class="xpbar" style="width:100%"><div class="fill" style="width:${xpFill(skill)}%"></div></div></div>`).join('')}</div></details>`;
  html+=`<div class="combat-resource-grid">
   <section class="info-box"><h3>🏹 Ranged · Bows & Arrows</h3><p>Equip a bow and arrows. Each shot uses <b>1 arrow</b>.</p>
   <label class="form-label" for="rangedAmmo">Selected ammunition</label><select id="rangedAmmo"></select>
@@ -3273,6 +3359,7 @@ function renderCombatResources(){
 }
 function renderCombatLive(){
  if(ui.view!=='combat')return;
+ refreshCombatTraining();
  const c=el('combatLevelDisplay');if(c)c.textContent=combatLevel();
  for(const skill of ['attack','strength','defence','ranged','magic']){
   const xp=el('main').querySelector(`[data-combat-xp="${skill}"]`);
@@ -3674,8 +3761,8 @@ function renderJournalMain(){
 }
 
 function renderRaidMain(){
- let html=`<div class="heading"><div><div class="eyebrow">⛰️ Adventure · Endgame</div><h2>Deep Mountain Expedition</h2><p class="section-description">Prepare your equipment, defeat 12 increasingly powerful waves, and claim Belroth's loot chest. Each completed wave saves your checkpoint. Change combat style and equipment between waves.</p></div><span class="recipe-badge level">Combat Lv ${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</span></div>`;
- html+=`<h3 class="section-title">⚔️ Choose a combat style</h3><div class="combat-choices raid-combat-styles">${['attack','strength','defence','ranged','magic'].map(skill=>`<button data-combat-style="${skill}" class="combat-choice ${state.combatStyle===skill?'selected':''}"><b>${SKILLS[skill].icon} ${label(skill)}</b><span>${state.combatStyle===skill?'✓ Selected':'Select'}</span></button>`).join('')}</div>`;
+ let html=`<div class="heading"><div><div class="eyebrow">⛰️ Adventure · Endgame</div><h2>Deep Mountain Expedition</h2><p class="section-description">Prepare your equipment, defeat 12 increasingly powerful waves, and claim Belroth's loot chest. Each completed wave saves your checkpoint. Change your weapon to change combat style between waves.</p></div><span class="recipe-badge level">Combat Lv ${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</span></div>`;
+ html+=combatTrainingHtml();
  html+=`<div class="combat-resource-grid" style="margin:14px 0">
  <section class="info-box"><h3>🏹 Ranged Ammo</h3><label class="form-label" for="rangedAmmo">Your arrows</label><select id="rangedAmmo"></select><div id="rangedStatus" class="small subdued"></div></section>
  <section class="info-box"><h3>🪄 Magic Staff</h3><div id="magicStaffStatus" class="small subdued"></div><div class="flexrow">${[1,5,25].map(n=>`<button data-charge="${n}" class="charge-btn">Charge +${n} shards</button>`).join('')}</div></section>
@@ -3688,6 +3775,7 @@ function renderRaidMain(){
 }
 function renderRaidLive(){
  if(ui.view!=='raid')return;
+ refreshCombatTraining();
  if(el('raidHp'))el('raidHp').textContent=`${Math.ceil(state.hp)}/${maxHp()} HP`;
  if(el('raidHealthFill'))el('raidHealthFill').style.width=clamp(100*state.hp/maxHp(),0,100)+'%';
  renderFood();renderAutoEatOptions();renderCombatResources();refreshRaidPanel();
@@ -3753,7 +3841,7 @@ function handleClick(e){
  }
  if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
  if(b.hasAttribute('data-skills-filter')){ui.skillsFilter=b.dataset.skillsFilter;renderSkillsOverview();return;}
- if(b.hasAttribute('data-skill-open')){const skill=b.dataset.skillOpen;if(!Object.hasOwn(SKILLS,skill))return; if(SKILLS[skill].combat){if(skill!=='hitpoints')state.combatStyle=skill;save();navigate('combat');}else navigate(skill);return;}
+ if(b.hasAttribute('data-skill-open')){const skill=b.dataset.skillOpen;if(!Object.hasOwn(SKILLS,skill))return; if(SKILLS[skill].combat){navigate('combat');}else navigate(skill);return;}
  if(b.hasAttribute('data-focus-toggle')){
   ui.focusExpanded=!ui.focusExpanded;
   const extra=el('skillFocus')?.querySelector('.focus-expandable');if(extra)extra.classList.toggle('expanded',ui.focusExpanded);
@@ -3778,9 +3866,7 @@ function handleClick(e){
  if(b.hasAttribute('data-open-raid-chest'))return openRaidChest();
  if(b.hasAttribute('data-raid-claim-pending'))return claimPendingRaidChests();
  if(b.hasAttribute('data-charge'))return chargeStaff(Number(b.dataset.charge));
- if(b.hasAttribute('data-combat-style')){
-  state.combatStyle=b.dataset.combatStyle;save();renderMain();refreshDynamic();return;
- }
+
  if(b.hasAttribute('data-skill-mode')){
   ui.skillMode[ui.view]=b.dataset.skillMode;
   for(const node of el('main').querySelectorAll('[data-skill-mode]'))node.classList.toggle('selected',node.dataset.skillMode===ui.skillMode[ui.view]);
@@ -3818,6 +3904,11 @@ function handleClick(e){
 }
 function handleInput(e){
  const t=e.target;
+ if(t.hasAttribute('data-combat-xp-select')){
+  const ok=toggleCombatXpSkill(t.dataset.combatXpSelect,t.checked);
+  if(!ok){t.checked=true;toast('Choose at least one combat skill.');}
+  refreshCombatTraining();refreshSkillsOverview();return;
+ }
  if(t.id==='navSearch'){
   const pos=t.selectionStart;ui.navSearch=t.value;renderNav();
   const input=el('navSearch');input.focus();try{input.setSelectionRange(pos,pos)}catch{}
@@ -4163,6 +4254,6 @@ async function boot(){
 }
 boot();
 // Expose test helpers for regression checks.
-window.IdleRPGDebug={combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
+window.IdleRPGDebug={equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
 </script></body></html>

@@ -191,19 +191,63 @@ button:hover:not(:disabled){background:linear-gradient(180deg,#4c7692,#2d5b75);b
 .monster .gold,.quest-tier-label,.item-art.tier-epic{animation:twinkle 2.6s ease-in-out infinite}
 @media(max-width:650px){.tabs button,#bankTab,#gearTab{padding:8px 10px}.nav button{padding:8px 7px;font-size:12px}}
 
+
+/* v3.13: subdued vanilla look without the broad diagonal highlight. */
+.bank-create-top{padding:5px 7px;font-size:11px;white-space:nowrap;background:#315343;border-color:#70a381;color:#ddf6e0}
+.bank-create-top:hover:not(:disabled){background:#47715a;border-color:#91caa1}
+
+body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
+.combat-choice::after,.monster::after,.recipe-card::after,.shop-card::after,.journal-card::after{content:none!important;display:none!important}
+.nav button{background:linear-gradient(180deg,#483a2a,#302920);border-color:#81613d;color:#ead9b9;box-shadow:inset 0 1px 0 #fff1c312}
+.nav button small{color:#cbb997}
+.nav button:hover:not(:disabled){background:linear-gradient(180deg,#56442f,#3a3025);border-color:#ae8350}
+.nav button.selected{background:linear-gradient(180deg,#756044,#51422e)!important;border-color:#d5a866!important;color:#fff1d0!important;box-shadow:inset 0 1px 0 #fff2cb25}
+.nav button.selected *{color:#fff1d0!important}
+.tabs button,#bankTab,#gearTab,#potionTab{background:linear-gradient(180deg,#554633,#3d3329);border:1px solid #8e6d46;color:#e9d7b8;border-radius:11px;box-shadow:inset 0 1px 0 #fff2d014;padding:8px 11px;font-weight:700}
+.tabs button:hover:not(:disabled),#bankTab:hover:not(:disabled),#gearTab:hover:not(:disabled),#potionTab:hover:not(:disabled){background:linear-gradient(180deg,#675439,#493b2e);border-color:#b28c56;color:#fff1d1}
+.tabs button.selected,#bankTab.selected,#gearTab.selected,#potionTab.selected{background:linear-gradient(180deg,#947343,#665233)!important;border-color:#dfb56c!important;color:#fff4d8!important}
+/* Bank folders are compact, always visible, and accept drag-and-drop from the item grid. */
+.bank-folders{display:flex;align-items:stretch;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding:7px 2px 10px;margin-top:8px;border-bottom:1px solid #6b5437}
+.bank-folder{display:flex;align-items:center;gap:5px;flex:none;white-space:nowrap;border-radius:8px 8px 5px 5px;padding:7px 10px;background:#352d25;border:1px solid #776244;color:#ecdabb;font-size:11px;font-weight:750}
+.bank-folder .folder-count{color:#c5b18a;opacity:.9;font-size:10px}
+.bank-folder.is-active{background:#735b3b;border-color:#dfae66;color:#fff1d4;box-shadow:inset 0 1px 0 #ffd99945}
+.bank-folder.is-active .folder-count{color:#f5deb0}
+.bank-folder.bank-drop-target{background:#345e46!important;outline:2px solid #92e0a6;outline-offset:-1px}
+.bank-folder.bank-add-folder{background:#315343;border-color:#6b9b78;color:#d4f4db}
+.bank-tab-manager{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:7px 2px 2px;font-size:11px;color:#c9b391}
+.bank-tab-manager button{font-size:10px;padding:4px 7px;background:#4e4030;border-color:#876a46}
+.bank-grid .bank-tile[draggable=true]{cursor:grab}
+.bank-grid .bank-tile.dragging{opacity:.4;transform:scale(.96)}
+.bank-move-area{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:10px;border-top:1px solid #67543a;padding-top:9px}
+.bank-move-area label{font-size:11px;color:#dfc9a5}
+.bank-move-area select{max-width:100%;min-width:140px;flex:1;background:#3e3328;color:#f2e4c7;border-color:#96734a;border-radius:8px;padding:6px}
+.bank-helper{font-size:11px;line-height:1.45;color:#baa789;margin:5px 0 0}
+.bank-tools input{background:#2b2622;color:#f7e6c7;border:1px solid #816444}
+.potion-pouch-summary{font-size:12px;color:#e9d7b5;margin-bottom:12px;line-height:1.45}
+.potion-pouch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px}
+.potion-card{display:flex;gap:8px;align-items:flex-start;background:linear-gradient(160deg,#30251f,#1d2027);border:1px solid #86604d;border-top:3px solid #b97d72;border-radius:10px;padding:9px}
+.potion-card .potion-content{flex:1;min-width:0}
+.potion-card strong{font-size:12px;color:#f5e0cc}
+.potion-card p{font-size:11px;color:#d2bda5;line-height:1.35;margin:4px 0 6px}
+.potion-card .potion-actions{display:flex;flex-wrap:wrap;gap:5px}
+.potion-card button{font-size:11px;padding:5px 7px}
+.potion-card .potion-owned{display:block;color:#a7e9b9;font-size:12px;font-weight:800;margin:3px 0}
+.potion-empty{padding:15px;border:1px dashed #806448;border-radius:10px;color:#c9b493}
+@media(max-width:650px){.bank-folder{padding:8px 9px}.potion-pouch-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.tabs button,#bankTab,#gearTab,#potionTab{padding:8px 9px;font-size:11px}}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.12 · Living Vanilla</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.13 · Organized Bank</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><div id="main"></div></main>
-<aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
+<aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
 </div><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.12 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.13 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -1137,7 +1181,7 @@ const EQUIP_SLOTS=['weapon','shield','head','body','legs','gloves','cape','quive
 const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,coinsEarned:0,potionsUsed:0,soulsCollected:0,soulsBySource:{},soulsByTier:{},soulShardsFound:0,arrowsFired:0,magicCasts:0});
 function newGame(){return {
  xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
- bank:{'Coins':250,'Soul Shard':10},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
+ bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
  hp:10,monsterIndex:0,monsterHp:null,combatStyle:'attack',rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
@@ -1145,7 +1189,7 @@ function newGame(){return {
  log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',category:'All',page:0,selected:null},side:{search:'',category:'All',page:0,selected:null}},journalCategory:'All',gearSlot:null};
+const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRowsDesktop:6,maxRowsMobile:3};
@@ -1184,7 +1228,7 @@ function renderActivityFeed(now=performance.now()){
   const skill=xp?SKILLS[reward.name]:null;
   const icon=xp?`<span class="reward-icon" aria-hidden="true">${skill?.icon||'✨'}</span>`:itemArt(reward.name);
   const title=xp?`${esc(label(reward.name))} XP`:esc(reward.name);
-  const sub=xp?'Experience gained':`Bank: ${fmt(count(reward.name))}`;
+  const sub=xp?'Experience gained':`${isPotion(reward.name)?'Potion Pouch':'Bank'}: ${fmt(count(reward.name))}`;
   const val=xp?Number(reward.amount.toFixed(2)).toLocaleString('en-US',{maximumFractionDigits:2}):fmt(reward.amount);
   return `<div class="activity-reward ${xp?'reward-xp':'reward-item'} ${fading?'fading':''}" data-reward="${esc(key)}" title="${title}: +${val}${xp?' XP':''}${xp?'':` · ${sub}`}">${icon}<span class="reward-info"><span class="reward-name">${title}</span></span><span class="reward-amount">+${val}${xp?' XP':''}</span></div>`;
  }).join('')+(hiddenCount?`<div class="activity-reward activity-reward-more">+${hiddenCount} more rewards</div>`:'');
@@ -1219,24 +1263,27 @@ function combatLevel(){
  const possible=(COMBAT_CONFIG.defensiveSkills.length+2)*(COMBAT_CONFIG.skillMaxLevel-1);
  return possible>0?clamp(1+Math.floor((def+best)*(COMBAT_CONFIG.maxLevel-1)/possible),1,COMBAT_CONFIG.maxLevel):1;
 }
-const count=item=>Math.max(0,Number(state.bank[item])||0);
+// Potions use a dedicated pouch, freeing bank slots and preserving existing recipes.
+const isPotion=item=>Object.hasOwn(POTIONS,item);
+const count=item=>Math.max(0,Number((isPotion(item)?state.potions:state.bank)[item])||0);
 const bankUsed=()=>Object.values(state.bank).filter(x=>Number(x)>0).length;
-const bankCanHold=item=>count(item)>0||bankUsed()<GAME_CONFIG.bankSlots;
+const bankCanHold=item=>isPotion(item)||count(item)>0||bankUsed()<GAME_CONFIG.bankSlots;
 function add(item,n=1){
  if(!item||!Number.isFinite(Number(n)))return false;
  n=Number(n);
  if(n>0&&!bankCanHold(item))return false;
+ const store=isPotion(item)?state.potions:state.bank;
  const result=Math.max(0,count(item)+n);
- if(result)state.bank[item]=result;else delete state.bank[item];
+ if(result)store[item]=result;else delete store[item];
  if(n>0)queueActivityReward('item',item,n);
  return true;
 }
 const canPay=cost=>Object.entries(cost||{}).every(([item,n])=>count(item)>=n);
 function buyOrCraft(cost,output,amount){
  if(!canPay(cost))return false;
- const old={...state.bank};
+ const beforeBank={...state.bank},beforePotions={...state.potions};
  for(const [item,n] of Object.entries(cost||{}))add(item,-n);
- if(!add(output,amount)){state.bank=old;return false}
+ if(!add(output,amount)){state.bank=beforeBank;state.potions=beforePotions;return false}
  return true;
 }
 function note(msg){if(offlineRunning){offlineLogCount++;return}state.log.unshift(msg);state.log=state.log.slice(0,80);renderLog()}
@@ -1253,7 +1300,7 @@ function restore(){
   const migratedStats={...stats,bySkill:{...(stats.bySkill||{})}};
   if(migratedStats.bySkill.herblore!==undefined&&migratedStats.bySkill.alchemy===undefined)migratedStats.bySkill.alchemy=migratedStats.bySkill.herblore;
   state={...base,...raw,xp:{...base.xp,...raw.xp},
-   bank:{...raw.bank},equipment:{...base.equipment,...(raw.equipment||{})},
+   bank:{...raw.bank},potions:{...(raw.potions||{})},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
    rangedAmmo:raw.rangedAmmo||'Bronze Arrows',staffCharges:{...(raw.staffCharges||{})},
    autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
    stats:{...emptyStats(),...migratedStats,bySkill:{...migratedStats.bySkill},produced:{...(stats.produced||{})},kills:{...(stats.kills||{})},soulsBySource:{...(stats.soulsBySource||{})},soulsByTier:{...(stats.soulsByTier||Object.fromEntries(SOUL_GEMS.map(g=>[g.name,Math.max(0,Number(raw.bank[g.name]||0))]))) }},
@@ -1281,7 +1328,16 @@ function restore(){
   if(![15,30,50].includes(Number(state.autoEat.threshold)))state.autoEat.threshold=30;
   state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
   if(!Number.isFinite(state.fireUntil))state.fireUntil=0;
-  for(const [item,n] of Object.entries(state.bank))if(!Number.isFinite(Number(n))||n<=0)delete state.bank[item];
+  // Upgrade v3.12 saves: transfer any existing potions into their independent pouch.
+  for(const [item,n] of Object.entries(state.bank))if(isPotion(item)){
+   const amount=Math.max(0,Number(n)||0);
+   state.potions[item]=Math.max(0,Number(state.potions[item])||0)+amount;
+   delete state.bank[item];
+  }
+  for(const store of [state.bank,state.potions])for(const [item,n] of Object.entries(store))if(!Number.isFinite(Number(n))||n<=0)delete store[item];
+  // Keep only valid assignments to built-in or currently saved custom tabs.
+  const tabIds=new Set([...BANK_DEFAULT_TABS.map(t=>t.id),...state.bankTabs.map(t=>t.id)]);
+  for(const [item,id] of Object.entries(state.bankAssignments))if(!tabIds.has(id)||isPotion(item))delete state.bankAssignments[item];
   // Old saves may carry v3.6 tier baselines; they are no longer used.
   delete state.journalTierBases;
   // Offline catch-up runs after restore, before the live animation starts.
@@ -1608,8 +1664,8 @@ function sell(item,qty){
  if(!count(item)||item==='Coins')return;
  if(!isTradeable(item)){note(`🔒 ${item} is soulbound and cannot be sold or traded.`);return;}
  qty=qty==='all'?count(item):Math.min(count(item),Math.max(1,Math.floor(Number(qty)||1)));
- const old={...state.bank};add(item,-qty);
- if(!add('Coins',sellPrice(item)*qty)){state.bank=old;note('🏦 No space for Coins.');return}
+ const old={...state.bank},oldPotions={...state.potions};add(item,-qty);
+ if(!add('Coins',sellPrice(item)*qty)){state.bank=old;state.potions=oldPotions;note('🏦 No space for Coins.');return}
  const coins=sellPrice(item)*qty;state.stats.coinsEarned+=coins;
  note(`🪙 Sold ${qty} ${item} for ${fmt(coins)} Coins.`);refreshDynamic();save();
 }
@@ -1637,18 +1693,18 @@ function claimQuest(id){
  const quest=QUESTS.find(x=>x.id===id);
  if(!quest||state.claimed.includes(id)||!quest.test(state))return;
  const items=questItemRewards(quest);
- const newStacks=Object.entries(items).filter(([item,n])=>n>0&&count(item)===0).length;
+ const newStacks=Object.entries(items).filter(([item,n])=>n>0&&!isPotion(item)&&count(item)===0).length;
  if(bankUsed()+newStacks>GAME_CONFIG.bankSlots){
   note(`🏦 Need ${bankUsed()+newStacks-GAME_CONFIG.bankSlots} free bank slot(s) to claim all rewards.`);
   toast('Free a bank slot for quest rewards');
   return;
  }
- const beforeBank={...state.bank};
+ const beforeBank={...state.bank},beforePotions={...state.potions};
  for(const [item,n] of Object.entries(items)){
   if(n<=0)continue;
   if(!add(item,n)){
-   state.bank=beforeBank;
-   note('🏦 Could not claim all rewards. Bank unchanged.');
+   state.bank=beforeBank;state.potions=beforePotions;
+   note('🏦 Could not claim all rewards. Inventory unchanged.');
    return;
   }
  }
@@ -1693,7 +1749,7 @@ function recipeCard(action,index,skill){
  return `<article class="recipe-card ${locked?'is-locked':''}" data-recipe="${index}">
  <div class="between"><span class="recipe-title">${itemIcon(action.output)} ${esc(action.name)}</span><span class="recipe-badge level">Lv ${action.level}</span></div>
  <div class="recipe-detail">Produces <b>×${action.quantity||1} ${esc(action.output)}</b> · <span class="positive">+${action.xp} XP</span>${action.requiresFire?' · 🔥 Fire (auto-relight)':''}</div>
- <div class="recipe-stock"><span class="recipe-stock-label">🏦 In bank:</span><div class="recipe-stock-items">${stock}</div></div>
+ <div class="recipe-stock"><span class="recipe-stock-label">${isPotion(action.output)?'🧪 In pouch:':'🏦 In bank:'}</span><div class="recipe-stock-items">${stock}</div></div>
  ${requirements?`<div class="requirements" data-ingredients="${index}">${requirements}</div>`:''}
  <div class="recipe-bottom"><span class="recipe-badge">${esc(action.category)}</span><button data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button></div></article>`;
 }
@@ -1782,7 +1838,7 @@ function renderFood(){
 function renderBuffs(){
  const box=el('buffList');if(!box)return;
  const buffs=Object.values(state.buffs).filter(x=>x?.until>Date.now());
- box.innerHTML=buffs.length?`<div class="buff-list">${buffs.map(x=>`<span class="buff-chip">🧪 ${esc(x.name)} · ${timeFmt((x.until-Date.now())/1000)}</span>`).join('')}</div>`:'<span class="small subdued">No active potion buffs. Craft or buy potions and use them from your bank.</span>';
+ box.innerHTML=buffs.length?`<div class="buff-list">${buffs.map(x=>`<span class="buff-chip">🧪 ${esc(x.name)} · ${timeFmt((x.until-Date.now())/1000)}</span>`).join('')}</div>`:'<span class="small subdued">No active potion buffs. Craft or buy potions and use them from your Potion Pouch.</span>';
 }
 function renderCombatResources(){
  const ammoBox=el('rangedAmmo');
@@ -1852,23 +1908,114 @@ function renderSkillLive(){
  }
  if(ui.view==='cooking')updateFireUi();
 }
-const BANK_CATEGORIES=['All','Currency','Wood','Fish','Food','Ores','Bars','Farming','Seeds','Gems','Soul Gems','Equipment','Potions','Loot','Materials'];
+// All items auto-sort into these folders until the player manually assigns them elsewhere.
+const BANK_DEFAULT_TABS=[
+ {id:'all',name:'All',icon:'🏦'},
+ {id:'currency',name:'Currency',icon:'🪙'},
+ {id:'food',name:'Food',icon:'🍗'},
+ {id:'farming',name:'Farming',icon:'🌾'},
+ {id:'seeds',name:'Seeds',icon:'🌱'},
+ {id:'fishing',name:'Fishing',icon:'🐟'},
+ {id:'wood',name:'Wood',icon:'🪵'},
+ {id:'mining',name:'Ores & Bars',icon:'⛏️'},
+ {id:'equipment',name:'Equipment',icon:'🛡️'},
+ {id:'gems',name:'Gems',icon:'💎'},
+ {id:'souls',name:'Souls',icon:'🔮'},
+ {id:'loot',name:'Loot',icon:'🎒'},
+ {id:'materials',name:'Materials',icon:'🧰'}
+];
+function bankAllTabs(){return [...BANK_DEFAULT_TABS,...state.bankTabs.map(t=>({...t,icon:'📁'}))]}
+function bankDefaultTab(item){
+ const cat=itemCategory(item);
+ return ({Currency:'currency',Food:'food',Farming:'farming',Seeds:'seeds',Fish:'fishing',Wood:'wood',Ores:'mining',Bars:'mining',Equipment:'equipment',Ammunition:'equipment',Gems:'gems','Soul Gems':'souls','Soul Shards':'souls',Loot:'loot','Rare Drops':'loot',Materials:'materials'})[cat]||'materials';
+}
+function bankTabForItem(item){
+ const override=state.bankAssignments[item];
+ if(override&&bankAllTabs().some(tab=>tab.id===override&&tab.id!=='all'))return override;
+ return bankDefaultTab(item);
+}
 function bankItems(scope){
- const filter=ui.bank[scope];return Object.entries(state.bank).filter(([item,qty])=>qty>0&&(filter.category==='All'||itemCategory(item)===filter.category)&&item.toLowerCase().includes(filter.search.toLowerCase())).sort(([a],[b])=>a.localeCompare(b,'en'));
+ const filter=ui.bank[scope];
+ return Object.entries(state.bank).filter(([item,qty])=>qty>0&&
+  (filter.tab==='all'||bankTabForItem(item)===filter.tab)&&
+  item.toLowerCase().includes(filter.search.toLowerCase()))
+  .sort(([a],[b])=>a.localeCompare(b,'en'));
+}
+function bankTabCount(tab){return Object.entries(state.bank).filter(([name,n])=>n>0&&(tab==='all'||bankTabForItem(name)===tab)).length}
+function bankSelectTab(scope,tab){
+ if(!bankAllTabs().some(t=>t.id===tab))return;
+ const settings=ui.bank[scope];settings.tab=tab;settings.page=0;settings.selected=null;
+ renderBankGrid(scope);
+}
+function bankCreateTab(){
+ const name=prompt('Name your new bank tab (up to 25 characters):');
+ if(name===null)return;
+ const trimmed=name.trim().slice(0,25);
+ if(!trimmed){toast('Enter a tab name');return}
+ if(bankAllTabs().some(t=>t.name.toLowerCase()===trimmed.toLowerCase())){toast('That tab name already exists');return}
+ if(state.bankTabs.length>=30){toast('Maximum 30 custom tabs');return}
+ const id='custom-'+Date.now()+'-'+Math.floor(Math.random()*100000);
+ state.bankTabs.push({id,name:trimmed});
+ for(const scope of ['main','side'])ui.bank[scope].tab=id;
+ save();renderBankUIs();toast('Created bank tab: '+trimmed);
+}
+function bankRenameTab(scope){
+ const id=ui.bank[scope].tab,tab=state.bankTabs.find(t=>t.id===id);
+ if(!tab)return;
+ const name=prompt('Rename bank tab:',tab.name);
+ if(name===null)return;
+ const trimmed=name.trim().slice(0,25);
+ if(!trimmed)return;
+ if(bankAllTabs().some(t=>t.id!==id&&t.name.toLowerCase()===trimmed.toLowerCase())){toast('That name already exists');return}
+ tab.name=trimmed;save();renderBankUIs();
+}
+function bankDeleteTab(scope){
+ const id=ui.bank[scope].tab,tab=state.bankTabs.find(t=>t.id===id);
+ if(!tab||!confirm(`Delete the tab "${tab.name}"? Items will return to their automatic categories. No items will be lost.`))return;
+ state.bankTabs=state.bankTabs.filter(t=>t.id!==id);
+ for(const [item,assigned] of Object.entries(state.bankAssignments))if(assigned===id)delete state.bankAssignments[item];
+ for(const scope of ['main','side'])if(ui.bank[scope].tab===id){ui.bank[scope].tab='all';ui.bank[scope].page=0;ui.bank[scope].selected=null}
+ save();renderBankUIs();toast('Tab deleted; all items are safe');
+}
+function bankMoveItem(item,id){
+ if(count(item)<1||isPotion(item)||!bankAllTabs().some(t=>t.id===id))return;
+ if(id==='all'||id==='auto'||id===bankDefaultTab(item))delete state.bankAssignments[item];
+ else state.bankAssignments[item]=id;
+ save();renderBankUIs();
+ const tab=bankAllTabs().find(t=>t.id===bankTabForItem(item));
+ toast(`${item} → ${tab?.name||'Bank'}`);
+}
+function renderBankUIs(){
+ if(ui.view==='bank'&&el('mainBankGrid'))renderBankGrid('main');
+ if(ui.sidebarTab==='bank'&&el('sideBankGrid'))renderBankGrid('side');
+}
+function renderBankTabs(scope){
+ const settings=ui.bank[scope];if(!bankAllTabs().some(t=>t.id===settings.tab))settings.tab='all';
+ const row=el(scope+'BankFolders');if(!row)return;
+ const left=row.scrollLeft;
+ row.innerHTML=bankAllTabs().map(t=>`<button type="button" class="bank-folder ${settings.tab===t.id?'is-active':''}" data-bank-tab="${esc(scope)}" data-tab-id="${esc(t.id)}" title="${esc(t.name)} · drop items here to move them">${t.icon} ${esc(t.name)} <span class="folder-count">${bankTabCount(t.id)}</span></button>`).join('')+
+  `<button type="button" class="bank-folder bank-add-folder" data-bank-new title="Create a custom tab">＋ New tab</button>`;
+ row.scrollLeft=left;
+ const custom=state.bankTabs.find(t=>t.id===settings.tab);
+ const manager=el(scope+'BankManager');if(manager)manager.innerHTML=custom?
+  `<span>📁 ${esc(custom.name)} · custom tab</span><button data-bank-rename="${scope}">✏️ Rename</button><button data-bank-delete="${scope}">🗑️ Delete</button>`:
+  `<span>Auto-sorted folders · drag items onto tabs, or select Move to tab below.</span>`;
 }
 function renderBankShell(scope){
- const filters=ui.bank[scope];return `<div class="between"><h3 style="margin:0">🏦 ${scope==='side'?'Bank':'Your Bank'}</h3><span class="bank-count" id="${scope}BankCapacity">${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks</span></div>
- <div class="bank-tools" style="margin-top:8px"><input type="search" id="${scope}BankSearch" data-bank-search="${scope}" placeholder="Search items..." value="${esc(filters.search)}"><select data-bank-category="${scope}" id="${scope}BankCategory">${BANK_CATEGORIES.map(x=>`<option value="${x}" ${filters.category===x?'selected':''}>${x}</option>`).join('')}</select></div>
+ const filters=ui.bank[scope];return `<div class="between"><h3 style="margin:0">🏦 ${scope==='side'?'Bank':'Your Bank'}</h3><span class="bank-count" id="${scope}BankCapacity">${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks</span><button type="button" class="bank-create-top" data-bank-new title="Create bank folder">＋ Tab</button></div>
+ <div class="bank-folders" id="${scope}BankFolders" aria-label="Bank folders"></div><div class="bank-tab-manager" id="${scope}BankManager"></div>
+ <div class="bank-tools" style="margin-top:8px"><input type="search" id="${scope}BankSearch" data-bank-search="${scope}" placeholder="Search this tab..." value="${esc(filters.search)}"></div>
  <div class="small subdued" id="${scope}BankCount" style="margin-top:8px"></div><div id="${scope}BankGrid" class="bank-grid ${scope==='side'?'compact':''}"></div><div class="pager" id="${scope}BankPager"></div><div id="${scope}BankDetail"></div>`;
 }
 function renderBankGrid(scope){
  const settings=ui.bank[scope],items=bankItems(scope),per=scope==='side'?GAME_CONFIG.sidebarPageSize:GAME_CONFIG.bankPageSize;
  const maxPage=Math.max(0,Math.ceil(items.length/per)-1);settings.page=clamp(settings.page,0,maxPage);
  const grid=el(scope+'BankGrid');if(!grid)return;
+ renderBankTabs(scope);
  const slice=items.slice(settings.page*per,(settings.page+1)*per);
- grid.innerHTML=slice.length?slice.map(([item,amount])=>`<button class="bank-tile ${settings.selected===item?'active':''}" data-bank-select="${scope}" data-item="${esc(item)}" title="${esc(item)} · ${fmt(amount)} owned">${itemArt(item)}<span class="item-name">${esc(item)}</span><span class="stack">×${fmt(amount)}</span></button>`).join(''):'<p class="subdued small">No matching items in the bank.</p>';
+ grid.innerHTML=slice.length?slice.map(([item,amount])=>`<button type="button" draggable="true" class="bank-tile ${settings.selected===item?'active':''}" data-bank-select="${scope}" data-item="${esc(item)}" title="${esc(item)} · ${fmt(amount)} owned · drag onto a tab to move">${itemArt(item)}<span class="item-name">${esc(item)}</span><span class="stack">×${fmt(amount)}</span></button>`).join(''):'<p class="subdued small">Nothing here yet. Items appear automatically, or move items here from another tab.</p>';
  const pager=el(scope+'BankPager');if(pager)pager.innerHTML=`<button data-bank-page="${scope}" data-delta="-1" ${settings.page<=0?'disabled':''}>←</button><span>Page ${settings.page+1} / ${maxPage+1}</span><button data-bank-page="${scope}" data-delta="1" ${settings.page>=maxPage?'disabled':''}>→</button>`;
- const counter=el(scope+'BankCount');if(counter)counter.textContent=`${items.length} unique stacks shown · ${fmt(Object.values(state.bank).reduce((a,b)=>a+Number(b),0))} total items`;
+ const counter=el(scope+'BankCount');if(counter)counter.textContent=`${items.length} unique stacks in this view · ${fmt(Object.values(state.bank).reduce((a,b)=>a+Number(b),0))} total bank items`;
  const capacity=el(scope+'BankCapacity');if(capacity)capacity.textContent=`${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks`;
  renderBankDetail(scope);
 }
@@ -1894,10 +2041,10 @@ function renderBankDetail(scope){
  ${potion?`<button data-use-potion="${esc(item)}">Use potion</button>`:''}
  ${fuel?`<button data-burn="${esc(item)}">🔥 Add to fire</button>`:''}
  ${item!=='Coins'&&isTradeable(item)?`<button data-sell="${esc(item)}" data-qty="1">Sell 1</button><button data-sell="${esc(item)}" data-qty="10">Sell 10</button><button data-sell="${esc(item)}" data-qty="all">Sell all</button>`:''}
- </div></div>`;
+ </div><div class="bank-move-area"><label for="${scope}MoveTo">📁 Move all ${esc(item)} to tab</label><select id="${scope}MoveTo" data-bank-move="${scope}" data-item="${esc(item)}"><option value="">Choose destination…</option><option value="auto">↺ Automatic category (${esc(BANK_DEFAULT_TABS.find(t=>t.id===bankDefaultTab(item))?.name||'Materials')})</option>${bankAllTabs().filter(t=>t.id!=='all').map(t=>`<option value="${esc(t.id)}" ${bankTabForItem(item)===t.id?'disabled':''}>${t.icon} ${esc(t.name)}</option>`).join('')}</select></div><p class="bank-helper">On desktop you can also drag this item onto a folder tab.</p></div>`;
 }
 function renderBankMain(){
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Inventory</div><h2>🏦 Bank</h2><p class="section-description">Your bank has <strong>${fmt(GAME_CONFIG.bankSlots)} unique stack slots</strong>. A stack can hold any quantity: 1, 100, or even 1 million of the same item. Browse categories and pages below.</p></div></div><div id="mainBankRoot">${renderBankShell('main')}</div>`;
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Inventory</div><h2>🏦 Bank</h2><p class="section-description">${fmt(GAME_CONFIG.bankSlots)} unique item stacks. Items sort into folders automatically. Create custom tabs, drag items between tabs or use Move to tab on any item. Potions are stored separately in your Potion Pouch.</p></div></div><div id="mainBankRoot">${renderBankShell('main')}</div>`;
  renderBankGrid('main');
 }
 const GEAR_SLOT_UI={
@@ -1944,18 +2091,32 @@ function closeGearSlot(){
  const slot=ui.gearSlot;ui.gearSlot=null;el('gearOverlay').hidden=true;
  if(ui.sidebarTab==='gear'&&slot)el('sidebar').querySelector(`[data-gear-slot="${slot}"]`)?.focus();
 }
+function renderPotionPouch(){
+ const owned=Object.entries(state.potions).filter(([item,n])=>isPotion(item)&&n>0)
+  .sort(([a],[b])=>a.localeCompare(b,'en'));
+ const current=Object.values(state.buffs||{}).filter(b=>b?.until>gameNow());
+ el('sidebar').innerHTML=`<div class="between"><h3 style="margin:0">🧪 Potion Pouch</h3><span class="recipe-badge">${owned.length} kinds</span></div>
+ <p class="potion-pouch-summary">Potions have their own unlimited stacks and <strong>do not use bank slots</strong>. Crafted, bought and rewarded potions appear here automatically.</p>
+ ${current.length?`<div class="info-box"><strong>✨ Active effects</strong>${current.map(b=>`<div class="small" style="margin-top:5px">${esc(b.name)} · ${timeFmt((b.until-gameNow())/1000)} remaining</div>`).join('')}</div>`:''}
+ ${owned.length?`<div class="potion-pouch-grid">${owned.map(([name,n])=>{
+  const pot=POTIONS[name];return `<div class="potion-card">${itemArt(name)}<div class="potion-content"><strong>${esc(name)}</strong><span class="potion-owned">×${fmt(n)} stored</span><p>${esc(pot.description)}</p><div class="potion-actions"><button data-use-potion="${esc(name)}" ${pot.heal&&state.hp>=maxHp()?'disabled':''}>🧪 Use</button>${isTradeable(name)?`<button data-sell="${esc(name)}" data-qty="1">Sell 1</button><button data-sell="${esc(name)}" data-qty="all">Sell all</button>`:''}</div></div></div>`;
+ }).join('')}</div>`:'<div class="potion-empty">No potions yet. Craft them with Alchemy, find them as rewards, or buy them in the Shop.</div>'}`;
+}
 function renderSidebar(){
- el('bankTab').classList.toggle('selected',ui.sidebarTab==='bank');el('gearTab').classList.toggle('selected',ui.sidebarTab==='gear');
+ el('bankTab').classList.toggle('selected',ui.sidebarTab==='bank');
+ el('gearTab').classList.toggle('selected',ui.sidebarTab==='gear');
+ el('potionTab').classList.toggle('selected',ui.sidebarTab==='potions');
  if(ui.sidebarTab==='bank'){
   el('sidebar').innerHTML=renderBankShell('side');renderBankGrid('side');
- }else renderGearSidebar();
+ }else if(ui.sidebarTab==='gear')renderGearSidebar();
+ else renderPotionPouch();
 }
 function renderShopMain(){
  const categories=['All',...new Set(SHOP_ITEMS.map(x=>x.category))];
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Trading Post</div><h2>🛒 General Shop</h2><p class="section-description">Buy tools, supplies, seeds, early equipment, food and potions. Sell your gathered or crafted goods from the bank to earn more Coins. Rare uniques are monster drops, not shop items.</p></div><div class="stat-tile"><small>Your Coins</small><strong class="gold" id="shopCoins">🪙 ${fmt(count('Coins'))}</strong></div></div>
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Trading Post</div><h2>🛒 General Shop</h2><p class="section-description">Buy tools, supplies, seeds, early equipment, food and potions. Sell goods from the bank or potions from your Potion Pouch to earn more Coins. Rare uniques are monster drops, not shop items.</p></div><div class="stat-tile"><small>Your Coins</small><strong class="gold" id="shopCoins">🪙 ${fmt(count('Coins'))}</strong></div></div>
  <div class="flexrow"><label class="small" for="shopQty">Buy quantity</label><select class="small-select shop-qty" id="shopQty"><option value="1" ${ui.shopQty===1?'selected':''}>1</option><option value="10" ${ui.shopQty===10?'selected':''}>10</option><option value="100" ${ui.shopQty===100?'selected':''}>100</option></select></div>
  <div class="tabs" id="shopTabs">${categories.map(x=>`<button data-shop-cat="${esc(x)}" class="${ui.shopCategory===x?'selected':''}">${esc(x)}</button>`).join('')}</div>
- <div class="shop-grid" id="shopGrid"></div><div class="info-box"><b>💰 How selling works</b><p>Select an item in your Bank (the sidebar stays open while you visit the Shop), then choose Sell 1, Sell 10, or Sell All. Sell prices are shown on the selected item.</p></div>`;
+ <div class="shop-grid" id="shopGrid"></div><div class="info-box"><b>💰 How selling works</b><p>Select an item in your Bank (the sidebar stays open while you visit the Shop), then choose Sell 1, Sell 10, or Sell All. Potions can be sold from their separate Potion Pouch.</p></div>`;
  renderShopItems();
 }
 function renderShopItems(){
@@ -2051,8 +2212,9 @@ function refreshDynamic(){
  else if(ui.view==='journal')renderJournalMain();
  if(ui.sidebarTab==='bank')renderBankGrid('side');
  else{
-  const right=el('sidebar');const parent=el('sidebar').closest('.right');const scroll=parent.scrollTop;
-  renderGearSidebar();parent.scrollTop=scroll;
+  const parent=el('sidebar').closest('.right');const scroll=parent.scrollTop;
+  if(ui.sidebarTab==='gear')renderGearSidebar();else renderPotionPouch();
+  parent.scrollTop=scroll;
  }
  if(!el('gearOverlay').hidden)renderGearPicker();
  renderProgress();
@@ -2080,6 +2242,10 @@ function handleClick(e){
  if(b.hasAttribute('data-sell'))return sell(b.dataset.sell,b.dataset.qty);
  if(b.hasAttribute('data-claim'))return claimQuest(b.dataset.claim);
  if(b.hasAttribute('data-journal-category')){ui.journalCategory=b.dataset.journalCategory;renderJournalMain();return;}
+ if(b.hasAttribute('data-bank-tab'))return bankSelectTab(b.dataset.bankTab,b.dataset.tabId);
+ if(b.hasAttribute('data-bank-new'))return bankCreateTab();
+ if(b.hasAttribute('data-bank-rename'))return bankRenameTab(b.dataset.bankRename);
+ if(b.hasAttribute('data-bank-delete'))return bankDeleteTab(b.dataset.bankDelete);
  if(b.hasAttribute('data-bank-select')){
   const scope=b.dataset.bankSelect;ui.bank[scope].selected=b.dataset.item;
   renderBankGrid(scope);return;
@@ -2093,14 +2259,40 @@ function handleInput(e){
  if(t.hasAttribute('data-bank-search')){
   const scope=t.dataset.bankSearch;ui.bank[scope].search=t.value;ui.bank[scope].page=0;renderBankGrid(scope);
  }
- if(t.hasAttribute('data-bank-category')){
-  const scope=t.dataset.bankCategory;ui.bank[scope].category=t.value;ui.bank[scope].page=0;renderBankGrid(scope);
+ if(t.hasAttribute('data-bank-move')&&t.value){
+  bankMoveItem(t.dataset.item,t.value);
  }
  if(t.id==='shopQty'){ui.shopQty=Number(t.value);renderShopItems()}
  if(t.id==='rangedAmmo'&&RANGED_AMMO[t.value]&&count(t.value)>0){state.rangedAmmo=t.value;renderCombatResources();save()}
  if(t.id==='autoEatEnabled'){state.autoEat.enabled=t.checked;save()}
  if(t.id==='autoEatFood'){if(count(t.value)>0&&Object.hasOwn(FOOD,t.value)){state.autoEat.food=t.value;renderAutoEatOptions();save()}}
  if(t.id==='autoEatThreshold'){state.autoEat.threshold=Number(t.value);save()}
+}
+// Drag-and-drop on desktop: drop a bank tile on a folder to move its whole stack.
+let bankDraggingItem=null;
+function bankDragStart(e){
+ const tile=e.target.closest('.bank-tile[draggable="true"]');if(!tile)return;
+ bankDraggingItem=tile.dataset.item;
+ e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',bankDraggingItem);
+ tile.classList.add('dragging');
+}
+function bankDragOver(e){
+ const tab=e.target.closest('[data-bank-tab]');if(!tab||!bankDraggingItem)return;
+ e.preventDefault();e.dataTransfer.dropEffect='move';tab.classList.add('bank-drop-target');
+}
+function bankDragLeave(e){const tab=e.target.closest('[data-bank-tab]');if(tab&&!tab.contains(e.relatedTarget))tab.classList.remove('bank-drop-target')}
+function bankDrop(e){
+ const tab=e.target.closest('[data-bank-tab]');if(!tab||!bankDraggingItem)return;
+ e.preventDefault();tab.classList.remove('bank-drop-target');
+ const item=bankDraggingItem;bankDraggingItem=null;bankMoveItem(item,tab.dataset.tabId);
+}
+function bankDragEnd(){bankDraggingItem=null;document.querySelectorAll('.bank-drop-target').forEach(n=>n.classList.remove('bank-drop-target'));document.querySelectorAll('.bank-tile.dragging').forEach(n=>n.classList.remove('dragging'))}
+for(const root of [el('main'),el('sidebar')]){
+ root.addEventListener('dragstart',bankDragStart);
+ root.addEventListener('dragover',bankDragOver);
+ root.addEventListener('dragleave',bankDragLeave);
+ root.addEventListener('drop',bankDrop);
+ root.addEventListener('dragend',bankDragEnd);
 }
 el('main').addEventListener('click',handleClick);
 el('sidebar').addEventListener('click',handleClick);
@@ -2121,6 +2313,7 @@ el('mobileSelect').onchange=ev=>navigate(ev.target.value);
 el('stopBtn').onclick=()=>stop();
 el('bankTab').onclick=()=>{ui.sidebarTab='bank';renderSidebar()};
 el('gearTab').onclick=()=>{ui.sidebarTab='gear';renderSidebar()};
+el('potionTab').onclick=()=>{ui.sidebarTab='potions';renderSidebar()};
 el('saveBtn').onclick=()=>{save();note('💾 Game saved.')};
 el('exportBtn').onclick=()=>{
  save();const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
@@ -2146,7 +2339,7 @@ function validSavedActivity(active){
  return active.type==='skill'&&!!SKILLS[active.skill]?.actions?.[active.index];
 }
 function offlineSnapshot(){
- return {bank:{...state.bank},xp:{...state.xp},kills:{...state.stats.kills},combat:combatLevel(),
+ return {bank:{...state.bank,...state.potions},xp:{...state.xp},kills:{...state.stats.kills},combat:combatLevel(),
          level:Object.fromEntries(Object.keys(state.xp).map(k=>[k,levelFromXp(state.xp[k]||0)]))};
 }
 const afkDuration=seconds=>{
@@ -2184,7 +2377,7 @@ function showOfflineReport(before,seconds,rewarded,actionName,actions){
  afkSection('🏆 Monsters defeated',kills.map(([n,v])=>`<div class="afk-item"><span>⚔️</span><div class="detail">${esc(n)}</div><b>×${fmt(v)}</b></div>`))+
  afkSection('📦 Materials / food consumed',spent.map(([n,v])=>afkCard(n,v,true)))+
  (!added.length&&!xp.length?'<p class="section-description">No rewards collected. You may have run out of supplies, fire, or health.</p>':'')+
- `<p class="small subdued">Rewards are already in your bank. ${state.active?'Your previous action will continue.':'Your activity stopped while you were away.'}</p>`;
+ `<p class="small subdued">Items were stored automatically in your bank or Potion Pouch. ${state.active?'Your previous action will continue.':'Your activity stopped while you were away.'}</p>`;
  el('afkOverlay').hidden=false;
 }
 async function catchUpOffline(){

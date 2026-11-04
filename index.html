@@ -694,9 +694,37 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
  .skill-browser .skill-filter-modes button{padding:5px 5px;font-size:10px}
 }
 
+
+/* v3.26 - profile isolation and developer controls */
+.profile-switch{display:inline-flex;align-items:center;gap:4px;padding:3px;border:1px solid #526d57;background:#142419;border-radius:7px}
+.profile-switch button{padding:6px 10px!important;font-size:11px!important;border:0!important;background:transparent!important;color:#c8d9c9!important}
+.profile-switch button.active{background:#69865c!important;color:#fff4d6!important;font-weight:800}
+body[data-profile="dev"] header{border-bottom:2px solid #d6a75e}
+body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-size:11px;letter-spacing:.04em;color:#f8d492;padding:3px 6px;background:#5b3b24;border:1px solid #c18a52;border-radius:5px;margin-left:8px;vertical-align:middle}
+#devToolsBtn{border-color:#d6a75e!important;color:#ffe5aa!important;background:#53452e!important}
+#devToolsBtn[hidden]{display:none!important}
+.dev-overlay[hidden]{display:none!important}
+.dev-overlay{position:fixed;inset:0;z-index:3500;background:#0d130edb;display:grid;place-items:center;padding:12px;overflow:auto}
+.dev-dialog{width:min(740px,100%);max-height:min(94dvh,950px);overflow:auto;background:#1a2b20;border:1px solid #c7a76b;border-radius:12px;padding:18px;box-shadow:0 20px 70px #0009;color:#e9eedf}
+.dev-top{display:flex;align-items:start;justify-content:space-between;gap:15px}
+.dev-top h2{margin:0 0 5px}
+.dev-dialog p{font-size:12px;color:#c1cbb9;line-height:1.45}
+.dev-warning{padding:10px;background:#463623;border-left:3px solid #f7c879;color:#ffedbf;font-size:12px;margin:10px 0 15px}
+.dev-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dev-group{background:#233629;border:1px solid #527156;padding:12px;border-radius:9px;display:grid;gap:8px;align-content:start}
+.dev-group h3{font-size:14px;margin:0 0 2px;color:#f5d49a}
+.dev-group label{font-size:11px;color:#c3d0c2;display:grid;gap:4px}
+.dev-group select,.dev-group input{width:100%;min-width:0;padding:8px;border:1px solid #648269;background:#122319;color:#fff5db;border-radius:6px}
+.dev-group .dev-actions{display:flex;flex-wrap:wrap;gap:6px}
+.dev-group button{flex:1;padding:7px 9px;font-size:11px;border-color:#749276;background:#36553c}
+.dev-group button:hover:not(:disabled){background:#486c4e}
+.dev-group button.danger{background:#633737;border-color:#b97878}
+#devStatus{margin-top:10px;min-height:22px;color:#f6d68f;font-size:12px}
+@media(max-width:650px){.profile-switch button{padding:5px 7px!important}.dev-grid{grid-template-columns:1fr}.dev-dialog{padding:12px}.dev-dialog h2{font-size:19px}}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.25 · Streamlined UI</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.26 · Developer Profiles</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -706,10 +734,43 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 </div><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="monster-inspect-overlay" id="monsterInspectOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="monsterInspectTitle"><div class="monster-inspect-dialog"><div class="between"><h2 id="monsterInspectTitle">Monster details</h2><button type="button" data-inspect-close aria-label="Close monster details">×</button></div><div id="monsterInspectContent"></div></div></div>
+<div class="dev-overlay" id="devOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="devTitle">
+<div class="dev-dialog">
+ <div class="dev-top"><div><h2 id="devTitle">🛠 Developer Tools</h2><p>DEV PROFILE ONLY · Your main save is stored separately and cannot be changed by these tools.</p></div><button id="devCloseBtn" type="button" aria-label="Close developer tools">✕</button></div>
+ <div class="dev-warning"><strong>Safe testing:</strong> Changes below only affect the <strong>Dev</strong> save. Switch to Main to continue your regular character. A copy of Main can be imported into Dev without changing Main.</div>
+ <div class="dev-grid">
+ <section class="dev-group"><h3>⭐ Skills & Levels</h3>
+   <label>Skill<select id="devSkill"></select></label>
+   <label>Target level (1–99)<input id="devLevel" type="number" min="1" max="99" step="1" value="99"></label>
+   <div class="dev-actions"><button type="button" data-dev="set-level">Set level</button><button type="button" data-dev="max-all">All skills 99</button></div>
+   <label>Extra XP<input id="devXp" type="number" min="1" max="50000000" step="1" value="1000000"></label>
+   <button type="button" data-dev="add-xp">Add XP</button>
+ </section>
+ <section class="dev-group"><h3>🎒 Inventory & GP</h3>
+   <label>Item<input id="devItem" list="devItemList" value="Bronze Arrows" autocomplete="off" spellcheck="false"><datalist id="devItemList"></datalist></label>
+   <label>Amount<input id="devQuantity" type="number" min="1" max="1000000000" step="1" value="1000"></label>
+   <div class="dev-actions"><button type="button" data-dev="give-item">Give item</button><button type="button" data-dev="give-coins">Give GP</button></div>
+   <button type="button" data-dev="heal">Fully heal</button>
+ </section>
+ <section class="dev-group"><h3>⚡ Speed & Combat</h3>
+   <label>Action speed<select id="devSpeed"><option value="1000">1,000 ms · Normal</option><option value="500">500 ms · ×2</option><option value="250">250 ms · ×4</option><option value="100">100 ms · ×10</option></select></label>
+   <button type="button" data-dev="speed">Apply speed</button>
+   <label>Monster / Boss<select id="devMonster"></select></label>
+   <button type="button" data-dev="monster">Start selected monster</button>
+ </section>
+ <section class="dev-group"><h3>⛰️ Raids & Profiles</h3>
+   <label>Raid checkpoint<select id="devWave"></select></label>
+   <button type="button" data-dev="raid">Jump to raid wave</button>
+   <p>Copy Main → Dev replaces only the Dev character. Main stays unchanged.</p>
+   <button type="button" data-dev="clone">Copy Main into Dev</button>
+   <button class="danger" type="button" data-dev="reset-dev">Reset Dev only</button>
+ </section>
+ </div><div id="devStatus" role="status" aria-live="polite"></div>
+</div></div>
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.25 · STREAMLINED UI · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.26 · DEVELOPER PROFILES · CHANGE GAME SETTINGS HERE
 const GAME_CONFIG = {
   actionMs: 1000,            // Base action duration in milliseconds
   bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
@@ -2095,7 +2156,12 @@ const fmt=n=>Math.floor(n||0).toLocaleString('en-US');
 const pct=n=>{const value=n*100,decimals=value>0&&value<1?3:1;return value.toFixed(decimals).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'')+'%'};
 const timeFmt=secs=>{secs=Math.max(0,Math.ceil(secs));return `${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`};
 const el=id=>document.getElementById(id);
-const SAVE_KEY='idle-rpg-v2-save'; // Same key as v2.9: old saved progress stays available.
+const SAVE_KEY='idle-rpg-v2-save'; // IMPORTANT: preserve existing Main save key.
+const DEV_SAVE_KEY='idle-rpg-v2-dev-save'; // Different slot: tools never write to Main.
+const PROFILE_PREF_KEY='idle-rpg-selected-profile';
+let currentProfile='main';
+const profileSaveKey=()=>currentProfile==='dev'?DEV_SAVE_KEY:SAVE_KEY;
+const inDev=()=>currentProfile==='dev';
 const EQUIP_SLOTS=['weapon','shield','head','body','legs','gloves','cape','quiver','amulet','ring','axe','pickaxe'];
 const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,coinsEarned:0,potionsUsed:0,soulsCollected:0,soulsBySource:{},soulsByTier:{},soulShardsFound:0,arrowsFired:0,magicCasts:0});
 function newGame(){return {
@@ -2240,10 +2306,10 @@ function buyOrCraft(cost,output,amount){
 }
 function note(msg){if(offlineRunning){offlineLogCount++;return}state.log.unshift(msg);state.log=state.log.slice(0,80);renderLog()}
 function toast(msg){const box=el('toast');box.textContent=msg;box.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>box.classList.remove('show'),2600)}
-function save(){if(offlineRunning)return;try{state.lastSaved=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(state))}catch(err){console.warn('Save error',err);toast('Could not save. Browser storage may be full.')}}
+function save(){if(offlineRunning)return;try{state.lastSaved=Date.now();localStorage.setItem(profileSaveKey(),JSON.stringify(state))}catch(err){console.warn('Save error',err);toast('Could not save. Browser storage may be full.')}}
 function restore(){
  try{
-  const raw=JSON.parse(localStorage.getItem(SAVE_KEY));if(!raw||!raw.xp||!raw.bank)return;
+  const raw=JSON.parse(localStorage.getItem(profileSaveKey()));if(!raw||!raw.xp||!raw.bank)return;
   const base=newGame();
   const stats=raw.stats||{};
   // Compatibility with v3.2: Herblore is now Alchemy, including any active task.
@@ -3555,7 +3621,7 @@ function refreshDynamic(){
  if(!el('gearOverlay').hidden)renderGearPicker();
  renderProgress();
 }
-function render(){renderNav();renderMain();renderSidebar();renderLog();refreshDynamic();renderActivityFeed()}
+function render(){updateProfileUI();renderNav();renderMain();renderSidebar();renderLog();refreshDynamic();renderActivityFeed()}
 // ── Interaction via event delegation: controls remain functional after redraw ──
 function handleClick(e){
  const b=e.target.closest('button');if(!b||b.disabled)return;
@@ -3710,18 +3776,19 @@ el('saveBtn').onclick=()=>{save();note('💾 Game saved.')};
 el('exportBtn').onclick=()=>{
  save();const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),anchor=document.createElement('a');anchor.href=url;
- anchor.download='idle-rpg-save.json';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),3000);
+ anchor.download=inDev()?'idle-rpg-DEV-save.json':'idle-rpg-MAIN-save.json';anchor.click();setTimeout(()=>URL.revokeObjectURL(url),3000);
 };
 el('importBtn').onclick=()=>el('fileInput').click();
 el('fileInput').onchange=async e=>{
  const file=e.target.files?.[0];if(!file)return;
  try{
   const data=JSON.parse(await file.text());if(!data.xp||!data.bank||typeof data.xp!=='object'||typeof data.bank!=='object')throw Error('Invalid save file');
-  localStorage.setItem(SAVE_KEY,JSON.stringify(data));clearActivityFeed();restore();render();note('💾 Save imported successfully.');
+  if(!confirm(`Replace the ${inDev()?'DEV':'MAIN'} character with this imported save?`))return;
+  localStorage.setItem(profileSaveKey(),JSON.stringify(data));state=newGame();clearActivityFeed();restore();render();note('💾 Save imported into '+(inDev()?'Dev':'Main')+'.');
  }catch(err){alert('Could not import save: '+err.message)}e.target.value='';
 };
 el('resetBtn').onclick=()=>{
- if(confirm('Reset all progress, bank items, equipment, quests and Coins? This cannot be undone unless you exported a save.')){
+ if(confirm(`Reset ${inDev()?'DEV':'MAIN'} progress, bank, equipment and quests? This cannot be undone without a backup.`) && (inDev()||confirm('FINAL WARNING: This will erase your real MAIN character. Continue?'))){
   state=newGame();clearActivityFeed();save();render();note('New adventure started!');
  }
 };
@@ -3844,10 +3911,133 @@ function tick(t){
  if(t-lastSavedFrame>15000){lastSavedFrame=t;save()}
  requestAnimationFrame(tick);
 }
+// ── Independent Main and Dev profiles ──
+function updateProfileUI(){
+ const dev=inDev();document.body.dataset.profile=dev?'dev':'main';
+ for(const [profile,id] of [['main','mainProfileBtn'],['dev','devProfileBtn']]){
+  const btn=el(id),chosen=profile===currentProfile;
+  btn.classList.toggle('active',chosen);btn.setAttribute('aria-pressed',String(chosen));
+ }
+ el('devToolsBtn').hidden=!dev;
+ if(!dev)el('devOverlay').hidden=true;
+}
+async function switchProfile(next){
+ if(!['main','dev'].includes(next)||next===currentProfile||offlineRunning)return;
+ save(); // Save only the current profile before changing keys.
+ currentProfile=next;
+ try{localStorage.setItem(PROFILE_PREF_KEY,next)}catch(e){console.warn(e)}
+ clearActivityFeed();
+ el('afkOverlay').hidden=true;el('devOverlay').hidden=true;
+ el('gearOverlay').hidden=true;el('monsterInspectOverlay').hidden=true;
+ state=newGame();restore(); // restore() always reads from the chosen profile key.
+ ui.view='skills';ui.skillSelection={};ui.skillSearch={};ui.bank.main.selected=null;ui.bank.side.selected=null;
+ lastTick=performance.now();lastUiPulse=lastTick;lastSavedFrame=lastTick;
+ render();
+ if(state.active)await catchUpOffline();
+ toast(next==='dev'?'Dev character active · Main is protected':'Main character active');
+}
+function devStatus(message){el('devStatus').textContent=message;toast(message)}
+function showDevTools(){
+ if(!inDev())return;
+ el('devSpeed').value=String([1000,500,250,100].includes(state.actionMs)?state.actionMs:1000);
+ el('devStatus').textContent='';el('devOverlay').hidden=false;
+}
+function devRefresh(message){
+ state.lastProcessedAt=Date.now();save();render();
+ if(!el('devOverlay').hidden)devStatus(message);
+}
+function buildDevOptions(){
+ el('devSkill').innerHTML=Object.keys(SKILLS).map(k=>`<option value="${esc(k)}">${esc(label(k))}</option>`).join('');
+ const all=new Set([...Object.keys(ITEM_META),...Object.keys(EQUIPMENT),...Object.keys(POTIONS),...Object.keys(FOOD),...SHOP_ITEMS.map(x=>x.name),'Coins',RAID_CONFIG.chest]);
+ el('devItemList').innerHTML=[...all].sort().map(x=>`<option value="${esc(x)}"></option>`).join('');
+ el('devMonster').innerHTML=MONSTERS.map((m,i)=>`<option value="${i}">Lv ${m.level} · ${esc(m.name)}</option>`).join('');
+ el('devWave').innerHTML=RAID_WAVES.map((m,i)=>`<option value="${i}">${i+1}. ${esc(m.name)}</option>`).join('');
+}
+function devPositiveNumber(id,max){
+ const n=Number(el(id).value);
+ return Number.isSafeInteger(n)&&n>=1&&n<=max?n:null;
+}
+function handleDevAction(action){
+ if(!inDev()||offlineRunning)return; // Developer controls must never mutate Main.
+ const skill=el('devSkill').value;
+ if(action==='set-level'){
+  const lvl=devPositiveNumber('devLevel',99);
+  if(!lvl||!Object.hasOwn(SKILLS,skill))return devStatus('Choose a valid skill and level.');
+  state.xp[skill]=xpForLevel(lvl);if(skill==='hitpoints')state.hp=maxHp();
+  return devRefresh(label(skill)+' set to level '+lvl+'.');
+ }
+ if(action==='add-xp'){
+  const qty=devPositiveNumber('devXp',50000000);
+  if(!qty||!Object.hasOwn(SKILLS,skill))return devStatus('Enter a valid XP amount.');
+  state.xp[skill]=Math.min(xpForLevel(99),(state.xp[skill]||0)+qty);
+  if(skill==='hitpoints')state.hp=maxHp();
+  return devRefresh(fmt(qty)+' XP added to '+label(skill)+'.');
+ }
+ if(action==='max-all'){
+  if(!confirm('Set EVERY skill to level 99 on DEV?'))return;
+  for(const k of Object.keys(SKILLS))state.xp[k]=xpForLevel(99);
+  state.hp=maxHp();return devRefresh('All Dev skills set to 99.');
+ }
+ if(action==='give-item'||action==='give-coins'){
+  const name=action==='give-coins'?'Coins':el('devItem').value.trim();
+  const qty=devPositiveNumber('devQuantity',1000000000);
+  if(!qty||!Object.hasOwn(ITEM_META,name)&&name!=='Coins'&&name!==RAID_CONFIG.chest)return devStatus('Select a known item and valid quantity.');
+  if(!add(name,qty))return devStatus('Bank full. Free a stack first.');
+  return devRefresh(fmt(qty)+' × '+name+' added to DEV.');
+ }
+ if(action==='heal'){state.hp=maxHp();return devRefresh('Dev HP restored.');}
+ if(action==='speed'){
+  const ms=Number(el('devSpeed').value);
+  if(![1000,500,250,100].includes(ms))return;
+  state.actionMs=ms;state.progress=0;
+  return devRefresh('Base action duration set to '+ms+' ms on Dev.');
+ }
+ if(action==='monster'){
+  const idx=Number(el('devMonster').value);
+  if(!Number.isInteger(idx)||!MONSTERS[idx])return;
+  state.monsterIndex=idx;state.monsterHp=MONSTERS[idx].hp;
+  state.active={type:'combat'};state.progress=0;ui.view='combat';
+  return devRefresh('Testing '+MONSTERS[idx].name+'.');
+ }
+ if(action==='raid'){
+  const idx=Number(el('devWave').value);
+  if(!Number.isInteger(idx)||!RAID_WAVES[idx])return;
+  raidState().wave=idx;state.monsterHp=RAID_WAVES[idx].hp;
+  state.active={type:'raid'};state.progress=0;ui.view='raid';
+  return devRefresh('Jumped to raid wave '+(idx+1)+' · '+RAID_WAVES[idx].name+'.');
+ }
+ if(action==='clone'){
+  let original;try{original=JSON.parse(localStorage.getItem(SAVE_KEY)||'null')}catch{}
+  if(!original?.xp||!original?.bank)return devStatus('No Main character save found to copy.');
+  if(!confirm('Replace the DEV character with a COPY of Main? Main will stay untouched.'))return;
+  const clone=structuredClone(original);
+  clone.active=null;clone.progress=0;clone.lastSaved=Date.now();clone.lastProcessedAt=Date.now();
+  try{localStorage.setItem(DEV_SAVE_KEY,JSON.stringify(clone))}catch(e){return devStatus('Unable to save Dev copy: '+e.message)}
+  state=newGame();restore();return devRefresh('Main copied into Dev. Original Main save is unchanged.');
+ }
+ if(action==='reset-dev'){
+  if(!confirm('Erase ONLY the Dev character and create a fresh Dev? Main stays untouched.'))return;
+  state=newGame();return devRefresh('Fresh Dev character created. Main unchanged.');
+ }
+}
+el('mainProfileBtn').onclick=()=>switchProfile('main');
+el('devProfileBtn').onclick=()=>switchProfile('dev');
+el('devToolsBtn').onclick=showDevTools;
+el('devCloseBtn').onclick=()=>el('devOverlay').hidden=true;
+el('devOverlay').addEventListener('click',e=>{
+ if(e.target===el('devOverlay'))el('devOverlay').hidden=true;
+ const button=e.target.closest('button[data-dev]');if(button)handleDevAction(button.dataset.dev);
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('devOverlay').hidden)el('devOverlay').hidden=true});
+buildDevOptions();
+
 // Persist the precise time of the last simulated game tick when leaving.
 window.addEventListener('pagehide',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
-async function boot(){restore();render();if(state.active)await catchUpOffline();lastTick=performance.now();requestAnimationFrame(tick)}
+async function boot(){
+ try{currentProfile=localStorage.getItem(PROFILE_PREF_KEY)==='dev'?'dev':'main'}catch{currentProfile='main'}
+ restore();render();if(state.active)await catchUpOffline();lastTick=performance.now();requestAnimationFrame(tick)
+}
 boot();
 // Expose test helpers for regression checks.
 window.IdleRPGDebug={GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};

@@ -620,9 +620,83 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
  #quickNav button{flex:none;white-space:nowrap}
 }
 
+
+/* v3.24 — one compact recipe row, always-visible requirements and stock. */
+.skill-browser .skill-cards{grid-template-columns:minmax(0,1fr)!important;gap:5px}
+.skill-browser .recipe-card{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;
+  gap:2px 9px;align-items:center;padding:6px 9px!important;
+  min-height:66px
+}
+.skill-browser .recipe-card .recipe-select{grid-column:1;grid-row:1;gap:7px;padding:0!important;min-width:0;min-height:29px}
+.skill-browser .recipe-card .recipe-illustration .item-art{width:29px;height:29px;font-size:19px;border-radius:5px}
+.skill-browser .recipe-card .recipe-title{font-size:11.5px!important;line-height:1.23}
+.skill-browser .recipe-card .recipe-detail{margin-top:2px;font-size:10px!important;line-height:1.16}
+.skill-browser .recipe-card .recipe-state{font-size:11px}
+.skill-browser .recipe-card .recipe-quick-details{grid-column:1;grid-row:2;min-width:0;display:flex;gap:4px 8px;flex-wrap:wrap;align-items:center;padding-left:36px}
+.skill-browser .recipe-card .requirements{display:flex!important;flex-wrap:wrap;align-items:center;gap:3px 4px;min-width:0}
+.skill-browser .recipe-card .ingredient{display:inline-flex;align-items:center;gap:3px;padding:2px 5px;font-size:10px;line-height:1.26;border-radius:4px;color:#dce6d7;background:#17291f;border-color:#405c42;white-space:normal}
+.skill-browser .recipe-card .ingredient.has-material b{color:#9bdf9e}
+.skill-browser .recipe-card .ingredient.missing{color:#f2c6b8;border-color:#97554f;background:#422b29}
+.skill-browser .recipe-card .ingredient.missing b{color:#ffada5}
+.skill-browser .recipe-card .ingredient b{font-size:10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.skill-browser .recipe-card .ingredient .armor-icon{width:13px;height:13px;margin:0}
+.skill-browser .recipe-card .recipe-owned{display:flex;flex-wrap:wrap;gap:3px 7px;min-width:0;align-items:center}
+.skill-browser .recipe-card .recipe-owned-count{color:#a9bcaa;font-size:10px;white-space:nowrap}
+.skill-browser .recipe-card .recipe-owned-count strong{color:#e6d7a9;font-variant-numeric:tabular-nums}
+.skill-browser .recipe-card .recipe-no-materials{font-size:10px;color:#839f89}
+.skill-browser .recipe-card .recipe-quick-start{grid-column:2;grid-row:1 / span 2;align-self:center;min-width:69px;white-space:nowrap;padding:6px 8px!important;font-size:10px;border-radius:5px;background:#365f49;border:1px solid #7eaf8b;color:#f6f2d9}
+.skill-browser .recipe-card .recipe-quick-start:hover:not(:disabled){background:#4b7f5c}
+.skill-browser .recipe-card .recipe-quick-start:disabled{background:#2a352e;border-color:#4f5e50;color:#9ca99c;opacity:1}
+@media(max-width:650px){
+ .skill-browser .recipe-card{padding:6px!important;gap:3px 5px;min-height:62px}
+ .skill-browser .recipe-card .recipe-illustration .item-art{width:27px;height:27px;font-size:18px}
+ .skill-browser .recipe-card .recipe-select{gap:6px}
+ .skill-browser .recipe-card .recipe-quick-details{padding-left:33px;gap:3px 6px}
+ .skill-browser .recipe-card .ingredient{font-size:9.5px;padding:2px 4px;gap:2px}
+ .skill-browser .recipe-card .recipe-quick-start{min-width:57px;padding:6px 5px!important;font-size:10px}
+}
+
+
+@media(max-width:650px){
+ /* The selected activity stays accessible without pushing all recipes below the fold. */
+ .skill-inspector .skill-focus{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 9px;align-items:center;padding:9px}
+ .skill-inspector .focus-head,.skill-inspector .focus-specs{display:none}
+ .skill-inspector .focus-item{grid-column:1;grid-row:1;gap:7px;margin:0;min-width:0}
+ .skill-inspector .focus-item .item-art{width:35px;height:35px;font-size:22px}
+ .skill-inspector .focus-item h3{font-size:13px;margin-bottom:2px}
+ .skill-inspector .focus-item p{font-size:10px}
+ .skill-inspector .focus-start{grid-column:2;grid-row:1;min-width:88px;width:auto;margin:0;padding:7px 6px!important;font-size:10px;line-height:1.3}
+ .skill-inspector .focus-expand-toggle{grid-column:1/-1;grid-row:2;margin:0;padding:5px 8px!important;font-size:10px}
+ .skill-inspector .focus-expandable{grid-column:1/-1;grid-row:3}
+}
+
+
+@media(max-width:650px){
+ .skill-stage{min-height:0;margin-bottom:7px}
+ .stage-details{padding:10px 12px}
+ .stage-title h2{font-size:19px}
+ .stage-icon{width:32px;height:32px;font-size:19px}
+ .skill-stage p{margin:4px 0 6px;font-size:10px;line-height:1.32;max-height:2.65em;overflow:hidden}
+ .skill-stage .xpbar{margin:5px 0 0}
+ .skill-workspace{gap:6px}
+ .skill-browser{padding:8px}
+ .skill-browser .workspace-title{margin-bottom:5px}
+ .skill-browser .workspace-title h3{font-size:15px}
+ .skill-browser .skill-category-tabs{margin:5px 0 4px;padding-bottom:4px}
+ .skill-browser .skill-category-tabs button{padding:5px 8px}
+ .skill-browser .skill-toolbar{padding:5px;margin:3px 0 5px;gap:4px}
+ .skill-browser .skill-list-heading{margin:6px 2px 5px}
+}
+@media(min-width:375px) and (max-width:650px){
+ .skill-browser .skill-toolbar{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+ .skill-browser .skill-filter-modes{width:auto;flex-wrap:nowrap;gap:3px}
+ .skill-browser .skill-filter-modes button{padding:5px 5px;font-size:10px}
+}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.23 · Universal Arrow Shafts</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.24 · Compact Recipe Lists</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -635,7 +709,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.23 · UNIVERSAL ARROW SHAFTS · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.24 · COMPACT RECIPE LISTS · CHANGE GAME SETTINGS HERE
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
   bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
@@ -2808,18 +2882,23 @@ function recipeCard(action,index,skill){
  const level=levelFromXp(state.xp[skill]||0),locked=level<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning()&&!nextAutoFuel();
  const already=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===index;
  const selected=ui.skillSelection[skill]===index;
- const stockItems=[action.output,...Object.keys(action.bonus||{}).filter(item=>item!==action.output)];
- const stock=stockItems.map((item,i)=>`<span class="recipe-stock-item ${i?'bonus':''}">${itemIcon(item)} ${esc(item)} <strong data-stock-count="${esc(item)}">${fmt(count(item))}</strong></span>`).join('');
- const requirements=Object.entries(action.cost||{}).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
+ // Show all ingredient counts directly in the list. This stays visible on mobile,
+ // and is updated live by renderSkillLive() when inventory changes.
+ const requirements=Object.entries(action.cost||{}).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':'has-material'}" title="${esc(item)} · ${fmt(count(item))} owned / ${fmt(n)} needed">${itemIcon(item)} <span>${esc(item)}</span> <b>${fmt(count(item))}/${fmt(n)}</b></span>`).join('');
+ const bonusItems=Object.keys(action.bonus||{}).filter(item=>item!==action.output);
+ const stockItems=[action.output,...bonusItems];
+ const stock=stockItems.map((item,i)=>`<span class="recipe-owned-count ${i?'is-bonus':''}" title="${esc(item)} in ${isPotion(item)?'pouch':'bank'}">${i?`${esc(item)}: `:isPotion(item)?'🧪':'🏦'} <strong data-stock-count="${esc(item)}">${fmt(count(item))}</strong></span>`).join('');
  return `<article class="recipe-card ${locked?'is-locked':''} ${selected?'is-focused':''}" data-recipe="${index}">
   <button type="button" class="recipe-select" data-recipe-pick="${index}" aria-pressed="${selected?'true':'false'}" title="View ${esc(action.name)} details">
    <span class="recipe-illustration">${itemArt(action.output)}</span>
-   <span class="recipe-select-copy"><strong class="recipe-title">${esc(action.name)}</strong><small class="recipe-detail">Lv ${action.level} · +${fmt(action.xp)} XP · ×${action.quantity||1} ${esc(action.output)}</small></span>
+   <span class="recipe-select-copy"><strong class="recipe-title">${esc(action.name)}</strong><small class="recipe-detail">Lv ${action.level} · +${fmt(action.xp)} XP · ×${action.quantity||1}</small></span>
    <span class="recipe-state">${already?'●':locked?'🔒':'›'}</span>
   </button>
-  <div class="recipe-stock"><span class="recipe-stock-label">${isPotion(action.output)?'🧪 Pouch':'🏦 Bank'}</span><div class="recipe-stock-items">${stock}</div></div>
-  ${requirements?`<div class="requirements" data-ingredients="${index}">${requirements}</div>`:''}
-  <div class="recipe-bottom"><span class="recipe-badge">${esc(action.category)}</span><button type="button" data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button></div>
+  <div class="recipe-quick-details">
+   ${requirements?`<div class="requirements" data-ingredients="${index}" aria-label="Required materials">${requirements}</div>`:`<span class="recipe-no-materials">No materials</span>`}
+   <div class="recipe-owned">${stock}</div>
+  </div>
+  <button type="button" class="recipe-quick-start" data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button>
  </article>`;
 }
 function renderSkillFocus(skill){
@@ -3114,7 +3193,7 @@ function renderSkillLive(){
    stockNode.textContent=fmt(count(stockNode.dataset.stockCount));
   }
   const req=card.querySelector('[data-ingredients]');
-  if(req)req.innerHTML=Object.entries(action.cost).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
+  if(req)req.innerHTML=Object.entries(action.cost||{}).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':'has-material'}" title="${esc(item)} · ${fmt(count(item))} owned / ${fmt(n)} needed">${itemIcon(item)} <span>${esc(item)}</span> <b>${fmt(count(item))}/${fmt(n)}</b></span>`).join('');
  }
  if(ui.view==='cooking')updateFireUi();
  refreshSkillFocus(ui.view);

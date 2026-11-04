@@ -450,9 +450,179 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 .quest-reward .armor-icon{width:17px;height:17px}
 .armor-icon path,.armor-icon polygon,.armor-icon circle,.armor-icon rect{transition:none!important;animation:none!important}
 
+
+/* ── v3.22 Crafted Horizons: original visual language inspired by modern idle RPG ergonomics ── */
+:root{--ui-bg:#141915;--ui-pane:#202822;--ui-pane2:#1b211e;--ui-edge:#475241;--ui-ink:#f0eee2;--ui-muted:#acb9aa;--ui-gold:#dabb75;--ui-green:#75bb8d;--ui-blue:#80b5c5;--ui-red:#d88679;color:var(--ui-ink);font-family:Inter,"Segoe UI",ui-sans-serif,system-ui,sans-serif}
+body{background:#101511;color:var(--ui-ink)}
+header{background:linear-gradient(180deg,#222a22,#151c18);border-bottom:2px solid #75835a;box-shadow:0 3px 12px #050907aa;gap:10px;padding:11px 17px}
+h1{font-size:20px;letter-spacing:.2px;color:#f5eacd}
+.version{color:#c5bb9f}
+.stat{background:#171f1b;border:1px solid #4e604f;color:#e4e8d8;padding:5px 9px;border-radius:7px}
+.stat b{color:#f6ddb0}
+.top-controls button{background:#313d31!important;border:1px solid #637658!important;color:#e6e4d2!important;box-shadow:none!important;border-radius:7px}
+.top-controls button:hover:not(:disabled){background:#405442!important}
+.layout{max-width:1740px;grid-template-columns:204px minmax(0,1fr) 308px;gap:11px;padding:12px}
+.panel{background:#1b221e;border:1px solid #415542;border-radius:10px;box-shadow:0 8px 22px #0005;padding:12px}
+.main{background:#18211e;min-width:0}
+.left{background:#18221d;max-height:calc(100vh - 14px)}
+.right{background:#18221e;max-height:calc(100vh - 14px)}
+.nav{gap:0}.nav-group{background:#1c251e;border:1px solid #3e513e;border-radius:9px;margin-bottom:8px;overflow:hidden}
+.nav-group-toggle{border-radius:0!important;background:#29372b!important;border:0!important;border-bottom:1px solid #4e6046!important;color:#e4d6b5!important;padding:10px!important;font-size:11px!important;letter-spacing:.02em}
+.nav-group-items{padding:5px;display:grid;gap:3px}
+.nav-group-items[hidden]{display:none}
+.nav-group-items button{padding:8px 9px!important;min-height:33px;border:1px solid transparent!important;background:transparent!important;color:#d4dece!important;box-shadow:none!important;border-radius:6px;text-align:left;gap:4px;transition:none!important}
+.nav-group-items button small{color:#9fb39f!important;white-space:nowrap;font-size:10px}
+.nav-group-items button:hover:not(:disabled){background:#2d3b30!important;border-color:#4d6751!important}
+.nav-group-items button.selected{background:#3a4a34!important;border-color:#af9658!important;box-shadow:inset 3px 0 #edcd86!important;color:#fff4d5!important}
+.nav-group-items button.selected small{color:#f2d69e!important}
+.nav-search-label{font-weight:700;color:#d4c39d}.nav-search-label,input::placeholder{opacity:.8}
+#navSearch{background:#141c17;color:#e5ebdc;border:1px solid #576552;border-radius:7px}
+.mobile-nav select{background:#263329;color:#f1e9d4;border:1px solid #758063}
+.eyebrow{color:#cab87e;font-size:10px;letter-spacing:.11em;font-weight:800}
+.section-title{color:#e8d9aa}
+.heading h2{color:#f3ecd7}
+.subdued,.muted,.section-description{color:#b2bfaf}
+button{border-radius:7px;background:#344938;border:1px solid #5f7962;color:#ecf0e7;box-shadow:none;transition:background .12s,border-color .12s}
+button:hover:not(:disabled){background:#43684b;border-color:#86a883}
+button.selected,.selected{background:#415c3d!important;border-color:#cba765!important;color:#f8f1d7!important}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #e9c56d;outline-offset:2px}
+.tabs button,#bankTab,#gearTab,#potionTab{background:#2c372f!important;border:1px solid #53644a!important;color:#dce6d3!important;box-shadow:none!important;padding:8px 11px;border-radius:6px!important}
+.tabs button.selected,#bankTab.selected,#gearTab.selected,#potionTab.selected{background:#596346!important;border-color:#d6b46b!important;color:#fff0be!important}
+#quickNav{background:#1c2720;border:1px solid #43533f;border-radius:8px;padding:5px;margin:8px 0 15px}
+#quickNav button{background:transparent!important;color:#c4d4c6!important;border:1px solid transparent!important;border-radius:5px!important}
+#quickNav button.selected{background:#3d523d!important;border-color:#8c9a69!important;color:#faebc7!important}
+#activityPanel{background:rgba(25,36,28,.86)!important;border-color:#6c7b59!important;backdrop-filter:none!important;box-shadow:none!important;border-radius:7px;padding:7px 10px}
+.activity-kicker{color:#e6c77a}.activity-name,.activity-percent{color:#e7ecd9}
+.bar.activity-track{height:5px;background:#0a140f}
+.fill{background:#7eaf79!important;animation:none!important}
+.xpbar{height:7px;background:#101913;border:1px solid #344737}
+.xpbar .fill{background:linear-gradient(90deg,#628e64,#a4d4a1)!important}
+.activity-reward{background:rgba(24,40,33,.94);border-color:#6b8b70;border-radius:6px}
+.activity-reward.reward-xp .reward-amount{color:#a4d9fc}
+.recipe-badge,.recipe-badge.level{background:#28372c;border:1px solid #586e54;color:#cfdcba;border-radius:5px}
+.info-box,.health-box,.fire-tile,.shop-card,.journal-card,.monster,.gear-paper,.bank-panel{background:#222c26;border-color:#4b5f4d;border-radius:8px}
+.stat-tile,.bank-tile,.gear-pick-item,.gear-equipped-card{background:#233026;border:1px solid #506651;border-radius:7px}
+.bank-tile:hover:not(:disabled){border-color:#d5b76f;background:#303e32}
+.bank-tile.active{border-color:#e4c575!important;outline:none!important;box-shadow:inset 0 0 0 1px #e4c57599!important}
+.bank-tile .stack{background:#111d15;color:#e9c475;border:1px solid #5d5a39}
+.bank-grid .item-art{box-shadow:none}
+.right>.tabs{flex-wrap:nowrap;gap:5px}
+.right>.tabs button{flex:1;min-width:0;padding:8px 5px!important;font-size:11px}
+.shop-card,.monster,.journal-card{border-top-width:2px}
+.monster:nth-child(3n+1),.shop-card:nth-child(3n+1){border-top-color:#669a77}
+.monster:nth-child(3n+2),.shop-card:nth-child(3n+2){border-top-color:#a9896a}
+.monster:nth-child(3n+3),.shop-card:nth-child(3n+3){border-top-color:#778fb1}
+.quest-progress-bar{background:#15231a}
+.quest-progress-bar .fill{background:#86b58b!important}
+.afk-dialog,.gear-dialog{background:#1a241e;border-color:#a89b69}
+/* Skill environment headers: muted biomes, no bright rays, no motion. */
+.skill-stage{--scene-a:#294734;--scene-b:#18281f;--scene-glow:#76b68b;position:relative;isolation:isolate;overflow:hidden;border-radius:11px;border:1px solid #667d57;min-height:160px;margin:0 0 16px;background:linear-gradient(160deg,var(--scene-a),var(--scene-b));box-shadow:inset 0 0 40px #0d171a70}
+.skill-stage::after{content:"";position:absolute;right:-24px;bottom:-100px;width:280px;height:210px;border:38px solid color-mix(in srgb,var(--scene-glow) 12%,transparent);border-radius:50%;opacity:.75;z-index:-1}
+.skill-scene-water{--scene-a:#1d475a;--scene-b:#152835;--scene-glow:#5cbed2}
+.skill-scene-stone{--scene-a:#414b51;--scene-b:#222a2d;--scene-glow:#a6b0b2}
+.skill-scene-growth{--scene-a:#34543b;--scene-b:#182c1e;--scene-glow:#89c87c}
+.skill-scene-wood{--scene-a:#34513c;--scene-b:#1a2d21;--scene-glow:#90c188}
+.skill-scene-fire{--scene-a:#65452f;--scene-b:#30231f;--scene-glow:#e9a45c}
+.skill-scene-forge{--scene-a:#554332;--scene-b:#282522;--scene-glow:#e1aa68}
+.skill-scene-arcane{--scene-a:#493855;--scene-b:#252030;--scene-glow:#b69bd5}
+.skill-scene-soul{--scene-a:#3c3859;--scene-b:#212436;--scene-glow:#9da9ea}
+.skill-scene-craft{--scene-a:#4d4937;--scene-b:#29291e;--scene-glow:#c8bf80}
+.skill-stage-decoration{position:absolute;right:34px;top:12px;font-size:95px;line-height:1;opacity:.15;transform:rotate(-11deg);filter:saturate(.6);pointer-events:none}
+.stage-details{position:relative;padding:21px 23px 19px;max-width:700px}
+.stage-title{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.stage-title h2{margin:0;font-size:26px;line-height:1.15;color:#fff1cf;letter-spacing:.1px}
+.stage-icon{display:grid;place-items:center;width:47px;height:47px;border-radius:10px;background:#0b171a52;border:1px solid #ffffff30;font-size:28px}
+.stage-level{padding:5px 9px;border:1px solid #d9c58d7a;border-radius:5px;background:#08171366;color:#f4dca0;font-weight:800;font-size:11px;letter-spacing:.07em}
+.skill-stage p{margin:8px 0 12px;color:#d9e3dd;line-height:1.5;font-size:12px}
+.skill-stage #skillXpText{font-size:12px;color:#e6e9d9}
+.skill-stage .xpbar{max-width:520px;background:#09131188}
+.skill-stage .xpbar .fill{background:#d7b779!important}
+.skill-guide{margin-bottom:12px}
+/* Melvor-style list/details arrangement, with original item illustrations. */
+.skill-workspace{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:12px;align-items:start}
+.skill-browser{min-width:0;background:#1c2821;border:1px solid #495c46;border-radius:9px;padding:12px}
+.workspace-title{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:10px}
+.workspace-title h3{margin:2px 0 0;color:#f5e4ba;font-size:17px}
+.workspace-count{font-size:11px;border:1px solid #657c59;border-radius:5px;padding:5px 8px;color:#d3e3c3;background:#28392c;font-variant-numeric:tabular-nums}
+.skill-category-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding:1px 0 6px;margin:8px 0 5px;gap:5px}
+.skill-category-tabs button{white-space:nowrap;flex:0 0 auto;border-radius:5px;font-size:11px;padding:7px 10px}
+.skill-toolbar{background:#223129;border:1px solid #445c46;border-radius:7px;padding:8px;margin:4px 0 10px;display:grid;gap:7px}
+.skill-toolbar .skill-search-box{background:#121d16;border:1px solid #445a49;border-radius:5px;padding:2px 8px;display:flex;gap:6px;align-items:center;min-width:0}
+.skill-search-box input{background:transparent!important;border:0!important;box-shadow:none!important;color:#f1f4ea!important;outline:none!important;width:100%;padding:7px 3px;font-size:12px;min-width:0}
+.skill-filter-modes{display:flex;gap:5px;flex-wrap:wrap}
+.skill-filter-modes button{background:#293c30!important;font-size:11px;padding:6px 9px}
+.skill-filter-modes button.selected{background:#526a48!important;border-color:#cbb574!important;color:#fff2c6!important}
+.skill-list-heading{display:flex;justify-content:space-between;gap:8px;font-size:10px;font-weight:750;letter-spacing:.07em;color:#b8c7ae;margin:12px 2px 8px}
+.skill-cards{display:grid;grid-template-columns:1fr;gap:7px;align-items:start}
+.recipe-card{border:1px solid #485c49!important;border-left:3px solid #688775!important;border-radius:7px!important;padding:9px!important;min-width:0;background:#233027!important;display:flex;flex-direction:column;gap:5px;position:relative;box-shadow:none!important;transition:none!important}
+.recipe-card:nth-child(4n+1),.recipe-card:nth-child(4n+2),.recipe-card:nth-child(4n+3),.recipe-card:nth-child(4n+4){border-top:1px solid #485c49!important}
+.recipe-card.is-focused{border-color:#d3b96f!important;border-left-color:#e3bd69!important;background:#2d3c30!important}
+.recipe-card.is-locked{opacity:.65}
+.recipe-select{display:flex;align-items:center;gap:10px;min-width:0;text-align:left;width:100%;background:transparent!important;border:0!important;color:inherit!important;box-shadow:none!important;padding:2px!important}
+.recipe-select:hover:not(:disabled){background:#ffffff09!important}
+.recipe-illustration{flex:none}.recipe-illustration .item-art{width:39px;height:39px;font-size:25px;border-radius:7px}
+.recipe-select-copy{flex:1;min-width:0}.recipe-title{font-size:12px!important;font-weight:800;color:#f3e5c2!important;display:block;overflow-wrap:anywhere}
+.recipe-select-copy .recipe-detail{display:block;margin:4px 0 0;color:#b5c5b3!important;line-height:1.3;font-size:10px!important}
+.recipe-state{font-size:15px;color:#d7c386;flex:none}
+.recipe-card.is-focused .recipe-state{color:#f8d57c}
+.recipe-stock{padding:4px 6px;background:#1b2920!important;border-color:#3d503e!important;font-size:10px;gap:3px 7px;border-radius:5px}
+.recipe-stock-label{font-size:10px;color:#a9c2ab;font-weight:700}
+.recipe-stock-item{font-size:10px;color:#cfdbc7}
+.recipe-stock-item strong{font-size:11px;color:#b9e5ab}
+.recipe-card .requirements{display:none}
+.recipe-card .recipe-bottom{margin:0;display:flex;align-items:center;justify-content:space-between}
+.recipe-card .recipe-bottom .recipe-badge{font-size:10px;padding:2px 6px;background:#1c2b22}
+.recipe-card .recipe-bottom button{font-size:11px;padding:5px 10px;white-space:nowrap;min-width:69px}
+.skill-inspector{position:sticky;top:8px;min-width:0}
+.skill-focus{background:#202e25;border:1px solid #9e915c;border-radius:9px;padding:14px;box-shadow:inset 0 3px 0 #d5b26e,0 4px 15px #060b0860}
+.focus-head{display:flex;align-items:center;justify-content:space-between;gap:6px;color:#d5b36c;font-size:10px;font-weight:850;letter-spacing:.08em}
+.focus-category{color:#cdd5c5;border:1px solid #607154;border-radius:4px;background:#304034;padding:4px 7px;letter-spacing:0;font-size:10px}
+.focus-item{display:flex;align-items:center;gap:10px;margin:16px 0 14px}
+.focus-item .item-art{width:62px;height:62px;flex:none;font-size:38px;box-shadow:0 3px 11px #090f0ca0}
+.focus-item h3{font-size:16px;line-height:1.2;color:#f8e7bf;margin:0 0 5px;overflow-wrap:anywhere}
+.focus-item p{margin:0;color:#bcc9ba;font-size:11px}
+.focus-specs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:10px 0 16px}
+.focus-specs span{padding:9px 4px 8px;text-align:center;background:#15221a;border:1px solid #40563f;border-radius:5px}
+.focus-specs small{display:block;color:#a9bba7;font-size:9px;line-height:1.15}
+.focus-specs b{display:block;color:#e8d398;font-size:12px;margin-top:5px;font-variant-numeric:tabular-nums}
+.focus-section-title{font-size:10px;font-weight:850;color:#c7c49f;border-bottom:1px solid #56644d;padding-bottom:7px;margin:13px 0 7px;letter-spacing:.09em}
+.focus-output>div,.focus-material{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:11px;border-bottom:1px solid #344437}
+.focus-output .item-art,.focus-material .item-art{flex:none;width:25px;height:25px;border-radius:5px;font-size:17px}
+.focus-output span,.focus-material span{flex:1;min-width:0;overflow-wrap:anywhere;color:#e4e8d6}
+.focus-output b{color:#a8db9e;font-variant-numeric:tabular-nums}
+.focus-material b{color:#bfdcb4;font-variant-numeric:tabular-nums;white-space:nowrap}
+.focus-material.missing b{color:#f2a9a0}
+.focus-fire{background:#3d3126;border:1px solid #835d42;color:#efd3ab;padding:7px;margin-top:11px;border-radius:5px;font-size:11px}
+.focus-start{width:100%;margin-top:15px;background:#567447!important;border:1px solid #97b170!important;color:#fff4ce!important;font-weight:850;padding:12px 10px!important;border-radius:6px}
+.focus-start:hover:not(:disabled){background:#6d8f56!important}
+.focus-start:disabled{background:#2b3830!important;border-color:#536154!important;color:#9daa9d!important;opacity:1!important}
+/* All effects remain static; activity progress and reward fading are the only motion. */
+.recipe-card::after,.shop-card::after,.monster::after,.journal-card::after,.combat-choice::after{display:none!important}
+.item-art,.recipe-title,.monster-name,.gear-paper-slot .gear-symbol{animation:none!important}
+@media(max-width:1360px){.layout{grid-template-columns:175px minmax(0,1fr) 270px;gap:8px;padding:8px}.panel{padding:10px}.skill-workspace{grid-template-columns:minmax(0,1fr) 255px;gap:8px}.skill-focus{padding:10px}.stage-details{padding:19px}}
+@media(max-width:1150px){.skill-workspace{grid-template-columns:1fr}.skill-inspector{position:static;grid-row:1}.skill-focus{display:grid;grid-template-columns:1.2fr 1fr;column-gap:14px}.focus-head,.focus-item,.focus-specs,.focus-start{grid-column:1}.focus-section-title,.focus-output,.focus-materials,.focus-fire{grid-column:2}.focus-section-title{margin-top:4px}.focus-start{margin-bottom:1px}.skill-cards{grid-template-columns:repeat(auto-fit,minmax(235px,1fr))}}
+@media(max-width:920px){.layout{grid-template-columns:155px minmax(0,1fr)}.left{top:8px}.right{max-height:none}.skill-workspace{grid-template-columns:1fr}.skill-focus{grid-template-columns:1fr}.focus-head,.focus-item,.focus-specs,.focus-start,.focus-section-title,.focus-output,.focus-materials,.focus-fire{grid-column:1}.skill-cards{grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}}
+@media(max-width:650px){header{padding:10px;gap:6px}h1{font-size:18px}.stats{gap:4px}.stat{font-size:10px;padding:4px 6px}.top-controls{width:100%;justify-content:space-between}.top-controls button{font-size:10px;padding:6px}.layout{grid-template-columns:1fr;gap:7px;padding:7px}.left{max-height:none;position:relative}.right{grid-column:1}.main{min-height:240px}.skill-stage{min-height:135px;margin-bottom:10px}.stage-details{padding:16px}.stage-title h2{font-size:21px}.stage-icon{width:38px;height:38px;font-size:22px}.stage-level{font-size:10px}.skill-stage-decoration{font-size:78px;right:8px}.skill-stage p{font-size:11px}.skill-workspace{gap:9px}.skill-browser{padding:9px}.skill-cards{grid-template-columns:1fr}.skill-focus{padding:13px}.focus-specs span{padding:8px 3px}.focus-item .item-art{width:54px;height:54px}.right>.tabs{gap:3px}.right>.tabs button{font-size:10px;padding:7px 4px!important}.activity-head{gap:6px}}
+@media(prefers-reduced-motion:reduce){.activity-reward{transition:none!important}}
+
+
+.focus-expand-toggle{display:none}
+.focus-expandable{display:block}
+@media(min-width:651px) and (max-width:1150px){.focus-expandable{grid-column:2;grid-row:1 / span 5}.focus-expand-toggle{display:none}.focus-start{align-self:end}}
+@media(max-width:650px){
+ .focus-expand-toggle{display:block;background:#263e2e!important;color:#dddeb8!important;border:1px solid #536b53!important;padding:8px 10px!important;width:100%;text-align:left;margin-top:9px}
+ .focus-expandable{display:none;padding:4px 0 0}
+ .focus-expandable.expanded{display:block}
+ .focus-start{margin-top:10px}
+ .focus-item{margin:10px 0}
+ .focus-specs{margin:7px 0 10px}
+ #quickNav{overflow-x:auto;scrollbar-width:thin;flex-wrap:nowrap}
+ #quickNav button{flex:none;white-space:nowrap}
+}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.21 · Forged Armour</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.22 · Crafted Horizons</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -465,7 +635,7 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.21 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.22 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -1865,7 +2035,7 @@ function newGame(){return {
  log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null};
+const ui={view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},skillSelection:{},focusExpanded:false,sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRowsDesktop:6,maxRowsMobile:3};
@@ -2606,19 +2776,70 @@ function navigate(view){if(!NAV_VIEWS.includes(view))return;ui.view=view;renderN
 function xpText(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return `Level ${lvl} · ${fmt(xp)} XP${lvl>=99?' · MAX LEVEL':' · '+fmt(xpForLevel(lvl+1)-xp)+' to next level'}`}
 function xpFill(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return lvl>=99?100:clamp((xp-xpForLevel(lvl))/(xpForLevel(lvl+1)-xpForLevel(lvl))*100,0,100)}
 function xpStrip(skill){return `<div class="subdued" id="skillXpText">${xpText(skill)}</div><div class="xpbar"><div class="fill" id="skillXpFill" style="width:${xpFill(skill)}%"></div></div>`}
+function selectedSkillAction(skill,candidates){
+ const actions=SKILLS[skill].actions;
+ const active=state.active?.type==='skill'&&state.active.skill===skill?state.active.index:null;
+ const own=Number.isInteger(ui.skillSelection[skill])?ui.skillSelection[skill]:null;
+ const available=(candidates||actions.map((a,i)=>({a,i}))).map(x=>x.i);
+ if(own!==null&&available.includes(own))return own;
+ if(active!==null&&available.includes(active))return active;
+ const level=levelFromXp(state.xp[skill]||0);
+ const unlocked=(candidates||actions.map((a,i)=>({a,i}))).filter(x=>x.a.level<=level);
+ const chosen=(unlocked.length?unlocked[unlocked.length-1]:candidates?.[0]||{i:0}).i;
+ ui.skillSelection[skill]=chosen;
+ return chosen;
+}
 function recipeCard(action,index,skill){
  const level=levelFromXp(state.xp[skill]||0),locked=level<action.level,missing=!canPay(action.cost),fireNeeded=action.requiresFire&&!fireBurning()&&!nextAutoFuel();
  const already=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===index;
- const requirements=Object.entries(action.cost||{}).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
- // Show the LIVE bank quantity for every produced item, including bonus outputs.
+ const selected=ui.skillSelection[skill]===index;
  const stockItems=[action.output,...Object.keys(action.bonus||{}).filter(item=>item!==action.output)];
  const stock=stockItems.map((item,i)=>`<span class="recipe-stock-item ${i?'bonus':''}">${itemIcon(item)} ${esc(item)} <strong data-stock-count="${esc(item)}">${fmt(count(item))}</strong></span>`).join('');
- return `<article class="recipe-card ${locked?'is-locked':''}" data-recipe="${index}">
- <div class="between"><span class="recipe-title">${itemIcon(action.output)} ${esc(action.name)}</span><span class="recipe-badge level">Lv ${action.level}</span></div>
- <div class="recipe-detail">Produces <b>×${action.quantity||1} ${esc(action.output)}</b> · <span class="positive">+${action.xp} XP</span>${action.requiresFire?' · 🔥 Fire (auto-relight)':''}</div>
- <div class="recipe-stock"><span class="recipe-stock-label">${isPotion(action.output)?'🧪 In pouch:':'🏦 In bank:'}</span><div class="recipe-stock-items">${stock}</div></div>
- ${requirements?`<div class="requirements" data-ingredients="${index}">${requirements}</div>`:''}
- <div class="recipe-bottom"><span class="recipe-badge">${esc(action.category)}</span><button data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button></div></article>`;
+ const requirements=Object.entries(action.cost||{}).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
+ return `<article class="recipe-card ${locked?'is-locked':''} ${selected?'is-focused':''}" data-recipe="${index}">
+  <button type="button" class="recipe-select" data-recipe-pick="${index}" aria-pressed="${selected?'true':'false'}" title="View ${esc(action.name)} details">
+   <span class="recipe-illustration">${itemArt(action.output)}</span>
+   <span class="recipe-select-copy"><strong class="recipe-title">${esc(action.name)}</strong><small class="recipe-detail">Lv ${action.level} · +${fmt(action.xp)} XP · ×${action.quantity||1} ${esc(action.output)}</small></span>
+   <span class="recipe-state">${already?'●':locked?'🔒':'›'}</span>
+  </button>
+  <div class="recipe-stock"><span class="recipe-stock-label">${isPotion(action.output)?'🧪 Pouch':'🏦 Bank'}</span><div class="recipe-stock-items">${stock}</div></div>
+  ${requirements?`<div class="requirements" data-ingredients="${index}">${requirements}</div>`:''}
+  <div class="recipe-bottom"><span class="recipe-badge">${esc(action.category)}</span><button type="button" data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button></div>
+ </article>`;
+}
+function renderSkillFocus(skill){
+ const a=SKILLS[skill].actions[ui.skillSelection[skill]],i=ui.skillSelection[skill];
+ if(!a)return '';
+ const level=levelFromXp(state.xp[skill]||0),locked=level<a.level,missing=!canPay(a.cost),fireNeeded=a.requiresFire&&!fireBurning()&&!nextAutoFuel();
+ const active=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===i;
+ const requirements=Object.entries(a.cost||{}).map(([item,n])=>`<div class="focus-material ${count(item)<n?'missing':''}">${itemArt(item)}<span>${esc(item)}</span><b data-focus-cost="${esc(item)}">${fmt(count(item))} / ${fmt(n)}</b></div>`).join('');
+ const owned=[a.output,...Object.keys(a.bonus||{}).filter(item=>item!==a.output)];
+ return `<section class="skill-focus" id="skillFocus" aria-label="Selected activity">
+  <div class="focus-head"><span>✦ SELECTED ACTIVITY</span><span class="focus-category">${esc(a.category)}</span></div>
+  <div class="focus-item">${itemArt(a.output,true)}<div><h3>${esc(a.name)}</h3><p>Level ${a.level} ${locked?'· Locked':'· Unlocked'}</p></div></div>
+  <div class="focus-specs"><span><small>Experience</small><b>+${fmt(a.xp)} XP</b></span><span><small>Per action</small><b>×${a.quantity||1}</b></span><span><small>Duration</small><b id="focusDuration">${(actionDurationMs()/1000).toFixed(2)}s</b></span></div>
+  <button type="button" class="focus-expand-toggle" data-focus-toggle aria-expanded="${ui.focusExpanded?'true':'false'}">${ui.focusExpanded?'▴ Hide materials and bank details':'▾ Show materials and bank details'}</button>
+  <div class="focus-expandable ${ui.focusExpanded?'expanded':''}">
+   <div class="focus-section-title">OUTPUT · IN STORAGE</div>
+   <div class="focus-output">${owned.map(item=>`<div>${itemArt(item)}<span>${esc(item)}</span><b data-focus-own="${esc(item)}">${fmt(count(item))}</b></div>`).join('')}</div>
+   <div class="focus-section-title">${requirements?'REQUIRED MATERIALS':'NO MATERIALS REQUIRED'}</div>
+   <div class="focus-materials">${requirements||'<p class="subdued small">Gather freely; no ingredients needed.</p>'}</div>
+   ${a.requiresFire?'<div class="focus-fire">🔥 Requires a burning fire · auto-relight enabled</div>':''}
+  </div>
+  <button type="button" class="focus-start" data-action="${i}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'🔒 Level '+a.level+' required':fireNeeded?'🔥 Fire required':missing?'Missing materials':active?'✓ Currently training':'▶ Start activity'}</button>
+ </section>`;
+}
+function refreshSkillFocus(skill){
+ const i=ui.skillSelection[skill],a=SKILLS[skill]?.actions[i],box=el('skillFocus');if(!box||!a)return;
+ const locked=levelFromXp(state.xp[skill]||0)<a.level,missing=!canPay(a.cost),fireNeeded=a.requiresFire&&!fireBurning()&&!nextAutoFuel();
+ const active=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===i;
+ for(const node of box.querySelectorAll('[data-focus-own]'))node.textContent=fmt(count(node.dataset.focusOwn));
+ for(const node of box.querySelectorAll('[data-focus-cost]')){
+  const item=node.dataset.focusCost,need=a.cost[item];node.textContent=fmt(count(item))+' / '+fmt(need);
+  node.parentElement.classList.toggle('missing',count(item)<need);
+ }
+ const duration=box.querySelector('#focusDuration');if(duration)duration.textContent=(actionDurationMs()/1000).toFixed(2)+'s';
+ const btn=box.querySelector('.focus-start');if(btn){btn.disabled=locked||missing||fireNeeded;btn.textContent=locked?'🔒 Level '+a.level+' required':fireNeeded?'🔥 Fire required':missing?'Missing materials':active?'✓ Currently training':'▶ Start activity';}
 }
 function renderFirePanel(){
  return `<section class="info-box" style="border-color:#8a663f"><div class="between"><h3 style="margin:0">🔥 Cooking Fire</h3><span class="recipe-badge">1 second / cooking action</span></div>
@@ -2642,7 +2863,8 @@ function renderSkillMain(skill){
  const def=SKILLS[skill],categories=[...new Set(def.actions.map(a=>a.category))];
  ui.skillTab[skill]??='All';
  let chosen=ui.skillTab[skill];if(chosen!=='All'&&!categories.includes(chosen)){chosen='All';ui.skillTab[skill]='All'}
- let html=`<div class="heading"><div><div class="eyebrow">Skill training</div><h2>${def.icon} ${label(skill)}</h2><p class="section-description">${esc(def.description)}</p></div><span class="recipe-badge level">Max Lv 99</span></div>${xpStrip(skill)}`;
+ const theme=({woodcutting:'wood',fishing:'water',mining:'stone',agriculture:'growth',cooking:'fire',smithing:'forge',fletching:'wood',crafting:'craft',alchemy:'arcane',enchanting:'soul'})[skill]||'craft';
+ let html=`<div class="skill-stage skill-scene-${theme}"><div class="skill-stage-decoration">${def.icon}</div><div class="stage-details"><div class="eyebrow">✦ ${esc(label(skill))} · SKILL TRAINING</div><div class="stage-title"><span class="stage-icon">${def.icon}</span><h2>${label(skill)}</h2><span class="stage-level">LEVEL ${levelFromXp(state.xp[skill]||0)} / 99</span></div><p>${esc(def.description)}</p>${xpStrip(skill)}</div></div>`;
  const boosts=permanentBonuses();
  const speed=boosts.skills[skill]||0, yieldBoost=boosts.yields[skill]||0;
  const skillTitle='Grandmaster '+labelSkillForQuest(skill);
@@ -2651,17 +2873,21 @@ function renderSkillMain(skill){
  if(skill==='cooking')html+=renderFirePanel();
  if(skill==='enchanting'){
   const soulTotal=SOUL_GEMS.reduce((sum,x)=>sum+x.weight,0);
-  html+=`<div class="info-box"><h3 style="margin:0 0 8px">💠 Soulbound Soul Gems</h3><p>Soul Gems are untradeable at EVERY tier: you cannot buy or sell them. Gathering (Woodcutting, Fishing, Mining, Agriculture) gives an independent ${pct(GAME_CONFIG.soulGemGatherChance)} base roll per action; Combat has an independent ${pct(GAME_CONFIG.soulGemCombatChance)} base roll per monster KILL. The rolls never replace normal loot or treasure. Spirit Sense potions can raise Soul Gem find chance but never alter tier odds.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic Soul Gem: exactly <b>1 in 10,000 Soul Gems</b> (not one in 3,000 actions). Used for the extremely powerful Eternal Soul Crown.</p></div>`;
+  html+=`<details class="info-box skill-guide"><summary>💠 Soulbound Soul Gems and drop rates</summary><p>Soul Gems are untradeable at EVERY tier: you cannot buy or sell them. Gathering (Woodcutting, Fishing, Mining, Agriculture) gives an independent ${pct(GAME_CONFIG.soulGemGatherChance)} base roll per action; Combat has an independent ${pct(GAME_CONFIG.soulGemCombatChance)} base roll per monster KILL. The rolls never replace normal loot or treasure. Spirit Sense potions can raise Soul Gem find chance but never alter tier odds.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic Soul Gem: exactly <b>1 in 10,000 Soul Gems</b> (not one in 10,000 actions).</p></details>`;
  }
- if(skill==='fletching')html+=`<div class="info-box"><b>🏹 How Fletching connects to the world</b><p>Chop trees for logs, farm Flax for bowstrings, collect Feathers from Chickens, then smith Arrowheads into finished Arrows. Equip a Bow and select arrows in Combat to train Ranged. Each shot consumes one arrow.</p></div>`;
- if(categories.length>1)html+=`<div class="tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
+ if(skill==='fletching')html+=`<details class="info-box skill-guide"><summary>🏹 How Fletching connects to other skills</summary><p>Chop trees for logs, farm Flax for bowstrings, collect Feathers from Chickens or the Shop, then smith Arrowheads into finished Arrows. Equip a Bow and select arrows in Combat to train Ranged. Each shot consumes one arrow.</p></details>`;
  const skillSearch=ui.skillSearch[skill]||'';
  const skillMode=ui.skillMode[skill]||'all';
- html+=`<div class="skill-toolbar"><label class="skill-search-box">🔎 <input type="search" data-skill-search autocomplete="off" placeholder="Find a resource or recipe…" value="${esc(skillSearch)}" aria-label="Search ${esc(label(skill))} actions"></label>
- <div class="skill-filter-modes" role="group" aria-label="Filter actions">${[['all','All'],['unlocked','Unlocked'],['craftable','Ready now']].map(([id,name])=>`<button type="button" data-skill-mode="${id}" class="${skillMode===id?'selected':''}">${name}</button>`).join('')}</div></div>
- <p class="small subdued skill-count-line"><span id="skillVisibleCount">${def.actions.length}</span> actions shown · Ordered by level · Current action: ${Math.round(actionDurationMs())} ms${skill==='cooking'?' · Fire relights automatically':''}</p>`;
  const actions=def.actions.map((a,i)=>({a,i})).filter(({a})=>chosen==='All'||a.category===chosen).sort((x,y)=>x.a.level-y.a.level||x.a.name.localeCompare(y.a.name,'en'));
- html+=`<div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div>`;
+ selectedSkillAction(skill,actions);
+ html+=`<div class="skill-workspace"><section class="skill-browser" aria-label="${esc(label(skill))} available activities">
+  <div class="workspace-title"><div><span class="eyebrow">BROWSE RECIPES</span><h3>Choose an activity</h3></div><span class="workspace-count"><span id="skillVisibleCount">${actions.length}</span> / ${def.actions.length}</span></div>`;
+ if(categories.length>1)html+=`<div class="tabs skill-category-tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
+ html+=`<div class="skill-toolbar"><label class="skill-search-box">🔎 <input type="search" data-skill-search autocomplete="off" placeholder="Search activities and items…" value="${esc(skillSearch)}" aria-label="Search ${esc(label(skill))} actions"></label>
+ <div class="skill-filter-modes" role="group" aria-label="Filter actions">${[['all','All'],['unlocked','Unlocked'],['craftable','Ready']].map(([id,name])=>`<button type="button" data-skill-mode="${id}" class="${skillMode===id?'selected':''}">${name}</button>`).join('')}</div></div>
+ <div class="skill-list-heading"><span>ACTIVITIES · ORDERED BY LEVEL</span><span>SELECT TO INSPECT</span></div>
+ <div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div></section>
+ <aside class="skill-inspector" aria-label="Active recipe details">${renderSkillFocus(skill)}</aside></div>`;
  el('main').innerHTML=html;
  filterRecipeCards();
 }
@@ -2876,6 +3102,7 @@ function renderSkillLive(){
   if(req)req.innerHTML=Object.entries(action.cost).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
  }
  if(ui.view==='cooking')updateFireUi();
+ refreshSkillFocus(ui.view);
  filterRecipeCards();
 }
 // All items auto-sort into these folders until the player manually assigns them elsewhere.
@@ -3171,6 +3398,8 @@ function renderRaidLive(){
 }
 
 function renderMain(){
+ el('main').dataset.currentView=ui.view;
+ document.body.dataset.currentView=ui.view;
  if(ui.view==='skills')renderSkillsOverview();
  else if(ui.view==='combat')renderCombatMain();
  else if(ui.view==='raid')renderRaidMain();
@@ -3229,6 +3458,22 @@ function handleClick(e){
  if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
  if(b.hasAttribute('data-skills-filter')){ui.skillsFilter=b.dataset.skillsFilter;renderSkillsOverview();return;}
  if(b.hasAttribute('data-skill-open')){const skill=b.dataset.skillOpen;if(!Object.hasOwn(SKILLS,skill))return; if(SKILLS[skill].combat){if(skill!=='hitpoints')state.combatStyle=skill;save();navigate('combat');}else navigate(skill);return;}
+ if(b.hasAttribute('data-focus-toggle')){
+  ui.focusExpanded=!ui.focusExpanded;
+  const extra=el('skillFocus')?.querySelector('.focus-expandable');if(extra)extra.classList.toggle('expanded',ui.focusExpanded);
+  b.setAttribute('aria-expanded',String(ui.focusExpanded));
+  b.textContent=ui.focusExpanded?'▴ Hide materials and bank details':'▾ Show materials and bank details';
+  return;
+ }
+ if(b.hasAttribute('data-recipe-pick')){
+  const skill=ui.view;ui.skillSelection[skill]=Number(b.dataset.recipePick);
+  const holder=el('skillFocus');if(holder)holder.outerHTML=renderSkillFocus(skill);
+  for(const node of el('main').querySelectorAll('[data-recipe]')){
+   const selected=Number(node.dataset.recipe)===ui.skillSelection[skill];node.classList.toggle('is-focused',selected);
+   const pick=node.querySelector('[data-recipe-pick]');if(pick)pick.setAttribute('aria-pressed',String(selected));
+  }
+  return;
+ }
  if(b.hasAttribute('data-action'))return startAction(ui.view,Number(b.dataset.action));
  if(b.hasAttribute('data-inspect-monster'))return inspectMonster(Number(b.dataset.inspectMonster));
  if(b.hasAttribute('data-inspect-raid'))return inspectMonster(Number(b.dataset.inspectRaid),true);
@@ -3245,7 +3490,7 @@ function handleClick(e){
   for(const node of el('main').querySelectorAll('[data-skill-mode]'))node.classList.toggle('selected',node.dataset.skillMode===ui.skillMode[ui.view]);
   filterRecipeCards();return;
  }
- if(b.hasAttribute('data-skill-tab')){ui.skillTab[ui.view]=b.dataset.skillTab;renderMain();refreshDynamic();return}
+ if(b.hasAttribute('data-skill-tab')){ui.skillTab[ui.view]=b.dataset.skillTab;delete ui.skillSelection[ui.view];renderMain();refreshDynamic();return}
  if(b.hasAttribute('data-shop-cat')){ui.shopCategory=b.dataset.shopCat;renderMain();refreshDynamic();return}
  if(b.hasAttribute('data-buy'))return buy(b.dataset.buy,ui.shopQty);
  if(b.hasAttribute('data-burn'))return lightFire(b.dataset.burn);

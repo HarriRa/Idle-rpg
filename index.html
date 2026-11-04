@@ -268,19 +268,140 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 .raid-chest-row button{font-size:11px;padding:6px 9px}
 .monster-weakness{color:#f3c988;font-weight:750}
 @media(max-width:650px){.raid-panel{padding:10px}.raid-heading{flex-wrap:wrap}.raid-score{white-space:normal}}
+
+/* v3.16 — unified skill ledger, built to stay readable on desktop and mobile */
+.skills-overview{--skills-amber:#e0b46c;--skills-mint:#79d2a9;--skills-sky:#8ac5f3}
+.skills-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.skills-summary-tile{min-width:0;padding:14px 12px;border:1px solid #866746;border-radius:11px;background:linear-gradient(155deg,#3a3025,#27251f 80%);box-shadow:inset 0 1px #f2d9a016}
+.skills-summary-tile:nth-child(2){border-top:3px solid #7abbd1}
+.skills-summary-tile:nth-child(3){border-top:3px solid #83ca9e}
+.skills-summary-tile:nth-child(4){border-top:3px solid #c39bdc}
+.skills-summary-tile:first-child{border-top:3px solid #deb56e}
+.skills-summary-tile small{display:block;color:#d8c4a0;font-size:11px;margin-bottom:6px}
+.skills-summary-tile strong{display:block;font-size:clamp(17px,2vw,25px);font-weight:850;color:#f8e8c9;overflow-wrap:anywhere;font-variant-numeric:tabular-nums;line-height:1.18}
+.skills-summary-tile span{display:block;color:#b4a48f;font-size:10px;margin-top:5px}
+.skills-overall-progress{background:#25221f;border:1px solid #665136;border-radius:10px;padding:12px;margin-bottom:17px}
+.skills-overall-progress .between{gap:9px}
+.skills-overall-progress .between strong{color:#f4dcad}
+.skills-overall-progress .xpbar{height:10px;background:#141619;border:1px solid #5c4832;margin-top:10px}
+.skills-overall-progress .fill{background:linear-gradient(90deg,#d8a85c,#93d49a,#9dc8ee)}
+.skills-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}
+.skills-filters{display:flex;gap:5px;flex-wrap:wrap}
+.skills-filters button{font-size:11px;padding:7px 10px;background:#342d26;border-color:#776044;color:#e6d0a7}
+.skills-filters button.selected{background:#756044!important;color:#fff0cc!important;border-color:#dcb372!important}
+.skills-toolbar label{display:flex;align-items:center;gap:7px;color:#dcc49e;font-size:11px}
+.skills-toolbar select{background:#342d26;color:#f4e2bf;border-color:#826440;padding:7px 8px;border-radius:8px;max-width:190px}
+.skills-ledger{display:grid;gap:7px}
+.skills-ledger-row{display:grid;grid-template-columns:minmax(115px,1.05fr) minmax(0,2fr) auto;gap:12px;align-items:center;min-width:0;background:linear-gradient(135deg,#322a23,#242426);border:1px solid #665337;border-radius:10px;padding:11px 12px}
+.skills-ledger-row.is-max{border-color:#ae9158;background:linear-gradient(135deg,#403426,#262824)}
+.skills-ledger-row.is-active{box-shadow:inset 3px 0 #89d1aa}
+.skills-ledger-identity{display:flex;align-items:center;gap:9px;min-width:0}
+.skills-ledger-icon{display:grid;place-items:center;background:#55432e;border:1px solid #826541;border-radius:8px;width:35px;height:35px;flex:none;font-size:21px}
+.skills-ledger-identity strong{color:#f9e8c7;font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skills-ledger-identity small{color:#c5ad87;font-size:11px;display:block;margin-top:3px}
+.skills-ledger-level{font-variant-numeric:tabular-nums;color:#e7c887;font-weight:800}
+.skills-ledger-stats{min-width:0}
+.skills-ledger-numbers{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#f1e1c4;font-size:11px}
+.skills-ledger-numbers span:last-child{color:#c5b49a;font-size:10px;text-align:right}
+.skills-ledger-row .xpbar{height:7px;margin:7px 0;background:#151b20;border:1px solid #514c46}
+.skills-ledger-row .fill{background:linear-gradient(90deg,#7291cd,#83dbb6)}
+.skills-ledger-bottom{display:flex;justify-content:space-between;gap:8px;color:#b3a58c;font-size:10px}
+.skills-ledger-row button{padding:7px 9px;white-space:nowrap;font-size:11px;background:#4c5b50;border-color:#779476;color:#f4f4da}
+.skills-ledger-row button:hover:not(:disabled){background:#627665;border-color:#a1c79d}
+.skills-ledger-note{font-size:11px;color:#bca786;line-height:1.5;margin-top:14px}
+@media(max-width:1150px){.skills-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.skills-ledger-row{grid-template-columns:minmax(105px,1fr) minmax(0,1.7fr) auto;gap:8px;padding:10px}}
+@media(max-width:650px){.skills-ledger-row{grid-template-columns:minmax(0,1fr) auto;row-gap:8px;padding:10px}.skills-ledger-stats{grid-row:2;grid-column:1/-1}.skills-ledger-row button{grid-column:2;grid-row:1}.skills-summary-tile{padding:11px 9px}.skills-summary-tile strong{font-size:18px}.skills-toolbar select{max-width:155px}}
+
+
+/* v3.17 — UX overhaul based on clear skill navigation, focused action cards and quick access */
+:root{--ux-border:#806749;--ux-paper:#e7d2ad;--ux-muted:#c5b69c;--ux-green:#7dc5a1}
+.nav{gap:9px}
+.nav-search-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#dac08c;font-weight:800;padding:0 2px}
+#navSearch{display:block;width:100%;min-width:0;background:#2b2722;color:#f3e6cc;border:1px solid #836744;outline-offset:2px;border-radius:9px;padding:9px 10px;font-size:12px}
+#navSearch::placeholder{color:#b1a18a}
+.nav-group{background:#201e1a;border:1px solid #574630;border-radius:11px;overflow:hidden}
+.nav .nav-group-toggle{width:100%;min-height:37px;padding:9px 10px;background:linear-gradient(180deg,#382d21,#2b251d);border:none;border-bottom:1px solid #4f402e;border-radius:0;color:#f0dcb5;text-align:left;display:flex;justify-content:space-between;font-size:12px;font-weight:800;box-shadow:none}
+.nav .nav-group-toggle:hover:not(:disabled){background:#49392a;border-color:#806343}
+.nav-group-items{display:grid;gap:2px;padding:6px}
+.nav-group-items[hidden]{display:none}
+.nav .nav-group-items button{padding:7px 8px;border-radius:7px;background:#302b25;color:#e9d6b2;border-color:transparent;box-shadow:none;text-align:left;font-size:12px;min-width:0}
+.nav .nav-group-items button:hover:not(:disabled){background:#443a2e;border-color:#95754d}
+.nav .nav-group-items button.selected{background:linear-gradient(90deg,#6c5537,#47382a)!important;border-color:#b38a4f!important;box-shadow:inset 3px 0 #e9c77a}
+.nav .nav-group-items button.selected,.nav .nav-group-items button.selected *{color:#fff4dd!important}
+.nav .nav-group-items button small{color:#b9a98e;white-space:nowrap;font-size:10px}
+.nav .nav-group-items button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quick-nav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 15px;padding:0 0 11px;border-bottom:1px solid #70563878}
+.quick-nav button{font-size:11px;padding:7px 10px;background:#282722;color:#dfcba7;border:1px solid #65533b;border-radius:8px;box-shadow:none;font-weight:750}
+.quick-nav button:hover:not(:disabled){background:#433528;border-color:#b18b50}
+.quick-nav button.selected{color:#ffebc2!important;background:#56422c!important;border-color:#e0b96a!important}
+.quick-nav #quickReady{color:#9ce1ae;font-weight:800}
+.skill-toolbar{display:flex;gap:9px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 11px;background:#25241f;border:1px solid #65533a;border-radius:11px;margin:12px 0 5px}
+.skill-search-box{display:flex;align-items:center;gap:8px;min-width:160px;flex:1;color:#d8c398;font-size:14px}
+.skill-search-box input{background:#171d20;color:#f1e4c8;border:1px solid #776143;border-radius:8px;padding:9px 10px;min-width:110px;width:100%;font-size:12px}
+.skill-search-box input::placeholder{color:#a7a9a5}
+.skill-filter-modes{display:flex;gap:4px;flex-wrap:wrap}
+.skill-filter-modes button{font-size:11px;padding:8px 10px;background:#373127;color:#decaa8;border-color:#70593e}
+.skill-filter-modes button.selected{background:#627551!important;color:#f7ffed!important;border-color:#a5ca86!important}
+.skill-count-line{padding-left:3px;font-size:11px}
+.perk-status{display:inline-block;padding:8px 10px;border-radius:8px;border:1px solid #5d9477;background:linear-gradient(95deg,#213b2d,#22281d);color:#bceabd;font-size:12px;font-weight:700;margin-top:9px}
+.recipe-card[hidden]{display:none!important}
+.skill-cards{gap:9px}
+.recipe-card{padding:11px;gap:6px;transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.recipe-card:hover{border-color:#b08c59;box-shadow:0 4px 14px #0003}
+.recipe-card .recipe-title{font-size:13px;line-height:1.35}
+.recipe-card .recipe-detail{font-size:11px}
+.recipe-card .recipe-stock{padding:7px 8px;gap:4px}
+.recipe-card .recipe-bottom{margin-top:auto}
+.recipe-card .recipe-bottom button{background:linear-gradient(180deg,#4a7964,#2f5849);border-color:#7fb79a;color:#f0ffee}
+.recipe-card .recipe-bottom button:hover:not(:disabled){background:linear-gradient(180deg,#63927b,#376b57)}
+.recipe-card .recipe-bottom button:disabled{background:#3d3932;color:#b9aa96;border-color:#655744}
+.journal-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:12px 0}
+.journal-toolbar .journal-filter{margin:0;flex:1}
+.claim-ready-button{padding:9px 13px;font-size:12px;font-weight:800;background:linear-gradient(180deg,#47765b,#315b47);border:1px solid #85b79a;color:#e6ffeb}
+.claim-ready-button:hover:not(:disabled){background:#528b68;border-color:#b1ddb3}
+.quest-reward.perk{border-color:#6ba184;background:#1d3328;color:#bbefc3}
+.quest-reward.cosmetic{border-color:#b59a54;background:#382e1b;color:#ffdd98}
+.journal-card.quest-ready{background:linear-gradient(155deg,#2a382b,#1f2724);border-color:#76c196;box-shadow:inset 3px 0 #81d2a4}
+.journal-card.quest-ready .recipe-bottom button{background:#4c8763;border-color:#83c5a1;color:#fff}
+.journal-card .quest-progress-bar{height:8px}
+#activityPanel{border-radius:8px}
+.stat{font-variant-numeric:tabular-nums}
+@media(max-width:1150px){.quick-nav{gap:4px}.quick-nav button{padding:6px 8px}.skill-toolbar{align-items:stretch}.skill-search-box{flex-basis:100%}}
+@media(max-width:920px){.quick-nav{flex-wrap:nowrap;overflow:auto;scrollbar-width:none;padding-bottom:9px}.quick-nav button{white-space:nowrap;flex:none}.left{max-height:none}}
+@media(max-width:650px){.quick-nav{margin-bottom:9px;gap:4px}.quick-nav button{font-size:11px;padding:7px 9px}.skill-filter-modes{width:100%}.skill-filter-modes button{flex:1}.skill-toolbar{padding:8px}.journal-toolbar .journal-filter{flex-basis:100%}.claim-ready-button{width:100%}.recipe-card{padding:10px}.skill-count-line{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.recipe-card{transition:none}}
+
+
+.mastery-titles{padding:10px 12px;background:linear-gradient(110deg,#382e1e,#2c2524);border:1px solid #b49a5c;border-radius:9px;color:#f7dd9d;margin:10px 0;font-size:12px}
+.mastery-titles>strong{display:block;margin-bottom:7px}
+.mastery-titles>div{display:flex;flex-wrap:wrap;gap:6px}
+.mastery-title{padding:4px 8px;border-radius:7px;border:1px solid #b79a52;background:#574425;color:#ffe4a3;font-weight:700}
+
+.journal-summary-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:4px 0 8px}
+.journal-summary-mini>div{padding:9px 10px;background:#212c29;border:1px solid #5c775d;border-radius:9px;min-width:0}
+.journal-summary-mini>div:nth-child(2){background:#2d2922;border-color:#7e6544}
+.journal-summary-mini>div:nth-child(3){background:#232b35;border-color:#57758b}
+.journal-summary-mini small{display:block;font-size:10px;color:#ddc8a5;margin-bottom:4px}
+.journal-summary-mini strong{color:#f2e7cf;font-size:17px;font-variant-numeric:tabular-nums}
+.journal-extra-stats{font-size:11px;color:#c6b99c;padding:5px 1px 9px}
+.journal-extra-stats summary{cursor:pointer;font-weight:700;color:#bdcca6}
+.journal-extra-stats span{display:inline-block;padding:7px 10px;margin-top:5px;margin-right:5px;border:1px solid #6c593f;border-radius:8px}
+@media(max-width:650px){.journal-summary-mini{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.journal-summary-mini>div{padding:8px 6px}.journal-summary-mini small{font-size:9px}.journal-summary-mini strong{font-size:14px}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.15 · Deep Mountain Expedition</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.17 · Quality of Life</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
-<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><div id="main"></div></main>
+<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
+<button type="button" data-nav="skills">📊 Skills</button><button type="button" data-nav="combat">⚔️ Combat</button><button type="button" data-nav="raid">⛰️ Raid</button><button type="button" data-nav="bank">🏦 Bank</button><button type="button" data-nav="journal">📜 Journal <span id="quickReady"></span></button>
+</nav><div id="main"></div></main>
 <aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
 </div><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.15 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.17 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -1187,6 +1308,64 @@ for(const [chain,ids] of Object.entries(JOURNAL_OTHER_CHAINS)){
   quest.text=`Complete ${fmtQuestTarget(quest.target)} ${chain==='combat-kills'?'monster kills':'skill actions'} in total`;
  });
 }
+// Beyond the original XP tiers, mastery continues up to TEN MILLION lifetime actions.
+// These later rewards grant Coins + permanent perks, but NO instant XP.
+// Perks are derived from claimed quest IDs, keeping old saves compatible.
+const ENDGAME_TIER_TARGETS=[250000,500000,1000000,2000000,5000000,10000000];
+const PERK_STAGE_VALUES=[.01,.02,.01,.03,.02,.05];
+for(const [chain,quests] of Object.entries(QUESTS.filter(q=>q.chain).reduce((out,q)=>{(out[q.chain]??=[]).push(q);return out},{}))){
+ const last=quests.reduce((a,b)=>a.target>b.target?a:b);
+ const progress=last.progressSource||last.progress;
+ const units=chain==='combat-kills'?'monster kills':chain==='all-actions'?'skill actions':(JOURNAL_ACTION_LABELS[chain.slice(6)]||['','actions'])[1];
+ const skill=chain.startsWith('skill-')?chain.slice(6):null;
+ let nextTier=Math.max(...quests.map(q=>q.tier));
+ for(const target of ENDGAME_TIER_TARGETS){
+  if(quests.some(q=>q.target===target))continue;
+  const rank=ENDGAME_TIER_TARGETS.indexOf(target),value=PERK_STAGE_VALUES[rank];
+  const perk=skill?( ['woodcutting','fishing','mining','agriculture'].includes(skill) && [1,3,5].includes(rank)
+   ?{type:'gatherYield',skill,value}
+   :{type:'skillSpeed',skill,value:Math.min(value,.02)} ):
+   chain==='combat-kills'?{type:'combatPower',value:.01}:
+   {type:'globalXp',value:.005};
+  const coins=Math.round((target/1000)**.75*750);
+  const q=tierMilestone('mastery-'+chain+'-'+target,last.title,
+   'Complete '+fmtQuestTarget(target)+' '+units+' in total',last.category,
+   progress,target,coins,{}, {},chain,++nextTier);
+  q.perk=perk;
+  if(target===10000000)q.cosmetic='Grandmaster '+(skill?labelSkillForQuest(skill):chain==='combat-kills'?'Slayer':'Adventurer');
+  QUESTS.push(q);
+ }
+}
+function permanentBonuses(){
+ if(permanentBonuses.cache?.list===state.claimed && permanentBonuses.cache.length===state.claimed.length)return permanentBonuses.cache.result;
+ const result={skills:{},yields:{},combatPower:0,globalXp:0,titles:[]};
+ const claimed=new Set(state.claimed);
+ for(const q of QUESTS){if(!claimed.has(q.id))continue;
+  const perk=q.perk;
+  if(perk){if(perk.type==='skillSpeed')result.skills[perk.skill]=(result.skills[perk.skill]||0)+perk.value;
+   else if(perk.type==='gatherYield')result.yields[perk.skill]=(result.yields[perk.skill]||0)+perk.value;
+   else if(perk.type==='combatPower')result.combatPower+=perk.value;
+   else if(perk.type==='globalXp')result.globalXp+=perk.value;
+  }
+  if(q.cosmetic)result.titles.push(q.cosmetic);
+ }
+ permanentBonuses.cache={list:state.claimed,length:state.claimed.length,result};
+ return result;
+}
+function actionDurationMs(){
+ const base=Math.max(100,Number(state.actionMs)||GAME_CONFIG.actionMs);
+ if(state.active?.type!=='skill')return base;
+ const perks=permanentBonuses();
+ const haste=Math.min(.25,(perks.skills[state.active.skill]||0));
+ return Math.max(100,base*(1-haste));
+}
+function perkDescription(perk){
+ if(!perk)return '';
+ if(perk.type==='skillSpeed')return `Permanent ${(perk.value*100).toFixed(0)}% faster ${label(perk.skill)} actions`;
+ if(perk.type==='gatherYield')return `Permanent +${(perk.value*100).toFixed(0)}% extra ${label(perk.skill)} resources`;
+ if(perk.type==='combatPower')return `Permanent +${(perk.value*100).toFixed(0)}% melee / ranged / magic power`;
+ return `Permanent +${(perk.value*100).toFixed(1)}% global skill XP`;
+}
 const JOURNAL_CHAINS={};
 for(const q of QUESTS)if(q.chain)(JOURNAL_CHAINS[q.chain]??=[]).push(q);
 for(const chain of Object.values(JOURNAL_CHAINS))chain.sort((a,b)=>a.tier-b.tier);
@@ -1399,7 +1578,7 @@ function newGame(){return {
  log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={view:'combat',skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null};
+const ui={view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRowsDesktop:6,maxRowsMobile:3};
@@ -1591,6 +1770,12 @@ function gearMods(){
  const mods={attackPct:0,strengthPct:0,defencePct:0,rangedPct:0,magicPct:0,rangedAccuracy:0,rangedPower:0,magicAccuracy:0,magicPower:0,xpBonus:0,luckBonus:0,soulDropBonus:0,gatherBonus:0,woodcuttingYield:0,miningYield:0,fishingYield:0,agricultureYield:0,
  fletchingXpBonus:0,craftingXpBonus:0,smithingXpBonus:0,alchemyXpBonus:0,enchantingXpBonus:0,miningXpBonus:0,defence:0,block:0,attack:0,strength:0};
  for(const name of Object.values(state.equipment)){const piece=EQUIPMENT[name]||{};for(const key of Object.keys(mods))mods[key]+=Number(piece[key]||0)}
+ const perks=permanentBonuses();
+ mods.xpBonus+=perks.globalXp;
+ mods.strengthPct+=perks.combatPower;
+ mods.rangedPct+=perks.combatPower;
+ mods.magicPct+=perks.combatPower;
+ for(const [skill,bonus] of Object.entries(perks.yields))mods[skill+'Yield']=(mods[skill+'Yield']||0)+bonus;
  for(const buff of Object.values(state.buffs||{})){
   if(buff?.until>gameNow()&&buff.effects)for(const [key,value] of Object.entries(buff.effects))mods[key]=(mods[key]||0)+Number(value||0);
  }
@@ -1941,6 +2126,8 @@ function questRewardSummary(quest){
  if(quest.coins>0)parts.push(`+${fmt(quest.coins)} Coins`);
  for(const [skill,n] of Object.entries(quest.xp||{}))if(n>0)parts.push(`+${fmt(n)} ${label(skill)} XP`);
  for(const [item,n] of Object.entries(quest.items||{}))if(n>0)parts.push(`+${fmt(n)} ${item}`);
+ if(quest.perk)parts.push(perkDescription(quest.perk));
+ if(quest.cosmetic)parts.push('Title: '+quest.cosmetic);
  return parts.join(' · ');
 }
 function claimQuest(id){
@@ -1972,22 +2159,148 @@ function claimQuest(id){
  refreshDynamic(); // Journal redraw removes claimed card immediately.
  save();
 }
+// Overview uses the same XP thresholds and saved XP as each individual skill.
+const allSkillKeys=()=>Object.keys(SKILLS);
+const totalSkillXp=()=>allSkillKeys().reduce((sum,skill)=>sum+Math.max(0,Number(state.xp[skill])||0),0);
+const totalSkillLevel=()=>allSkillKeys().reduce((sum,skill)=>sum+levelFromXp(state.xp[skill]||0),0);
+const maxedSkillCount=()=>allSkillKeys().filter(skill=>levelFromXp(state.xp[skill]||0)>=XP_CONFIG.maxLevel).length;
+const skillXpPercent=()=>{
+ const maximum=xpForLevel(XP_CONFIG.maxLevel)*allSkillKeys().length;
+ const progress=allSkillKeys().reduce((sum,skill)=>sum+Math.min(xpForLevel(XP_CONFIG.maxLevel),Math.max(0,Number(state.xp[skill])||0)),0);
+ return maximum?clamp(100*progress/maximum,0,100):100;
+};
+const skillLedgerData=skill=>{
+ const xp=Math.max(0,Number(state.xp[skill])||0),level=levelFromXp(xp),max=level>=XP_CONFIG.maxLevel;
+ return {skill,xp,level,max,needed: max?0:Math.max(0,xpForLevel(level+1)-xp),toMax:Math.max(0,xpForLevel(XP_CONFIG.maxLevel)-xp),progress:max?100:clamp((xp-xpForLevel(level))/(xpForLevel(level+1)-xpForLevel(level))*100,0,100)};
+};
+function visibleSkillLedger(){
+ return allSkillKeys().map(skillLedgerData).filter(r=>{
+  if(ui.skillsFilter==='Combat')return !!SKILLS[r.skill].combat;
+  if(ui.skillsFilter==='Gathering & Crafting')return !SKILLS[r.skill].combat;
+  if(ui.skillsFilter==='Level 99')return r.max;
+  return true;
+ }).sort((a,b)=>{
+  switch(ui.skillsSort){
+   case 'xp':return b.xp-a.xp||a.skill.localeCompare(b.skill);
+   case 'name':return label(a.skill).localeCompare(label(b.skill),'en');
+   case 'remaining':return a.toMax-b.toMax||b.level-a.level;
+   default:return b.level-a.level||b.xp-a.xp||a.skill.localeCompare(b.skill);
+  }
+ });
+}
+function skillLedgerRow(r){
+ const combat=!!SKILLS[r.skill].combat;
+ const active=state.active?.type==='skill'&&state.active.skill===r.skill||
+  (combat&&(state.active?.type==='combat'||state.active?.type==='raid')&&(r.skill===state.combatStyle||r.skill==='hitpoints'));
+ return `<article class="skills-ledger-row ${r.max?'is-max':''} ${active?'is-active':''}" data-ledger-skill="${esc(r.skill)}">
+  <div class="skills-ledger-identity"><span class="skills-ledger-icon" aria-hidden="true">${SKILLS[r.skill].icon}</span><div style="min-width:0"><strong>${esc(label(r.skill))}</strong><small><span class="skills-ledger-level" data-ledger-level>Lv ${r.level}</span> / ${XP_CONFIG.maxLevel}${r.max?' ★':''}</small></div></div>
+  <div class="skills-ledger-stats"><div class="skills-ledger-numbers"><b data-ledger-xp>${fmt(r.xp)} XP</b><span data-ledger-next>${r.max?'MAX LEVEL':fmt(r.needed)+' XP to next'}</span></div>
+   <div class="xpbar" role="progressbar" aria-label="${esc(label(r.skill))} progress to next level" aria-valuenow="${Math.round(r.progress)}" aria-valuemin="0" aria-valuemax="100"><div class="fill" data-ledger-fill style="width:${r.progress.toFixed(2)}%"></div></div>
+   <div class="skills-ledger-bottom"><span data-ledger-pct>${Math.floor(r.progress)}% to ${r.max?'max level':'next level'}</span><span data-ledger-max>${r.max?'Mastered ★':fmt(r.toMax)+' XP until 99'}</span></div></div>
+  <button type="button" data-skill-open="${esc(r.skill)}" aria-label="Open ${esc(label(r.skill))}">Train ↗</button></article>`;
+}
+function skillsOverviewSummary(){
+ const n=allSkillKeys().length,max=XP_CONFIG.maxLevel,total=totalSkillLevel();
+ return `<div class="skills-summary">
+  <div class="skills-summary-tile"><small>⭐ Total Level</small><strong id="skillsTotalLevel">${fmt(total)} / ${fmt(n*max)}</strong><span id="skillsGained">${fmt(total-n)} levels gained</span></div>
+  <div class="skills-summary-tile"><small>✨ Total XP earned</small><strong id="skillsTotalXp">${fmt(totalSkillXp())}</strong><span>Across all ${n} skills</span></div>
+  <div class="skills-summary-tile"><small>🏆 Level 99 skills</small><strong id="skillsMaxed">${maxedSkillCount()} / ${n}</strong><span>Mastered skills</span></div>
+  <div class="skills-summary-tile"><small>⚔️ Combat Level</small><strong id="skillsCombatLevel">${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</strong><span>Separate from Total Level</span></div>
+ </div><div class="skills-overall-progress"><div class="between"><strong>Overall XP completion</strong><span class="small" id="skillsOverallPercent">${skillXpPercent().toFixed(2)}%</span></div>
+ <div class="xpbar" role="progressbar" aria-label="Overall XP completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(skillXpPercent())}"><div class="fill" id="skillsOverallFill" style="width:${skillXpPercent().toFixed(3)}%"></div></div>
+ <div class="small subdued" style="margin-top:7px">Progress toward 50,000,000 XP in each skill. Extra XP after 99 counts toward total earned XP, but not completion.</div></div>`;
+}
+function renderSkillsOverview(){
+ const filters=['All','Combat','Gathering & Crafting','Level 99'];
+ el('main').innerHTML=`<section class="skills-overview"><div class="heading"><div><div class="eyebrow">Adventurer's record</div><h2>📊 Skills Overview</h2><p class="section-description">Your levels, lifetime XP and progress in every skill. Select any skill to open its training screen.</p></div><span class="recipe-badge level">${allSkillKeys().length} Skills</span></div>
+ ${skillsOverviewSummary()}
+ ${permanentBonuses().titles.length?`<div class="mastery-titles"><strong>🏅 Grandmaster titles earned</strong><div>${permanentBonuses().titles.map(title=>`<span class="mastery-title">✦ ${esc(title)}</span>`).join('')}</div></div>`:''}
+ <div class="skills-toolbar"><div class="skills-filters">${filters.map(f=>`<button type="button" data-skills-filter="${esc(f)}" class="${ui.skillsFilter===f?'selected':''}">${f==='Level 99'?'🏆 ':''}${esc(f)}</button>`).join('')}</div>
+ <label>Sort by <select data-skills-sort aria-label="Sort skills">${[['level','Highest level'],['xp','Most XP'],['remaining','Closest to 99'],['name','Alphabetical']].map(([v,name])=>`<option value="${v}" ${v===ui.skillsSort?'selected':''}>${name}</option>`).join('')}</select></label></div>
+ <div class="skills-ledger" id="skillsLedger">${visibleSkillLedger().map(skillLedgerRow).join('')||'<p class="subdued small">No skills match this filter yet.</p>'}</div>
+ <p class="skills-ledger-note">Total Level sums every individual skill level (including Attack, Strength, Defence, Hitpoints, Ranged and Magic). Combat Level is calculated separately. Your progress and XP update while skilling, including offline rewards.</p>
+ </section>`;
+}
+function refreshSkillsOverview(){
+ if(ui.view!=='skills'||!el('skillsLedger'))return;
+ const n=allSkillKeys().length;
+ if(el('skillsTotalLevel'))el('skillsTotalLevel').textContent=`${fmt(totalSkillLevel())} / ${fmt(n*XP_CONFIG.maxLevel)}`;
+ if(el('skillsTotalXp'))el('skillsTotalXp').textContent=fmt(totalSkillXp());
+ if(el('skillsGained'))el('skillsGained').textContent=fmt(totalSkillLevel()-n)+' levels gained';
+ if(el('skillsMaxed'))el('skillsMaxed').textContent=`${maxedSkillCount()} / ${n}`;
+ if(el('skillsCombatLevel'))el('skillsCombatLevel').textContent=`${combatLevel()} / ${COMBAT_CONFIG.maxLevel}`;
+ const percent=skillXpPercent();
+ if(el('skillsOverallPercent'))el('skillsOverallPercent').textContent=percent.toFixed(2)+'%';
+ if(el('skillsOverallFill'))el('skillsOverallFill').style.width=percent.toFixed(3)+'%';
+ const overallBar=el('skillsOverallFill')?.parentElement;
+ if(overallBar)overallBar.setAttribute('aria-valuenow',String(Math.round(percent)));
+ const ledger=el('skillsLedger'),visible=visibleSkillLedger();
+ // Update existing nodes instead of rebuilding the whole page every game tick.
+ // Reordering nodes when a level changes keeps "highest level" and "most XP" accurate.
+ const existing=new Map([...ledger.querySelectorAll('[data-ledger-skill]')].map(node=>[node.dataset.ledgerSkill,node]));
+ if(!visible.length){ledger.innerHTML='<p class="subdued small">No skills match this filter yet.</p>';return;}
+ if(existing.size!==visible.length||visible.some(r=>!existing.has(r.skill))){ledger.innerHTML=visible.map(skillLedgerRow).join('');return;}
+ for(const [index,r] of visible.entries()){
+  const node=existing.get(r.skill);
+  node.classList.toggle('is-max',r.max);
+  const active=state.active?.type==='skill'&&state.active.skill===r.skill||
+   (SKILLS[r.skill].combat&&(state.active?.type==='combat'||state.active?.type==='raid')&&(r.skill===state.combatStyle||r.skill==='hitpoints'));
+  node.classList.toggle('is-active',!!active);
+  node.querySelector('[data-ledger-level]').textContent='Lv '+r.level;
+  node.querySelector('[data-ledger-xp]').textContent=fmt(r.xp)+' XP';
+  node.querySelector('[data-ledger-next]').textContent=r.max?'MAX LEVEL':fmt(r.needed)+' XP to next';
+  node.querySelector('[data-ledger-pct]').textContent=Math.floor(r.progress)+'% to '+(r.max?'max level':'next level');
+  node.querySelector('[data-ledger-max]').textContent=r.max?'Mastered ★':fmt(r.toMax)+' XP until 99';
+  node.querySelector('[data-ledger-fill]').style.width=r.progress.toFixed(2)+'%';
+  node.querySelector('.xpbar').setAttribute('aria-valuenow',String(Math.round(r.progress)));
+  if(ledger.children[index]!==node)ledger.insertBefore(node,ledger.children[index]||null);
+ }
+}
 // ── Presentation / navigation ─────────────────────────────────────────────────
-const NAV_VIEWS=['combat','raid',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
-const NAV_META={combat:['⚔️','Combat'],raid:['⛰️','Raid'],bank:['🏦','Bank'],shop:['🛒','Shop'],journal:['📜','Journal']};
+const NAV_VIEWS=['skills','combat','raid',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
+const NAV_META={skills:['📊','Skills Overview'],combat:['⚔️','Combat'],raid:['⛰️','Raid'],bank:['🏦','Bank'],shop:['🛒','Shop'],journal:['📜','Journal']};
 function viewLabel(v){return NAV_META[v]?.[1]||label(v)}
 function navIcon(v){return NAV_META[v]?.[0]||SKILLS[v]?.icon||'🔹'}
+function journalReadyCount(){return QUESTS.filter(q=>!state.claimed.includes(q.id)&&journalTierUnlocked(q,state)&&q.test(state)).length}
+const NAV_GROUPS=[
+ {id:'adventure',label:'Adventure',icon:'🧭',views:['skills','combat','raid']},
+ {id:'gathering',label:'Gathering',icon:'🌲',views:['agriculture','fishing','mining','woodcutting']},
+ {id:'production',label:'Crafting & Production',icon:'⚒️',views:['alchemy','cooking','crafting','enchanting','fletching','smithing']},
+ {id:'goals',label:'Items & Goals',icon:'🎒',views:['bank','shop','journal']}
+];
+function navLevelText(v){
+ return v==='skills'?'Lv '+totalSkillLevel():v==='combat'?'Lv '+combatLevel():
+ v==='raid'?'Wave '+(raidState().wave+1):SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):
+ v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':
+ v==='journal'&&journalReadyCount()?'🎁 '+journalReadyCount():'';
+}
 function renderNav(){
- el('nav').innerHTML=`<div class="nav-divider">Adventure</div>`+NAV_VIEWS.map((v,i)=>
- `${i===2?'<div class="nav-divider">Skills</div>':''}${v==='bank'?'<div class="nav-divider">Inventory & Goals</div>':''}
- <button class="${ui.view===v?'selected':''}" data-nav="${esc(v)}"><span>${navIcon(v)} ${viewLabel(v)}</span><small data-nav-lvl="${esc(v)}">${v==='combat'?'Lv '+combatLevel():v==='raid'?'Wave '+(raidState().wave+1):SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':''}</small></button>`).join('');
+ const query=ui.navSearch.toLowerCase().trim();
+ const groupHtml=NAV_GROUPS.map(group=>{
+  const views=group.views.filter(v=>NAV_VIEWS.includes(v));
+  const matches=views.filter(v=>!query||(viewLabel(v)+' '+group.label).toLowerCase().includes(query));
+  if(query&&!matches.length)return '';
+  const expanded=!!ui.navGroups[group.id]||!!query;
+  return `<section class="nav-group" data-nav-group-wrap="${group.id}">
+   <button type="button" class="nav-group-toggle" data-nav-group="${group.id}" aria-expanded="${expanded}"><span>${group.icon} ${group.label}</span><span aria-hidden="true">${expanded?'▾':'▸'}</span></button>
+   <div class="nav-group-items" ${expanded?'':'hidden'}>${matches.map(v=>`<button class="${ui.view===v?'selected':''}" data-nav="${esc(v)}" ${ui.view===v?'aria-current="page"':''}><span>${navIcon(v)} ${viewLabel(v)}</span><small data-nav-lvl="${esc(v)}">${navLevelText(v)}</small></button>`).join('')}</div></section>`;
+ }).join('');
+ el('nav').innerHTML=`<label class="nav-search-label" for="navSearch">Find a skill or menu</label><input type="search" id="navSearch" autocomplete="off" placeholder="🔎 Search skills…" aria-label="Search navigation" value="${esc(ui.navSearch)}">`+(groupHtml||'<p class="small subdued">No matching skills.</p>');
  const select=el('mobileSelect');select.innerHTML=NAV_VIEWS.map(v=>`<option value="${v}">${navIcon(v)} ${viewLabel(v)}</option>`).join('');select.value=ui.view;
+ updateQuickNav();
+}
+function updateQuickNav(){
+ const root=el('quickNav');if(!root)return;
+ for(const button of root.querySelectorAll('[data-nav]')){
+  const active=button.dataset.nav===ui.view;
+  button.classList.toggle('selected',active);
+  if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+ }
+ const ready=el('quickReady');if(ready)ready.textContent=journalReadyCount()?'· '+journalReadyCount():'';
 }
 function refreshNavLevels(){
- for(const node of document.querySelectorAll('[data-nav-lvl]')){
-  const v=node.dataset.navLvl;
-  node.textContent=v==='combat'?'Lv '+combatLevel():v==='raid'?'Wave '+(raidState().wave+1):SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':'';
- }
+ for(const node of document.querySelectorAll('[data-nav-lvl]'))node.textContent=navLevelText(node.dataset.navLvl);
+ updateQuickNav();
 }
 function navigate(view){if(!NAV_VIEWS.includes(view))return;ui.view=view;renderNav();renderMain();refreshDynamic()}
 function xpText(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return `Level ${lvl} · ${fmt(xp)} XP${lvl>=99?' · MAX LEVEL':' · '+fmt(xpForLevel(lvl+1)-xp)+' to next level'}`}
@@ -2030,6 +2343,11 @@ function renderSkillMain(skill){
  ui.skillTab[skill]??='All';
  let chosen=ui.skillTab[skill];if(chosen!=='All'&&!categories.includes(chosen)){chosen='All';ui.skillTab[skill]='All'}
  let html=`<div class="heading"><div><div class="eyebrow">Skill training</div><h2>${def.icon} ${label(skill)}</h2><p class="section-description">${esc(def.description)}</p></div><span class="recipe-badge level">Max Lv 99</span></div>${xpStrip(skill)}`;
+ const boosts=permanentBonuses();
+ const speed=boosts.skills[skill]||0, yieldBoost=boosts.yields[skill]||0;
+ const skillTitle='Grandmaster '+labelSkillForQuest(skill);
+ if(boosts.titles.includes(skillTitle))html+=`<div class="mastery-titles">🏅 ${esc(skillTitle)} — 10,000,000 lifetime actions completed</div>`;
+ if(speed||yieldBoost)html+=`<div class="perk-status">🏅 Mastery perks: ${speed?`${(speed*100).toFixed(0)}% faster actions`:''}${speed&&yieldBoost?' · ':''}${yieldBoost?`+${(yieldBoost*100).toFixed(0)}% bonus resources`:''}</div>`;
  if(skill==='cooking')html+=renderFirePanel();
  if(skill==='enchanting'){
   const soulTotal=SOUL_GEMS.reduce((sum,x)=>sum+x.weight,0);
@@ -2037,10 +2355,32 @@ function renderSkillMain(skill){
  }
  if(skill==='fletching')html+=`<div class="info-box"><b>🏹 How Fletching connects to the world</b><p>Chop trees for logs, farm Flax for bowstrings, collect Feathers from Chickens, then smith Arrowheads into finished Arrows. Equip a Bow and select arrows in Combat to train Ranged. Each shot consumes one arrow.</p></div>`;
  if(categories.length>1)html+=`<div class="tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
- html+=`<p class="small subdued">${def.actions.length} available recipes and activities · Each action takes 1 second for testing · Items go straight to your bank.</p>`;
+ const skillSearch=ui.skillSearch[skill]||'';
+ const skillMode=ui.skillMode[skill]||'all';
+ html+=`<div class="skill-toolbar"><label class="skill-search-box">🔎 <input type="search" data-skill-search autocomplete="off" placeholder="Find a resource or recipe…" value="${esc(skillSearch)}" aria-label="Search ${esc(label(skill))} actions"></label>
+ <div class="skill-filter-modes" role="group" aria-label="Filter actions">${[['all','All'],['unlocked','Unlocked'],['craftable','Ready now']].map(([id,name])=>`<button type="button" data-skill-mode="${id}" class="${skillMode===id?'selected':''}">${name}</button>`).join('')}</div></div>
+ <p class="small subdued skill-count-line"><span id="skillVisibleCount">${def.actions.length}</span> actions shown · Ordered by level · Current action: ${Math.round(actionDurationMs())} ms${skill==='cooking'?' · Fire relights automatically':''}</p>`;
  const actions=def.actions.map((a,i)=>({a,i})).filter(({a})=>chosen==='All'||a.category===chosen).sort((x,y)=>x.a.level-y.a.level||x.a.name.localeCompare(y.a.name,'en'));
  html+=`<div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div>`;
  el('main').innerHTML=html;
+ filterRecipeCards();
+}
+function filterRecipeCards(){
+ const skill=ui.view;
+ if(!SKILLS[skill]||SKILLS[skill].combat)return;
+ const query=(ui.skillSearch[skill]||'').trim().toLowerCase();
+ const mode=ui.skillMode[skill]||'all';
+ let n=0;
+ for(const card of el('main').querySelectorAll('[data-recipe]')){
+  const a=SKILLS[skill].actions[Number(card.dataset.recipe)];
+  const level=levelFromXp(state.xp[skill]||0);
+  const unlocked=level>=a.level;
+  const ready=unlocked&&canPay(a.cost)&&(!a.requiresFire||fireBurning()||nextAutoFuel());
+  const labelText=[a.name,a.output,a.category,...Object.keys(a.cost||{})].join(' ').toLowerCase();
+  card.hidden=!!(query&&!labelText.includes(query) || mode==='unlocked'&&!unlocked || mode==='craftable'&&!ready);
+  if(!card.hidden)n++;
+ }
+ const countEl=el('skillVisibleCount');if(countEl)countEl.textContent=String(n);
 }
 
 function raidPanelHtml(){
@@ -2194,6 +2534,7 @@ function renderSkillLive(){
   if(req)req.innerHTML=Object.entries(action.cost).map(([item,n])=>`<span class="ingredient ${count(item)<n?'missing':''}">${itemIcon(item)} ${esc(item)} ${fmt(count(item))}/${n}</span>`).join('');
  }
  if(ui.view==='cooking')updateFireUi();
+ filterRecipeCards();
 }
 // All items auto-sort into these folders until the player manually assigns them elsewhere.
 const BANK_DEFAULT_TABS=[
@@ -2427,26 +2768,29 @@ function questRewardHtml(quest){
  for(const [item,n] of Object.entries(quest.items||{}))if(n>0){
   html+=`<span class="quest-reward ${NONTRADEABLE_ITEMS.has(item)?'soul':''}">${esc(itemIcon(item))} ×${fmt(n)} ${esc(item)}${NONTRADEABLE_ITEMS.has(item)?' 🔒':''}</span>`;
  }
+ if(quest.perk)html+=`<span class="quest-reward perk">✦ ${esc(perkDescription(quest.perk))}</span>`;
+ if(quest.cosmetic)html+=`<span class="quest-reward cosmetic">🏅 ${esc(quest.cosmetic)} title</span>`;
  return html;
 }
 function renderJournalMain(){
  const claimed=new Set(state.claimed);
  const completed=QUESTS.filter(q=>claimed.has(q.id)).length;
- const available=QUESTS.filter(q=>!claimed.has(q.id));
+ const available=QUESTS.filter(q=>!claimed.has(q.id)&&journalTierUnlocked(q,state));
  const ready=available.filter(q=>q.test(state)).length;
  const categories=['All','Ready','Gathering','Production','Combat','Soulbound','Milestones'];
  if(!categories.includes(ui.journalCategory))ui.journalCategory='All';
  const visible=available.filter(q=>ui.journalCategory==='All'||
   (ui.journalCategory==='Ready'?q.test(state):q.category===ui.journalCategory))
   .sort((a,b)=>{
-   const rank=q=>q.test(state)?0:journalTierUnlocked(q,state)?1:2;
+   const rank=q=>q.test(state)?0:1;
    return rank(a)-rank(b);
   });
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Achievements · Tiered challenges</div><h2>📜 Adventurer's Journal</h2><p class="section-description">Claim Coins, XP, Soul Gems and supplies. Tiered challenges go up to 100,000 lifetime actions. Your actions count toward every tier, but only the current unlocked tier shows progress. Claimable rewards always appear at the top. Claim each tier in order to reveal the next one. Claimed quests disappear.</p></div><span class="recipe-badge level">${completed} / ${QUESTS.length} claimed</span></div>
- <div class="stat-grid"><div class="stat-tile"><small>Rewards ready</small><strong class="positive">🎁 ${ready}</strong></div><div class="stat-tile"><small>Quests remaining</small><strong>${available.length}</strong></div><div class="stat-tile"><small>Total skill actions</small><strong>${fmt(questTotalActions(state))}</strong></div><div class="stat-tile"><small>Monsters defeated</small><strong>${fmt(questTotalKills(state))}</strong></div><div class="stat-tile"><small>Soul Gems found</small><strong>${fmt(state.stats.soulsCollected||0)}</strong></div></div>
- <div class="journal-filter">${categories.map(cat=>`<button class="${ui.journalCategory===cat?'selected':''}" data-journal-category="${cat}">${cat==='Ready'?'🎁 Ready ('+ready+')':cat}</button>`).join('')}</div>
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Achievements · Tiered challenges</div><h2>📜 Adventurer's Journal</h2><p class="section-description">Only your current tier is shown. Lifetime actions count toward future tiers, up to 10 million. Claim rewards to reveal the next tier and earn permanent mastery perks.</p></div><span class="recipe-badge level">${completed} / ${QUESTS.length} claimed</span></div>
+ <div class="journal-summary-mini"><div><small>🎁 Rewards ready</small><strong class="positive">${ready}</strong></div><div><small>📜 Quests available</small><strong>${available.length}</strong></div><div><small>⚡ Lifetime actions</small><strong>${fmt(questTotalActions(state))}</strong></div></div><details class="journal-extra-stats"><summary>More journal statistics</summary><span>⚔️ ${fmt(questTotalKills(state))} monster kills</span><span>💠 ${fmt(state.stats.soulsCollected||0)} Soul Gems found</span><span>🏅 ${completed} claimed rewards</span></details>
+ <div class="journal-toolbar"><div class="journal-filter">${categories.map(cat=>`<button class="${ui.journalCategory===cat?'selected':''}" data-journal-category="${cat}">${cat==='Ready'?'🎁 Ready ('+ready+')':cat}</button>`).join('')}</div>
+ <button type="button" data-claim-ready class="claim-ready-button" ${ready?'':'disabled'}>🎁 Claim ${ready} ready</button></div>
  ${visible.length?`<div class="skill-cards">${visible.map(q=>{
-  const locked=!!q.chain&&!journalTierUnlocked(q,state);
+  const locked=false; // Locked quests are filtered out entirely.
   const isReady=!locked&&q.test(state),progress=journalQuestProgress(q,state);
   const goal=Math.max(1,Number(q.target||1));
   const fraction=clamp(progress/goal,0,1)*100;
@@ -2460,7 +2804,7 @@ function renderJournalMain(){
    ${q.chain?`<div class="journal-chain-note">${isReady?'Claim rewards to unlock the next tier.':'Earlier actions already count toward higher tiers.'}</div>`:''}` }
    <div class="quest-rewards">${questRewardHtml(q)}</div>
    <div class="recipe-bottom"><span class="recipe-badge ${isReady?'level':''}">${locked?'🔒 Locked':isReady?'Ready to claim':'In progress'}</span><button data-claim="${esc(q.id)}" ${isReady?'':'disabled'}>${isReady?'🎁 Claim rewards':locked?'🔒 Locked':'In progress'}</button></div></div>`;
- }).join('')}</div>`:`<div class="journal-empty">${available.length===0?'🏆 All journal quests completed!':'No quests in this category right now. Try All or another category.'}</div>`}`;
+ }).join('')}</div>`:`<div class="journal-empty">${available.length===0?'🏆 All available quests completed!':'No quests in this category right now. Try All or another category.'}</div>`}`;
 }
 
 function renderRaidMain(){
@@ -2484,7 +2828,8 @@ function renderRaidLive(){
 }
 
 function renderMain(){
- if(ui.view==='combat')renderCombatMain();
+ if(ui.view==='skills')renderSkillsOverview();
+ else if(ui.view==='combat')renderCombatMain();
  else if(ui.view==='raid')renderRaidMain();
  else if(ui.view==='bank')renderBankMain();
  else if(ui.view==='shop')renderShopMain();
@@ -2511,11 +2856,12 @@ function renderProgress(){
  el('stopBtn').disabled=!current;
 }
 function refreshSummary(){
- el('summary').innerHTML=`<span class="stat">⚔️ Combat <b>${combatLevel()}/${COMBAT_CONFIG.maxLevel}</b></span><span class="stat">❤️ <b>${Math.ceil(state.hp)}/${maxHp()}</b> HP</span><span class="stat">🪙 <b>${fmt(count('Coins'))}</b></span><span class="stat">🏦 <b>${fmt(bankUsed())}/${GAME_CONFIG.bankSlots}</b> stacks</span><span class="stat">${state.active?'⚡ Working':'💤 Idle'}</span>`;
+ el('summary').innerHTML=`<span class="stat">⭐ Total Lv <b>${fmt(totalSkillLevel())}</b></span><span class="stat">✨ XP <b>${fmt(totalSkillXp())}</b></span><span class="stat">⚔️ Combat <b>${combatLevel()}/${COMBAT_CONFIG.maxLevel}</b></span><span class="stat">❤️ <b>${Math.ceil(state.hp)}/${maxHp()}</b> HP</span><span class="stat">🪙 <b>${fmt(count('Coins'))}</b></span><span class="stat">🏦 <b>${fmt(bankUsed())}/${GAME_CONFIG.bankSlots}</b> stacks</span><span class="stat">${state.active?'⚡ Working':'💤 Idle'}</span>`;
 }
 function refreshDynamic(){
  refreshSummary();refreshNavLevels();
- if(ui.view==='combat')renderCombatLive();
+ if(ui.view==='skills')refreshSkillsOverview();
+ else if(ui.view==='combat')renderCombatLive();
  else if(ui.view==='raid')renderRaidLive();
  else if(SKILLS[ui.view]&&!SKILLS[ui.view].combat)renderSkillLive();
  else if(ui.view==='bank')renderBankGrid('main');
@@ -2534,7 +2880,12 @@ function render(){renderNav();renderMain();renderSidebar();renderLog();refreshDy
 // ── Interaction via event delegation: controls remain functional after redraw ──
 function handleClick(e){
  const b=e.target.closest('button');if(!b||b.disabled)return;
+ if(b.hasAttribute('data-nav-group')){
+  const id=b.dataset.navGroup;ui.navGroups[id]=!ui.navGroups[id];renderNav();return;
+ }
  if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
+ if(b.hasAttribute('data-skills-filter')){ui.skillsFilter=b.dataset.skillsFilter;renderSkillsOverview();return;}
+ if(b.hasAttribute('data-skill-open')){const skill=b.dataset.skillOpen;if(!Object.hasOwn(SKILLS,skill))return; if(SKILLS[skill].combat){if(skill!=='hitpoints')state.combatStyle=skill;save();navigate('combat');}else navigate(skill);return;}
  if(b.hasAttribute('data-action'))return startAction(ui.view,Number(b.dataset.action));
  if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));
  if(b.hasAttribute('data-raid-start'))return startRaidWave();
@@ -2543,6 +2894,11 @@ function handleClick(e){
  if(b.hasAttribute('data-charge'))return chargeStaff(Number(b.dataset.charge));
  if(b.hasAttribute('data-combat-style')){
   state.combatStyle=b.dataset.combatStyle;save();renderMain();refreshDynamic();return;
+ }
+ if(b.hasAttribute('data-skill-mode')){
+  ui.skillMode[ui.view]=b.dataset.skillMode;
+  for(const node of el('main').querySelectorAll('[data-skill-mode]'))node.classList.toggle('selected',node.dataset.skillMode===ui.skillMode[ui.view]);
+  filterRecipeCards();return;
  }
  if(b.hasAttribute('data-skill-tab')){ui.skillTab[ui.view]=b.dataset.skillTab;renderMain();refreshDynamic();return}
  if(b.hasAttribute('data-shop-cat')){ui.shopCategory=b.dataset.shopCat;renderMain();refreshDynamic();return}
@@ -2554,6 +2910,12 @@ function handleClick(e){
  if(b.hasAttribute('data-eat')){if(!eat(b.dataset.eat))note('Cannot eat now.');refreshDynamic();save();return}
  if(b.hasAttribute('data-use-potion'))return usePotion(b.dataset.usePotion);
  if(b.hasAttribute('data-sell'))return sell(b.dataset.sell,b.dataset.qty);
+ if(b.hasAttribute('data-claim-ready')){
+  // Snapshot only quests currently unlocked: future tiers must be opened deliberately.
+  const ids=QUESTS.filter(q=>!state.claimed.includes(q.id)&&journalTierUnlocked(q,state)&&q.test(state)).map(q=>q.id);
+  for(const id of ids){claimQuest(id);if(!state.claimed.includes(id))break;}
+  return;
+ }
  if(b.hasAttribute('data-claim'))return claimQuest(b.dataset.claim);
  if(b.hasAttribute('data-journal-category')){ui.journalCategory=b.dataset.journalCategory;renderJournalMain();return;}
  if(b.hasAttribute('data-bank-tab'))return bankSelectTab(b.dataset.bankTab,b.dataset.tabId);
@@ -2570,6 +2932,16 @@ function handleClick(e){
 }
 function handleInput(e){
  const t=e.target;
+ if(t.id==='navSearch'){
+  const pos=t.selectionStart;ui.navSearch=t.value;renderNav();
+  const input=el('navSearch');input.focus();try{input.setSelectionRange(pos,pos)}catch{}
+  return;
+ }
+ if(t.hasAttribute('data-skill-search')){
+  ui.skillSearch[ui.view]=t.value;filterRecipeCards();return;
+ }
+
+ if(t.hasAttribute('data-skills-sort')){ui.skillsSort=t.value;renderSkillsOverview();return;}
  if(t.hasAttribute('data-bank-search')){
   const scope=t.dataset.bankSearch;ui.bank[scope].search=t.value;ui.bank[scope].page=0;renderBankGrid(scope);
  }
@@ -2619,6 +2991,8 @@ el('gearOverlay').addEventListener('click',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('gearOverlay').hidden)closeGearSlot()});
 el('nav').addEventListener('click',handleClick);
+el('nav').addEventListener('input',handleInput);
+el('quickNav').addEventListener('click',handleClick);
 el('main').addEventListener('input',handleInput);
 el('sidebar').addEventListener('input',handleInput);
 el('main').addEventListener('change',handleInput);
@@ -2703,7 +3077,7 @@ async function catchUpOffline(){
  const rewardedMs=Math.min(gap,capMs),end=start+rewardedMs;
  const actionName=state.active.type==='raid'?`⛰️ ${RAID_WAVES[raidState().wave]?.name||'Raid'}`:state.active.type==='combat'?`⚔️ ${MONSTERS[state.monsterIndex]?.name||'Combat'}`:
     `${SKILLS[state.active.skill]?.icon||'⚡'} ${SKILLS[state.active.skill]?.actions[state.active.index]?.name||'Activity'}`;
- const before=offlineSnapshot(),actionMs=Math.max(100,Number(state.actionMs)||GAME_CONFIG.actionMs);
+ const before=offlineSnapshot(),actionMs=actionDurationMs();
  clearActivityFeed(); // The AFK report handles rewards while the page is away.
  let completed=0,clock=start,progressMs=(Number(state.progress)||0)/100*actionMs;
  offlineRunning=true;simulatedTime=clock;
@@ -2747,7 +3121,7 @@ function tick(t){
  let dt=clamp(t-lastTick,0,250);lastTick=t;
  updateActivityFeed(t);
  if(state.active){
-  state.progress+=dt/(Number(state.actionMs)||GAME_CONFIG.actionMs)*100;
+  state.progress+=dt/actionDurationMs()*100;
   if(state.progress>=100){state.progress-=100;complete()}
   renderProgress();
  }

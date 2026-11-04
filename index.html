@@ -121,9 +121,79 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 @media(max-width:920px){.layout{grid-template-columns:155px minmax(0,1fr)}.right{position:relative;max-height:none;grid-column:2}.main{min-height:300px}}
 @media(max-width:650px){header{padding:12px}.layout{grid-template-columns:1fr;gap:8px;padding:8px}.left{position:relative;top:auto;max-height:none;padding:9px}.left .nav,.left .nav-divider{display:none}.mobile-nav{display:block}.right{grid-column:1}.main{padding:10px;min-height:240px}.heading h2{font-size:21px}.combat-choices{grid-template-columns:1fr}.combat-choice{flex-direction:row;flex-wrap:wrap;align-items:center}.combat-choice .xpbar{flex:1 1 100%}#activityPanel{top:4px;padding:10px}.skill-cards{grid-template-columns:1fr}.bank-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr))}.bank-grid.compact{grid-template-columns:repeat(5,minmax(0,1fr))}.right .panel{padding:10px}}
 @media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
+
+/* v3.12 visual refresh: warmer vanilla tabs, richer colors, subtle life */
+:root{--paper:#ead7b1;--paper-2:#dcc18e;--ink:#4a3318;--gold:#ddb25a;--forest:#355d46;--berry:#6a4256;--ocean:#2d5d73;--ember:#7b4b2c;--mist:#c7dfef}
+body{background:radial-gradient(circle at top,#5a4127 0%,#2b2119 34%,#15161b 82%)}
+header{background:linear-gradient(180deg,#2c2117,#1c1713);border-bottom-color:#8a663b;box-shadow:0 8px 28px #0005}
+.panel{background:linear-gradient(180deg,#1f1b18,#17191f 82%);border-color:#6e5738;box-shadow:0 10px 28px #0003}
+.left{background:linear-gradient(180deg,#201a14,#16181d)}
+.right{background:linear-gradient(180deg,#181a1f,#15161b)}
+.nav button{background:linear-gradient(180deg,#f1dfb8,#d8be8a);border-color:#9f7a40;color:#402d18;box-shadow:inset 0 1px 0 #fff4d7}
+.nav button small{color:#6a5539}
+.nav button:hover:not(:disabled){background:linear-gradient(180deg,#f8ebc9,#e1c892);border-color:#bb9047}
+.nav button.selected,.nav button.selected *{color:#3c280f!important}
+.nav button.selected{background:linear-gradient(180deg,#ffefc7,#efca79)!important;border-color:#e1aa41!important;box-shadow:0 0 0 1px #f6dea2 inset,0 0 16px #efca7935}
+.nav-divider{color:#d5b27b}
+.mobile-nav select,.bank-tools select,.bank-tools input,select,input{background:#f2e7d0;color:#3f2c17;border:1px solid #9f7d4d}
+.tabs{gap:8px}
+.tabs button,#bankTab,#gearTab{background:linear-gradient(180deg,#f3e4bf,#d8bf8c);border:1px solid #a07d46;color:#4a3417;border-radius:13px;box-shadow:inset 0 1px 0 #fff4d5,0 1px 2px #0002;padding:9px 13px;font-weight:700}
+.tabs button:hover:not(:disabled),#bankTab:hover:not(:disabled),#gearTab:hover:not(:disabled){background:linear-gradient(180deg,#faedca,#e1c995);border-color:#c3984f}
+.tabs button.selected,#bankTab.selected,#gearTab.selected{background:linear-gradient(180deg,#fff2c9,#eec975)!important;border-color:#e0aa41!important;color:#4a3314!important}
+button{background:linear-gradient(180deg,#3e5f78,#24475f);border-color:#7aa0b7}
+button:hover:not(:disabled){background:linear-gradient(180deg,#4c7692,#2d5b75);border-color:#a5c4d6}
+.top-controls button{background:linear-gradient(180deg,#f3e5c1,#d7bd89);color:#4b3518;border-color:#a47f48}
+.top-controls button:hover:not(:disabled){background:linear-gradient(180deg,#faefcf,#e1c892)}
+.stat{border-color:#6f5637;background:linear-gradient(180deg,#2b241e,#1d1a17);color:#f4e4c1}
+.version,.muted,.subdued{color:#cab89d}
+.eyebrow{color:#dfc08b}
+.heading h2,.section-title,.recipe-title,.monster-name,.shop-card h3,.journal-card h3{color:#f8e6be}
+.section-description,.recipe-detail,.monster p,.shop-card p,.journal-chain-note,.quest-progress-line{color:#d4c4a7}
+#activityPanel{background:rgba(49,36,24,.28);border-color:#c9a25a55;box-shadow:0 4px 18px #0002}
+.activity-kicker{color:#f1cf8b}.activity-name,.activity-percent{color:#f8ead2}
+.activity-reward{background:rgba(47,34,22,.88);border-color:#c29b5f66}
+.activity-reward .reward-icon,.activity-reward .item-art{background:#fff3dc18}
+.activity-reward.reward-xp{border-left:3px solid #7cc1ff}.activity-reward:not(.reward-xp){border-left:3px solid #92d089}
+.fill{background:linear-gradient(90deg,#ffb347,#8de07f,#6fc7ff);background-size:200% 100%;animation:barflow 2.8s linear infinite}
+.xpbar .fill{background:linear-gradient(90deg,#6ea6ff,#8dd4f4,#bee5ff);background-size:200% 100%}
+.healthbar .fill{background:linear-gradient(90deg,#d45560,#ffb277);background-size:200% 100%}
+.skill-cards .recipe-card,.journal-card,.shop-card,.monster,.health-box,.fire-tile,.gear-paper,.bank-panel,.info-box{background:linear-gradient(180deg,#25211c,#1b1d23 86%);border-color:#735a3b}
+.skill-cards .recipe-card:nth-child(4n+1){border-top:3px solid #7ab47f}
+.skill-cards .recipe-card:nth-child(4n+2){border-top:3px solid #8bb8de}
+.skill-cards .recipe-card:nth-child(4n+3){border-top:3px solid #e1b86b}
+.skill-cards .recipe-card:nth-child(4n+4){border-top:3px solid #c894b1}
+.recipe-stock{background:linear-gradient(180deg,#2a261f,#1a1b20);border-color:#695437}
+.recipe-stock-item strong{color:#b4efb9}
+.recipe-badge{background:#2c241c;border-color:#a6814d;color:#f7dfb0}
+.recipe-badge.level{color:#9ed6ff}
+.ingredient{background:#2b231c;border-color:#7a613f;color:#f0e3cb}
+.ingredient.missing{border-color:#d08181;color:#ffc5c5;background:#3a2222}
+.quest-reward{background:#2a241f;border-color:#7f6440;color:#f4e3c5}
+.quest-reward.experience{background:#1e3134;border-color:#47877b;color:#b2f1e7}
+.quest-reward.soul{background:#31223f;border-color:#8466b7;color:#f0e1ff}
+.quest-reward.money{background:#362918;border-color:#a47c37;color:#ffd88f}
+.quest-progress-bar{background:#1a1918;border-color:#705737}
+.quest-progress-bar .fill{background:linear-gradient(90deg,#efc875,#76c2ea,#83d5a3)}
+.bank-grid .bank-tile,.gear-pick-item,.gear-equipped-card,.selected-item,.afk-item{background:linear-gradient(180deg,#2a241e,#1c1e24);border-color:#735b3b}
+.bank-grid .bank-tile.active{border-color:#edc978;box-shadow:0 0 0 1px #f8deb0 inset,0 0 12px #edc97835}
+.item-art{box-shadow:0 2px 8px #0003}
+.item-art.tier-basic{background:linear-gradient(180deg,#44372b,#2b221b)}
+.item-art.tier-high{background:linear-gradient(180deg,#225648,#17362d)}
+.item-art.tier-rare{background:linear-gradient(180deg,#30527a,#1c314a)}
+.item-art.tier-epic{background:linear-gradient(180deg,#65458a,#35214a)}
+.combat-choice,.monster,.shop-card,.journal-card{position:relative;overflow:hidden}
+.combat-choice::after,.monster::after,.recipe-card::after,.shop-card::after,.journal-card::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 0%,transparent 58%,rgba(255,255,255,.05) 72%,transparent 82%);pointer-events:none}
+.recipe-title .item-art,.bank-tile .item-art,.gear-paper-slot .gear-symbol,.monster-name{animation:bob 3.3s ease-in-out infinite}
+.monster:nth-child(2n) .monster-name,.skill-cards .recipe-card:nth-child(2n) .recipe-title .item-art{animation-duration:4.2s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes barflow{0%{background-position:0 0}100%{background-position:200% 0}}
+@keyframes twinkle{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+.monster .gold,.quest-tier-label,.item-art.tier-epic{animation:twinkle 2.6s ease-in-out infinite}
+@media(max-width:650px){.tabs button,#bankTab,#gearTab{padding:8px 10px}.nav button{padding:8px 7px;font-size:12px}}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.11 · Compact Activity</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.12 · Living Vanilla</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><div id="main"></div></main>
@@ -133,7 +203,7 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.11 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.12 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -901,35 +971,111 @@ for(const q of QUESTS)if(q.chain)q.test=s=>
 
 // ── Item database: icons, stacking, prices, and readable tooltips ────────────
 const ITEM_META={};
-const ICON_BY_FISH=['🦐','🐟','🦀','🐟','🐟','🐟','🐠','🐍','🐟','🦞','🐟','🐟','🦈','🐡','🐟','🐉'];
+const ICON_BY_FISH=['🦐','🐟','🦀','🐠','🐡','🐠','🦑','🐍','🐬','🦞','🐙','🐋','🦈','🐡','🐉','🐲'];
+const MATERIAL_MARKS={Bronze:'🟫',Iron:'⬜',Steel:'⬛',Silver:'⚪',Gold:'🟨',Mithril:'🟦',Adamant:'🟩',Rune:'🟪',Dragonite:'🟥',Obsidian:'⬛',Crystal:'🔷',Ancient:'🟧',Void:'⚫'};
+function materialMark(item){
+ for(const [key,val] of Object.entries(MATERIAL_MARKS)) if(item.includes(key)) return val;
+ if(item.includes('Wooden')||item.includes('Normal')) return '🪵';
+ if(item.includes('Oak')) return '🌳';
+ if(item.includes('Willow')) return '🌿';
+ if(item.includes('Maple')) return '🍁';
+ if(item.includes('Yew')) return '🌲';
+ if(item.includes('Magic')) return '✨';
+ return '';
+}
+function gemMark(item){
+ if(/Opal/.test(item)) return '⚪';
+ if(/Jade/.test(item)) return '🟢';
+ if(/Red Topaz/.test(item)) return '🔶';
+ if(/Sapphire/.test(item)) return '🔷';
+ if(/Emerald/.test(item)) return '🟩';
+ if(/Ruby/.test(item)) return '🟥';
+ if(/Diamond/.test(item)) return '💠';
+ if(/Dragonstone/.test(item)) return '🔷';
+ if(/Onyx/.test(item)) return '⚫';
+ if(/Zenyte/.test(item)) return '🟧';
+ return '💎';
+}
+function monsterIcon(monster){
+ const name=typeof monster==='string'?monster:monster.name;
+ if(name==='Rat') return '🐀';
+ if(name==='Chicken') return '🐔';
+ if(name==='Wandering Peasant') return '🧑‍🌾';
+ if(name==='Goblin') return '👺';
+ if(name==='Skeleton') return '💀';
+ if(name==='Bandit') return '🥷';
+ if(name==='Dwarven Miner') return '⛏️';
+ if(name==='Forest Guardian') return '🌳';
+ if(name==='Swamp Witch') return '🧙';
+ if(name==='Cave Troll') return '🧌';
+ if(name==='Mithril Golem') return '🗿';
+ if(name==='Abyss Warden') return '👁️';
+ if(name==='Crystal Sentinel') return '🔮';
+ if(name==='Ancient Dragon') return '🐉';
+ if(name==='Void Overlord') return '🌌';
+ return '👾';
+}
 function itemIcon(item){
  if(item==='Coins')return '🪙';
  const soul=SOUL_GEMS.find(s=>s.name===item);if(soul)return soul.color;
- if(item.includes('Bow')||item.includes('Quiver')||item.includes('Arrow Shaft'))return '🏹';
  if(item==='Soul Shard')return '🔹';
- if(item.includes('Arcane')||item.includes('Witch Sigil')||item.includes('Goblin Ember')||item.includes('Golem Heart'))return '✨';
- if(item.includes('Ranger')||item.includes('Hood'))return '🎯';
+ if(item==='Rat Tail')return '🐀';
+ if(item==='Goblin Ear')return '👂';
+ if(item==='Bones')return '🦴';
+ if(item==='Ancient Token')return '🏅';
+ if(item==='Feather')return '🪶';
+ if(item==='Leather')return '🧥';
+ if(item==='Cowhide')return '🐄';
+ if(item==='Thick Hide')return '🐂';
+ if(item==='Raw Chicken')return '🍗';
+ if(item==='Raw Beef')return '🥩';
+ if(item==='Raw Lamb')return '🍖';
+ if(item==='Bread')return '🍞';
+ if(item.includes('Pie'))return '🥧';
+ if(item.includes('Soup')||item.includes('Stew'))return '🍲';
+ if(item.includes('Platter')||item.includes('Feast'))return '🍽️';
  if(item.includes('Bowstring'))return '🧵';
+ if(item.includes('Arrow Shaft'))return '🪵';
+ if(item.includes('Arrow'))return `${materialMark(item)||'🏹'}➶`;
+ if(item.includes('Bow')||item.includes('Quiver'))return `${materialMark(item)||'🏹'}🏹`;
+ if(item.includes('Staff')||item.includes('Wand'))return `${materialMark(item)||'🔮'}🪄`;
+ if(item.includes('Sword')||item.includes('Blade'))return `${materialMark(item)||'⚔️'}🗡️`;
+ if(item.includes('Shield'))return `${materialMark(item)||'🛡️'}🛡️`;
+ if(item.includes('Helm')||item.includes('Hood'))return `${materialMark(item)||'🪖'}🪖`;
+ if(item.includes('Chestplate')||item.includes('Body')||item.includes('Robe Top'))return `${materialMark(item)||'🥋'}🥋`;
+ if(item.includes('Platelegs')||item.includes('Legs')||item.includes('Robe Bottom'))return `${materialMark(item)||'👖'}👖`;
+ if(item.includes('Gloves')||item.includes('Gauntlets'))return '🧤';
+ if(item.includes('Axe'))return `${materialMark(item)||'🪓'}🪓`;
+ if(item.includes('Pickaxe'))return `${materialMark(item)||'⛏️'}⛏️`;
+ if(item.includes('Amulet')||item.includes('Charm'))return `${gemMark(item)}📿`;
+ if(item.includes('Ring'))return `${gemMark(item)}💍`;
+ if(item.includes('Cape'))return '🧣';
  if(item.includes('Crown'))return '👑';
- if(FISH_TO_COOK.includes(item))return ICON_BY_FISH[FISH_TO_COOK.indexOf(item)];
- if(item.startsWith('Cooked ')){const raw=item.slice(7);if(FISH_TO_COOK.includes(raw))return '🍣';if(raw.includes('Chicken'))return '🍗';if(raw.includes('Beef')||raw.includes('Lamb'))return '🥩'}
- if(item.includes('Logs'))return '🪵';if(item.includes('Ore')||item==='Coal'||item==='Obsidian')return '🪨';
- if(item.endsWith('Bar'))return '🧱';if(item.includes('Sword')||item.includes('Blade'))return '⚔️';
- if(item.includes('Shield'))return '🛡️';if(item.includes('Helm'))return '🪖';
- if(item.includes('Chestplate')||item.includes('Body'))return '🥋';if(item.includes('Platelegs'))return '👖';
- if(item.includes('Axe'))return '🪓';if(item.includes('Pickaxe'))return '⛏️';
- if(item.includes('Amulet')||item.includes('Charm'))return '📿';if(item.includes('Ring'))return '💍';
- if(item.includes('Potion'))return '🧪';if(item.startsWith('Uncut ')||GEMS.includes(item))return '💎';
- if(item.includes('Seed')||item.includes('Spores'))return '🌰';if(item.includes('Herb'))return '🌿';
- if(item==='Wheat'||item==='Flax')return '🌾';if(item==='Carrot')return '🥕';if(item==='Potato')return '🥔';
- if(item==='Berries'||item==='Sunfruit')return '🍇';if(item==='Mushroom')return '🍄';if(item==='Milk')return '🥛';
- if(item==='Egg')return '🥚';if(item==='Wool'||item==='Ball of Wool')return '🧶';
- if(item.includes('Leather')||item.includes('Hide'))return '🧥';if(item.includes('Cape'))return '🧣';
- if(item.includes('Feather'))return '🪶';if(item.includes('Bread')||item.includes('Pie'))return '🥧';
- if(item.includes('Stew')||item.includes('Soup'))return '🍲';if(item==='Baked Potato')return '🥔';
- if(item.includes('Feast')||item.includes('Platter'))return '🍽️';if(item.includes('Staff')||item.includes('Wand'))return '🪄';
- if(item.includes('Crystal'))return '🔮';if(item.includes('Scale'))return '🐉';
- if(item.includes('Arrow'))return '🏹';if(item.includes('Nail'))return '🔩';if(item.includes('Token'))return '🏅';
+ if(item.includes('Potion'))return '🧪';
+ if(item.startsWith('Uncut ')||GEMS.includes(item))return `${gemMark(item)}💎`;
+ if(FISH_TO_COOK.includes(item))return ICON_BY_FISH[FISH_TO_COOK.indexOf(item)]||'🐟';
+ if(item.startsWith('Cooked ')){const raw=item.slice(7);if(FISH_TO_COOK.includes(raw))return '🍣';if(raw.includes('Chicken'))return '🍗';if(raw.includes('Beef')||raw.includes('Lamb'))return '🥩';}
+ if(item.includes('Logs')){if(item.includes('Magic'))return '✨🪵';if(item.includes('Redwood'))return '🟥🪵';if(item.includes('Yew'))return '🌲🪵';if(item.includes('Maple'))return '🍁🪵';if(item.includes('Willow'))return '🌿🪵';if(item.includes('Oak'))return '🌳🪵';return '🪵';}
+ if(item.includes(' Ore')||item==='Coal'||item==='Obsidian'||item==='Clay'||item==='Limestone')return `${materialMark(item)||'🪨'}🪨`;
+ if(item.endsWith('Bar'))return `${materialMark(item)||'🧱'}🧱`;
+ if(item.includes('Arcane')||item.includes('Witch Sigil')||item.includes('Goblin Ember')||item.includes('Golem Heart'))return '✨';
+ if(item.includes('Ranger'))return '🎯';
+ if(item.includes('Crystal'))return '🔮';
+ if(item.includes('Scale'))return '🐉';
+ if(item.includes('Seed')||item.includes('Spores'))return '🌰';
+ if(item.includes('Herb'))return '🌿';
+ if(item==='Wheat'||item==='Flax')return '🌾';
+ if(item==='Carrot')return '🥕';
+ if(item==='Potato'||item==='Baked Potato')return '🥔';
+ if(item==='Berries'||item==='Sunfruit')return '🍇';
+ if(item==='Corn')return '🌽';
+ if(item==='Mushroom')return '🍄';
+ if(item==='Milk')return '🥛';
+ if(item==='Egg')return '🥚';
+ if(item==='Wool'||item==='Ball of Wool')return '🧶';
+ if(item.includes('Feather'))return '🪶';
+ if(item.includes('Nail'))return '🔩';
+ if(item.includes('Token'))return '🏅';
  return '📦';
 }
 function itemCategory(item){
@@ -1602,7 +1748,7 @@ function renderCombatMain(){
  html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
  html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
  <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote">Only food you own is shown, with remaining quantities. When the selected food runs out, select a new one.</small></div>`;
- html+=`<h3 class="section-title">⚔️ Monsters (${MONSTERS.length})</h3><div class="combat-monsters">${MONSTERS.map((m,i)=>`<div class="monster"><div class="between"><span class="monster-name">${i>8?'🐉':i>4?'👹':'👾'} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div><p>${fmt(m.hp)} HP · Defence ${m.def} · Max hit ${m.maxHit}<br>Loot: ${Object.keys(m.loot).map(x=>`${itemIcon(x)} ${esc(x)}`).join(', ')||'None'}${['trash','seed','gem'].filter(k=>m[k+'Table']?.length).map(k=>`<br>${k==='trash'?'🗑️ Junk':k==='seed'?'🌰 Seed':'💎 Gem'} table (${pct(m[k+'Chance'])}): ${m[k+'Table'].map(r=>esc(r[0])).join(', ')}`).join('')}${m.componentDrop?`<br><span class="gold">✨ Arcane part: ${esc(m.componentDrop.item)} (${pct(m.componentDrop.chance)})${m.componentDrop.extraItem?', '+esc(m.componentDrop.extraItem)+' ('+pct(m.componentDrop.extraChance)+')':''}</span>`:''}${m.unique?`<br><span class="gold">🌟 ${esc(m.unique.item)} · ${pct(m.unique.chance)} base unique drop</span>`:''}</p><div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div>`).join('')}</div>`;
+ html+=`<h3 class="section-title">⚔️ Monsters (${MONSTERS.length})</h3><div class="combat-monsters">${MONSTERS.map((m,i)=>`<div class="monster"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div><p>${fmt(m.hp)} HP · Defence ${m.def} · Max hit ${m.maxHit}<br>Loot: ${Object.keys(m.loot).map(x=>`${itemIcon(x)} ${esc(x)}`).join(', ')||'None'}${['trash','seed','gem'].filter(k=>m[k+'Table']?.length).map(k=>`<br>${k==='trash'?'🗑️ Junk':k==='seed'?'🌰 Seed':'💎 Gem'} table (${pct(m[k+'Chance'])}): ${m[k+'Table'].map(r=>esc(r[0])).join(', ')}`).join('')}${m.componentDrop?`<br><span class="gold">✨ Arcane part: ${esc(m.componentDrop.item)} (${pct(m.componentDrop.chance)})${m.componentDrop.extraItem?', '+esc(m.componentDrop.extraItem)+' ('+pct(m.componentDrop.extraChance)+')':''}</span>`:''}${m.unique?`<br><span class="gold">🌟 ${esc(m.unique.item)} · ${pct(m.unique.chance)} base unique drop</span>`:''}</p><div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div>`).join('')}</div>`;
  const total=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
  html+=`<div class="info-box"><b>💠 Soul Gems · separate drop table</b><p>Every monster KILL independently rolls ${pct(GAME_CONFIG.soulGemCombatChance)} for one untradeable Soul Gem and ${pct(GAME_CONFIG.soulShardCombatChance)} for Soul Shards to charge Magic Staves. This cannot remove normal loot, seeds, junk, gems, uniques or treasure. Prismatic is 1 in 3,000 SOUL GEMS. All Soul Gems are untradeable.</p></div>`;
  html+=`<details class="info-box"><summary>💎 Treasure Table · <strong id="treasureRateText">${pct(TREASURE_CHANCE)} base chance per kill</strong></summary><p>Each kill rolls for a gem. If successful, gem type is selected by relative weight. Luck gear and potions raise the initial treasure chance and unique drop rates.</p><div class="bank-count">Current effective treasure chance: <b id="treasureCurrent">${pct(treasureChance())}</b>. Conditional gem odds below add up to 100%.</div>${TREASURE_TABLE.map(([gem,weight])=>`<div class="between" style="padding:5px 0;border-bottom:1px solid #39526a"><span>${itemIcon(gem)} ${esc(gem)}</span><span class="small">${pct(weight/total)} of gems · <span data-gem-chance="${weight}">${pct(treasureChance()*weight/total)}</span> per kill</span></div>`).join('')}</details>`;

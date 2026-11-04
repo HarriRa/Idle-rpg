@@ -237,7 +237,7 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.13 · Organized Bank</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.14 · Balanced XP Curve</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><div id="main"></div></main>
@@ -247,7 +247,7 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.13 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.14 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -1247,8 +1247,40 @@ function updateActivityFeed(now=performance.now()){
  if(redraw)renderActivityFeed(now);
 }
 const gameNow=()=>simulatedTime===null?Date.now():simulatedTime;
-const levelFromXp=xp=>{let lvl=1,total=0;while(lvl<99){const need=Math.floor(100*Math.pow(1.13,lvl-1));if(xp<total+need)break;total+=need;lvl++}return lvl};
-const xpForLevel=lvl=>{let n=0;for(let i=1;i<Math.min(100,lvl);i++)n+=Math.floor(100*Math.pow(1.13,i-1));return n};
+// Skill XP curve. Change xpToMax to rebalance the level-99 target later.
+// Previously: 100 * 1.13^(level - 1) => ~122.4 million XP for level 99.
+// The gentler curve preserves early levels and reaches exactly 50 million at 99.
+const XP_CONFIG = {
+ maxLevel: COMBAT_CONFIG.skillMaxLevel, // 99; Combat Level itself remains capped at 120
+ xpToMax: 50_000_000,
+ firstLevelCost: 100,
+ growth: 1.118685
+};
+const XP_THRESHOLDS = (()=>{
+ const thresholds=Array(XP_CONFIG.maxLevel+1).fill(0);
+ let total=0;
+ for(let level=1;level<XP_CONFIG.maxLevel;level++){
+  // Correct only the final increment so max level is exactly xpToMax.
+  const needed=level===XP_CONFIG.maxLevel-1
+   ? XP_CONFIG.xpToMax-total
+   : Math.floor(XP_CONFIG.firstLevelCost*Math.pow(XP_CONFIG.growth,level-1));
+  if(needed<=0)throw Error('Invalid XP_CONFIG: max XP must exceed earlier level thresholds.');
+  total+=needed;
+  thresholds[level+1]=total;
+ }
+ return thresholds;
+})();
+const xpForLevel=lvl=>XP_THRESHOLDS[Math.max(1,Math.min(XP_CONFIG.maxLevel,Math.floor(Number(lvl)||1)))];
+const levelFromXp=xp=>{
+ const earned=Math.max(0,Number(xp)||0);
+ let low=1,high=XP_CONFIG.maxLevel;
+ while(low<high){
+  const middle=Math.ceil((low+high)/2);
+  if(earned>=XP_THRESHOLDS[middle])low=middle;
+  else high=middle-1;
+ }
+ return low;
+};
 const label=s=>SKILLS[s]?.name||s.replace(/^./,c=>c.toUpperCase());
 const maxHp=()=>levelFromXp(state.xp.hitpoints||0)*10;
 const clamp=(x,lo,hi)=>Math.max(lo,Math.min(hi,x));

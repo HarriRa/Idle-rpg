@@ -622,7 +622,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.22 · Crafted Horizons</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.23 · Universal Arrow Shafts</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -635,8 +635,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.22 · CHANGE GAME SETTINGS HERE
-// ──────────────────────────────────────────────────────────────────────────────
+// IDLE RPG v3.23 · UNIVERSAL ARROW SHAFTS · CHANGE GAME SETTINGS HERE
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
   bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
@@ -895,28 +894,30 @@ for(const [name,level,xp,cost,group,slot,stats] of ELITE_STYLE_GEAR){
 
 
 // FLETCHING: genuinely dependent on Woodcutting, Agriculture, Smithing and Combat.
+// All types of wood make the SAME arrow shaft stack. Rarer logs yield more.
+// [wood name, source log, level, XP, bow power, shafts per action]
 const FLETCH_WOODS=[
- ['Normal','Logs',1,15,2],['Oak','Oak Logs',10,35,5],['Willow','Willow Logs',25,60,9],
- ['Maple','Maple Logs',40,90,14],['Yew','Yew Logs',55,145,22],
- ['Magic','Magic Logs',70,235,34],['Redwood','Redwood Logs',85,355,46],['Elder','Elder Logs',95,500,63]
+ ['Normal','Logs',1,15,2,20],['Oak','Oak Logs',10,35,5,30],
+ ['Willow','Willow Logs',25,60,9,45],['Maple','Maple Logs',40,90,14,65],
+ ['Yew','Yew Logs',55,145,22,90],['Magic','Magic Logs',70,235,34,125],
+ ['Redwood','Redwood Logs',85,355,46,165],['Elder','Elder Logs',95,500,63,220]
 ];
 SKILLS.fletching.actions.push(
  A('Spin Bowstring','Bowstring',1,22,{'Flax':2},'Materials',{quantity:2}),
  A('Twist Reinforced String','Reinforced Bowstring',35,85,{'Bowstring':2,'Linen':2},'Materials'),
  A('Prepare Feather Bundle','Feather Bundle',10,25,{'Feather':10,'Ball of Wool':1},'Materials',{quantity:5})
 );
-for(const [wood,logs,level,xp,power] of FLETCH_WOODS){
+for(const [wood,logs,level,xp,power,shafts] of FLETCH_WOODS){
  const bow=wood+' Bow';
  SKILLS.fletching.actions.push(
-  A('Carve '+wood+' Arrow Shafts',wood+' Arrow Shafts',level,xp,{[logs]:1},'Shafts',{quantity:20}),
+  A('Carve Shafts from '+wood+' Logs','Normal Arrow Shafts',level,xp,{[logs]:1},'Shafts',{quantity:shafts}),
   A('Fletch '+bow,bow,Math.min(99,level+3),xp*2,{[logs]:2,[level>=40?'Reinforced Bowstring':'Bowstring']:1},'Bows')
  );
  registerGear(bow,{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:Math.max(1,level-3),rangedAccuracy:power,rangedPower:Math.ceil(power*.25)});
 }
 for(const [metal,level,xp] of [['Bronze',1,20],['Iron',15,45],['Steel',30,70],['Mithril',50,120],['Adamant',65,190],['Rune',80,270],['Dragonite',95,470]]){
- const wood=level<30?'Normal':level<65?'Oak':'Maple';
  SKILLS.fletching.actions.push(A('Make '+metal+' Arrows',metal+' Arrows',level,xp,
-  {[wood+' Arrow Shafts']:10,[metal+' Arrowheads']:10,'Feather':10},'Arrows',{quantity:10}));
+  {'Normal Arrow Shafts':10,[metal+' Arrowheads']:10,'Feather':10},'Arrows',{quantity:10}));
 }
 SKILLS.fletching.actions.push(
  A('Fletch Hunter Quiver','Hunter Quiver',25,95,{'Leather':2,'Linen':1,'Feather':10},'Utility'),
@@ -2186,6 +2187,20 @@ function restore(){
    active:validSavedActivity(raw.active)?raw.active:null,
    progress:clamp(Number(raw.progress)||0,0,99.999),
    monsterHp:Number.isFinite(Number(raw.monsterHp))&&Number(raw.monsterHp)>0?Number(raw.monsterHp):(raw.active?.type==='raid'?RAID_WAVES[Math.min(RAID_WAVES.length-1,Math.max(0,Number(raw.raid?.wave)||0))].hp:MONSTERS[raw.monsterIndex]?.hp)};
+  // v3.23: old wood-specific shafts are merged into the single common shaft.
+  // This runs during both normal loading and imported-save restoration.
+  const oldShaftTypes=['Oak','Willow','Maple','Yew','Magic','Redwood','Elder'];
+  for(const wood of oldShaftTypes){
+   const obsolete=wood+' Arrow Shafts';
+   const amount=Math.max(0,Number(state.bank[obsolete])||0);
+   if(amount)state.bank['Normal Arrow Shafts']=(Number(state.bank['Normal Arrow Shafts'])||0)+amount;
+   delete state.bank[obsolete];
+   const produced=Math.max(0,Number(state.stats.produced[obsolete])||0);
+   if(produced)state.stats.produced['Normal Arrow Shafts']=(Number(state.stats.produced['Normal Arrow Shafts'])||0)+produced;
+   delete state.stats.produced[obsolete];
+   if(state.bankAssignments[obsolete]&&!state.bankAssignments['Normal Arrow Shafts'])state.bankAssignments['Normal Arrow Shafts']=state.bankAssignments[obsolete];
+   delete state.bankAssignments[obsolete];
+  }
   state.lastProcessedAt=Number(raw.lastProcessedAt)||Number(raw.lastSaved)||Date.now();
   // Historic saves had Farming and Animal Husbandry before they became Agriculture.
   if(raw.xp.agriculture===undefined&&(raw.xp.farming!==undefined||raw.xp.animalHusbandry!==undefined))state.xp.agriculture=(raw.xp.farming||0)+(raw.xp.animalHusbandry||0);

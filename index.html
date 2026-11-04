@@ -393,9 +393,55 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 .combat-choice::after,.monster::after,.recipe-card::after,.shop-card::after,.journal-card::after{background:none!important}
 .item-art,.bank-tile,.recipe-card,.monster,.shop-card,.journal-card{transition:none!important}
 
+
+/* v3.19 richer item identity */
+.item-art.style-melee{box-shadow:inset 0 0 0 1px #ffffff12,0 0 0 1px #8a5140,0 2px 8px #0003}
+.item-art.style-ranged{box-shadow:inset 0 0 0 1px #ffffff12,0 0 0 1px #4e7d52,0 2px 8px #0003}
+.item-art.style-magic{box-shadow:inset 0 0 0 1px #ffffff12,0 0 0 1px #526fb5,0 2px 8px #0003}
+.item-art.cat-food{background:linear-gradient(145deg,#84543e,#553325)!important;border-color:#d9a17d!important}
+.item-art.cat-potion{background:linear-gradient(145deg,#4d3d76,#2a214f)!important;border-color:#c3b0ff!important}
+.item-art.cat-loot{background:linear-gradient(145deg,#6b4f2f,#3e2f1a)!important;border-color:#d7ba7e!important}
+.item-art.cat-gem{background:linear-gradient(145deg,#3f576f,#223140)!important;border-color:#a9dcff!important}
+.item-art.cat-farm{background:linear-gradient(145deg,#516039,#2f3923)!important;border-color:#bfd68d!important}
+.item-art.slot-ring,.item-art.slot-amulet{border-radius:50%}
+.item-art.slot-weapon,.item-art.slot-shield{transform:translateZ(0)}
+
+
+/* v3.20: boss tiers, inspect panel, set collection indicators. */
+.monster.boss-early{border-color:#c38f5e;background:linear-gradient(160deg,#35271d,#21212a)}
+.monster.boss-late{border-color:#9f76cb;background:linear-gradient(160deg,#34243d,#20212b)}
+.monster.boss-late .monster-name{color:#edceff}.monster.boss-early .monster-name{color:#ffe2b5}
+.monster-type{font-size:10px;letter-spacing:.04em;color:#dcb98a;font-weight:800}
+.boss-late .monster-type{color:#d8b9f7}
+.monster-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.monster-actions button{padding:6px 9px;font-size:11px}
+.monster-inspect-overlay{position:fixed;inset:0;z-index:98;background:rgba(6,9,14,.87);display:flex;justify-content:center;align-items:center;padding:12px;backdrop-filter:blur(5px)}
+.monster-inspect-overlay[hidden]{display:none}
+.monster-inspect-dialog{width:min(685px,100%);max-height:calc(100dvh - 26px);overflow:auto;background:linear-gradient(160deg,#30271d,#1d2129);border:1px solid #bd9360;border-radius:15px;box-shadow:0 17px 60px #000b;padding:17px}
+.monster-inspect-dialog h2{font-size:20px;color:#ffe1ad;margin:0}
+.monster-inspect-header{display:flex;gap:12px;align-items:center;margin:14px 0}
+.monster-inspect-icon{font-size:38px;display:grid;place-items:center;background:#403123;border:1px solid #947149;border-radius:12px;width:67px;height:67px;flex:none}
+.monster-inspect-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:11px 0}
+.monster-inspect-metrics div{background:#282621;border:1px solid #665137;padding:10px;border-radius:8px}
+.monster-inspect-metrics small{display:block;color:#d3baa0;font-size:10px;margin-bottom:4px}
+.monster-inspect-metrics strong{color:#f5e5c8;font-size:15px}
+.monster-loot-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:6px;margin:8px 0 12px}
+.monster-loot-row{display:flex;gap:8px;align-items:center;background:#28251f;border:1px solid #6d5136;border-radius:8px;padding:8px;min-width:0}
+.monster-loot-row .item-art{flex:none}
+.monster-loot-row div{flex:1;min-width:0;font-size:12px}
+.monster-loot-row small{display:block;font-size:10px;color:#d4ba9b;margin-top:2px}
+.monster-loot-row.unique{border-color:#d1a34b;background:#382b1e}
+.monster-inspect-hint{font-size:11px;line-height:1.55;color:#d2c1a6}
+.set-tracker{display:flex;flex-direction:column;gap:4px;margin:7px 0;padding:8px;border:1px solid #70553a;background:#26221c;border-radius:8px}
+.set-tracker b{font-size:12px;color:#f7dcb0}
+.set-tracker small{font-size:10px;line-height:1.4;color:#baa88e}
+.set-tracker.set-enabled{border-color:#668e68;background:#233329}
+.set-tracker.set-enabled small{color:#cae7c5}
+@media(max-width:650px){.monster-inspect-dialog{padding:11px}.monster-inspect-metrics{gap:4px}.monster-inspect-metrics div{padding:6px}.monster-inspect-metrics strong{font-size:12px}.monster-loot-list{grid-template-columns:1fr}}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.18 · Cleaner Icons</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.20 · Boss Hunts & Set Bonuses</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -404,10 +450,11 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 <aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
 </div><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
+<div class="monster-inspect-overlay" id="monsterInspectOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="monsterInspectTitle"><div class="monster-inspect-dialog"><div class="between"><h2 id="monsterInspectTitle">Monster details</h2><button type="button" data-inspect-close aria-label="Close monster details">×</button></div><div id="monsterInspectContent"></div></div></div>
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.18 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.20 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -607,7 +654,7 @@ const JEWELLERY = [
  ['Strength Amulet','Ruby','Gold Amulet Blank',30,130,{strengthPct:.10}],
  ['Defence Amulet','Emerald','Gold Amulet Blank',30,130,{defencePct:.10}],
  ['Accuracy Amulet','Sapphire','Gold Amulet Blank',30,130,{attackPct:.10}],
- ['Power Amulet','Diamond','Gold Amulet Blank',50,220,{strengthPct:.10,attackPct:.10,defencePct:.10}],
+ ['Power Amulet','Diamond','Gold Amulet Blank',50,220,{strengthPct:.10,attackPct:.10,defencePct:.10,rangedPct:.10,magicPct:.10}],
  ['Wisdom Amulet','Dragonstone','Gold Amulet Blank',70,280,{xpBonus:.08}],
  ['Guardian Amulet','Onyx','Gold Amulet Blank',85,410,{defencePct:.16,strengthPct:.06}],
  ['Lucky Ring','Jade','Silver Ring Blank',18,95,{luckBonus:.25}],
@@ -616,7 +663,7 @@ const JEWELLERY = [
  ['Protector Ring','Sapphire','Gold Ring Blank',55,225,{defencePct:.07}],
  ['Precision Ring','Diamond','Gold Ring Blank',65,260,{attackPct:.07}],
  ['Gatherer Ring','Dragonstone','Gold Ring Blank',75,310,{gatherBonus:.12}],
- ['Mastery Ring','Zenyte','Gold Ring Blank',95,520,{xpBonus:.15,attackPct:.05,strengthPct:.05,defencePct:.05}]
+ ['Mastery Ring','Zenyte','Gold Ring Blank',95,520,{xpBonus:.15,attackPct:.05,strengthPct:.05,defencePct:.05,rangedPct:.05,magicPct:.05}]
 ];
 for(const [item,gem,blank,lvl,xp,buffs] of JEWELLERY){
  const cost={[blank]:1,[gem]:1};if(item.includes('Amulet'))cost['Ball of Wool']=1;
@@ -627,7 +674,7 @@ for(const [item,gem,blank,lvl,xp,buffs] of JEWELLERY){
 registerGear('Fortune Ring',{slot:'ring',luckBonus:.75});
 registerGear('Ancient Scholar Charm',{slot:'amulet',xpBonus:.12});
 registerGear('Abyssal Blade',{slot:'weapon',attack:64,strength:27});
-registerGear('Dragonheart Amulet',{slot:'amulet',strengthPct:.15,attackPct:.15,defencePct:.15});
+registerGear('Dragonheart Amulet',{slot:'amulet',strengthPct:.15,attackPct:.15,defencePct:.15,rangedPct:.15,magicPct:.15});
 registerGear('Forest Guardian Shield',{slot:'shield',defence:35,block:8,agricultureYield:.10});
 registerGear('Troll King Ring',{slot:'ring',strengthPct:.12});
 registerGear('Voidborn Cape',{slot:'cape',xpBonus:.08,defence:17});
@@ -637,7 +684,34 @@ SKILLS.crafting.actions.push(
  A('Craft Dragon Scale Armour','Dragon Scale Body',95,450,{'Dragon Scale':5,'Hard Leather':3,'Rune Bar':2},'Rare Gear'),
  A('Weave Spirit Thread','Spirit Thread',80,230,{'Mystic Herb':2,'Ball of Wool':2,'Ancient Crystal':1},'Materials')
 );
+
 registerGear('Dragon Scale Body',{slot:'body',defence:95});
+// Late-game identity gear: each style gets tank and power-focused options.
+const ELITE_STYLE_GEAR=[
+ ['Bulwark Helm',86,420,{'Dragonite Bar':2,'Golem Core':1,'Hard Leather':1},'Elite Tank','head',{requiredSkill:'defence',requiredLevel:80,defence:48,block:5}],
+ ['Bulwark Plate',90,620,{'Dragonite Bar':4,'Golem Core':2,'Dragon Scale':1},'Elite Tank','body',{requiredSkill:'defence',requiredLevel:84,defence:98,block:10}],
+ ['Bulwark Legs',88,520,{'Dragonite Bar':3,'Golem Core':1,'Hard Leather':2},'Elite Tank','legs',{requiredSkill:'defence',requiredLevel:82,defence:76,block:7}],
+ ['Ravager Helm',88,450,{'Dragon Scale':2,'Abyss Shard':2,'Rune Bar':2},'Elite Power','head',{requiredSkill:'attack',requiredLevel:82,defence:22,attack:9,strength:8}],
+ ['Ravager Plate',92,680,{'Dragon Scale':4,'Abyss Shard':3,'Dragonite Bar':2},'Elite Power','body',{requiredSkill:'attack',requiredLevel:86,defence:44,attack:14,strength:18}],
+ ['Ravager Legs',90,570,{'Dragon Scale':3,'Abyss Shard':2,'Dragonite Bar':1},'Elite Power','legs',{requiredSkill:'attack',requiredLevel:84,defence:33,attack:10,strength:12}],
+ ['Warden Hood',84,390,{'Hard Leather':3,'Ancient Crystal':1,'Rune Nails':10},'Elite Tank','head',{requiredSkill:'ranged',requiredLevel:78,defence:34,rangedAccuracy:12,rangedPower:4}],
+ ['Warden Coat',88,570,{'Hard Leather':5,'Ancient Crystal':2,'Dragon Scale':1},'Elite Tank','body',{requiredSkill:'ranged',requiredLevel:82,defence:70,rangedAccuracy:18,rangedPower:6}],
+ ['Warden Guards',86,470,{'Hard Leather':4,'Ancient Crystal':1,'Rune Nails':10},'Elite Tank','legs',{requiredSkill:'ranged',requiredLevel:80,defence:54,rangedAccuracy:15,rangedPower:5}],
+ ['Deadeye Hood',87,420,{'Spirit Thread':2,'Dragon Bowstring':1,'Dragon Scale':1},'Elite Power','head',{requiredSkill:'ranged',requiredLevel:82,defence:14,rangedAccuracy:26,rangedPower:10}],
+ ['Deadeye Jacket',91,650,{'Spirit Thread':3,'Dragon Bowstring':2,'Dragon Scale':2},'Elite Power','body',{requiredSkill:'ranged',requiredLevel:86,defence:24,rangedAccuracy:42,rangedPower:16}],
+ ['Deadeye Chaps',89,540,{'Spirit Thread':2,'Dragon Bowstring':1,'Hard Leather':3},'Elite Power','legs',{requiredSkill:'ranged',requiredLevel:84,defence:19,rangedAccuracy:33,rangedPower:12}],
+ ['Spellguard Hood',84,405,{'Spirit Thread':2,'Ancient Crystal':1,'Void Residue':1},'Elite Tank','head',{requiredSkill:'magic',requiredLevel:78,defence:32,magicAccuracy:14,magicPower:5}],
+ ['Spellguard Robes',89,610,{'Spirit Thread':4,'Ancient Crystal':2,'Void Residue':2},'Elite Tank','body',{requiredSkill:'magic',requiredLevel:83,defence:66,magicAccuracy:22,magicPower:8}],
+ ['Spellguard Legwraps',87,505,{'Spirit Thread':3,'Ancient Crystal':1,'Void Residue':1},'Elite Tank','legs',{requiredSkill:'magic',requiredLevel:81,defence:51,magicAccuracy:18,magicPower:7}],
+ ['Soulweaver Hood',89,460,{'Spirit Thread':3,'Void Arcane Core':1,'Onyx':1},'Elite Power','head',{requiredSkill:'magic',requiredLevel:84,defence:12,magicAccuracy:31,magicPower:14}],
+ ['Soulweaver Robes',93,720,{'Spirit Thread':5,'Void Arcane Core':1,'Dragonstone':1,'Ancient Crystal':1},'Elite Power','body',{requiredSkill:'magic',requiredLevel:88,defence:21,magicAccuracy:49,magicPower:22}],
+ ['Soulweaver Legwraps',91,590,{'Spirit Thread':4,'Void Residue':2,'Onyx':1},'Elite Power','legs',{requiredSkill:'magic',requiredLevel:86,defence:16,magicAccuracy:38,magicPower:17}]
+];
+for(const [name,level,xp,cost,group,slot,stats] of ELITE_STYLE_GEAR){
+ SKILLS.crafting.actions.push(A('Craft '+name,name,level,xp,cost,group));
+ registerGear(name,{slot,...stats});
+}
+
 
 // FLETCHING: genuinely dependent on Woodcutting, Agriculture, Smithing and Combat.
 const FLETCH_WOODS=[
@@ -772,12 +846,12 @@ const ENCHANTMENTS=[
  ['Woodland Spirit Axe','Steel Axe','Emerald','Azure Soul Gem',40,235,{woodcuttingYield:.36,xpBonus:.07}],
  ['Sea Whisper Amulet','Gold Amulet Blank','Sapphire','Azure Soul Gem',42,250,{fishingYield:.38,xpBonus:.07}],
  ['Fletcher Ward','Adventurer Cape','Red Topaz','Azure Soul Gem',45,250,{fletchingXpBonus:.28,xpBonus:.05}],
- ['Battlebound Amulet','Power Amulet','Ruby','Violet Soul Gem',60,365,{attackPct:.20,strengthPct:.20,defencePct:.20}],
+ ['Battlebound Amulet','Power Amulet','Ruby','Violet Soul Gem',60,365,{attackPct:.20,strengthPct:.20,defencePct:.20,rangedPct:.20,magicPct:.20}],
  ['Artisan Soul Ring','Gold Ring Blank','Dragonstone','Violet Soul Gem',65,375,{craftingXpBonus:.35,smithingXpBonus:.35,fletchingXpBonus:.35}],
  ['Living Grove Axe','Rune Axe','Onyx','Violet Soul Gem',75,475,{woodcuttingYield:.65,agricultureYield:.25}],
  ['Deep Earth Pickaxe','Rune Pickaxe','Diamond','Violet Soul Gem',77,480,{miningYield:.65}],
  ['Alchemist Soul Charm','Wisdom Amulet','Dragonstone','Violet Soul Gem',80,520,{alchemyXpBonus:.60,enchantingXpBonus:.30}],
- ['Sunforged Battle Ring','Warrior Ring','Onyx','Solar Soul Gem',90,660,{attackPct:.45,strengthPct:.45,defencePct:.35}],
+ ['Sunforged Battle Ring','Warrior Ring','Onyx','Solar Soul Gem',90,660,{attackPct:.45,strengthPct:.45,defencePct:.35,rangedPct:.30,magicPct:.30}],
  ['Soulweaver Cape','Explorer Cape','Zenyte','Solar Soul Gem',94,800,{xpBonus:.60,gatherBonus:.35,luckBonus:.40}],
  // MYTHIC: requires a 1/10000 Soul Gem. The crown is deliberately extremely powerful.
  ['Eternal Soul Crown','Rune Helm','Zenyte','Prismatic Soul Gem',99,3000,{xpBonus:1.50,gatherBonus:1.50,luckBonus:2.50,attackPct:1,strengthPct:1,defencePct:1}]
@@ -886,6 +960,23 @@ MONSTERS.splice(MONSTERS.findIndex(m=>m.name==='Forest Guardian'),0,
   trashChance:.50,trashTable:[['Broken Pick Head',55,1,2],['Rusty Gear',35,1,2],['Dented Lantern',10,1,1]],
   gemChance:.32,gemTable:[['Uncut Opal',35,1,1],['Uncut Jade',30,1,1],['Uncut Red Topaz',18,1,1],['Uncut Sapphire',10,1,1],['Uncut Emerald',5,1,1],['Uncut Ruby',2,1,1]],
   unique:{item:'Dwarven Soul Pickaxe',chance:1/850}});
+// Dedicated optional boss hunts. Every armour piece is an independent rare roll;
+// no boss drop replaces regular loot, Soul Gems, treasure or shards.
+const HUNT_BOSSES=[
+ {name:'Hillbreaker Giant',level:18,hp:225,def:15,atk:16,maxHit:7,weakness:'melee',boss:true,bossTier:'early',gearSet:'Hillbreaker',
+  loot:{Coins:42,Bones:3},bossGearDrops:[['Hillbreaker Helm',.075],['Hillbreaker Vest',.075],['Hillbreaker Greaves',.075]]},
+ {name:'Broodmother Vesha',level:22,hp:260,def:19,atk:20,maxHit:8,weakness:'ranged',boss:true,bossTier:'early',gearSet:'Broodstalker',
+  loot:{Coins:54,'Thick Hide':1},bossGearDrops:[['Broodstalker Hood',.070],['Broodstalker Tunic',.070],['Broodstalker Chaps',.070]]},
+ {name:'Hollow Magister',level:26,hp:300,def:22,atk:25,maxHit:9,weakness:'magic',boss:true,bossTier:'early',gearSet:'Hollowmage',
+  loot:{Coins:65,Herb:2},bossGearDrops:[['Hollowmage Hood',.070],['Hollowmage Robes',.070],['Hollowmage Legwraps',.070]]},
+ {name:'Ashen Warlord',level:88,hp:1780,def:100,atk:102,maxHit:65,weakness:'melee',boss:true,bossTier:'late',gearSet:'Ashen Warlord',
+  loot:{Coins:340,'Dragon Scale':2},bossGearDrops:[['Ashen Warlord Helm',.018],['Ashen Warlord Plate',.018],['Ashen Warlord Legs',.018]]},
+ {name:'Stormwing Matriarch',level:94,hp:2050,def:111,atk:113,maxHit:72,weakness:'ranged',boss:true,bossTier:'late',gearSet:'Stormwing',
+  loot:{Coins:440,'Ancient Crystal':1},bossGearDrops:[['Stormwing Hood',.018],['Stormwing Mantle',.018],['Stormwing Chaps',.018]]},
+ {name:'Astral Hierophant',level:99,hp:2300,def:116,atk:122,maxHit:78,weakness:'magic',boss:true,bossTier:'late',gearSet:'Astral',
+  loot:{Coins:510,'Void Residue':2},bossGearDrops:[['Astral Crown',.018],['Astral Vestments',.018],['Astral Legwraps',.018]]}
+];
+MONSTERS.push(...HUNT_BOSSES);
 const SPECIAL_COMPONENT_DROPS={
  Goblin:{item:'Goblin Ember',chance:.10},
  'Swamp Witch':{item:'Witch Sigil',chance:.075},
@@ -919,7 +1010,7 @@ const MONSTER_WEAKNESSES={
  'Abyss Warden':'melee','Crystal Sentinel':'melee','Ancient Dragon':'ranged',
  'Void Overlord':'magic'
 };
-for(const m of MONSTERS)m.weakness=MONSTER_WEAKNESSES[m.name]||'melee';
+for(const m of MONSTERS)m.weakness=m.weakness||MONSTER_WEAKNESSES[m.name]||'melee';
 const combatType=style=>style==='ranged'?'ranged':style==='magic'?'magic':'melee';
 const weaknessLabel=style=>({melee:'🗡️ Melee',ranged:'🏹 Ranged',magic:'🪄 Magic'})[style]||style;
 
@@ -962,6 +1053,51 @@ for(const [name,gear] of Object.entries(RAID_GEAR)){
  registerGear(name,gear);
  if(gear.combatType==='magic')MAGIC_STAVES[name]=gear;
 }
+// Armour from boss hunts is DROP-ONLY. Early sets beat ordinary smithing
+// offence at their levels while sacrificing protection; late sets rival crafted
+// power gear but do not replace the defensive Bulwark/Warden/Spellguard sets.
+const BOSS_ARMOUR={
+ 'Hillbreaker Helm':{slot:'head',requiredSkill:'defence',requiredLevel:12,defence:6,attack:2,strength:1},
+ 'Hillbreaker Vest':{slot:'body',requiredSkill:'defence',requiredLevel:12,defence:12,attack:4,strength:2},
+ 'Hillbreaker Greaves':{slot:'legs',requiredSkill:'defence',requiredLevel:12,defence:9,attack:3,strength:1},
+ 'Broodstalker Hood':{slot:'head',requiredSkill:'ranged',requiredLevel:15,defence:4,rangedAccuracy:7,rangedPower:2},
+ 'Broodstalker Tunic':{slot:'body',requiredSkill:'ranged',requiredLevel:15,defence:10,rangedAccuracy:11,rangedPower:3},
+ 'Broodstalker Chaps':{slot:'legs',requiredSkill:'ranged',requiredLevel:15,defence:7,rangedAccuracy:8,rangedPower:2},
+ 'Hollowmage Hood':{slot:'head',requiredSkill:'magic',requiredLevel:18,defence:3,magicAccuracy:7,magicPower:3},
+ 'Hollowmage Robes':{slot:'body',requiredSkill:'magic',requiredLevel:18,defence:8,magicAccuracy:13,magicPower:4},
+ 'Hollowmage Legwraps':{slot:'legs',requiredSkill:'magic',requiredLevel:18,defence:6,magicAccuracy:9,magicPower:3},
+ 'Ashen Warlord Helm':{slot:'head',requiredSkill:'attack',requiredLevel:85,defence:18,attack:20,strength:12},
+ 'Ashen Warlord Plate':{slot:'body',requiredSkill:'attack',requiredLevel:85,defence:32,attack:29,strength:21},
+ 'Ashen Warlord Legs':{slot:'legs',requiredSkill:'attack',requiredLevel:85,defence:24,attack:23,strength:16},
+ 'Stormwing Hood':{slot:'head',requiredSkill:'ranged',requiredLevel:88,defence:13,rangedAccuracy:38,rangedPower:15},
+ 'Stormwing Mantle':{slot:'body',requiredSkill:'ranged',requiredLevel:88,defence:23,rangedAccuracy:58,rangedPower:23},
+ 'Stormwing Chaps':{slot:'legs',requiredSkill:'ranged',requiredLevel:88,defence:17,rangedAccuracy:46,rangedPower:18},
+ 'Astral Crown':{slot:'head',requiredSkill:'magic',requiredLevel:90,defence:11,magicAccuracy:43,magicPower:19},
+ 'Astral Vestments':{slot:'body',requiredSkill:'magic',requiredLevel:90,defence:19,magicAccuracy:66,magicPower:27},
+ 'Astral Legwraps':{slot:'legs',requiredSkill:'magic',requiredLevel:90,defence:15,magicAccuracy:52,magicPower:22}
+};
+for(const [name,stats] of Object.entries(BOSS_ARMOUR))registerGear(name,stats);
+
+// Both thresholds count. 3 pieces give the 2-piece bonus PLUS the 3-piece bonus.
+const GEAR_SETS=[
+ {name:'Hillbreaker',items:['Hillbreaker Helm','Hillbreaker Vest','Hillbreaker Greaves'],two:{attackPct:.04},three:{strength:3,attack:5}},
+ {name:'Broodstalker',items:['Broodstalker Hood','Broodstalker Tunic','Broodstalker Chaps'],two:{rangedPct:.04},three:{rangedAccuracy:8,rangedPower:4}},
+ {name:'Hollowmage',items:['Hollowmage Hood','Hollowmage Robes','Hollowmage Legwraps'],two:{magicPct:.04},three:{magicAccuracy:9,magicPower:4}},
+ {name:'Bulwark',items:['Bulwark Helm','Bulwark Plate','Bulwark Legs'],two:{defencePct:.12},three:{defence:48,block:8}},
+ {name:'Ravager',items:['Ravager Helm','Ravager Plate','Ravager Legs'],two:{attackPct:.10},three:{attack:14,strength:12}},
+ {name:'Warden',items:['Warden Hood','Warden Coat','Warden Guards'],two:{defencePct:.10},three:{defence:30,block:5}},
+ {name:'Deadeye',items:['Deadeye Hood','Deadeye Jacket','Deadeye Chaps'],two:{rangedPct:.12},three:{rangedAccuracy:20,rangedPower:14}},
+ {name:'Spellguard',items:['Spellguard Hood','Spellguard Robes','Spellguard Legwraps'],two:{defencePct:.10},three:{defence:30,block:5}},
+ {name:'Soulweaver',items:['Soulweaver Hood','Soulweaver Robes','Soulweaver Legwraps'],two:{magicPct:.12},three:{magicAccuracy:22,magicPower:16}},
+ {name:'Ashen Warlord',items:['Ashen Warlord Helm','Ashen Warlord Plate','Ashen Warlord Legs'],two:{attackPct:.18},three:{attack:24,strength:22}},
+ {name:'Stormwing',items:['Stormwing Hood','Stormwing Mantle','Stormwing Chaps'],two:{rangedPct:.18},three:{rangedAccuracy:34,rangedPower:23}},
+ {name:'Astral',items:['Astral Crown','Astral Vestments','Astral Legwraps'],two:{magicPct:.18},three:{magicAccuracy:38,magicPower:27}}
+];
+function setPieceCount(set){return set.items.filter(name=>Object.values(state.equipment).includes(name)).length}
+function setBonusEntries(){return GEAR_SETS.map(set=>({...set,count:setPieceCount(set)})).filter(set=>set.count>0)}
+function activeSetBonuses(){return setBonusEntries().filter(set=>set.count>=2)}
+const SET_STAT_LABELS={attackPct:'Melee accuracy',strengthPct:'Melee strength',defencePct:'Defence',rangedPct:'Ranged accuracy & damage',magicPct:'Magic accuracy & damage',attack:'Melee accuracy',strength:'Melee damage',defence:'Armour defence',block:'Block',rangedAccuracy:'Ranged accuracy',rangedPower:'Ranged damage',magicAccuracy:'Magic accuracy',magicPower:'Magic damage'};
+function describeSetBonus(bonus){return Object.entries(bonus).map(([key,value])=>`+${key.endsWith('Pct')?Math.round(value*100)+'%':value} ${SET_STAT_LABELS[key]||key}`).join(' · ')}
 SKILLS.crafting.actions.push(
  A('Forge Perfect Amulet (Unf)','Perfect Amulet (Unf)',96,1700,{'Belroth Amulet Core':1,'Gold Amulet Blank':1,'Spirit Thread':4,'Zenyte':1},'Raid Jewellery'),
  A('Forge Perfect Ring (Unf)','Perfect Ring (Unf)',96,1700,{'Belroth Ring Core':1,'Gold Ring Blank':1,'Rune Bar':2,'Zenyte':1},'Raid Jewellery')
@@ -1422,51 +1558,50 @@ function gemMark(item){
 }
 function monsterIcon(monster){
  const name=typeof monster==='string'?monster:monster.name;
- if(name==='Belroth')return '👑';
- if(name.includes('Deep')||name.includes('Cave'))return '⛰️';
- if(name.includes('Sentinel')||name.includes('Colossus')||name.includes('Stoneguard'))return '🗿';
- if(name==='Rat') return '🐀';
- if(name==='Chicken') return '🐔';
- if(name==='Wandering Peasant') return '🧑‍🌾';
- if(name==='Goblin') return '👺';
- if(name==='Skeleton') return '💀';
- if(name==='Bandit') return '🥷';
- if(name==='Dwarven Miner') return '⛏️';
- if(name==='Forest Guardian') return '🌳';
- if(name==='Swamp Witch') return '🧙';
- if(name==='Cave Troll') return '🧌';
- if(name==='Mithril Golem') return '🗿';
- if(name==='Abyss Warden') return '👁️';
- if(name==='Crystal Sentinel') return '🔮';
- if(name==='Ancient Dragon') return '🐉';
- if(name==='Void Overlord') return '🌌';
+ const icons={
+  'Belroth':'👑','Belroth’s Warden':'🛡️','Deep Cave Marauder':'⛏️','Runebound Stoneguard':'🗿','Lurking Gloomstalker':'🦇','Deep Mountain Troll':'🧌',
+  'Armoured Cave Sentinel':'🤖','Shadowwing Harpy':'🦅','Ancient Iron Colossus':'🦾','Fallen Expedition Knight':'⚔️','Abyssal Cave Serpent':'🐍','Deepmountain Hexweaver':'🪄',
+  'Hillbreaker Giant':'🧌','Broodmother Vesha':'🕷️','Hollow Magister':'🔮','Ashen Warlord':'🔥','Stormwing Matriarch':'🦅','Astral Hierophant':'🌠',
+  'Rat':'🐀','Chicken':'🐔','Wandering Peasant':'🧑‍🌾','Goblin':'👺','Skeleton':'💀','Bandit':'🥷','Dwarven Miner':'⛏️','Forest Guardian':'🌳',
+  'Swamp Witch':'🧙','Cave Troll':'🧌','Mithril Golem':'🗿','Abyss Warden':'👁️','Crystal Sentinel':'🔮','Ancient Dragon':'🐉','Void Overlord':'🌌'
+ };
+ if(icons[name])return icons[name];
+ if(name.includes('Dragon'))return '🐉';
+ if(name.includes('Witch')||name.includes('weaver'))return '🪄';
+ if(name.includes('Golem')||name.includes('Sentinel')||name.includes('Stone'))return '🗿';
+ if(name.includes('Troll'))return '🧌';
+ if(name.includes('Serpent'))return '🐍';
+ if(name.includes('Knight'))return '⚔️';
  return '👾';
 }
 function itemIcon(item){
- const RAW_FISH_ICONS={Shrimp:'🦐',Sardine:'🐟',Crab:'🦀',Herring:'🐠',Trout:'🐟',Cod:'🐡',Salmon:'🐟',Eel:'🐍',Tuna:'🐟',Lobster:'🦞',Swordfish:'🐠',Monkfish:'🐡',Shark:'🦈',Anglerfish:'🐠',"Manta Ray":'🐋',Leviathan:'🐉'};
- const COOKED_FISH_ICONS={'Cooked Shrimp':'🍤','Cooked Sardine':'🍣','Cooked Crab':'🦀','Cooked Herring':'🍣','Cooked Trout':'🐟','Cooked Cod':'🐡','Cooked Salmon':'🍣','Cooked Eel':'🍢','Cooked Tuna':'🍣','Cooked Lobster':'🦞','Cooked Swordfish':'🍢','Cooked Monkfish':'🍥','Cooked Shark':'🥩','Cooked Anglerfish':'🍥','Cooked Manta Ray':'🍽️','Cooked Leviathan':'🍖'};
+ const RAW_FISH_ICONS={Shrimp:'🦐',Sardine:'🐟',Crab:'🦀',Herring:'🐠',Trout:'🐟',Cod:'🐡',Salmon:'🐟',Eel:'🐍',Tuna:'🐟',Lobster:'🦞',Swordfish:'🗡️',Monkfish:'🐡',Shark:'🦈',Anglerfish:'🎣','Manta Ray':'🐋',Leviathan:'🐉'};
+ const COOKED_FISH_ICONS={'Cooked Shrimp':'🍤','Cooked Sardine':'🍣','Cooked Crab':'🦀','Cooked Herring':'🍣','Cooked Trout':'🐟','Cooked Cod':'🐡','Cooked Salmon':'🍣','Cooked Eel':'🍢','Cooked Tuna':'🍣','Cooked Lobster':'🦞','Cooked Swordfish':'🍖','Cooked Monkfish':'🍥','Cooked Shark':'🥩','Cooked Anglerfish':'🍥','Cooked Manta Ray':'🍽️','Cooked Leviathan':'🍖'};
  const ITEM_ICON_MAP={
-  [RAID_CONFIG.chest]:'🎁','Coins':'🪙','Soul Shard':'🔹','Belroth Amulet Core':'🧿','Belroth Ring Core':'⚙️','Perfect Amulet (Unf)':'📿','Perfect Ring (Unf)':'💍',
-  'Perfect Amulet':'🪬','Perfect Ring':'💠',
+  [RAID_CONFIG.chest]:'🎁','Coins':'🪙','Soul Shard':'🔹','Belroth Amulet Core':'🧿','Belroth Ring Core':'⚙️','Perfect Amulet (Unf)':'🪬','Perfect Ring (Unf)':'💠','Perfect Amulet':'🪬','Perfect Ring':'💠',
   'Rat Tail':'🪱','Goblin Ear':'👂','Bones':'🦴','Ancient Token':'🏺','Feather':'🪶','Leather':'🧥','Cowhide':'🐄','Thick Hide':'🐃','Goat Horn':'🐐',
-  'Raw Chicken':'🍗','Raw Beef':'🥩','Raw Lamb':'🍖','Cooked Chicken':'🍗','Cooked Beef':'🥓','Cooked Lamb':'🍖',
-  'Bread':'🍞','Baked Potato':'🥔','Carrot Soup':'🥣','Fish Stew':'🍲','Meat Pie':'🥧','Seafood Platter':'🍽️','Royal Feast':'🍱',
+  'Raw Chicken':'🍗','Raw Beef':'🥩','Raw Lamb':'🍖','Cooked Chicken':'🍗','Cooked Beef':'🥓','Cooked Lamb':'🍖','Bread':'🍞','Baked Potato':'🥔','Carrot Soup':'🥣','Fish Stew':'🍲','Meat Pie':'🥧','Seafood Platter':'🍽️','Royal Feast':'🍱',
   'Potato':'🥔','Berries':'🫐','Egg':'🥚','Milk':'🥛','Carrot':'🥕','Sunfruit':'🍊','Wheat':'🌾','Flax':'🪢','Mushroom':'🍄','Corn':'🌽',
   'Herb':'🌿','Highland Herb':'🍃','Mystic Herb':'☘️',
   'Carrot Seed':'🌰','Flax Seed':'🫘','Mushroom Spores':'🦠','Corn Seed':'🌽','Highland Seed':'🌱','Mystic Seed':'✨','Sunfruit Seed':'🌻',
-  'Wool':'🧶','Ball of Wool':'🧵',
-  'Logs':'🪵','Oak Logs':'🌳','Willow Logs':'🌿','Maple Logs':'🍁','Yew Logs':'🌲','Magic Logs':'✨','Redwood Logs':'🪵',
+  'Wool':'🧶','Ball of Wool':'🧵','Logs':'🪵','Oak Logs':'🌳','Willow Logs':'🌿','Maple Logs':'🍁','Yew Logs':'🌲','Magic Logs':'✨','Redwood Logs':'🪵','Elder Logs':'🌲',
   'Copper Ore':'🟠','Tin Ore':'⚪','Iron Ore':'⛓️','Silver Ore':'🥈','Gold Ore':'🥇','Mithril Ore':'🔷','Adamant Ore':'🟩','Rune Ore':'🟪','Dragonite Ore':'🟥','Coal':'⚫','Clay':'🟤','Limestone':'⬜','Obsidian':'◼️',
   'Bronze Bar':'🟫','Iron Bar':'⬜','Steel Bar':'⬛','Silver Bar':'⚪','Gold Bar':'🟡','Mithril Bar':'🔷','Adamant Bar':'🟩','Rune Bar':'🟪','Dragonite Bar':'🟥',
-  'Torn Cloth':'🧻','Bent Nail':'📎','Cracked Jug':'🏺','Broken Pick Head':'⛏️','Rusty Gear':'⚙️','Dented Lantern':'🏮',
-  'Chewed Rope':'🪢','Broken Tooth':'🦷','Dirty Feather':'🪶','Bone Dust':'⚱️','Ancient Scrap':'🧩','Old Medallion':'🏵️','Mossy Bark':'🪵',
-  'Empty Vial':'🧴','Witch Ash':'🌫️','Troll Bone':'🦴','Golem Core':'🔩','Void Residue':'🌑','Crystal Dust':'✨','Charred Scale':'🐉',
-  'Goblin Ember':'🔥','Witch Sigil':'🔯','Golem Heart':'❤️','Dragon Arcane Core':'🔮','Void Arcane Core':'🌌','Troll Bowstring':'🪢','Dragon Bowstring':'🧵',
-  'Troll Fang':'🦷','Abyss Shard':'🔻','Ancient Crystal':'💎','Dragon Scale':'🐲',
-  'Ancient Scholar Charm':'🎓','Fortune Ring':'🍀','Troll King Ring':'👹','Dragonheart Amulet':'❤️','Voidborn Cape':'🕶️','Abyssal Blade':'⚔️','Dwarven Soul Pickaxe':'⛏️',
-  'Deepmountain Greatsword':'🗡️','Deepmountain Warbow':'🏹','Deepmountain Soulstaff':'🪄',
-  'Healing Potion':'🧪','Greater Healing Potion':'🧫','Superior Healing Potion':'⚗️','Ultimate Healing Potion':'🥤',
-  'Strength Potion':'🟥','Accuracy Potion':'🟦','Defence Potion':'🟩','Battle Potion':'🟪','Master Battle Potion':'🔴','Wisdom Potion':'📘','Greater Wisdom Potion':'📙','Luck Potion':'🍀','Greater Luck Potion':'🌟'
+  'Silver Wire':'🧵','Steel Nails':'📎','Rune Nails':'📎',
+  'Torn Cloth':'🧻','Bent Nail':'📎','Cracked Jug':'🏺','Broken Pick Head':'⛏️','Rusty Gear':'⚙️','Dented Lantern':'🏮','Chewed Rope':'🪢','Broken Tooth':'🦷','Dirty Feather':'🪶','Bone Dust':'⚱️','Ancient Scrap':'🧩','Old Medallion':'🏵️','Mossy Bark':'🪵','Empty Vial':'🧴','Witch Ash':'🌫️','Troll Bone':'🦴','Golem Core':'🔩','Void Residue':'🌑','Crystal Dust':'✨','Charred Scale':'🐉',
+  'Goblin Ember':'🔥','Witch Sigil':'🔯','Golem Heart':'❤️','Dragon Arcane Core':'🔮','Void Arcane Core':'🌌','Troll Bowstring':'🪢','Dragon Bowstring':'🧵','Troll Fang':'🦷','Abyss Shard':'🔻','Ancient Crystal':'💎','Dragon Scale':'🐲',
+  'Ancient Scholar Charm':'🎓','Fortune Ring':'🍀','Troll King Ring':'👹','Dragonheart Amulet':'❤️','Voidborn Cape':'🕶️','Abyssal Blade':'⚔️','Dwarven Soul Pickaxe':'⛏️','Forest Guardian Shield':'🛡️','Dragon Scale Body':'🥋',
+  'Deepmountain Greatsword':'⚔️','Deepmountain Warbow':'🏹','Deepmountain Soulstaff':'🪄',
+  'Hillbreaker Helm':'🪖','Hillbreaker Vest':'🦾','Hillbreaker Greaves':'🥾',
+  'Broodstalker Hood':'🕷️','Broodstalker Tunic':'🕸️','Broodstalker Chaps':'🦗',
+  'Hollowmage Hood':'🧙','Hollowmage Robes':'🪬','Hollowmage Legwraps':'🌙',
+  'Ashen Warlord Helm':'🔥','Ashen Warlord Plate':'🌋','Ashen Warlord Legs':'⚔️',
+  'Stormwing Hood':'🌩️','Stormwing Mantle':'🦅','Stormwing Chaps':'⚡',
+  'Astral Crown':'🌠','Astral Vestments':'🌌','Astral Legwraps':'✨',
+  'Bulwark Helm':'🪖','Bulwark Plate':'🛡️','Bulwark Legs':'🥾','Ravager Helm':'⛑️','Ravager Plate':'🥋','Ravager Legs':'👖',
+  'Warden Hood':'🧢','Warden Coat':'🧥','Warden Guards':'👖','Deadeye Hood':'🎯','Deadeye Jacket':'🦺','Deadeye Chaps':'👖',
+  'Spellguard Hood':'🔷','Spellguard Robes':'🔮','Spellguard Legwraps':'👖','Soulweaver Hood':'🟣','Soulweaver Robes':'🪄','Soulweaver Legwraps':'👖',
+  'Healing Potion':'🧪','Greater Healing Potion':'🧫','Superior Healing Potion':'⚗️','Ultimate Healing Potion':'🥤','Strength Potion':'🟥','Accuracy Potion':'🟦','Defence Potion':'🟩','Battle Potion':'🟪','Master Battle Potion':'🔴','Wisdom Potion':'📘','Greater Wisdom Potion':'📙','Luck Potion':'🍀','Greater Luck Potion':'🌟','Ranger Focus Potion':'🏹','Arcane Surge Potion':'🪄'
  };
  const soul=SOUL_GEMS.find(s=>s.name===item); if(soul) return soul.color;
  if(ITEM_ICON_MAP[item]) return ITEM_ICON_MAP[item];
@@ -1474,16 +1609,17 @@ function itemIcon(item){
  if(RAW_FISH_ICONS[item]) return RAW_FISH_ICONS[item];
  if(item.startsWith('Uncut ')) return ({'Uncut Opal':'🪨','Uncut Jade':'🟢','Uncut Red Topaz':'🟧','Uncut Sapphire':'🔷','Uncut Emerald':'💚','Uncut Ruby':'❤️','Uncut Diamond':'💠','Uncut Dragonstone':'💙','Uncut Onyx':'⚫','Uncut Zenyte':'🧡'})[item] || '💎';
  if(GEMS.includes(item)) return ({Opal:'⚪',Jade:'🟢','Red Topaz':'🟧',Sapphire:'🔷',Emerald:'💚',Ruby:'❤️',Diamond:'💠',Dragonstone:'💙',Onyx:'⚫',Zenyte:'🧡'})[item] || '💎';
- if(item.includes('Arrow')) return '➶';
+ if(item.includes('Arrowheads')) return '🪓';
+ if(item.includes('Arrows')) return '➶';
  if(item.includes('Bowstring')) return '🧵';
- if(item.includes('Arrow Shaft')) return '🪚';
+ if(item.includes('Arrow Shafts')) return '🪚';
  if(item.includes('Bow')||item.includes('Quiver')) return '🏹';
  if(item.includes('Staff')||item.includes('Wand')) return '🪄';
  if(item.includes('Sword')||item.includes('Blade')) return '🗡️';
  if(item.includes('Shield')) return '🛡️';
  if(item.includes('Helm')||item.includes('Hood')) return '🪖';
- if(item.includes('Chestplate')||item.includes('Body')||item.includes('Robe Top')) return '🥋';
- if(item.includes('Platelegs')||item.includes('Legs')||item.includes('Robe Bottom')) return '👖';
+ if(item.includes('Chestplate')||item.includes('Body')||item.includes('Robes')||item.includes('Robe Top')||item.includes('Plate')) return '🥋';
+ if(item.includes('Platelegs')||item.includes('Legs')||item.includes('Leggings')||item.includes('Legwraps')||item.includes('Chaps')||item.includes('Guards')) return '👖';
  if(item.includes('Gloves')||item.includes('Gauntlets')) return '🧤';
  if(item.includes('Axe')) return '🪓';
  if(item.includes('Pickaxe')) return '⛏️';
@@ -1530,7 +1666,13 @@ const SPECIAL_SELL_PRICES={
  'Belroth Amulet Core':120000,'Belroth Ring Core':120000,
  'Perfect Amulet (Unf)':160000,'Perfect Ring (Unf)':160000,
  'Deepmountain Greatsword':500000,'Deepmountain Warbow':500000,'Deepmountain Soulstaff':500000,
- 'Perfect Amulet':800000,'Perfect Ring':800000
+ 'Perfect Amulet':800000,'Perfect Ring':800000,
+ 'Hillbreaker Helm':2800,'Hillbreaker Vest':4200,'Hillbreaker Greaves':3400,
+ 'Broodstalker Hood':3200,'Broodstalker Tunic':4400,'Broodstalker Chaps':3700,
+ 'Hollowmage Hood':3500,'Hollowmage Robes':4800,'Hollowmage Legwraps':3900,
+ 'Ashen Warlord Helm':180000,'Ashen Warlord Plate':260000,'Ashen Warlord Legs':220000,
+ 'Stormwing Hood':190000,'Stormwing Mantle':275000,'Stormwing Chaps':230000,
+ 'Astral Crown':210000,'Astral Vestments':300000,'Astral Legwraps':250000
 };
 function baseSellPrice(item){
  const shop=SHOP_ITEMS.find(x=>x.name===item);if(shop)return Math.max(1,Math.floor(shop.price*GAME_CONFIG.shopSellMultiplier));
@@ -1543,6 +1685,8 @@ function baseSellPrice(item){
  return 15;
 }
 function itemTier(item){
+ if(/Ashen Warlord|Stormwing|Astral (Crown|Vestments|Legwraps)/.test(item))return 'tier-epic';
+ if(/Hillbreaker|Broodstalker|Hollowmage/.test(item))return 'tier-rare';
  if(/Prismatic Soul Gem|Perfect Ring|Perfect Amulet|Deepmountain|Belroth|Eternal Soul Crown|Solar Soul Gem|Voidcaller|Dragonfire Staff|Dragonbone Bow/.test(item))return 'tier-epic';
  if(/Violet Soul Gem|Azure Soul Gem/.test(item))return 'tier-rare';
  if(/Verdant Soul Gem/.test(item))return 'tier-high';
@@ -1555,8 +1699,24 @@ for(const skill of Object.values(SKILLS))for(const a of skill.actions||[])ITEM_M
 for(const monster of MONSTERS){for(const item of Object.keys(monster.loot))ITEM_META[item]??={category:itemCategory(item)};if(monster.unique)ITEM_META[monster.unique.item]??={category:itemCategory(monster.unique.item)};if(monster.componentDrop){for(const item of [monster.componentDrop.item,monster.componentDrop.extraItem].filter(Boolean))ITEM_META[item]??={category:itemCategory(item)}}for(const key of ['trashTable','seedTable','gemTable'])for(const row of monster[key]||[])ITEM_META[row[0]]??={category:itemCategory(row[0])}}
 for(const item of [...Object.keys(EQUIPMENT),...Object.keys(FOOD),...Object.keys(POTIONS),...Object.keys(FIRE_FUEL),...SHOP_ITEMS.map(x=>x.name),'Coins',...TREASURE_TABLE.map(x=>x[0]),...SOUL_GEMS.map(x=>x.name),'Soul Shard'])ITEM_META[item]??={category:itemCategory(item)};
 function itemVisualClass(item){
+ const classes=[];
  const m=Object.keys(MATERIAL_MARKS).find(k=>item.includes(k));
- return m?'metal-'+m.toLowerCase():item.includes('Prismatic')?'metal-prismatic':item.includes('Perfect')?'metal-prismatic':'';
+ if(m)classes.push('metal-'+m.toLowerCase());
+ else if(item.includes('Prismatic')||item.includes('Perfect'))classes.push('metal-prismatic');
+ const cat=itemCategory(item);
+ if(cat==='Food'||FISH_TO_COOK.includes(item)||item.startsWith('Cooked '))classes.push('cat-food');
+ else if(cat==='Potions')classes.push('cat-potion');
+ else if(cat==='Loot'||cat==='Rare Drops')classes.push('cat-loot');
+ else if(cat==='Gems'||cat==='Soul Gems'||cat==='Soul Shards')classes.push('cat-gem');
+ else if(cat==='Farming'||cat==='Seeds')classes.push('cat-farm');
+ const gear=EQUIPMENT[item];
+ if(gear){
+  if(gear.slot)classes.push('slot-'+gear.slot);
+  if(gear.combatType==='ranged'||gear.requiredSkill==='ranged'||gear.rangedAccuracy||gear.rangedPower)classes.push('style-ranged');
+  else if(gear.combatType==='magic'||gear.requiredSkill==='magic'||gear.magicAccuracy||gear.magicPower)classes.push('style-magic');
+  else if(['weapon','shield','head','body','legs','gloves','cape','amulet','ring'].includes(gear.slot||'')||gear.attack||gear.strength||gear.block)classes.push('style-melee');
+ }
+ return classes.join(' ');
 }
 function itemArt(item,large=false){return `<span class="item-art ${itemTier(item)} ${itemVisualClass(item)} ${large?'big-art':''}" aria-hidden="true">${itemIcon(item)}</span>`}
 
@@ -1770,6 +1930,11 @@ function gearMods(){
  const mods={attackPct:0,strengthPct:0,defencePct:0,rangedPct:0,magicPct:0,rangedAccuracy:0,rangedPower:0,magicAccuracy:0,magicPower:0,xpBonus:0,luckBonus:0,soulDropBonus:0,gatherBonus:0,woodcuttingYield:0,miningYield:0,fishingYield:0,agricultureYield:0,
  fletchingXpBonus:0,craftingXpBonus:0,smithingXpBonus:0,alchemyXpBonus:0,enchantingXpBonus:0,miningXpBonus:0,defence:0,block:0,attack:0,strength:0};
  for(const name of Object.values(state.equipment)){const piece=EQUIPMENT[name]||{};for(const key of Object.keys(mods))mods[key]+=Number(piece[key]||0)}
+ for(const set of activeSetBonuses()){
+  for(const threshold of [set.two,...(set.count===3?[set.three]:[])]){
+   for(const [key,value] of Object.entries(threshold))mods[key]=(mods[key]||0)+Number(value||0);
+  }
+ }
  const perks=permanentBonuses();
  mods.xpBonus+=perks.globalXp;
  mods.strengthPct+=perks.combatPower;
@@ -1934,6 +2099,14 @@ function applyMonsterLoot(m){
   if(add('Soul Shard',qty)){
    drops.push(`${qty} Soul Shard`);
    state.stats.soulShardsFound=(state.stats.soulShardsFound||0)+qty;
+  }
+ }
+ // Boss gear rolls independently of regular loot, Soul Gems and uniques.
+ for(const [item,baseChance] of m.bossGearDrops||[]){
+  const chance=clamp(baseChance*(1+gearMods().luckBonus),0,.95);
+  if(Math.random()<chance){
+   if(add(item,1)){drops.push(`🌟 ${item}`);note(`🌟 BOSS DROP! ${item}`)}
+   else note(`🏦 Bank full; missed boss gear ${item}.`);
   }
  }
  if(m.componentDrop){
@@ -2396,10 +2569,10 @@ function raidPanelHtml(){
  <div class="raid-waves">${RAID_WAVES.map((m,i)=>`<span class="raid-wave ${i<raid.wave?'raid-cleared':i===raid.wave?'raid-current':'raid-locked'}" title="Wave ${i+1}: ${esc(m.name)} · Weak to ${m.weakness}">${i<raid.wave?'✓':i===raid.wave?'⚔️':'🔒'} ${i+1}</span>`).join('')}</div>
  <div class="raid-current"><div><strong>${isBoss?'👑':'⚔️'} Wave ${raid.wave+1}/${RAID_WAVES.length} · ${esc(wave.name)}</strong>
  <div class="raid-details">${fmt(wave.hp)} HP · Defence ${wave.def} · Max hit ${wave.maxHit} · <b>Weakness: ${weaknessLabel(wave.weakness)}</b></div></div>
- <button data-raid-start ${canStart?'':'disabled'}>${playing?'Fighting…':isBoss?'⚔️ Face Belroth':'Enter wave '+(raid.wave+1)}</button></div>
+ <div class="monster-actions"><button data-inspect-raid="${raid.wave}">🔎 Inspect</button><button data-raid-start ${canStart?'':'disabled'}>${playing?'Fighting…':isBoss?'⚔️ Face Belroth':'Enter wave '+(raid.wave+1)}</button></div></div>
  ${!unlocked?`<div class="raid-warning">🔒 Requires Combat Level ${RAID_CONFIG.unlockCombatLevel} to enter.</div>`:isBoss&&bossMissing.length?`<div class="raid-warning">🔒 Belroth requires ${esc(bossMissing.join(', '))}. Level up and equip near-best pre-raid gear.</div>`:supplies?`<div class="raid-warning">${esc(supplies)}</div>`:''}
  <div class="raid-tip">🗡️ Melee · 🏹 Ranged · 🪄 Magic — use the correct style, change weapons in Equipment, and restock food between waves. Belroth is tuned for high-level stats and strong pre-raid gear.</div>
- <details class="raid-guide"><summary>🗺️ All 12 raid waves and weaknesses</summary><div class="raid-guide-list">${RAID_WAVES.map((m,i)=>`<div class="${i===raid.wave?'active':''}"><span>${i+1}. ${esc(m.name)}</span><b>${weaknessLabel(m.weakness)}</b></div>`).join('')}</div></details>
+ <details class="raid-guide"><summary>🗺️ All 12 raid waves and weaknesses</summary><div class="raid-guide-list">${RAID_WAVES.map((m,i)=>`<div class="${i===raid.wave?'active':''}"><span>${i+1}. ${esc(m.name)}</span><b>${weaknessLabel(m.weakness)}</b><button data-inspect-raid="${i}" type="button">Inspect</button></div>`).join('')}</div></details>
  <div class="raid-loot"><strong>🎁 Belroth Expedition Chest</strong><p>The final boss always awards a chest to your Bank. Each chest contains Coins, Soul Shards and a weighted drop: <b>11% Amulet Core</b>, <b>11% Ring Core</b>, <b>3% each BiS weapon</b>, or materials/Solar Soul Gem. Cores become Perfect (Unf) jewellery in Crafting, finished with Prismatic Soul Gems in Enchanting.</p>
  <div class="raid-chest-row"><span>🎁 Chests owned: <b>${fmt(count(RAID_CONFIG.chest))}</b></span>
  <button data-open-raid-chest ${count(RAID_CONFIG.chest)>0?'':'disabled'}>Open Chest</button>
@@ -2414,6 +2587,38 @@ function refreshRaidPanel(){
  if(guideOpen){const guide=box.querySelector('.raid-guide');if(guide)guide.open=true}
 }
 
+function monsterLootRow(item,description,unique=false){
+ return `<div class="monster-loot-row ${unique?'unique':''}">${itemArt(item)}<div><b>${esc(item)}</b><small>${esc(description)}</small></div></div>`;
+}
+function inspectMonster(index,raid=false){
+ const m=raid?RAID_WAVES[index]:MONSTERS[index],overlay=el('monsterInspectOverlay'),out=el('monsterInspectContent');
+ if(!m||!overlay||!out)return;
+ const treasurePct=pct(treasureChance());
+ let drops=[];
+ if(raid){
+  drops=m.boss?[monsterLootRow(RAID_CONFIG.chest,'Guaranteed on Belroth defeat · chest contains coins, Soul Shards and a rare item',true)]:[];
+ }else{
+  for(const [name,qty] of Object.entries(m.loot||{}))drops.push(monsterLootRow(name,name==='Coins'?'Guaranteed · amount varies':`65% per kill · up to ×${qty}`));
+  for(const type of ['trash','seed','gem'])if(m[type+'Table']?.length){
+   const total=m[type+'Table'].reduce((n,row)=>n+row[1],0),start=m[type+'Chance']||0;
+   for(const [item,weight,min=1,max=min] of m[type+'Table'])drops.push(monsterLootRow(item,`${pct(start*weight/total)} per kill · ${min===max?'×'+min:'×'+min+'–'+max} · ${type} table`));
+  }
+  if(m.unique)drops.push(monsterLootRow(m.unique.item,`${pct(clamp(m.unique.chance*(1+gearMods().luckBonus),0,.95))} per kill · unique`,true));
+  if(m.componentDrop){const d=m.componentDrop;drops.push(monsterLootRow(d.item,`${pct(d.chance)} per kill · special material`,true));if(d.extraItem)drops.push(monsterLootRow(d.extraItem,`${pct(d.extraChance)} per kill · special material`,true))}
+  for(const [name,chance] of m.bossGearDrops||[])drops.push(monsterLootRow(name,`${pct(clamp(chance*(1+gearMods().luckBonus),0,.95))} per kill · boss-exclusive`,true));
+  if(!drops.length)drops.push('<p class="subdued">No direct loot from this monster.</p>');
+ }
+ const set=GEAR_SETS.find(s=>s.name===m.gearSet);
+ el('monsterInspectTitle').textContent=(m.boss?'👑 ':'🔎 ')+m.name;
+ out.innerHTML=`<div class="monster-inspect-header"><span class="monster-inspect-icon">${monsterIcon(m)}</span><div><b>${esc(m.name)} · Level ${m.level}</b><p class="small subdued">${raid?'Deep Mountain Expedition · Wave '+(index+1):m.boss?(m.bossTier==='early'?'Early-game boss · accessible with level-appropriate gear':'Late-game power boss · expect a long fight'):'Regular monster'}<br>Weak to ${weaknessLabel(m.weakness)}</p></div></div>
+ <div class="monster-inspect-metrics">${[['HP',fmt(m.hp)],['Defence',fmt(m.def)],['Attack',fmt(m.atk)],['Max hit',fmt(m.maxHit)],['Counter style',weaknessLabel(m.weakness)],['Kills',fmt(state.stats.kills[m.name]||0)]].map(([k,v])=>`<div><small>${esc(k)}</small><strong>${esc(v)}</strong></div>`).join('')}</div>
+ ${set?`<div class="info-box"><b>🎽 ${esc(set.name)} power set</b><p>Two equipped pieces: ${esc(describeSetBonus(set.two))}.<br>Three equipped pieces: ${esc(describeSetBonus(set.three))} <em>(stacks with two-piece bonus)</em>.</p><small>Exclusive drop-only armour, not available in the shop.</small></div>`:''}
+ <h3 class="section-title">🎁 ${raid?'Raid reward':'Drop tables & unique items'}</h3><div class="monster-loot-list">${drops.join('')}</div>
+ <p class="monster-inspect-hint">${raid?'Raid enemies have a saved checkpoint. Only Belroth grants a guaranteed chest.':'All side tables are rolled separately. '+(m.boss?'Each boss armour piece has its own independent roll. ':'')+'Every kill can also grant a Soul Gem ('+pct(soulGemChance('combat'))+'), Soul Shards and treasure gems ('+treasurePct+'). Luck modifies uniques and boss armour drops.'}</p>
+ <div class="monster-actions">${raid?`<button data-inspect-close>Close details</button>`:`<button data-inspect-fight="${index}">⚔️ Fight ${esc(m.name)}</button><button data-inspect-close>Close</button>`}</div>`;
+ overlay.hidden=false;
+}
+function closeMonsterInspect(){el('monsterInspectOverlay').hidden=true}
 function renderCombatMain(){
  const mods=gearMods();
  let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2><p class="section-description">Combat level uses Defence, Hitpoints and your strongest offence: Melee (Attack + Strength), Ranged or Magic. It caps at ${COMBAT_CONFIG.maxLevel}; skills cap at 99.</p></div></div>`;
@@ -2431,7 +2636,17 @@ function renderCombatMain(){
  html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
  <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote">Only food you own is shown, with remaining quantities. When the selected food runs out, select a new one.</small></div>`;
  html+=`<div class="info-box"><div class="between"><div><strong>⛰️ Deep Mountain Expedition</strong><p>12 checkpointed endgame waves. Switch combat styles to counter different enemies and face Belroth for rare raid rewards.</p></div><button data-nav="raid">Open Raid →</button></div></div>`;
- html+=`<h3 class="section-title">⚔️ Monsters (${MONSTERS.length})</h3><div class="combat-monsters">${MONSTERS.map((m,i)=>`<div class="monster"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div><p>${fmt(m.hp)} HP · Defence ${m.def} · Max hit ${m.maxHit}<br><span class="monster-weakness">Weakness: ${weaknessLabel(m.weakness)}</span><br>Loot: ${Object.keys(m.loot).map(x=>`${itemIcon(x)} ${esc(x)}`).join(', ')||'None'}${['trash','seed','gem'].filter(k=>m[k+'Table']?.length).map(k=>`<br>${k==='trash'?'🗑️ Junk':k==='seed'?'🌰 Seed':'💎 Gem'} table (${pct(m[k+'Chance'])}): ${m[k+'Table'].map(r=>esc(r[0])).join(', ')}`).join('')}${m.componentDrop?`<br><span class="gold">✨ Arcane part: ${esc(m.componentDrop.item)} (${pct(m.componentDrop.chance)})${m.componentDrop.extraItem?', '+esc(m.componentDrop.extraItem)+' ('+pct(m.componentDrop.extraChance)+')':''}</span>`:''}${m.unique?`<br><span class="gold">🌟 ${esc(m.unique.item)} · ${pct(m.unique.chance)} base unique drop</span>`:''}</p><div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div>`).join('')}</div>`;
+ const grouped=[
+  ['⚔️ Regular monsters',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>!m.boss)],
+  ['👑 Early bosses · accessible rare power gear',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>m.bossTier==='early')],
+  ['🌟 Late-game boss hunts · rare power sets',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>m.bossTier==='late')]
+ ];
+ for(const [heading,entries] of grouped){
+  html+=`<h3 class="section-title">${heading} (${entries.length})</h3><div class="combat-monsters">${entries.map(([m,i])=>`<div class="monster ${m.boss?'boss-'+m.bossTier:''}"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div>
+   ${m.boss?`<span class="monster-type">${m.bossTier==='early'?'EARLY BOSS':'ENDGAME BOSS'} · ${esc(m.gearSet)} set</span>`:''}
+   <p>${fmt(m.hp)} HP · Max hit ${m.maxHit}<br><span class="monster-weakness">Weak to ${weaknessLabel(m.weakness)}</span>${m.boss?`<br>🌟 Exclusive armour: ${m.bossGearDrops.length} drops`:''}</p>
+   <div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><div class="monster-actions"><button data-inspect-monster="${i}">🔎 Inspect</button><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div></div>`).join('')}</div>`;
+ }
  const total=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
  html+=`<div class="info-box"><b>💠 Soul Gems · separate drop table</b><p>Every monster KILL independently rolls ${pct(GAME_CONFIG.soulGemCombatChance)} for one untradeable Soul Gem and ${pct(GAME_CONFIG.soulShardCombatChance)} for Soul Shards to charge Magic Staves. This cannot remove normal loot, seeds, junk, gems, uniques or treasure. Prismatic is 1 in 10,000 SOUL GEMS. All Soul Gems are untradeable.</p></div>`;
  html+=`<details class="info-box"><summary>💎 Treasure Table · <strong id="treasureRateText">${pct(TREASURE_CHANCE)} base chance per kill</strong></summary><p>Each kill rolls for a gem. If successful, gem type is selected by relative weight. Luck gear and potions raise the initial treasure chance and unique drop rates.</p><div class="bank-count">Current effective treasure chance: <b id="treasureCurrent">${pct(treasureChance())}</b>. Conditional gem odds below add up to 100%.</div>${TREASURE_TABLE.map(([gem,weight])=>`<div class="between" style="padding:5px 0;border-bottom:1px solid #39526a"><span>${itemIcon(gem)} ${esc(gem)}</span><span class="small">${pct(weight/total)} of gems · <span data-gem-chance="${weight}">${pct(treasureChance()*weight/total)}</span> per kill</span></div>`).join('')}</details>`;
@@ -2694,7 +2909,8 @@ function renderGearSidebar(){
  <p class="gear-intro">Click any equipment slot to choose items from your bank, or use × to unequip.</p>
  <div class="gear-doll"><div class="gear-paper-grid">${paperSlots.map(gearSlotButton).join('')}</div><div class="gear-tools-title">Toolbelt</div><div class="gear-toolbelt">${['axe','pickaxe'].map(gearSlotButton).join('')}</div></div>
  <div class="gear-small-note">Empty slots can be clicked too · Gear is returned to your bank when removed</div>
- <div class="equipment-stats"><b>Active bonuses</b>${gearDescription(mods).split(' · ').filter(x=>!x.endsWith('+0')&&!x.endsWith('+0%')).map(x=>`<span>• ${esc(x)}</span>`).join('')||'<span class="subdued">No bonuses equipped yet.</span>'}</div>`;
+ <div class="equipment-stats"><b>Set collections</b>${setBonusEntries().map(set=>`<div class="set-tracker ${set.count>=2?'set-enabled':''}"><b>${esc(set.name)} ${set.count}/3</b><small>2 pieces: ${esc(describeSetBonus(set.two))} ${set.count>=2?'✓':'🔒'}</small><small>3 pieces: ${esc(describeSetBonus(set.three))} ${set.count===3?'✓':'🔒'}</small></div>`).join('')||'<span class="subdued">Equip two matching armour pieces to activate set bonuses.</span>'}</div>
+ <div class="equipment-stats"><b>Active bonuses (including sets)</b>${gearDescription(mods).split(' · ').filter(x=>!x.endsWith('+0')&&!x.endsWith('+0%')).map(x=>`<span>• ${esc(x)}</span>`).join('')||'<span class="subdued">No bonuses equipped yet.</span>'}</div>`;
 }
 function renderGearPicker(){
  const slot=ui.gearSlot,overlay=el('gearOverlay');
@@ -2887,6 +3103,8 @@ function handleClick(e){
  if(b.hasAttribute('data-skills-filter')){ui.skillsFilter=b.dataset.skillsFilter;renderSkillsOverview();return;}
  if(b.hasAttribute('data-skill-open')){const skill=b.dataset.skillOpen;if(!Object.hasOwn(SKILLS,skill))return; if(SKILLS[skill].combat){if(skill!=='hitpoints')state.combatStyle=skill;save();navigate('combat');}else navigate(skill);return;}
  if(b.hasAttribute('data-action'))return startAction(ui.view,Number(b.dataset.action));
+ if(b.hasAttribute('data-inspect-monster'))return inspectMonster(Number(b.dataset.inspectMonster));
+ if(b.hasAttribute('data-inspect-raid'))return inspectMonster(Number(b.dataset.inspectRaid),true);
  if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));
  if(b.hasAttribute('data-raid-start'))return startRaidWave();
  if(b.hasAttribute('data-open-raid-chest'))return openRaidChest();
@@ -2982,6 +3200,13 @@ for(const root of [el('main'),el('sidebar')]){
 }
 el('main').addEventListener('click',handleClick);
 el('sidebar').addEventListener('click',handleClick);
+el('monsterInspectOverlay').addEventListener('click',e=>{
+ if(e.target===el('monsterInspectOverlay'))return closeMonsterInspect();
+ const button=e.target.closest('button');if(!button)return;
+ if(button.hasAttribute('data-inspect-close'))return closeMonsterInspect();
+ if(button.hasAttribute('data-inspect-fight')){closeMonsterInspect();return startCombat(Number(button.dataset.inspectFight))}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('monsterInspectOverlay').hidden)closeMonsterInspect()});
 el('gearOverlay').addEventListener('click',e=>{
  if(e.target===el('gearOverlay'))return closeGearSlot();
  const btn=e.target.closest('button');if(!btn||btn.disabled)return;
@@ -3146,6 +3371,6 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 async function boot(){restore();render();if(state.active)await catchUpOffline();lastTick=performance.now();requestAnimationFrame(tick)}
 boot();
 // Expose test helpers for regression checks.
-window.IdleRPGDebug={getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
+window.IdleRPGDebug={GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
 </script></body></html>

@@ -722,9 +722,41 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 #devStatus{margin-top:10px;min-height:22px;color:#f6d68f;font-size:12px}
 @media(max-width:650px){.profile-switch button{padding:5px 7px!important}.dev-grid{grid-template-columns:1fr}.dev-dialog{padding:12px}.dev-dialog h2{font-size:19px}}
 
+
+/* v3.27: combat stats and contextual item inspection */
+.item-tooltip{position:fixed;z-index:150;width:min(330px,calc(100vw - 18px));max-height:calc(100dvh - 24px);overflow:auto;pointer-events:none;padding:13px 14px;border:1px solid #b99b65;border-radius:11px;background:linear-gradient(160deg,#272720 0%,#141b20 100%);box-shadow:0 14px 40px #000c;color:#eee3cc;font-size:12px;line-height:1.4}
+.item-tooltip[hidden]{display:none!important}
+.tooltip-head{display:flex;align-items:center;gap:10px;padding-bottom:7px;border-bottom:1px solid #6c6046}
+.tooltip-head .item-art{flex:none;width:42px;height:42px;font-size:27px}
+.tooltip-head strong{font-size:14px;display:block;line-height:1.3;color:#f7deb1}
+.tooltip-head small,.tooltip-foot,.tooltip-owned{display:block;color:#bdc6be;font-size:10.5px}
+.tooltip-owned{padding:6px 0}
+.tooltip-stats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;padding:7px 0}
+.tooltip-stats>div{display:flex;align-items:baseline;justify-content:space-between;gap:5px}
+.tooltip-stats span{font-size:11px;color:#c5c9bc}.tooltip-stats b{color:#c5eed0;white-space:nowrap}
+.tooltip-max{margin:8px 0 5px;padding:8px 10px;border:1px solid #69563c;background:#312a20;border-radius:7px}
+.tooltip-hit-row{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:baseline;gap:2px 6px;padding:3px 0}
+.tooltip-hit-row:not(:last-child){border-bottom:1px solid #604c34}
+.tooltip-hit-row>b{color:#ffd98e;font-size:15px;white-space:nowrap}
+.tooltip-hit-row b small{font-size:10px;font-weight:700}
+.tt-gain{color:#8fe4ac}.tt-loss{color:#f3aaa0}.tt-neutral{color:#ada998}.tt-target{width:100%;text-align:right;color:#bbb9a8;font-size:10px}
+.tooltip-set{margin:8px 0;padding:7px;background:#243328;border:1px solid #537752;border-radius:6px}
+.tooltip-set b,.tooltip-set small{display:block}.tooltip-set small{margin-top:3px;color:#bcdac2}
+.tooltip-foot{padding-top:8px;margin-top:7px;border-top:1px solid #534b40;line-height:1.4}
+.equipment-max-hits{border:1px solid #826c49;border-radius:9px;background:#31291e;padding:10px;margin:11px 0}
+.max-hit-heading{font-size:13px;font-weight:800;color:#f4d9a1;display:flex;justify-content:space-between;gap:8px}.max-hit-heading small{font-size:10px;color:#bcb9ad;font-weight:400}
+.max-hit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.max-hit-grid>div{display:grid;gap:3px;text-align:center;border:1px solid #6b5941;background:#231f1a;padding:7px 3px;border-radius:6px}
+.max-hit-grid small{font-size:10px;color:#d2bd9c}.max-hit-grid strong{font-size:22px;color:#ffde93;font-variant-numeric:tabular-nums}
+.equipment-max-hits p{font-size:10px;color:#c2bba9;margin:8px 0 0}
+.combat-max-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center;padding:9px 11px;margin:10px 0;background:#2c2921;border:1px solid #716043;border-radius:8px}
+.combat-max-row>span{margin-right:auto;font-weight:800;color:#f8d99a}.combat-max-row>span small{font-size:10px;color:#c2b8a5;font-weight:400}
+.combat-max-row b{font-size:11px;white-space:nowrap;color:#cfdbc9}.combat-max-row strong{font-size:17px;color:#ffdb96;margin-left:3px}
+@media(max-width:650px){.item-tooltip{width:min(310px,calc(100vw - 20px));max-height:65dvh}.combat-max-row{gap:8px}.combat-max-row>span{width:100%}}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.26 · Developer Profiles</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.27 · Combat Tooltips</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -770,7 +802,7 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.26 · DEVELOPER PROFILES · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.27 · COMBAT TOOLTIPS · CHANGE GAME SETTINGS HERE
 const GAME_CONFIG = {
   actionMs: 1000,            // Base action duration in milliseconds
   bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
@@ -1408,9 +1440,9 @@ const GEAR_SETS=[
  {name:'Stormwing',items:['Stormwing Hood','Stormwing Mantle','Stormwing Chaps'],two:{rangedPct:.18},three:{rangedAccuracy:34,rangedPower:23}},
  {name:'Astral',items:['Astral Crown','Astral Vestments','Astral Legwraps'],two:{magicPct:.18},three:{magicAccuracy:38,magicPower:27}}
 ];
-function setPieceCount(set){return set.items.filter(name=>Object.values(state.equipment).includes(name)).length}
-function setBonusEntries(){return GEAR_SETS.map(set=>({...set,count:setPieceCount(set)})).filter(set=>set.count>0)}
-function activeSetBonuses(){return setBonusEntries().filter(set=>set.count>=2)}
+function setPieceCount(set,equipment=state.equipment){return set.items.filter(name=>Object.values(equipment).includes(name)).length}
+function setBonusEntries(equipment=state.equipment){return GEAR_SETS.map(set=>({...set,count:setPieceCount(set,equipment)})).filter(set=>set.count>0)}
+function activeSetBonuses(equipment=state.equipment){return setBonusEntries(equipment).filter(set=>set.count>=2)}
 const SET_STAT_LABELS={attackPct:'Melee accuracy',strengthPct:'Melee strength',defencePct:'Defence',rangedPct:'Ranged accuracy & damage',magicPct:'Magic accuracy & damage',attack:'Melee accuracy',strength:'Melee damage',defence:'Armour defence',block:'Block',rangedAccuracy:'Ranged accuracy',rangedPower:'Ranged damage',magicAccuracy:'Magic accuracy',magicPower:'Magic damage'};
 function describeSetBonus(bonus){return Object.entries(bonus).map(([key,value])=>`+${key.endsWith('Pct')?Math.round(value*100)+'%':value} ${SET_STAT_LABELS[key]||key}`).join(' · ')}
 SKILLS.crafting.actions.push(
@@ -2149,7 +2181,7 @@ function itemVisualClass(item){
  }
  return classes.join(' ');
 }
-function itemArt(item,large=false){return `<span class="item-art ${itemTier(item)} ${itemVisualClass(item)} ${large?'big-art':''}" aria-hidden="true">${itemIcon(item)}</span>`}
+function itemArt(item,large=false){return `<span data-item-preview="${esc(item)}" class="item-art ${itemTier(item)} ${itemVisualClass(item)} ${large?'big-art':''}" aria-hidden="true">${itemIcon(item)}</span>`}
 
 const esc=x=>String(x).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const fmt=n=>Math.floor(n||0).toLocaleString('en-US');
@@ -2393,11 +2425,11 @@ function restore(){
   // Offline catch-up runs after restore, before the live animation starts.
  }catch(e){console.warn('Could not restore game',e)}
 }
-function gearMods(){
+function gearMods(equipment=state.equipment){
  const mods={attackPct:0,strengthPct:0,defencePct:0,rangedPct:0,magicPct:0,rangedAccuracy:0,rangedPower:0,magicAccuracy:0,magicPower:0,xpBonus:0,luckBonus:0,soulDropBonus:0,gatherBonus:0,woodcuttingYield:0,miningYield:0,fishingYield:0,agricultureYield:0,
  fletchingXpBonus:0,craftingXpBonus:0,smithingXpBonus:0,alchemyXpBonus:0,enchantingXpBonus:0,miningXpBonus:0,defence:0,block:0,attack:0,strength:0};
- for(const name of Object.values(state.equipment)){const piece=EQUIPMENT[name]||{};for(const key of Object.keys(mods))mods[key]+=Number(piece[key]||0)}
- for(const set of activeSetBonuses()){
+ for(const name of Object.values(equipment)){const piece=EQUIPMENT[name]||{};for(const key of Object.keys(mods))mods[key]+=Number(piece[key]||0)}
+ for(const set of activeSetBonuses(equipment)){
   for(const threshold of [set.two,...(set.count===3?[set.three]:[])]){
    for(const [key,value] of Object.entries(threshold))mods[key]=(mods[key]||0)+Number(value||0);
   }
@@ -2623,36 +2655,40 @@ function chargeStaff(shardsRequested){
  note(`🪄 Charged ${staff} +${gain} casts using ${amount} Soul Shard${amount>1?'s':''}.`);
  refreshDynamic();save();
 }
+// Single source of truth for max-hit previews and the live combat roll.
+// 'baseMax' is the standard maximum; 'maxHit' includes an enemy's weakness.
+function combatPreview(style,equipment=state.equipment,enemy=null,ammoName=state.rangedAmmo){
+ const mods=gearMods(equipment);
+ const level=skill=>levelFromXp(state.xp[skill]||0);
+ let accuracy,baseMax;
+ if(style==='ranged'){
+  const ammo=RANGED_AMMO[ammoName]||{accuracy:0,power:0};
+  accuracy=(.62+.008*(level('ranged')+mods.rangedAccuracy+ammo.accuracy-(enemy?.def||0)))*(1+mods.rangedPct);
+  baseMax=Math.max(1,Math.floor((2+Math.floor((level('ranged')-1)/6)+mods.rangedPower+ammo.power)*(1+mods.rangedPct)));
+ }else if(style==='magic'){
+  accuracy=(.64+.008*(level('magic')+mods.magicAccuracy-(enemy?.def||0)))*(1+mods.magicPct);
+  baseMax=Math.max(1,Math.floor((3+Math.floor((level('magic')-1)/6)+mods.magicPower)*(1+mods.magicPct)));
+ }else{
+  accuracy=(.62+.008*(level('attack')+mods.attack-(enemy?.def||0)))*(1+mods.attackPct);
+  baseMax=Math.max(1,Math.floor((2+Math.floor((level('strength')-1)/7)+mods.strength)*(1+mods.strengthPct)));
+ }
+ accuracy=clamp(accuracy,.12,.98);
+ if(!enemy)return {baseMax,maxHit:baseMax,accuracy};
+ const matching=combatType(style)===enemy.weakness;
+ return {baseMax,maxHit:Math.max(1,Math.floor(baseMax*(matching?1.30:.35))),accuracy:clamp(accuracy*(matching?1.16:.56),.035,.99),matching};
+}
 function completeCombat(){
  const m=currentEnemy(),mods=gearMods(),raidFight=state.active?.type==='raid';
  if(!m){stop(true);return}
  const supplyError=combatSupplyError();
  if(supplyError){note('⏹ '+supplyError);stop(true);return}
- const style=state.combatStyle;
- const attack=levelFromXp(state.xp.attack||0),strength=levelFromXp(state.xp.strength||0);
- const defence=levelFromXp(state.xp.defence||0);
- let accuracy,maxHit;
+ const style=state.combatStyle,defence=levelFromXp(state.xp.defence||0);
+ const {accuracy,maxHit}=combatPreview(style,state.equipment,m);
  if(style==='ranged'){
-  const ammo=RANGED_AMMO[state.rangedAmmo];
-  const ranged=levelFromXp(state.xp.ranged||0);
-  accuracy=clamp((.62+.008*(ranged+mods.rangedAccuracy+ammo.accuracy-m.def))*(1+mods.rangedPct),.12,.98);
-  maxHit=Math.max(1,Math.floor((2+Math.floor((ranged-1)/6)+mods.rangedPower+ammo.power)*(1+mods.rangedPct)));
   add(state.rangedAmmo,-1);state.stats.arrowsFired=(state.stats.arrowsFired||0)+1;
  }else if(style==='magic'){
-  const staff=magicStaffEquipped(),magic=levelFromXp(state.xp.magic||0);
-  accuracy=clamp((.64+.008*(magic+mods.magicAccuracy-m.def))*(1+mods.magicPct),.12,.98);
-  maxHit=Math.max(1,Math.floor((3+Math.floor((magic-1)/6)+mods.magicPower)*(1+mods.magicPct)));
-  state.staffCharges[staff]--;state.stats.magicCasts=(state.stats.magicCasts||0)+1;
- }else{
-  accuracy=clamp((.62+.008*(attack+mods.attack-m.def))*(1+mods.attackPct),.12,.98);
-  maxHit=Math.max(1,Math.floor((2+Math.floor((strength-1)/7)+mods.strength)*(1+mods.strengthPct)));
+  const staff=magicStaffEquipped();state.staffCharges[staff]--;state.stats.magicCasts=(state.stats.magicCasts||0)+1;
  }
- // A raid wave intentionally demands switching styles. Countering its weakness
- // raises accuracy and damage; brute-forcing with the wrong style is inefficient.
- const matching=combatType(style)===m.weakness;
- const affinity=matching?1.30:.35;
- accuracy=clamp(accuracy*(matching?1.16:.56),.035,.99);
- maxHit=Math.max(1,Math.floor(maxHit*affinity));
  const damage=Math.random()<accuracy?1+Math.floor(Math.random()*maxHit):0;
  const actualDamage=Math.min(damage,state.monsterHp);
  state.monsterHp=Math.max(0,state.monsterHp-damage);
@@ -2941,7 +2977,7 @@ function refreshNavLevels(){
  for(const node of document.querySelectorAll('[data-nav-lvl]'))node.textContent=navLevelText(node.dataset.navLvl);
  updateQuickNav();
 }
-function navigate(view){if(!NAV_VIEWS.includes(view))return;ui.view=view;renderNav();renderMain();refreshDynamic()}
+function navigate(view){if(!NAV_VIEWS.includes(view))return;hideItemTooltip();ui.view=view;renderNav();renderMain();refreshDynamic()}
 function xpText(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return `Level ${lvl} · ${fmt(xp)} XP${lvl>=99?' · MAX LEVEL':' · '+fmt(xpForLevel(lvl+1)-xp)+' to next level'}`}
 function xpFill(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return lvl>=99?100:clamp((xp-xpForLevel(lvl))/(xpForLevel(lvl+1)-xpForLevel(lvl))*100,0,100)}
 function xpStrip(skill){return `<div class="subdued" id="skillXpText">${xpText(skill)}</div><div class="xpbar"><div class="fill" id="skillXpFill" style="width:${xpFill(skill)}%"></div></div>`}
@@ -3159,6 +3195,7 @@ function renderCombatMain(){
   </section></div>`;
  html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><div class="bar healthbar"><div class="fill" id="healthFill" style="width:${state.hp/maxHp()*100}%"></div></div><small class="subdued">Each Hitpoints level adds 10 HP.</small></div>`;
  html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
+ html+=`<div class="combat-max-row"><span>⚔️ Max hits <small>(before enemy weakness)</small></span>${[['attack','Melee'],['ranged','Ranged'],['magic','Magic']].map(([style,name])=>`<b>${name} <strong data-current-max="${style}">${fmt(combatPreview(style).baseMax)}</strong></b>`).join('')}</div>`;
  html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
  <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote"></small></div>`;
  html+=`<div class="info-box"><div class="between"><div><strong>⛰️ Deep Mountain Expedition</strong><p>12 waves. Defeat Belroth for rare rewards.</p></div><button data-nav="raid">Open Raid →</button></div></div>`;
@@ -3248,6 +3285,7 @@ function renderCombatLive(){
  if(el('healthFill'))el('healthFill').style.width=clamp(state.hp/maxHp()*100,0,100)+'%';
  const mods=gearMods();for(const [id,value] of [['boostAccuracy',mods.attackPct],['boostStrength',mods.strengthPct],['boostDefence',mods.defencePct]])if(el(id))el(id).textContent='+'+pct(value);
  if(el('boostTreasure'))el('boostTreasure').textContent=pct(treasureChance());
+ for(const n of el('main').querySelectorAll('[data-current-max]'))n.textContent=fmt(combatPreview(n.dataset.currentMax).baseMax);
  if(el('treasureCurrent'))el('treasureCurrent').textContent=pct(treasureChance());
  const totalWeight=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
  for(const node of el('main').querySelectorAll('[data-gem-chance]'))node.textContent=pct(treasureChance()*Number(node.dataset.gemChance)/totalWeight);
@@ -3383,7 +3421,7 @@ function renderBankGrid(scope){
  const grid=el(scope+'BankGrid');if(!grid)return;
  renderBankTabs(scope);
  const slice=items.slice(settings.page*per,(settings.page+1)*per);
- grid.innerHTML=slice.length?slice.map(([item,amount])=>`<button type="button" draggable="true" class="bank-tile ${settings.selected===item?'active':''}" data-bank-select="${scope}" data-item="${esc(item)}" title="${esc(item)} · ${fmt(amount)} owned · drag onto a tab to move">${itemArt(item)}<span class="item-name">${esc(item)}</span><span class="stack">×${fmt(amount)}</span></button>`).join(''):'<p class="subdued small">Nothing here yet. Items appear automatically, or move items here from another tab.</p>';
+ grid.innerHTML=slice.length?slice.map(([item,amount])=>`<button type="button" draggable="true" class="bank-tile ${settings.selected===item?'active':''}" data-bank-select="${scope}" data-item="${esc(item)}" data-item-preview="${esc(item)}" aria-label="${esc(item)}, ${fmt(amount)} owned. Select to inspect; drag onto a tab to move">${itemArt(item)}<span class="item-name">${esc(item)}</span><span class="stack">×${fmt(amount)}</span></button>`).join(''):'<p class="subdued small">Nothing here yet. Items appear automatically, or move items here from another tab.</p>';
  const pager=el(scope+'BankPager');if(pager)pager.innerHTML=`<button data-bank-page="${scope}" data-delta="-1" ${settings.page<=0?'disabled':''}>←</button><span>Page ${settings.page+1} / ${maxPage+1}</span><button data-bank-page="${scope}" data-delta="1" ${settings.page>=maxPage?'disabled':''}>→</button>`;
  const counter=el(scope+'BankCount');if(counter)counter.textContent=`${items.length} unique stacks in this view · ${fmt(Object.values(state.bank).reduce((a,b)=>a+Number(b),0))} total bank items`;
  const capacity=el(scope+'BankCapacity');if(capacity)capacity.textContent=`${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks`;
@@ -3394,11 +3432,95 @@ function gearDescription(info){
  const rows=[];
  for(const [key,val] of Object.entries(info)){
   if(['slot','requiredLevel','requiredSkill','combatType','maxCharges'].includes(key))continue;
-  const names={rangedAccuracy:'Ranged accuracy',rangedPower:'Ranged power',magicAccuracy:'Magic accuracy',magicPower:'Magic power',rangedPct:'Ranged bonus',magicPct:'Magic bonus',attack:'Accuracy',strength:'Damage',defence:'Defence',block:'Block',attackPct:'Accuracy',strengthPct:'Strength',defencePct:'Defence',xpBonus:'All skill XP',luckBonus:'Treasure & unique luck',gatherBonus:'Gathering bonus',woodcuttingYield:'Woodcutting yield',miningYield:'Mining yield',fishingYield:'Fishing yield',agricultureYield:'Agriculture yield',soulDropBonus:'Soul Gem find chance',fletchingXpBonus:'Fletching XP',craftingXpBonus:'Crafting XP',smithingXpBonus:'Smithing XP',alchemyXpBonus:'Alchemy XP',enchantingXpBonus:'Enchanting XP',miningXpBonus:'Mining XP'};
+  const names={rangedAccuracy:'Ranged accuracy',rangedPower:'Ranged strength',magicAccuracy:'Magic accuracy',magicPower:'Magic strength',rangedPct:'Ranged bonus',magicPct:'Magic bonus',attack:'Melee accuracy',strength:'Melee strength',defence:'Defence',block:'Block',attackPct:'Accuracy',strengthPct:'Strength',defencePct:'Defence',xpBonus:'All skill XP',luckBonus:'Treasure & unique luck',gatherBonus:'Gathering bonus',woodcuttingYield:'Woodcutting yield',miningYield:'Mining yield',fishingYield:'Fishing yield',agricultureYield:'Agriculture yield',soulDropBonus:'Soul Gem find chance',fletchingXpBonus:'Fletching XP',craftingXpBonus:'Crafting XP',smithingXpBonus:'Smithing XP',alchemyXpBonus:'Alchemy XP',enchantingXpBonus:'Enchanting XP',miningXpBonus:'Mining XP'};
   if(names[key])rows.push(`${names[key]} +${key.endsWith('Pct')||key.endsWith('Bonus')||key.endsWith('Yield')?pct(val):val}`);
  }
  return rows.join(' · ')||'Equipment';
 }
+// A compact, context-sensitive equipment tooltip. Comparing a candidate creates
+// a temporary equipment map: neither the character nor either save is mutated.
+function itemTooltipHtml(item){
+ const info=EQUIPMENT[item],ammo=RANGED_AMMO[item],owned=count(item);
+ const category=itemCategory(item);
+ const oldGear=state.equipment;
+ const previewGear=info?{...oldGear,[info.slot]:item}:oldGear;
+ const previewAmmo=ammo?item:state.rangedAmmo;
+ const req=info?gearRequirement(item):null;
+ const rows=[];
+ if(info){
+  const properties=[['attack','Melee accuracy'],['strength','Melee strength'],['defence','Defence'],['block','Block'],['rangedAccuracy','Ranged accuracy'],['rangedPower','Ranged strength'],['magicAccuracy','Magic accuracy'],['magicPower','Magic strength'],['attackPct','Melee accuracy'],['strengthPct','Melee damage'],['defencePct','Defence'],['rangedPct','Ranged damage & accuracy'],['magicPct','Magic damage & accuracy']];
+  for(const [key,name] of properties)if(Number(info[key]))rows.push(`<div><span>${name}</span><b>+${key.endsWith('Pct')?pct(info[key]):fmt(info[key])}</b></div>`);
+  for(const [key,value] of Object.entries(info))if(!properties.some(([k])=>k===key)&&!['slot','requiredLevel','requiredSkill','combatType','maxCharges'].includes(key)&&Number(value)){
+   const text=gearDescription({[key]:value});if(text!=='Equipment')rows.push(`<div><span>${esc(text.split(' +')[0])}</span><b>${esc(text.includes(' +')?'+'+text.split(' +').slice(1).join(' +'):'')}</b></div>`);
+  }
+ }else if(ammo){rows.push(`<div><span>Ranged accuracy</span><b>+${fmt(ammo.accuracy)}</b></div><div><span>Ranged strength</span><b>+${fmt(ammo.power)}</b></div>`)}
+ const headings={attack:'Melee',ranged:'Ranged',magic:'Magic'};
+ let maxRows='';
+ if(info||ammo){
+  const showStyles=ammo?['ranged']:info?.combatType==='ranged'?['ranged']:info?.combatType==='magic'?['magic']:info?.slot==='weapon'?['attack']:['attack','ranged','magic'];
+  const enemy=state.active?.type==='combat'||state.active?.type==='raid'?currentEnemy():null;
+  maxRows=showStyles.map(style=>{
+   const original=combatPreview(style,oldGear,null,state.rangedAmmo);
+   const next=combatPreview(style,previewGear,null,previewAmmo);
+   const diff=next.baseMax-original.baseMax;
+   const target=enemy?combatPreview(style,previewGear,enemy,previewAmmo):null;
+   return `<div class="tooltip-hit-row"><span>${headings[style]} max hit</span><b>${fmt(next.baseMax)} <small class="${diff>0?'tt-gain':diff<0?'tt-loss':'tt-neutral'}">${info&&oldGear[info.slot]===item||ammo&&state.rangedAmmo===item?'Equipped':`${diff>0?'+':''}${fmt(diff)} vs now`}</small></b>${target?`<small class="tt-target">vs ${esc(enemy.name)}: ${fmt(target.maxHit)}</small>`:''}</div>`;
+  }).join('');
+ }
+ const sets=info?GEAR_SETS.filter(set=>set.items.includes(item)).map(set=>{
+  const current=setPieceCount(set),projected=setPieceCount(set,previewGear);
+  return `<div class="tooltip-set"><b>${esc(set.name)} set · ${projected}/3 ${projected>current?`(+${projected-current})`:''}</b><small>2 pieces: ${esc(describeSetBonus(set.two))}</small><small>3 pieces: ${esc(describeSetBonus(set.three))}</small></div>`;
+ }).join(''):'';
+ const actualStats=rows.length?`<div class="tooltip-stats">${rows.join('')}</div>`:'';
+ const effect=info?null:POTIONS[item]?.description|| (FOOD[item]?`Restores ${fmt(FOOD[item])} HP`:null);
+ return `<div class="tooltip-head">${itemArt(item,true)}<div><strong>${esc(item)}</strong><small>${esc(category)}${req?.skill?` · ${esc(label(req.skill))} Lv ${req.level}`:''}</small></div></div>
+ <div class="tooltip-owned">${oldGear[info?.slot]===item?'✓ Equipped · ':''}Owned: ${fmt(owned)}</div>
+ ${actualStats}${maxRows?`<div class="tooltip-max">${maxRows}</div>`:''}${sets}${effect?`<p>${esc(effect)}</p>`:''}
+ ${info||ammo?'<div class="tooltip-foot">Potential max hit at your current levels, including gear, set bonuses and buffs. You still need the right weapon and ammo or charges to attack. Enemy weakness changes damage.</div>':''}`;
+}
+const itemTooltipEl=document.createElement('div');
+itemTooltipEl.className='item-tooltip';itemTooltipEl.id='itemTooltip';itemTooltipEl.hidden=true;
+itemTooltipEl.setAttribute('role','tooltip');document.body.append(itemTooltipEl);
+let tooltipItem=null,tooltipTouchPinned=false;
+function hideItemTooltip(){itemTooltipEl.hidden=true;tooltipItem=null;tooltipTouchPinned=false}
+function placeItemTooltip(x,y){
+ if(itemTooltipEl.hidden)return;
+ const margin=10,padding=16,rect=itemTooltipEl.getBoundingClientRect();
+ let left=x+16,top=y+16;
+ if(left+rect.width>innerWidth-margin)left=x-rect.width-16;
+ if(top+rect.height>innerHeight-margin)top=y-rect.height-16;
+ itemTooltipEl.style.left=Math.max(margin,Math.min(left,innerWidth-rect.width-margin))+'px';
+ itemTooltipEl.style.top=Math.max(margin,Math.min(top,innerHeight-rect.height-margin))+'px';
+}
+function showItemTooltip(item,x,y,pin=false){
+ if(!item)return;
+ if(tooltipItem!==item||itemTooltipEl.hidden){itemTooltipEl.innerHTML=itemTooltipHtml(item);tooltipItem=item}
+ tooltipTouchPinned=pin;itemTooltipEl.hidden=false;placeItemTooltip(x,y);
+}
+function itemTooltipTarget(target){return target?.closest?.('[data-item-preview]')}
+document.addEventListener('pointerover',e=>{
+ if(e.pointerType==='touch'||tooltipTouchPinned)return;
+ const target=itemTooltipTarget(e.target);if(!target)return;
+ showItemTooltip(target.dataset.itemPreview,e.clientX,e.clientY);
+});
+document.addEventListener('pointermove',e=>{
+ if(!itemTooltipEl.hidden&&!tooltipTouchPinned&&e.pointerType!=='touch')placeItemTooltip(e.clientX,e.clientY);
+});
+document.addEventListener('pointerout',e=>{
+ if(tooltipTouchPinned)return;
+ const target=itemTooltipTarget(e.target);
+ if(target&&!target.contains(e.relatedTarget))hideItemTooltip();
+});
+document.addEventListener('click',e=>{
+ const target=itemTooltipTarget(e.target);
+ if(!target){if(tooltipTouchPinned)hideItemTooltip();return}
+ if(e.pointerType==='touch'||matchMedia('(hover: none)').matches){
+  // Tap an item icon or tile to inspect it. Normal equip/bank actions still run.
+  showItemTooltip(target.dataset.itemPreview,e.clientX||innerWidth/2,e.clientY||innerHeight/2,true);
+ }
+});
+window.addEventListener('scroll',hideItemTooltip,true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideItemTooltip()});
 function renderBankDetail(scope){
  const box=el(scope+'BankDetail');if(!box)return;
  const item=ui.bank[scope].selected;
@@ -3426,7 +3548,7 @@ const GEAR_SLOT_UI={
 };
 function gearSlotButton(slot){
  const item=state.equipment[slot],info=GEAR_SLOT_UI[slot]||{icon:'📦',label:slot};
- return `<div style="position:relative;grid-area:${slot}"><button type="button" class="gear-paper-slot ${item?'occupied':''}" style="width:100%;height:100%" data-gear-slot="${slot}" title="${esc(info.label)}: ${item?esc(item):'Empty – click to choose'}" aria-label="${esc(info.label)} slot: ${item?esc(item):'empty'}. Choose equipment">
+ return `<div style="position:relative;grid-area:${slot}"><button type="button" class="gear-paper-slot ${item?'occupied':''}" ${item?`data-item-preview="${esc(item)}"`: ''} style="width:100%;height:100%" data-gear-slot="${slot}" ${item?'':`title="${esc(info.label)}: Empty – click to choose"`} aria-label="${esc(info.label)} slot: ${item?esc(item):'empty'}. Choose equipment">
  <span class="gear-symbol" aria-hidden="true">${item?itemIcon(item):info.icon}</span><span class="gear-caption">${esc(info.label)}</span><span class="gear-name">${item?esc(item):'Empty'}</span></button>${item?`<button type="button" class="gear-unequip-mini" data-unequip="${slot}" title="Unequip ${esc(item)}" aria-label="Unequip ${esc(item)}">×</button>`:''}</div>`;
 }
 function renderGearSidebar(){
@@ -3436,6 +3558,7 @@ function renderGearSidebar(){
  <p class="gear-intro">Click any equipment slot to choose items from your bank, or use × to unequip.</p>
  <div class="gear-doll"><div class="gear-paper-grid">${paperSlots.map(gearSlotButton).join('')}</div><div class="gear-tools-title">Toolbelt</div><div class="gear-toolbelt">${['axe','pickaxe'].map(gearSlotButton).join('')}</div></div>
  <div class="gear-small-note"></div>
+ <div class="equipment-max-hits"><div class="max-hit-heading">⚔️ Your max hits <small>Before enemy weakness</small></div><div class="max-hit-grid">${[['attack','🗡️ Melee'],['ranged','🏹 Ranged'],['magic','🪄 Magic']].map(([style,name])=>`<div><small>${name}</small><strong>${fmt(combatPreview(style).baseMax)}</strong></div>`).join('')}</div><p>Ranged uses selected arrows; Magic uses staff bonuses. Values are potential damage until a bow or charged staff is ready. Hover items to compare.</p></div>
  <div class="equipment-stats"><b>Set collections</b>${setBonusEntries().map(set=>`<div class="set-tracker ${set.count>=2?'set-enabled':''}"><b>${esc(set.name)} ${set.count}/3</b><small>2 pieces: ${esc(describeSetBonus(set.two))} ${set.count>=2?'✓':'🔒'}</small><small>3 pieces: ${esc(describeSetBonus(set.three))} ${set.count===3?'✓':'🔒'}</small></div>`).join('')||'<span class="subdued">Equip two matching armour pieces to activate set bonuses.</span>'}</div>
  <div class="equipment-stats"><b>Active bonuses (including sets)</b>${gearDescription(mods).split(' · ').filter(x=>!x.endsWith('+0')&&!x.endsWith('+0%')).map(x=>`<span>• ${esc(x)}</span>`).join('')||'<span class="subdued">No bonuses equipped yet.</span>'}</div>`;
 }
@@ -3447,15 +3570,15 @@ function renderGearPicker(){
  const current=state.equipment[slot];
  const options=Object.entries(state.bank).filter(([name,qty])=>qty>0&&EQUIPMENT[name]?.slot===slot)
   .sort(([a],[b])=>Number(gearRequirement(b).met)-Number(gearRequirement(a).met)||gearRequirement(a).level-gearRequirement(b).level||a.localeCompare(b));
- const currentHtml=current?`<div class="gear-equipped-card">${itemArt(current,true)}<div class="gear-current-details"><strong>${esc(current)}</strong><small>${esc(gearDescription(EQUIPMENT[current]))}${MAGIC_STAVES[current]?' · '+fmt(state.staffCharges[current]||0)+' charges':''}</small></div><button data-unequip="${slot}">Unequip</button></div>`:'<div class="gear-picker-empty">Nothing equipped in this slot yet.</div>';
+ const currentHtml=current?`<div class="gear-equipped-card" data-item-preview="${esc(current)}">${itemArt(current,true)}<div class="gear-current-details"><strong>${esc(current)}</strong><small>${esc(gearDescription(EQUIPMENT[current]))}${MAGIC_STAVES[current]?' · '+fmt(state.staffCharges[current]||0)+' charges':''}</small></div><button data-unequip="${slot}">Unequip</button></div>`:'<div class="gear-picker-empty">Nothing equipped in this slot yet.</div>';
  const availableHtml=options.length?`<div class="gear-picker-grid">${options.map(([name,qty])=>{
   const req=gearRequirement(name),reqText=req.skill?`${label(req.skill)} level ${req.level}`:'No level requirement';
-  return `<div class="gear-pick-item ${req.met?'':'locked'}">${itemArt(name)}<div class="gear-pick-details"><strong>${esc(name)} <span class="gold">×${fmt(qty)}</span></strong><small>${esc(gearDescription(EQUIPMENT[name]))} · ${esc(reqText)}${req.met?'':' 🔒'}</small><button data-equip="${esc(name)}" ${req.met?'':'disabled'}>${req.met?'Equip':'Level too low'}</button></div></div>`;
+  return `<div class="gear-pick-item ${req.met?'':'locked'}" data-item-preview="${esc(name)}">${itemArt(name)}<div class="gear-pick-details"><strong>${esc(name)} <span class="gold">×${fmt(qty)}</span></strong><small>${esc(gearDescription(EQUIPMENT[name]))} · ${esc(reqText)}${req.met?'':' 🔒'}</small><button data-equip="${esc(name)}" ${req.met?'':'disabled'}>${req.met?'Equip':'Level too low'}</button></div></div>`;
  }).join('')}</div>`:'<div class="gear-picker-empty">No items for this slot in your bank yet. Find, craft or buy equipment and it will appear here.</div>';
  el('gearDialogContent').innerHTML=`<div class="eyebrow" style="margin-top:15px">Currently equipped</div>${currentHtml}<div class="between" style="margin-top:17px"><strong>Available in bank</strong><span class="small subdued">${options.length} types</span></div>${availableHtml}`;
 }
 function openGearSlot(slot){
- if(!EQUIP_SLOTS.includes(slot))return;
+ if(!EQUIP_SLOTS.includes(slot))return;hideItemTooltip();
  ui.gearSlot=slot;el('gearOverlay').hidden=false;renderGearPicker();
  el('gearOverlay').querySelector('[data-gear-close]').focus();
 }
@@ -4040,6 +4163,6 @@ async function boot(){
 }
 boot();
 // Expose test helpers for regression checks.
-window.IdleRPGDebug={GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
+window.IdleRPGDebug={combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
 </script></body></html>

@@ -387,9 +387,15 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 .journal-extra-stats summary{cursor:pointer;font-weight:700;color:#bdcca6}
 .journal-extra-stats span{display:inline-block;padding:7px 10px;margin-top:5px;margin-right:5px;border:1px solid #6c593f;border-radius:8px}
 @media(max-width:650px){.journal-summary-mini{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.journal-summary-mini>div{padding:8px 6px}.journal-summary-mini small{font-size:9px}.journal-summary-mini strong{font-size:14px}}
+
+/* v3.18 reduce distracting UI motion */
+.recipe-title .item-art,.bank-tile .item-art,.gear-paper-slot .gear-symbol,.monster-name,.monster .gold,.quest-tier-label,.item-art.tier-epic{animation:none!important}
+.combat-choice::after,.monster::after,.recipe-card::after,.shop-card::after,.journal-card::after{background:none!important}
+.item-art,.bank-tile,.recipe-card,.monster,.shop-card,.journal-card{transition:none!important}
+
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.17 · Quality of Life</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.18 · Cleaner Icons</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -401,7 +407,7 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.17 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.18 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -1437,70 +1443,64 @@ function monsterIcon(monster){
  return '👾';
 }
 function itemIcon(item){
- if(item===RAID_CONFIG.chest)return '🎁';
- if(item==='Belroth Amulet Core'||item==='Perfect Amulet (Unf)')return '📿';
- if(item==='Belroth Ring Core'||item==='Perfect Ring (Unf)')return '💍';
- if(item==='Coins')return '🪙';
- const soul=SOUL_GEMS.find(s=>s.name===item);if(soul)return soul.color;
- if(item==='Soul Shard')return '🔹';
- if(item==='Rat Tail')return '🐀';
- if(item==='Goblin Ear')return '👂';
- if(item==='Bones')return '🦴';
- if(item==='Ancient Token')return '🏅';
- if(item==='Feather')return '🪶';
- if(item==='Leather')return '🧥';
- if(item==='Cowhide')return '🐄';
- if(item==='Thick Hide')return '🐂';
- if(item==='Raw Chicken')return '🍗';
- if(item==='Raw Beef')return '🥩';
- if(item==='Raw Lamb')return '🍖';
- if(item==='Bread')return '🍞';
- if(item.includes('Pie'))return '🥧';
- if(item.includes('Soup')||item.includes('Stew'))return '🍲';
- if(item.includes('Platter')||item.includes('Feast'))return '🍽️';
- if(item.includes('Bowstring'))return '🧵';
- if(item.includes('Arrow Shaft'))return '🪵';
- if(item.includes('Arrow'))return '🏹';
- if(item.includes('Bow')||item.includes('Quiver'))return '🏹';
- if(item.includes('Staff')||item.includes('Wand'))return '🪄';
- if(item.includes('Sword')||item.includes('Blade'))return '🗡️';
- if(item.includes('Shield'))return '🛡️';
- if(item.includes('Helm')||item.includes('Hood'))return '🪖';
- if(item.includes('Chestplate')||item.includes('Body')||item.includes('Robe Top'))return '🥋';
- if(item.includes('Platelegs')||item.includes('Legs')||item.includes('Robe Bottom'))return '👖';
- if(item.includes('Gloves')||item.includes('Gauntlets'))return '🧤';
- if(item.includes('Axe'))return '🪓';
- if(item.includes('Pickaxe'))return '⛏️';
- if(item.includes('Amulet')||item.includes('Charm'))return '📿';
- if(item.includes('Ring'))return '💍';
- if(item.includes('Cape'))return '🧣';
- if(item.includes('Crown'))return '👑';
- if(item.includes('Potion'))return '🧪';
- if(item.startsWith('Uncut ')||GEMS.includes(item))return gemMark(item);
- if(FISH_TO_COOK.includes(item))return ICON_BY_FISH[FISH_TO_COOK.indexOf(item)]||'🐟';
- if(item.startsWith('Cooked ')){const raw=item.slice(7);if(FISH_TO_COOK.includes(raw))return '🍣';if(raw.includes('Chicken'))return '🍗';if(raw.includes('Beef')||raw.includes('Lamb'))return '🥩';}
- if(item.includes('Logs')){if(item.includes('Magic'))return '🪵';if(item.includes('Redwood'))return '🪵';if(item.includes('Yew'))return '🪵';if(item.includes('Maple'))return '🪵';if(item.includes('Willow'))return '🪵';if(item.includes('Oak'))return '🪵';return '🪵';}
- if(item.includes(' Ore')||item==='Coal'||item==='Obsidian'||item==='Clay'||item==='Limestone')return '🪨';
- if(item.endsWith('Bar'))return '🧱';
- if(item.includes('Arcane')||item.includes('Witch Sigil')||item.includes('Goblin Ember')||item.includes('Golem Heart'))return '✨';
- if(item.includes('Ranger'))return '🎯';
- if(item.includes('Crystal'))return '🔮';
- if(item.includes('Scale'))return '🐉';
- if(item.includes('Seed')||item.includes('Spores'))return '🌰';
- if(item.includes('Herb'))return '🌿';
- if(item==='Wheat'||item==='Flax')return '🌾';
- if(item==='Carrot')return '🥕';
- if(item==='Potato'||item==='Baked Potato')return '🥔';
- if(item==='Berries'||item==='Sunfruit')return '🍇';
- if(item==='Corn')return '🌽';
- if(item==='Mushroom')return '🍄';
- if(item==='Milk')return '🥛';
- if(item==='Egg')return '🥚';
- if(item==='Wool'||item==='Ball of Wool')return '🧶';
- if(item.includes('Feather'))return '🪶';
- if(item.includes('Nail'))return '🔩';
- if(item.includes('Token'))return '🏅';
- return '📦';
+ const RAW_FISH_ICONS={Shrimp:'🦐',Sardine:'🐟',Crab:'🦀',Herring:'🐠',Trout:'🐟',Cod:'🐡',Salmon:'🐟',Eel:'🐍',Tuna:'🐟',Lobster:'🦞',Swordfish:'🐠',Monkfish:'🐡',Shark:'🦈',Anglerfish:'🐠',"Manta Ray":'🐋',Leviathan:'🐉'};
+ const COOKED_FISH_ICONS={'Cooked Shrimp':'🍤','Cooked Sardine':'🍣','Cooked Crab':'🦀','Cooked Herring':'🍣','Cooked Trout':'🐟','Cooked Cod':'🐡','Cooked Salmon':'🍣','Cooked Eel':'🍢','Cooked Tuna':'🍣','Cooked Lobster':'🦞','Cooked Swordfish':'🍢','Cooked Monkfish':'🍥','Cooked Shark':'🥩','Cooked Anglerfish':'🍥','Cooked Manta Ray':'🍽️','Cooked Leviathan':'🍖'};
+ const ITEM_ICON_MAP={
+  [RAID_CONFIG.chest]:'🎁','Coins':'🪙','Soul Shard':'🔹','Belroth Amulet Core':'🧿','Belroth Ring Core':'⚙️','Perfect Amulet (Unf)':'📿','Perfect Ring (Unf)':'💍',
+  'Perfect Amulet':'🪬','Perfect Ring':'💠',
+  'Rat Tail':'🪱','Goblin Ear':'👂','Bones':'🦴','Ancient Token':'🏺','Feather':'🪶','Leather':'🧥','Cowhide':'🐄','Thick Hide':'🐃','Goat Horn':'🐐',
+  'Raw Chicken':'🍗','Raw Beef':'🥩','Raw Lamb':'🍖','Cooked Chicken':'🍗','Cooked Beef':'🥓','Cooked Lamb':'🍖',
+  'Bread':'🍞','Baked Potato':'🥔','Carrot Soup':'🥣','Fish Stew':'🍲','Meat Pie':'🥧','Seafood Platter':'🍽️','Royal Feast':'🍱',
+  'Potato':'🥔','Berries':'🫐','Egg':'🥚','Milk':'🥛','Carrot':'🥕','Sunfruit':'🍊','Wheat':'🌾','Flax':'🪢','Mushroom':'🍄','Corn':'🌽',
+  'Herb':'🌿','Highland Herb':'🍃','Mystic Herb':'☘️',
+  'Carrot Seed':'🌰','Flax Seed':'🫘','Mushroom Spores':'🦠','Corn Seed':'🌽','Highland Seed':'🌱','Mystic Seed':'✨','Sunfruit Seed':'🌻',
+  'Wool':'🧶','Ball of Wool':'🧵',
+  'Logs':'🪵','Oak Logs':'🌳','Willow Logs':'🌿','Maple Logs':'🍁','Yew Logs':'🌲','Magic Logs':'✨','Redwood Logs':'🪵',
+  'Copper Ore':'🟠','Tin Ore':'⚪','Iron Ore':'⛓️','Silver Ore':'🥈','Gold Ore':'🥇','Mithril Ore':'🔷','Adamant Ore':'🟩','Rune Ore':'🟪','Dragonite Ore':'🟥','Coal':'⚫','Clay':'🟤','Limestone':'⬜','Obsidian':'◼️',
+  'Bronze Bar':'🟫','Iron Bar':'⬜','Steel Bar':'⬛','Silver Bar':'⚪','Gold Bar':'🟡','Mithril Bar':'🔷','Adamant Bar':'🟩','Rune Bar':'🟪','Dragonite Bar':'🟥',
+  'Torn Cloth':'🧻','Bent Nail':'📎','Cracked Jug':'🏺','Broken Pick Head':'⛏️','Rusty Gear':'⚙️','Dented Lantern':'🏮',
+  'Chewed Rope':'🪢','Broken Tooth':'🦷','Dirty Feather':'🪶','Bone Dust':'⚱️','Ancient Scrap':'🧩','Old Medallion':'🏵️','Mossy Bark':'🪵',
+  'Empty Vial':'🧴','Witch Ash':'🌫️','Troll Bone':'🦴','Golem Core':'🔩','Void Residue':'🌑','Crystal Dust':'✨','Charred Scale':'🐉',
+  'Goblin Ember':'🔥','Witch Sigil':'🔯','Golem Heart':'❤️','Dragon Arcane Core':'🔮','Void Arcane Core':'🌌','Troll Bowstring':'🪢','Dragon Bowstring':'🧵',
+  'Troll Fang':'🦷','Abyss Shard':'🔻','Ancient Crystal':'💎','Dragon Scale':'🐲',
+  'Ancient Scholar Charm':'🎓','Fortune Ring':'🍀','Troll King Ring':'👹','Dragonheart Amulet':'❤️','Voidborn Cape':'🕶️','Abyssal Blade':'⚔️','Dwarven Soul Pickaxe':'⛏️',
+  'Deepmountain Greatsword':'🗡️','Deepmountain Warbow':'🏹','Deepmountain Soulstaff':'🪄',
+  'Healing Potion':'🧪','Greater Healing Potion':'🧫','Superior Healing Potion':'⚗️','Ultimate Healing Potion':'🥤',
+  'Strength Potion':'🟥','Accuracy Potion':'🟦','Defence Potion':'🟩','Battle Potion':'🟪','Master Battle Potion':'🔴','Wisdom Potion':'📘','Greater Wisdom Potion':'📙','Luck Potion':'🍀','Greater Luck Potion':'🌟'
+ };
+ const soul=SOUL_GEMS.find(s=>s.name===item); if(soul) return soul.color;
+ if(ITEM_ICON_MAP[item]) return ITEM_ICON_MAP[item];
+ if(COOKED_FISH_ICONS[item]) return COOKED_FISH_ICONS[item];
+ if(RAW_FISH_ICONS[item]) return RAW_FISH_ICONS[item];
+ if(item.startsWith('Uncut ')) return ({'Uncut Opal':'🪨','Uncut Jade':'🟢','Uncut Red Topaz':'🟧','Uncut Sapphire':'🔷','Uncut Emerald':'💚','Uncut Ruby':'❤️','Uncut Diamond':'💠','Uncut Dragonstone':'💙','Uncut Onyx':'⚫','Uncut Zenyte':'🧡'})[item] || '💎';
+ if(GEMS.includes(item)) return ({Opal:'⚪',Jade:'🟢','Red Topaz':'🟧',Sapphire:'🔷',Emerald:'💚',Ruby:'❤️',Diamond:'💠',Dragonstone:'💙',Onyx:'⚫',Zenyte:'🧡'})[item] || '💎';
+ if(item.includes('Arrow')) return '➶';
+ if(item.includes('Bowstring')) return '🧵';
+ if(item.includes('Arrow Shaft')) return '🪚';
+ if(item.includes('Bow')||item.includes('Quiver')) return '🏹';
+ if(item.includes('Staff')||item.includes('Wand')) return '🪄';
+ if(item.includes('Sword')||item.includes('Blade')) return '🗡️';
+ if(item.includes('Shield')) return '🛡️';
+ if(item.includes('Helm')||item.includes('Hood')) return '🪖';
+ if(item.includes('Chestplate')||item.includes('Body')||item.includes('Robe Top')) return '🥋';
+ if(item.includes('Platelegs')||item.includes('Legs')||item.includes('Robe Bottom')) return '👖';
+ if(item.includes('Gloves')||item.includes('Gauntlets')) return '🧤';
+ if(item.includes('Axe')) return '🪓';
+ if(item.includes('Pickaxe')) return '⛏️';
+ if(item.includes('Amulet')||item.includes('Charm')) return '📿';
+ if(item.includes('Ring')) return '💍';
+ if(item.includes('Cape')) return '🧣';
+ if(item.includes('Crown')) return '👑';
+ if(item.includes('Potion')) return '🧪';
+ if(item.includes('Seed')||item.includes('Spores')) return '🌱';
+ if(item.includes('Herb')) return '🌿';
+ if(item.includes('Scale')) return '🐉';
+ if(item.includes('Token')) return '🏅';
+ if(item.includes('Nail')) return '📎';
+ if(item.includes('Feather')) return '🪶';
+ if(item.includes('Ore')||['Coal','Clay','Limestone','Obsidian'].includes(item)) return '🪨';
+ if(item.endsWith('Bar')) return '🧱';
+ return '🧰';
 }
 function itemCategory(item){
  if(item===RAID_CONFIG.chest||item==='Belroth Amulet Core'||item==='Belroth Ring Core'||item.includes('(Unf)'))return 'Rare Drops';if(item==='Coins')return 'Currency';if(item==='Soul Shard')return 'Soul Shards';if(NONTRADEABLE_ITEMS.has(item))return 'Soul Gems';if(item in RANGED_AMMO)return 'Ammunition';if(item in EQUIPMENT)return 'Equipment';

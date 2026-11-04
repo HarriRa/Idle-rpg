@@ -696,10 +696,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.24 · Compact Recipe Lists</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.25 · Streamlined UI</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
-<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
+<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
 <button type="button" data-nav="skills">📊 Skills</button><button type="button" data-nav="combat">⚔️ Combat</button><button type="button" data-nav="raid">⛰️ Raid</button><button type="button" data-nav="bank">🏦 Bank</button><button type="button" data-nav="journal">📜 Journal <span id="quickReady"></span></button>
 </nav><div id="main"></div></main>
 <aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
@@ -709,9 +709,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.24 · COMPACT RECIPE LISTS · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.25 · STREAMLINED UI · CHANGE GAME SETTINGS HERE
 const GAME_CONFIG = {
-  actionMs: 1000,            // Testing speed: 1 second for every action
+  actionMs: 1000,            // Base action duration in milliseconds
   bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
   bankPageSize: 48,
   sidebarPageSize: 24,
@@ -978,8 +978,7 @@ const FLETCH_WOODS=[
 ];
 SKILLS.fletching.actions.push(
  A('Spin Bowstring','Bowstring',1,22,{'Flax':2},'Materials',{quantity:2}),
- A('Twist Reinforced String','Reinforced Bowstring',35,85,{'Bowstring':2,'Linen':2},'Materials'),
- A('Prepare Feather Bundle','Feather Bundle',10,25,{'Feather':10,'Ball of Wool':1},'Materials',{quantity:5})
+ A('Twist Reinforced String','Reinforced Bowstring',35,85,{'Bowstring':2,'Linen':2},'Materials')
 );
 for(const [wood,logs,level,xp,power,shafts] of FLETCH_WOODS){
  const bow=wood+' Bow';
@@ -1026,7 +1025,6 @@ for(const [name,level,xp,cost,slot,acc,power] of RANGED_ARMOUR){
  registerGear(name,{slot,requiredSkill:'ranged',requiredLevel:Math.max(1,level-10),defence:Math.floor(acc*.7),rangedAccuracy:acc,rangedPower:power});
 }
 SKILLS.fletching.actions.push(
- A('Fletch Training Arrows','Bronze Arrows',1,20,{'Bronze Arrowheads':10,'Normal Arrow Shafts':10,'Feather':10},'Arrows',{quantity:10}),
  A('Fletch Ranger Bow','Ranger Bow',32,165,{'Maple Logs':2,'Reinforced Bowstring':1,'Leather':2},'Bows'),
  A('Fletch Trollbone Bow','Trollbone Bow',57,275,{'Yew Logs':2,'Troll Bowstring':1,'Mithril Bar':1},'Rare Bows'),
  A('Fletch Dragonbone Bow','Dragonbone Bow',90,590,{'Elder Logs':2,'Dragon Bowstring':1,'Dragonite Bar':2},'Rare Bows'),
@@ -2103,6 +2101,7 @@ const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,
 function newGame(){return {
  xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
+ recipeLayoutVersion:25,
  hp:10,monsterIndex:0,monsterHp:null,raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
@@ -2250,6 +2249,16 @@ function restore(){
   // Compatibility with v3.2: Herblore is now Alchemy, including any active task.
   if(raw.xp.herblore!==undefined&&raw.xp.alchemy===undefined)raw.xp.alchemy=raw.xp.herblore;
   if(raw.active?.type==='skill'&&raw.active.skill==='herblore')raw.active.skill='alchemy';
+  // v3.25 removes the old Feather Bundle (index 2) and the redundant
+  // Training Arrows recipe (index 29) from Fletching. Preserve saved activity.
+  if(Number(raw.recipeLayoutVersion||0)<25&&raw.active?.type==='skill'&&raw.active.skill==='fletching'){
+   const index=Number(raw.active.index);
+   if(index===2)raw.active=null; // Retired recipe: stop rather than train the wrong thing.
+   else if(index===29)raw.active.index=18; // Existing Make Bronze Arrows.
+   else if(index>29)raw.active.index=index-2;
+   else if(index>2)raw.active.index=index-1;
+  }
+  raw.recipeLayoutVersion=25;
   const migratedStats={...stats,bySkill:{...(stats.bySkill||{})}};
   if(migratedStats.bySkill.herblore!==undefined&&migratedStats.bySkill.alchemy===undefined)migratedStats.bySkill.alchemy=migratedStats.bySkill.herblore;
   state={...base,...raw,xp:{...base.xp,...raw.xp},
@@ -2261,6 +2270,12 @@ function restore(){
    active:validSavedActivity(raw.active)?raw.active:null,
    progress:clamp(Number(raw.progress)||0,0,99.999),
    monsterHp:Number.isFinite(Number(raw.monsterHp))&&Number(raw.monsterHp)>0?Number(raw.monsterHp):(raw.active?.type==='raid'?RAID_WAVES[Math.min(RAID_WAVES.length-1,Math.max(0,Number(raw.raid?.wave)||0))].hp:MONSTERS[raw.monsterIndex]?.hp)};
+  // v3.25: return unused legacy Feather Bundles to their original Feathers.
+  const bundles=Math.max(0,Number(state.bank['Feather Bundle'])||0);
+  if(bundles)state.bank.Feather=(Number(state.bank.Feather)||0)+bundles*2;
+  delete state.bank['Feather Bundle'];
+  delete state.bankAssignments['Feather Bundle'];
+  delete state.stats.produced['Feather Bundle'];
   // v3.23: old wood-specific shafts are merged into the single common shaft.
   // This runs during both normal loading and imported-save restoration.
   const oldShaftTypes=['Oak','Willow','Maple','Yew','Magic','Redwood','Elder'];
@@ -2762,22 +2777,21 @@ function skillsOverviewSummary(){
  const n=allSkillKeys().length,max=XP_CONFIG.maxLevel,total=totalSkillLevel();
  return `<div class="skills-summary">
   <div class="skills-summary-tile"><small>⭐ Total Level</small><strong id="skillsTotalLevel">${fmt(total)} / ${fmt(n*max)}</strong><span id="skillsGained">${fmt(total-n)} levels gained</span></div>
-  <div class="skills-summary-tile"><small>✨ Total XP earned</small><strong id="skillsTotalXp">${fmt(totalSkillXp())}</strong><span>Across all ${n} skills</span></div>
+  <div class="skills-summary-tile"><small>✨ Total XP earned</small><strong id="skillsTotalXp">${fmt(totalSkillXp())}</strong></div>
   <div class="skills-summary-tile"><small>🏆 Level 99 skills</small><strong id="skillsMaxed">${maxedSkillCount()} / ${n}</strong><span>Mastered skills</span></div>
-  <div class="skills-summary-tile"><small>⚔️ Combat Level</small><strong id="skillsCombatLevel">${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</strong><span>Separate from Total Level</span></div>
+  <div class="skills-summary-tile"><small>⚔️ Combat Level</small><strong id="skillsCombatLevel">${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</strong></div>
  </div><div class="skills-overall-progress"><div class="between"><strong>Overall XP completion</strong><span class="small" id="skillsOverallPercent">${skillXpPercent().toFixed(2)}%</span></div>
  <div class="xpbar" role="progressbar" aria-label="Overall XP completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(skillXpPercent())}"><div class="fill" id="skillsOverallFill" style="width:${skillXpPercent().toFixed(3)}%"></div></div>
- <div class="small subdued" style="margin-top:7px">Progress toward 50,000,000 XP in each skill. Extra XP after 99 counts toward total earned XP, but not completion.</div></div>`;
+</div>`;
 }
 function renderSkillsOverview(){
  const filters=['All','Combat','Gathering & Crafting','Level 99'];
- el('main').innerHTML=`<section class="skills-overview"><div class="heading"><div><div class="eyebrow">Adventurer's record</div><h2>📊 Skills Overview</h2><p class="section-description">Your levels, lifetime XP and progress in every skill. Select any skill to open its training screen.</p></div><span class="recipe-badge level">${allSkillKeys().length} Skills</span></div>
+ el('main').innerHTML=`<section class="skills-overview"><div class="heading"><div><div class="eyebrow">Adventurer's record</div><h2>📊 Skills Overview</h2></div><span class="recipe-badge level">${allSkillKeys().length} Skills</span></div>
  ${skillsOverviewSummary()}
  ${permanentBonuses().titles.length?`<div class="mastery-titles"><strong>🏅 Grandmaster titles earned</strong><div>${permanentBonuses().titles.map(title=>`<span class="mastery-title">✦ ${esc(title)}</span>`).join('')}</div></div>`:''}
  <div class="skills-toolbar"><div class="skills-filters">${filters.map(f=>`<button type="button" data-skills-filter="${esc(f)}" class="${ui.skillsFilter===f?'selected':''}">${f==='Level 99'?'🏆 ':''}${esc(f)}</button>`).join('')}</div>
  <label>Sort by <select data-skills-sort aria-label="Sort skills">${[['level','Highest level'],['xp','Most XP'],['remaining','Closest to 99'],['name','Alphabetical']].map(([v,name])=>`<option value="${v}" ${v===ui.skillsSort?'selected':''}>${name}</option>`).join('')}</select></label></div>
  <div class="skills-ledger" id="skillsLedger">${visibleSkillLedger().map(skillLedgerRow).join('')||'<p class="subdued small">No skills match this filter yet.</p>'}</div>
- <p class="skills-ledger-note">Total Level sums every individual skill level (including Attack, Strength, Defence, Hitpoints, Ranged and Magic). Combat Level is calculated separately. Your progress and XP update while skilling, including offline rewards.</p>
  </section>`;
 }
 function refreshSkillsOverview(){
@@ -2909,16 +2923,16 @@ function renderSkillFocus(skill){
  const requirements=Object.entries(a.cost||{}).map(([item,n])=>`<div class="focus-material ${count(item)<n?'missing':''}">${itemArt(item)}<span>${esc(item)}</span><b data-focus-cost="${esc(item)}">${fmt(count(item))} / ${fmt(n)}</b></div>`).join('');
  const owned=[a.output,...Object.keys(a.bonus||{}).filter(item=>item!==a.output)];
  return `<section class="skill-focus" id="skillFocus" aria-label="Selected activity">
-  <div class="focus-head"><span>✦ SELECTED ACTIVITY</span><span class="focus-category">${esc(a.category)}</span></div>
+  <div class="focus-head"><span>SELECTED</span><span class="focus-category">${esc(a.category)}</span></div>
   <div class="focus-item">${itemArt(a.output,true)}<div><h3>${esc(a.name)}</h3><p>Level ${a.level} ${locked?'· Locked':'· Unlocked'}</p></div></div>
   <div class="focus-specs"><span><small>Experience</small><b>+${fmt(a.xp)} XP</b></span><span><small>Per action</small><b>×${a.quantity||1}</b></span><span><small>Duration</small><b id="focusDuration">${(actionDurationMs()/1000).toFixed(2)}s</b></span></div>
   <button type="button" class="focus-expand-toggle" data-focus-toggle aria-expanded="${ui.focusExpanded?'true':'false'}">${ui.focusExpanded?'▴ Hide materials and bank details':'▾ Show materials and bank details'}</button>
   <div class="focus-expandable ${ui.focusExpanded?'expanded':''}">
-   <div class="focus-section-title">OUTPUT · IN STORAGE</div>
+   <div class="focus-section-title">IN BANK</div>
    <div class="focus-output">${owned.map(item=>`<div>${itemArt(item)}<span>${esc(item)}</span><b data-focus-own="${esc(item)}">${fmt(count(item))}</b></div>`).join('')}</div>
-   <div class="focus-section-title">${requirements?'REQUIRED MATERIALS':'NO MATERIALS REQUIRED'}</div>
-   <div class="focus-materials">${requirements||'<p class="subdued small">Gather freely; no ingredients needed.</p>'}</div>
-   ${a.requiresFire?'<div class="focus-fire">🔥 Requires a burning fire · auto-relight enabled</div>':''}
+   <div class="focus-section-title">${requirements?'MATERIALS':'NO MATERIALS'}</div>
+   <div class="focus-materials">${requirements||'<p class="subdued small">No materials needed.</p>'}</div>
+   ${a.requiresFire?'<div class="focus-fire">🔥 Requires a fire</div>':''}
   </div>
   <button type="button" class="focus-start" data-action="${i}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'🔒 Level '+a.level+' required':fireNeeded?'🔥 Fire required':missing?'Missing materials':active?'✓ Currently training':'▶ Start activity'}</button>
  </section>`;
@@ -2936,8 +2950,8 @@ function refreshSkillFocus(skill){
  const btn=box.querySelector('.focus-start');if(btn){btn.disabled=locked||missing||fireNeeded;btn.textContent=locked?'🔒 Level '+a.level+' required':fireNeeded?'🔥 Fire required':missing?'Missing materials':active?'✓ Currently training':'▶ Start activity';}
 }
 function renderFirePanel(){
- return `<section class="info-box" style="border-color:#8a663f"><div class="between"><h3 style="margin:0">🔥 Cooking Fire</h3><span class="recipe-badge">1 second / cooking action</span></div>
- <p>Cooking burns logs for real-world time. <strong>Auto-relight:</strong> while Cooking, a new log is lit automatically when the fire runs out. The last log type is preferred; another available type is used if needed. Cooking stops when you run out of ingredients or logs.</p>
+ return `<section class="info-box" style="border-color:#8a663f"><h3 style="margin:0">🔥 Cooking Fire</h3>
+ <p>Logs fuel Cooking. The fire automatically relights while you have logs.</p>
  <div class="fire-layout"><div class="fire-tile ${fireBurning()?'':'out'}" id="fireTile"><h3 id="fireStatus">${fireBurning()?'🔥 Burning':'💨 Unlit'}</h3><b id="fireTimer">${timeFmt(fireRemaining())}</b><div class="small" id="fireFuelInfo">${fireBurning()?'Cooking available':nextAutoFuel()?'Auto-relight ready':'Add logs to light the fire'}</div></div>
  <div class="fire-log-grid">${Object.entries(FIRE_FUEL).map(([item,seconds])=>`<button data-burn="${esc(item)}" ${count(item)<1?'disabled':''}>${itemIcon(item)} ${esc(item)} <span data-fuel-own="${esc(item)}">×${fmt(count(item))}</span><small>+${timeFmt(seconds)} burn time</small></button>`).join('')}</div></div></section>`;
 }
@@ -2958,7 +2972,7 @@ function renderSkillMain(skill){
  ui.skillTab[skill]??='All';
  let chosen=ui.skillTab[skill];if(chosen!=='All'&&!categories.includes(chosen)){chosen='All';ui.skillTab[skill]='All'}
  const theme=({woodcutting:'wood',fishing:'water',mining:'stone',agriculture:'growth',cooking:'fire',smithing:'forge',fletching:'wood',crafting:'craft',alchemy:'arcane',enchanting:'soul'})[skill]||'craft';
- let html=`<div class="skill-stage skill-scene-${theme}"><div class="skill-stage-decoration">${def.icon}</div><div class="stage-details"><div class="eyebrow">✦ ${esc(label(skill))} · SKILL TRAINING</div><div class="stage-title"><span class="stage-icon">${def.icon}</span><h2>${label(skill)}</h2><span class="stage-level">LEVEL ${levelFromXp(state.xp[skill]||0)} / 99</span></div><p>${esc(def.description)}</p>${xpStrip(skill)}</div></div>`;
+ let html=`<div class="skill-stage skill-scene-${theme}"><div class="skill-stage-decoration">${def.icon}</div><div class="stage-details"><div class="eyebrow">✦ ${esc(label(skill))} · SKILL TRAINING</div><div class="stage-title"><span class="stage-icon">${def.icon}</span><h2>${label(skill)}</h2><span class="stage-level">LEVEL ${levelFromXp(state.xp[skill]||0)} / 99</span></div>${xpStrip(skill)}</div></div>`;
  const boosts=permanentBonuses();
  const speed=boosts.skills[skill]||0, yieldBoost=boosts.yields[skill]||0;
  const skillTitle='Grandmaster '+labelSkillForQuest(skill);
@@ -2967,7 +2981,7 @@ function renderSkillMain(skill){
  if(skill==='cooking')html+=renderFirePanel();
  if(skill==='enchanting'){
   const soulTotal=SOUL_GEMS.reduce((sum,x)=>sum+x.weight,0);
-  html+=`<details class="info-box skill-guide"><summary>💠 Soulbound Soul Gems and drop rates</summary><p>Soul Gems are untradeable at EVERY tier: you cannot buy or sell them. Gathering (Woodcutting, Fishing, Mining, Agriculture) gives an independent ${pct(GAME_CONFIG.soulGemGatherChance)} base roll per action; Combat has an independent ${pct(GAME_CONFIG.soulGemCombatChance)} base roll per monster KILL. The rolls never replace normal loot or treasure. Spirit Sense potions can raise Soul Gem find chance but never alter tier odds.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic Soul Gem: exactly <b>1 in 10,000 Soul Gems</b> (not one in 10,000 actions).</p></details>`;
+  html+=`<details class="info-box skill-guide"><summary>💠 Soulbound Soul Gems and drop rates</summary><p>Gathering: ${pct(GAME_CONFIG.soulGemGatherChance)} per action · Combat: ${pct(GAME_CONFIG.soulGemCombatChance)} per kill. Soul Gems cannot be traded.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic: <b>1 in 10,000 Soul Gems</b>.</p></details>`;
  }
  if(skill==='fletching')html+=`<details class="info-box skill-guide"><summary>🏹 How Fletching connects to other skills</summary><p>Chop trees for logs, farm Flax for bowstrings, collect Feathers from Chickens or the Shop, then smith Arrowheads into finished Arrows. Equip a Bow and select arrows in Combat to train Ranged. Each shot consumes one arrow.</p></details>`;
  const skillSearch=ui.skillSearch[skill]||'';
@@ -2975,11 +2989,10 @@ function renderSkillMain(skill){
  const actions=def.actions.map((a,i)=>({a,i})).filter(({a})=>chosen==='All'||a.category===chosen).sort((x,y)=>x.a.level-y.a.level||x.a.name.localeCompare(y.a.name,'en'));
  selectedSkillAction(skill,actions);
  html+=`<div class="skill-workspace"><section class="skill-browser" aria-label="${esc(label(skill))} available activities">
-  <div class="workspace-title"><div><span class="eyebrow">BROWSE RECIPES</span><h3>Choose an activity</h3></div><span class="workspace-count"><span id="skillVisibleCount">${actions.length}</span> / ${def.actions.length}</span></div>`;
+  <div class="workspace-title"><h3>Activities</h3></div>`;
  if(categories.length>1)html+=`<div class="tabs skill-category-tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
  html+=`<div class="skill-toolbar"><label class="skill-search-box">🔎 <input type="search" data-skill-search autocomplete="off" placeholder="Search activities and items…" value="${esc(skillSearch)}" aria-label="Search ${esc(label(skill))} actions"></label>
  <div class="skill-filter-modes" role="group" aria-label="Filter actions">${[['all','All'],['unlocked','Unlocked'],['craftable','Ready']].map(([id,name])=>`<button type="button" data-skill-mode="${id}" class="${skillMode===id?'selected':''}">${name}</button>`).join('')}</div></div>
- <div class="skill-list-heading"><span>ACTIVITIES · ORDERED BY LEVEL</span><span>SELECT TO INSPECT</span></div>
  <div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div></section>
  <aside class="skill-inspector" aria-label="Active recipe details">${renderSkillFocus(skill)}</aside></div>`;
  el('main').innerHTML=html;
@@ -3000,7 +3013,7 @@ function filterRecipeCards(){
   card.hidden=!!(query&&!labelText.includes(query) || mode==='unlocked'&&!unlocked || mode==='craftable'&&!ready);
   if(!card.hidden)n++;
  }
- const countEl=el('skillVisibleCount');if(countEl)countEl.textContent=String(n);
+ 
 }
 
 function raidPanelHtml(){
@@ -3068,34 +3081,34 @@ function inspectMonster(index,raid=false){
 function closeMonsterInspect(){el('monsterInspectOverlay').hidden=true}
 function renderCombatMain(){
  const mods=gearMods();
- let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2><p class="section-description">Combat level uses Defence, Hitpoints and your strongest offence: Melee (Attack + Strength), Ranged or Magic. It caps at ${COMBAT_CONFIG.maxLevel}; skills cap at 99.</p></div></div>`;
+ let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2></div></div>`;
  html+=`<div class="combat-choices">${['attack','strength','defence','ranged','magic'].map(skill=>`<button data-combat-style="${skill}" class="combat-choice ${state.combatStyle===skill?'selected':''}"><b>${SKILLS[skill].icon} ${label(skill)}</b><span data-combat-xp="${skill}">${xpText(skill)}</span><div class="xpbar" style="width:100%"><div class="fill" style="width:${xpFill(skill)}%"></div></div><span>${state.combatStyle===skill?'✓ Training':'Train '+label(skill)}</span></button>`).join('')}</div>`;
  html+=`<div class="combat-resource-grid">
-  <section class="info-box"><h3>🏹 Ranged · Bows & Arrows</h3><p>Equip a bow and select arrows. Each attempted shot consumes <b>1 arrow</b> from your bank. Ammo tiers have Ranged level requirements.</p>
+  <section class="info-box"><h3>🏹 Ranged · Bows & Arrows</h3><p>Equip a bow and arrows. Each shot uses <b>1 arrow</b>.</p>
   <label class="form-label" for="rangedAmmo">Selected ammunition</label><select id="rangedAmmo"></select>
   <div class="combat-resource-count" id="rangedStatus"></div></section>
-  <section class="info-box"><h3>🪄 Magic · Soul-charged Staves</h3><p>Craft a base staff in Crafting, upgrade it in Enchanting with rare monster components. <b>No runes.</b> Each cast uses 1 staff charge.</p>
+  <section class="info-box"><h3>🪄 Magic · Soul-charged Staves</h3><p>Each cast uses 1 staff charge. Recharge with Soul Shards.</p>
   <div id="magicStaffStatus" class="combat-resource-count"></div>
   <div class="flexrow">${[1,5,25].map(n=>`<button data-charge="${n}" class="charge-btn">🔹 Charge +${n} shard${n>1?'s':''}</button>`).join('')}</div>
   </section></div>`;
- html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><div class="bar healthbar"><div class="fill" id="healthFill" style="width:${state.hp/maxHp()*100}%"></div></div><small class="subdued">Each Hitpoints level gives 10 max HP. Each attack awards 5 XP per damage to your chosen combat style and 25% of that to Hitpoints.</small></div>`;
+ html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><div class="bar healthbar"><div class="fill" id="healthFill" style="width:${state.hp/maxHp()*100}%"></div></div><small class="subdued">Each Hitpoints level adds 10 HP.</small></div>`;
  html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
  html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
- <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote">Only food you own is shown, with remaining quantities. When the selected food runs out, select a new one.</small></div>`;
- html+=`<div class="info-box"><div class="between"><div><strong>⛰️ Deep Mountain Expedition</strong><p>12 checkpointed endgame waves. Switch combat styles to counter different enemies and face Belroth for rare raid rewards.</p></div><button data-nav="raid">Open Raid →</button></div></div>`;
+ <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote"></small></div>`;
+ html+=`<div class="info-box"><div class="between"><div><strong>⛰️ Deep Mountain Expedition</strong><p>12 waves. Defeat Belroth for rare rewards.</p></div><button data-nav="raid">Open Raid →</button></div></div>`;
  const grouped=[
   ['⚔️ Regular monsters',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>!m.boss)],
   ['👑 Early bosses · accessible rare power gear',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>m.bossTier==='early')],
   ['🌟 Late-game boss hunts · rare power sets',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>m.bossTier==='late')]
  ];
  for(const [heading,entries] of grouped){
-  html+=`<h3 class="section-title">${heading} (${entries.length})</h3><div class="combat-monsters">${entries.map(([m,i])=>`<div class="monster ${m.boss?'boss-'+m.bossTier:''}"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div>
+  html+=`<h3 class="section-title">${heading}</h3><div class="combat-monsters">${entries.map(([m,i])=>`<div class="monster ${m.boss?'boss-'+m.bossTier:''}"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div>
    ${m.boss?`<span class="monster-type">${m.bossTier==='early'?'EARLY BOSS':'ENDGAME BOSS'} · ${esc(m.gearSet)} set</span>`:''}
    <p>${fmt(m.hp)} HP · Max hit ${m.maxHit}<br><span class="monster-weakness">Weak to ${weaknessLabel(m.weakness)}</span>${m.boss?`<br>🌟 Exclusive armour: ${m.bossGearDrops.length} drops`:''}</p>
    <div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><div class="monster-actions"><button data-inspect-monster="${i}">🔎 Inspect</button><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div></div>`).join('')}</div>`;
  }
  const total=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
- html+=`<div class="info-box"><b>💠 Soul Gems · separate drop table</b><p>Every monster KILL independently rolls ${pct(GAME_CONFIG.soulGemCombatChance)} for one untradeable Soul Gem and ${pct(GAME_CONFIG.soulShardCombatChance)} for Soul Shards to charge Magic Staves. This cannot remove normal loot, seeds, junk, gems, uniques or treasure. Prismatic is 1 in 10,000 SOUL GEMS. All Soul Gems are untradeable.</p></div>`;
+ html+=`<details class="info-box"><summary>💠 Soul Gems</summary><p>${pct(GAME_CONFIG.soulGemCombatChance)} Soul Gem chance per kill · ${pct(GAME_CONFIG.soulShardCombatChance)} Soul Shard chance. Prismatic: 1 in 10,000 Soul Gems.</p></details>`;
  html+=`<details class="info-box"><summary>💎 Treasure Table · <strong id="treasureRateText">${pct(TREASURE_CHANCE)} base chance per kill</strong></summary><p>Each kill rolls for a gem. If successful, gem type is selected by relative weight. Luck gear and potions raise the initial treasure chance and unique drop rates.</p><div class="bank-count">Current effective treasure chance: <b id="treasureCurrent">${pct(treasureChance())}</b>. Conditional gem odds below add up to 100%.</div>${TREASURE_TABLE.map(([gem,weight])=>`<div class="between" style="padding:5px 0;border-bottom:1px solid #39526a"><span>${itemIcon(gem)} ${esc(gem)}</span><span class="small">${pct(weight/total)} of gems · <span data-gem-chance="${weight}">${pct(treasureChance()*weight/total)}</span> per kill</span></div>`).join('')}</details>`;
  html+=`<h3 class="section-title">🧪 Active buffs</h3><div id="buffList"></div>`;
  el('main').innerHTML=html;renderFood();renderAutoEatOptions();renderBuffs();
@@ -3333,10 +3346,10 @@ function renderBankDetail(scope){
  ${potion?`<button data-use-potion="${esc(item)}">Use potion</button>`:''}
  ${fuel?`<button data-burn="${esc(item)}">🔥 Add to fire</button>`:''}
  ${item!=='Coins'&&isTradeable(item)?`<button data-sell="${esc(item)}" data-qty="1">Sell 1</button><button data-sell="${esc(item)}" data-qty="10">Sell 10</button><button data-sell="${esc(item)}" data-qty="all">Sell all</button>`:''}
- </div><div class="bank-move-area"><label for="${scope}MoveTo">📁 Move all ${esc(item)} to tab</label><select id="${scope}MoveTo" data-bank-move="${scope}" data-item="${esc(item)}"><option value="">Choose destination…</option><option value="auto">↺ Automatic category (${esc(BANK_DEFAULT_TABS.find(t=>t.id===bankDefaultTab(item))?.name||'Materials')})</option>${bankAllTabs().filter(t=>t.id!=='all').map(t=>`<option value="${esc(t.id)}" ${bankTabForItem(item)===t.id?'disabled':''}>${t.icon} ${esc(t.name)}</option>`).join('')}</select></div><p class="bank-helper">On desktop you can also drag this item onto a folder tab.</p></div>`;
+ </div><div class="bank-move-area"><label for="${scope}MoveTo">📁 Move all ${esc(item)} to tab</label><select id="${scope}MoveTo" data-bank-move="${scope}" data-item="${esc(item)}"><option value="">Choose destination…</option><option value="auto">↺ Automatic category (${esc(BANK_DEFAULT_TABS.find(t=>t.id===bankDefaultTab(item))?.name||'Materials')})</option>${bankAllTabs().filter(t=>t.id!=='all').map(t=>`<option value="${esc(t.id)}" ${bankTabForItem(item)===t.id?'disabled':''}>${t.icon} ${esc(t.name)}</option>`).join('')}</select></div><p class="bank-helper">Drag items onto tabs to organize them.</p></div>`;
 }
 function renderBankMain(){
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Inventory</div><h2>🏦 Bank</h2><p class="section-description">${fmt(GAME_CONFIG.bankSlots)} unique item stacks. Items sort into folders automatically. Create custom tabs, drag items between tabs or use Move to tab on any item. Potions are stored separately in your Potion Pouch.</p></div></div><div id="mainBankRoot">${renderBankShell('main')}</div>`;
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Inventory</div><h2>🏦 Bank</h2><p class="section-description">${fmt(GAME_CONFIG.bankSlots)} item stacks. Organize items with tabs.</p></div></div><div id="mainBankRoot">${renderBankShell('main')}</div>`;
  renderBankGrid('main');
 }
 const GEAR_SLOT_UI={
@@ -3356,7 +3369,7 @@ function renderGearSidebar(){
  el('sidebar').innerHTML=`<div class="between"><h3 style="margin:0 0 10px">🛡️ Equipment</h3><span class="small subdued">${EQUIP_SLOTS.filter(slot=>!!state.equipment[slot]).length}/${EQUIP_SLOTS.length} equipped</span></div>
  <p class="gear-intro">Click any equipment slot to choose items from your bank, or use × to unequip.</p>
  <div class="gear-doll"><div class="gear-paper-grid">${paperSlots.map(gearSlotButton).join('')}</div><div class="gear-tools-title">Toolbelt</div><div class="gear-toolbelt">${['axe','pickaxe'].map(gearSlotButton).join('')}</div></div>
- <div class="gear-small-note">Empty slots can be clicked too · Gear is returned to your bank when removed</div>
+ <div class="gear-small-note"></div>
  <div class="equipment-stats"><b>Set collections</b>${setBonusEntries().map(set=>`<div class="set-tracker ${set.count>=2?'set-enabled':''}"><b>${esc(set.name)} ${set.count}/3</b><small>2 pieces: ${esc(describeSetBonus(set.two))} ${set.count>=2?'✓':'🔒'}</small><small>3 pieces: ${esc(describeSetBonus(set.three))} ${set.count===3?'✓':'🔒'}</small></div>`).join('')||'<span class="subdued">Equip two matching armour pieces to activate set bonuses.</span>'}</div>
  <div class="equipment-stats"><b>Active bonuses (including sets)</b>${gearDescription(mods).split(' · ').filter(x=>!x.endsWith('+0')&&!x.endsWith('+0%')).map(x=>`<span>• ${esc(x)}</span>`).join('')||'<span class="subdued">No bonuses equipped yet.</span>'}</div>`;
 }
@@ -3389,7 +3402,7 @@ function renderPotionPouch(){
   .sort(([a],[b])=>a.localeCompare(b,'en'));
  const current=Object.values(state.buffs||{}).filter(b=>b?.until>gameNow());
  el('sidebar').innerHTML=`<div class="between"><h3 style="margin:0">🧪 Potion Pouch</h3><span class="recipe-badge">${owned.length} kinds</span></div>
- <p class="potion-pouch-summary">Potions have their own unlimited stacks and <strong>do not use bank slots</strong>. Crafted, bought and rewarded potions appear here automatically.</p>
+ <p class="potion-pouch-summary">Potions are stored separately from your bank.</p>
  ${current.length?`<div class="info-box"><strong>✨ Active effects</strong>${current.map(b=>`<div class="small" style="margin-top:5px">${esc(b.name)} · ${timeFmt((b.until-gameNow())/1000)} remaining</div>`).join('')}</div>`:''}
  ${owned.length?`<div class="potion-pouch-grid">${owned.map(([name,n])=>{
   const pot=POTIONS[name];return `<div class="potion-card">${itemArt(name)}<div class="potion-content"><strong>${esc(name)}</strong><span class="potion-owned">×${fmt(n)} stored</span><p>${esc(pot.description)}</p><div class="potion-actions"><button data-use-potion="${esc(name)}" ${pot.heal&&state.hp>=maxHp()?'disabled':''}>🧪 Use</button>${isTradeable(name)?`<button data-sell="${esc(name)}" data-qty="1">Sell 1</button><button data-sell="${esc(name)}" data-qty="all">Sell all</button>`:''}</div></div></div>`;
@@ -3406,7 +3419,7 @@ function renderSidebar(){
 }
 function renderShopMain(){
  const categories=['All',...new Set(SHOP_ITEMS.map(x=>x.category))];
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Trading Post</div><h2>🛒 General Shop</h2><p class="section-description">Buy tools, supplies, seeds, early equipment, food and potions. Sell goods from the bank or potions from your Potion Pouch to earn more Coins. Rare uniques are monster drops, not shop items.</p></div><div class="stat-tile"><small>Your Coins</small><strong class="gold" id="shopCoins">🪙 ${fmt(count('Coins'))}</strong></div></div>
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Trading Post</div><h2>🛒 General Shop</h2><p class="section-description">Buy supplies and sell items for Coins.</p></div><div class="stat-tile"><small>Your Coins</small><strong class="gold" id="shopCoins">🪙 ${fmt(count('Coins'))}</strong></div></div>
  <div class="flexrow"><label class="small" for="shopQty">Buy quantity</label><select class="small-select shop-qty" id="shopQty"><option value="1" ${ui.shopQty===1?'selected':''}>1</option><option value="10" ${ui.shopQty===10?'selected':''}>10</option><option value="100" ${ui.shopQty===100?'selected':''}>100</option></select></div>
  <div class="tabs" id="shopTabs">${categories.map(x=>`<button data-shop-cat="${esc(x)}" class="${ui.shopCategory===x?'selected':''}">${esc(x)}</button>`).join('')}</div>
  <div class="shop-grid" id="shopGrid"></div><div class="info-box"><b>💰 How selling works</b><p>Select an item in your Bank (the sidebar stays open while you visit the Shop), then choose Sell 1, Sell 10, or Sell All. Potions can be sold from their separate Potion Pouch.</p></div>`;
@@ -3756,7 +3769,7 @@ function showOfflineReport(before,seconds,rewarded,actionName,actions){
  afkSection('🏆 Monsters defeated',kills.map(([n,v])=>`<div class="afk-item"><span>⚔️</span><div class="detail">${esc(n)}</div><b>×${fmt(v)}</b></div>`))+
  afkSection('📦 Materials / food consumed',spent.map(([n,v])=>afkCard(n,v,true)))+
  (!added.length&&!xp.length?'<p class="section-description">No rewards collected. You may have run out of supplies, fire, or health.</p>':'')+
- `<p class="small subdued">Items were stored automatically in your bank or Potion Pouch. ${state.active?'Your previous action will continue.':'Your activity stopped while you were away.'}</p>`;
+ `<p class="small subdued">${state.active?'Your activity continues.':'Your activity has stopped.'}</p>`;
  el('afkOverlay').hidden=false;
 }
 async function catchUpOffline(){

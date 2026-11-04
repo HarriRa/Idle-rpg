@@ -235,9 +235,42 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 .potion-empty{padding:15px;border:1px dashed #806448;border-radius:10px;color:#c9b493}
 @media(max-width:650px){.bank-folder{padding:8px 9px}.potion-pouch-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}.tabs button,#bankTab,#gearTab,#potionTab{padding:8px 9px;font-size:11px}}
 
+
+/* v3.15: metals use a single glyph with a distinct colored background */
+.item-art.metal-bronze{background:linear-gradient(145deg,#936337,#4c3729)!important;border-color:#c49b65!important}
+.item-art.metal-iron{background:linear-gradient(145deg,#8492a5,#485768)!important;border-color:#c4d1de!important}
+.item-art.metal-steel{background:linear-gradient(145deg,#51687e,#293b50)!important;border-color:#94b4ca!important}
+.item-art.metal-silver{background:linear-gradient(145deg,#c6cad3,#6f7687)!important;border-color:#e9edf3!important}
+.item-art.metal-gold{background:linear-gradient(145deg,#c9a04a,#73552c)!important;border-color:#f1d78e!important}
+.item-art.metal-mithril{background:linear-gradient(145deg,#38889e,#1a4356)!important;border-color:#83d7eb!important}
+.item-art.metal-adamant{background:linear-gradient(145deg,#438357,#24553c)!important;border-color:#a3dba7!important}
+.item-art.metal-rune{background:linear-gradient(145deg,#7560a8,#423164)!important;border-color:#b5a4e7!important}
+.item-art.metal-dragonite{background:linear-gradient(145deg,#a44b3b,#5b2e36)!important;border-color:#e5a38a!important}
+.item-art.metal-prismatic{background:linear-gradient(130deg,#a75091,#5969bd,#4d9b8b,#c5a353)!important;border-color:#f2e5bd!important}
+.raid-panel{margin:15px 0 22px;padding:16px;border:1px solid #a9824b;border-radius:14px;background:linear-gradient(160deg,#30271c,#22222a 65%,#19232b);box-shadow:inset 0 1px #fff2c010}
+.raid-heading{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.raid-heading h3{color:#f7d8a0;margin:3px 0 6px;font-size:19px}
+.raid-heading p{font-size:12px;line-height:1.55;color:#dac7ad;margin:0 0 12px}
+.raid-score{color:#f1cb85;background:#382b20;border:1px solid #997343;border-radius:13px;padding:5px 8px;white-space:nowrap}
+.raid-progress{height:9px;background:#151c21;border:1px solid #866b45;border-radius:12px;overflow:hidden;margin-bottom:10px}
+.raid-progress>div{height:100%;background:linear-gradient(90deg,#65b9d5,#a3d178,#e8bc72);transition:width .3s}
+.raid-waves{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 14px}
+.raid-wave{padding:4px 7px;border-radius:7px;font-size:11px;border:1px solid #615445;color:#8c887f;background:#292a2d}
+.raid-cleared{background:#284536;border-color:#558a67;color:#a7e2ab}
+.raid-current{background:#483922;border-color:#c99b56;color:#ffe0aa;box-shadow:0 0 12px #b6862b35}
+.raid-current:not(.raid-wave){display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid #7f6442;border-radius:10px;background:#352a20;color:#f8e5c0;flex-wrap:wrap}
+.raid-details{font-size:11px;color:#c9bba6;margin-top:5px}
+.raid-tip,.raid-warning{padding:8px 10px;font-size:12px;border-radius:8px;margin-top:10px;background:#232c32;color:#c9dde4;border:1px solid #435768}
+.raid-warning{background:#3d2d20;color:#f7d5a1;border-color:#9c6c40}
+.raid-guide{margin:10px 0;padding:9px 11px;background:#202427;border:1px solid #5b5a4d;border-radius:9px;font-size:12px}.raid-guide summary{cursor:pointer;color:#f0d5a7;font-weight:700}.raid-guide-list{margin-top:8px;display:grid;gap:4px}.raid-guide-list>div{display:flex;justify-content:space-between;gap:12px;padding:6px 8px;border-radius:5px;background:#2d2c29;color:#d2cab7}.raid-guide-list>div.active{background:#45351f;color:#ffe0a8}.raid-guide-list b{white-space:nowrap}.raid-loot{border-top:1px solid #68563a;margin-top:13px;padding-top:12px}
+.raid-loot p{font-size:12px;color:#dac7ad;line-height:1.5;margin:6px 0}
+.raid-chest-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px}
+.raid-chest-row button{font-size:11px;padding:6px 9px}
+.monster-weakness{color:#f3c988;font-weight:750}
+@media(max-width:650px){.raid-panel{padding:10px}.raid-heading{flex-wrap:wrap}.raid-score{white-space:normal}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.14 · Balanced XP Curve</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.15 · Deep Mountain Expedition</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div><small id="activityHint" class="activity-sr-only">All actions take 1 second while testing.</small></section><div id="main"></div></main>
@@ -247,7 +280,7 @@ body{background:linear-gradient(155deg,#221d19 0%,#1b1b1d 52%,#171820 100%)}
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.14 · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.15 · CHANGE GAME SETTINGS HERE
 // ──────────────────────────────────────────────────────────────────────────────
 const GAME_CONFIG = {
   actionMs: 1000,            // Testing speed: 1 second for every action
@@ -287,15 +320,15 @@ const TREASURE_TABLE = [
   ['Uncut Sapphire',11],['Uncut Emerald',6],['Uncut Ruby',3],
   ['Uncut Diamond',2],['Uncut Dragonstone',0.7],['Uncut Onyx',0.2],['Uncut Zenyte',0.1]
 ];
-// All Soul Gems are permanently untradeable. Tiers add up to 3000:
-// Prismatic = exactly 1 / 3000 OF SOUL GEMS, not 1 / 3000 actions.
+// All Soul Gems are permanently untradeable. Tiers add up to 10,000:
+// Prismatic = exactly 1 / 10,000 OF SOUL GEMS, not 1 / 10,000 actions.
 // Soul Gems roll independently of equipment, regular loot, treasure and uniques.
 const SOUL_GEMS = [
- {name:'Faded Soul Gem',color:'⚪',weight:1700,tier:'Common'},
- {name:'Verdant Soul Gem',color:'🟢',weight:800,tier:'Uncommon'},
- {name:'Azure Soul Gem',color:'🔵',weight:350,tier:'Rare'},
- {name:'Violet Soul Gem',color:'🟣',weight:120,tier:'Epic'},
- {name:'Solar Soul Gem',color:'🟡',weight:29,tier:'Legendary'},
+ {name:'Faded Soul Gem',color:'⚪',weight:5668,tier:'Common'},
+ {name:'Verdant Soul Gem',color:'🟢',weight:2667,tier:'Uncommon'},
+ {name:'Azure Soul Gem',color:'🔵',weight:1167,tier:'Rare'},
+ {name:'Violet Soul Gem',color:'🟣',weight:400,tier:'Epic'},
+ {name:'Solar Soul Gem',color:'🟡',weight:97,tier:'Legendary'},
  {name:'Prismatic Soul Gem',color:'🌈',weight:1,tier:'Mythic'}
 ];
 const NONTRADEABLE_ITEMS=new Set([...SOUL_GEMS.map(x=>x.name),'Soul Shard']);
@@ -619,7 +652,7 @@ const ENCHANTMENTS=[
  ['Alchemist Soul Charm','Wisdom Amulet','Dragonstone','Violet Soul Gem',80,520,{alchemyXpBonus:.60,enchantingXpBonus:.30}],
  ['Sunforged Battle Ring','Warrior Ring','Onyx','Solar Soul Gem',90,660,{attackPct:.45,strengthPct:.45,defencePct:.35}],
  ['Soulweaver Cape','Explorer Cape','Zenyte','Solar Soul Gem',94,800,{xpBonus:.60,gatherBonus:.35,luckBonus:.40}],
- // MYTHIC: requires a 1/3000 Soul Gem. The crown is deliberately extremely powerful.
+ // MYTHIC: requires a 1/10000 Soul Gem. The crown is deliberately extremely powerful.
  ['Eternal Soul Crown','Rune Helm','Zenyte','Prismatic Soul Gem',99,3000,{xpBonus:1.50,gatherBonus:1.50,luckBonus:2.50,attackPct:1,strengthPct:1,defencePct:1}]
 ];
 for(const [output,base,gem,soul,level,xp,buffs] of ENCHANTMENTS){
@@ -750,6 +783,150 @@ const MONSTER_DROP_RULES={
  'Void Overlord':{trashChance:.50,trashTable:[['Void Residue',70,1,3],['Crystal Dust',30,1,2]],gemChance:.25,gemTable:[['Uncut Dragonstone',65,1,1],['Uncut Onyx',30,1,1],['Uncut Zenyte',5,1,1]]}
 };
 for(const m of MONSTERS)Object.assign(m,MONSTER_DROP_RULES[m.name]||{},SPECIAL_COMPONENT_DROPS[m.name]?{componentDrop:SPECIAL_COMPONENT_DROPS[m.name]}:{});
+// Every monster has a preferred combat counter. The bonus applies to accuracy
+// and damage; attacking with another style remains possible, but much slower.
+const MONSTER_WEAKNESSES={
+ Rat:'melee',Chicken:'melee','Wandering Peasant':'melee',Goblin:'ranged',
+ Skeleton:'magic',Bandit:'melee','Dwarven Miner':'magic','Forest Guardian':'ranged',
+ 'Swamp Witch':'ranged','Cave Troll':'magic','Mithril Golem':'magic',
+ 'Abyss Warden':'melee','Crystal Sentinel':'melee','Ancient Dragon':'ranged',
+ 'Void Overlord':'magic'
+};
+for(const m of MONSTERS)m.weakness=MONSTER_WEAKNESSES[m.name]||'melee';
+const combatType=style=>style==='ranged'?'ranged':style==='magic'?'magic':'melee';
+const weaknessLabel=style=>({melee:'🗡️ Melee',ranged:'🏹 Ranged',magic:'🪄 Magic'})[style]||style;
+
+
+// ── Deep Mountain Expedition / permanent wave checkpoint system ─────────────
+// All raids share the same combat/XP/autoeat rules as normal monsters.
+const RAID_CONFIG={
+ name:'Deep Mountain Expedition', unlockCombatLevel:95,
+ belrothCombatLevel:105, belrothDefenceLevel:70, belrothHitpointsLevel:70, belrothArmourDefence:40,
+ chest:'Belroth Expedition Chest',
+ // The chest always drops, but unique weapons and jewellery cores are rare.
+ // Each entry: item, relative drop weight, quantity (weights total 100).
+ chestRewards:[
+  ['Ancient Crystal',35,5],['Dragonite Bar',25,3],['Solar Soul Gem',9,1],
+  ['Belroth Amulet Core',11,1],['Belroth Ring Core',11,1],
+  ['Deepmountain Greatsword',3,1],['Deepmountain Warbow',3,1],['Deepmountain Soulstaff',3,1]
+ ]
+};
+NONTRADEABLE_ITEMS.add(RAID_CONFIG.chest);
+const RAID_WAVES=[
+ {name:'Deep Cave Marauder',level:92,hp:440,def:72,atk:93,maxHit:49,weakness:'melee'},
+ {name:'Runebound Stoneguard',level:94,hp:490,def:83,atk:95,maxHit:51,weakness:'magic'},
+ {name:'Lurking Gloomstalker',level:96,hp:510,def:80,atk:98,maxHit:55,weakness:'ranged'},
+ {name:'Deep Mountain Troll',level:98,hp:575,def:88,atk:102,maxHit:59,weakness:'magic'},
+ {name:'Armoured Cave Sentinel',level:100,hp:610,def:93,atk:108,maxHit:63,weakness:'melee'},
+ {name:'Shadowwing Harpy',level:102,hp:645,def:95,atk:110,maxHit:68,weakness:'ranged'},
+ {name:'Ancient Iron Colossus',level:105,hp:720,def:105,atk:118,maxHit:74,weakness:'magic'},
+ {name:'Fallen Expedition Knight',level:108,hp:770,def:112,atk:122,maxHit:78,weakness:'melee'},
+ {name:'Abyssal Cave Serpent',level:110,hp:820,def:112,atk:128,maxHit:81,weakness:'ranged'},
+ {name:'Deepmountain Hexweaver',level:112,hp:900,def:122,atk:137,maxHit:87,weakness:'ranged'},
+ {name:'Belroth’s Warden',level:115,hp:1150,def:125,atk:141,maxHit:94,weakness:'melee'},
+ {name:'Belroth',level:120,hp:9000,def:170,atk:190,maxHit:155,weakness:'magic',boss:true}
+];
+const RAID_GEAR={
+ 'Deepmountain Greatsword':{slot:'weapon',requiredSkill:'attack',requiredLevel:95,attack:130,strength:93},
+ 'Deepmountain Warbow':{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:95,rangedAccuracy:179,rangedPower:115},
+ 'Deepmountain Soulstaff':{slot:'weapon',combatType:'magic',requiredSkill:'magic',requiredLevel:95,magicAccuracy:245,magicPower:159,maxCharges:2600}
+};
+for(const [name,gear] of Object.entries(RAID_GEAR)){
+ registerGear(name,gear);
+ if(gear.combatType==='magic')MAGIC_STAVES[name]=gear;
+}
+SKILLS.crafting.actions.push(
+ A('Forge Perfect Amulet (Unf)','Perfect Amulet (Unf)',96,1700,{'Belroth Amulet Core':1,'Gold Amulet Blank':1,'Spirit Thread':4,'Zenyte':1},'Raid Jewellery'),
+ A('Forge Perfect Ring (Unf)','Perfect Ring (Unf)',96,1700,{'Belroth Ring Core':1,'Gold Ring Blank':1,'Rune Bar':2,'Zenyte':1},'Raid Jewellery')
+);
+SKILLS.enchanting.actions.push(
+ A('Awaken Perfect Amulet','Perfect Amulet',99,5000,{'Perfect Amulet (Unf)':1,'Prismatic Soul Gem':1,'Zenyte':1,'Solar Soul Gem':2},'Mythic'),
+ A('Awaken Perfect Ring','Perfect Ring',99,5000,{'Perfect Ring (Unf)':1,'Prismatic Soul Gem':1,'Onyx':1,'Solar Soul Gem':2},'Mythic')
+);
+registerGear('Perfect Amulet',{slot:'amulet',attackPct:.80,strengthPct:.80,defencePct:.80,rangedPct:.80,magicPct:.80,xpBonus:.70,luckBonus:.70});
+registerGear('Perfect Ring',{slot:'ring',attackPct:.55,strengthPct:.55,defencePct:.55,rangedPct:.55,magicPct:.55,xpBonus:.55,gatherBonus:.80,soulDropBonus:.60});
+function raidState(){
+ state.raid??={wave:0,completions:0,pendingChests:0};
+ state.raid.wave=Math.max(0,Math.min(RAID_WAVES.length-1,Math.floor(Number(state.raid.wave)||0)));
+ state.raid.completions=Math.max(0,Math.floor(Number(state.raid.completions)||0));
+ state.raid.pendingChests=Math.max(0,Math.floor(Number(state.raid.pendingChests)||0));
+ return state.raid;
+}
+function currentEnemy(){return state.active?.type==='raid'?RAID_WAVES[raidState().wave]:MONSTERS[state.monsterIndex]}
+function belrothEntryRequirement(){
+ const problems=[];
+ if(combatLevel()<RAID_CONFIG.belrothCombatLevel)problems.push('Combat Level '+RAID_CONFIG.belrothCombatLevel);
+ if(levelFromXp(state.xp.defence||0)<RAID_CONFIG.belrothDefenceLevel)problems.push('Defence '+RAID_CONFIG.belrothDefenceLevel);
+ if(levelFromXp(state.xp.hitpoints||0)<RAID_CONFIG.belrothHitpointsLevel)problems.push('Hitpoints '+RAID_CONFIG.belrothHitpointsLevel);
+ if(gearMods().defence<RAID_CONFIG.belrothArmourDefence)problems.push(RAID_CONFIG.belrothArmourDefence+'+ armour defence');
+ const weapon=state.equipment.weapon;
+ const adequate={melee:['Dragonite Sword','Abyssal Blade','Deepmountain Greatsword'],ranged:['Dragonbone Bow','Deepmountain Warbow'],magic:['Dragonfire Staff','Voidcaller Staff','Deepmountain Soulstaff']}[combatType(state.combatStyle)];
+ if(!adequate.includes(weapon))problems.push('near-endgame '+combatType(state.combatStyle)+' weapon');
+ return problems;
+}
+function startRaidWave(){
+ const raid=raidState(),wave=RAID_WAVES[raid.wave];
+ if(combatLevel()<RAID_CONFIG.unlockCombatLevel){toast('Reach Combat '+RAID_CONFIG.unlockCombatLevel+' to enter');return}
+ if(wave.boss){const needs=belrothEntryRequirement();if(needs.length){note('🔒 Belroth requires '+needs.join(', '));toast('Belroth requires stronger gear and levels');return}}
+ const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
+ clearActivityFeed();state.active={type:'raid'};state.monsterHp=wave.hp;state.progress=0;
+ note(`⛰️ Wave ${raid.wave+1}/${RAID_WAVES.length}: ${wave.name} · Weak to ${combatType(state.combatStyle)===wave.weakness?'your style':wave.weakness}`);
+ renderProgress();renderMain();refreshDynamic();save();
+}
+function awardRaidChest(){
+ const raid=raidState();
+ if(!add(RAID_CONFIG.chest,1)){
+  raid.pendingChests++;
+  note('📦 Bank full! Belroth chest saved as a pending reward. Free a slot, then claim in the Raid panel.');
+ }else note('🏆 Belroth defeated! Belroth Expedition Chest added to your bank.');
+}
+function claimPendingRaidChests(){
+ const raid=raidState();let moved=0;
+ while(raid.pendingChests>0&&bankCanHold(RAID_CONFIG.chest)){
+  if(!add(RAID_CONFIG.chest,1))break;
+  raid.pendingChests--;moved++;
+ }
+ if(moved)note('📦 Claimed '+moved+' Belroth Expedition Chest(s).');
+ else note('Free a bank stack to claim your saved chest.');
+ refreshDynamic();save();
+}
+function openRaidChest(){
+ const chest=RAID_CONFIG.chest;
+ if(count(chest)<1)return;
+ const chosen=weightedPick(RAID_CONFIG.chestRewards);
+ const unique=chosen[0],quantity=chosen[2]||1;
+ // Keep the chest untouched unless there is room for its new stack.
+ const rewards={[unique]:quantity,'Coins':6000,'Soul Shard':100};
+ const gained=Object.entries(rewards);
+ const freed=count(chest)===1?1:0;
+ const needed=gained.filter(([name])=>count(name)<1).length;
+ if(bankUsed()-freed+needed>GAME_CONFIG.bankSlots){note('🏦 Free bank space before opening the chest.');toast('Not enough bank slots');return}
+ add(chest,-1);
+ for(const [name,n] of gained)add(name,n);
+ state.stats.coinsEarned=(state.stats.coinsEarned||0)+6000;
+ note(`🎁 Belroth's chest: ${quantity} ${unique}, 6,000 Coins and 100 Soul Shards!`);
+ toast('Raid reward: '+unique);
+ refreshDynamic();save();
+}
+function finishRaidWave(m){
+ const raid=raidState();
+ state.stats.kills[m.name]=(state.stats.kills[m.name]||0)+1;
+ // Raid waves roll Soul Gems and Soul Shards INDEPENDENTLY of completion loot.
+ rollSoulGem('combat');
+ if(Math.random()<GAME_CONFIG.soulShardCombatChance){
+  const n=2+Math.floor(m.level/20);
+  if(add('Soul Shard',n))state.stats.soulShardsFound=(state.stats.soulShardsFound||0)+n;
+ }
+ if(m.boss){
+  awardRaidChest();raid.completions++;raid.wave=0;
+  note(`⛰️ ${RAID_CONFIG.name} completed ${raid.completions} time(s). A new run begins at Wave 1.`);
+ }else{
+  raid.wave++;
+  note(`✅ ${m.name} defeated! Checkpoint saved · Wave ${raid.wave+1}/${RAID_WAVES.length} unlocked.`);
+ }
+ state.active=null;state.progress=0;state.monsterHp=null;
+}
+
 const SHOP_ITEMS=[
  {name:'Logs',price:20,category:'Supplies'},{name:'Oak Logs',price:55,category:'Supplies'},
  {name:'Wheat',price:15,category:'Supplies'},{name:'Herb',price:30,category:'Supplies'},
@@ -777,8 +954,24 @@ const SHOP_ITEMS=[
  {name:'Gold Bar',price:400,category:'Materials'},
  {name:'Silver Ring Blank',price:280,category:'Materials'},
  {name:'Gold Ring Blank',price:630,category:'Materials'},
- {name:'Gold Amulet Blank',price:710,category:'Materials'}
+ {name:'Gold Amulet Blank',price:710,category:'Materials'},
+ // Accessible early progression: all ordinary gear up through Steel, no raid uniques.
+ ...['Bronze','Iron','Steel'].flatMap((metal,tier)=>[
+  ['Sword','Weapons', [200,620,1300][tier]],
+  ['Shield','Armour',[180,530,1250][tier]],
+  ['Helm','Armour',[140,420,950][tier]],
+  ['Chestplate','Armour',[320,1050,2500][tier]],
+  ['Platelegs','Armour',[260,780,1850][tier]],
+  ['Axe','Tools',[150,500,1050][tier]],
+  ['Pickaxe','Tools',[150,500,1050][tier]]
+ ].map(([kind,category,price])=>({name:metal+' '+kind,price,category}))).filter(x=>!['Bronze Sword','Bronze Shield','Bronze Axe','Bronze Pickaxe','Iron Sword','Iron Axe','Iron Pickaxe','Steel Sword','Steel Axe','Steel Pickaxe'].includes(x.name)),
+ ...['Cooked Sardine','Cooked Crab','Cooked Herring','Cooked Trout','Cooked Cod','Cooked Eel','Cooked Tuna'].map((name,i)=>({name,price:[85,100,135,175,210,270,370][i],category:'Food'})),
+ {name:'Cooked Chicken',price:95,category:'Food'},
+ {name:'Cooked Beef',price:240,category:'Food'}
 ];
+for(const offer of SHOP_ITEMS)if(/^(Bronze|Iron|Steel) /.test(offer.name)){
+ offer.category=/ Sword$/.test(offer.name)?'Weapons':/ Axe$| Pickaxe$/.test(offer.name)?'Tools':'Armour';
+}
 // Journal objectives provide longer-term progression and Coins for shopping.
 const QUESTS=[
  {id:'forest-start',title:'Into the Woods',text:'Chop 25 trees',test:s=>(s.stats.bySkill.woodcutting||0)>=25,coins:180},
@@ -1014,6 +1207,8 @@ for(const q of QUESTS)if(q.chain)q.test=s=>
 
 
 // ── Item database: icons, stacking, prices, and readable tooltips ────────────
+QUESTS.push({id:'deep-mountain-victory',title:'The Mountain Falls',text:'Defeat Belroth and finish Deep Mountain Expedition',category:'Combat',
+ progress:r=>r.raid?.completions||0,target:1,test:r=>(r.raid?.completions||0)>=1,coins:25000,xp:{attack:300000,defence:300000,hitpoints:100000},items:{'Solar Soul Gem':2}});
 const ITEM_META={};
 const ICON_BY_FISH=['🦐','🐟','🦀','🐠','🐡','🐠','🦑','🐍','🐬','🦞','🐙','🐋','🦈','🐡','🐉','🐲'];
 const MATERIAL_MARKS={Bronze:'🟫',Iron:'⬜',Steel:'⬛',Silver:'⚪',Gold:'🟨',Mithril:'🟦',Adamant:'🟩',Rune:'🟪',Dragonite:'🟥',Obsidian:'⬛',Crystal:'🔷',Ancient:'🟧',Void:'⚫'};
@@ -1042,6 +1237,9 @@ function gemMark(item){
 }
 function monsterIcon(monster){
  const name=typeof monster==='string'?monster:monster.name;
+ if(name==='Belroth')return '👑';
+ if(name.includes('Deep')||name.includes('Cave'))return '⛰️';
+ if(name.includes('Sentinel')||name.includes('Colossus')||name.includes('Stoneguard'))return '🗿';
  if(name==='Rat') return '🐀';
  if(name==='Chicken') return '🐔';
  if(name==='Wandering Peasant') return '🧑‍🌾';
@@ -1060,6 +1258,9 @@ function monsterIcon(monster){
  return '👾';
 }
 function itemIcon(item){
+ if(item===RAID_CONFIG.chest)return '🎁';
+ if(item==='Belroth Amulet Core'||item==='Perfect Amulet (Unf)')return '📿';
+ if(item==='Belroth Ring Core'||item==='Perfect Ring (Unf)')return '💍';
  if(item==='Coins')return '🪙';
  const soul=SOUL_GEMS.find(s=>s.name===item);if(soul)return soul.color;
  if(item==='Soul Shard')return '🔹';
@@ -1080,28 +1281,28 @@ function itemIcon(item){
  if(item.includes('Platter')||item.includes('Feast'))return '🍽️';
  if(item.includes('Bowstring'))return '🧵';
  if(item.includes('Arrow Shaft'))return '🪵';
- if(item.includes('Arrow'))return `${materialMark(item)||'🏹'}➶`;
- if(item.includes('Bow')||item.includes('Quiver'))return `${materialMark(item)||'🏹'}🏹`;
- if(item.includes('Staff')||item.includes('Wand'))return `${materialMark(item)||'🔮'}🪄`;
- if(item.includes('Sword')||item.includes('Blade'))return `${materialMark(item)||'⚔️'}🗡️`;
- if(item.includes('Shield'))return `${materialMark(item)||'🛡️'}🛡️`;
- if(item.includes('Helm')||item.includes('Hood'))return `${materialMark(item)||'🪖'}🪖`;
- if(item.includes('Chestplate')||item.includes('Body')||item.includes('Robe Top'))return `${materialMark(item)||'🥋'}🥋`;
- if(item.includes('Platelegs')||item.includes('Legs')||item.includes('Robe Bottom'))return `${materialMark(item)||'👖'}👖`;
+ if(item.includes('Arrow'))return '🏹';
+ if(item.includes('Bow')||item.includes('Quiver'))return '🏹';
+ if(item.includes('Staff')||item.includes('Wand'))return '🪄';
+ if(item.includes('Sword')||item.includes('Blade'))return '🗡️';
+ if(item.includes('Shield'))return '🛡️';
+ if(item.includes('Helm')||item.includes('Hood'))return '🪖';
+ if(item.includes('Chestplate')||item.includes('Body')||item.includes('Robe Top'))return '🥋';
+ if(item.includes('Platelegs')||item.includes('Legs')||item.includes('Robe Bottom'))return '👖';
  if(item.includes('Gloves')||item.includes('Gauntlets'))return '🧤';
- if(item.includes('Axe'))return `${materialMark(item)||'🪓'}🪓`;
- if(item.includes('Pickaxe'))return `${materialMark(item)||'⛏️'}⛏️`;
- if(item.includes('Amulet')||item.includes('Charm'))return `${gemMark(item)}📿`;
- if(item.includes('Ring'))return `${gemMark(item)}💍`;
+ if(item.includes('Axe'))return '🪓';
+ if(item.includes('Pickaxe'))return '⛏️';
+ if(item.includes('Amulet')||item.includes('Charm'))return '📿';
+ if(item.includes('Ring'))return '💍';
  if(item.includes('Cape'))return '🧣';
  if(item.includes('Crown'))return '👑';
  if(item.includes('Potion'))return '🧪';
- if(item.startsWith('Uncut ')||GEMS.includes(item))return `${gemMark(item)}💎`;
+ if(item.startsWith('Uncut ')||GEMS.includes(item))return gemMark(item);
  if(FISH_TO_COOK.includes(item))return ICON_BY_FISH[FISH_TO_COOK.indexOf(item)]||'🐟';
  if(item.startsWith('Cooked ')){const raw=item.slice(7);if(FISH_TO_COOK.includes(raw))return '🍣';if(raw.includes('Chicken'))return '🍗';if(raw.includes('Beef')||raw.includes('Lamb'))return '🥩';}
- if(item.includes('Logs')){if(item.includes('Magic'))return '✨🪵';if(item.includes('Redwood'))return '🟥🪵';if(item.includes('Yew'))return '🌲🪵';if(item.includes('Maple'))return '🍁🪵';if(item.includes('Willow'))return '🌿🪵';if(item.includes('Oak'))return '🌳🪵';return '🪵';}
- if(item.includes(' Ore')||item==='Coal'||item==='Obsidian'||item==='Clay'||item==='Limestone')return `${materialMark(item)||'🪨'}🪨`;
- if(item.endsWith('Bar'))return `${materialMark(item)||'🧱'}🧱`;
+ if(item.includes('Logs')){if(item.includes('Magic'))return '🪵';if(item.includes('Redwood'))return '🪵';if(item.includes('Yew'))return '🪵';if(item.includes('Maple'))return '🪵';if(item.includes('Willow'))return '🪵';if(item.includes('Oak'))return '🪵';return '🪵';}
+ if(item.includes(' Ore')||item==='Coal'||item==='Obsidian'||item==='Clay'||item==='Limestone')return '🪨';
+ if(item.endsWith('Bar'))return '🧱';
  if(item.includes('Arcane')||item.includes('Witch Sigil')||item.includes('Goblin Ember')||item.includes('Golem Heart'))return '✨';
  if(item.includes('Ranger'))return '🎯';
  if(item.includes('Crystal'))return '🔮';
@@ -1123,7 +1324,7 @@ function itemIcon(item){
  return '📦';
 }
 function itemCategory(item){
- if(item==='Coins')return 'Currency';if(item==='Soul Shard')return 'Soul Shards';if(NONTRADEABLE_ITEMS.has(item))return 'Soul Gems';if(item in RANGED_AMMO)return 'Ammunition';if(item in EQUIPMENT)return 'Equipment';
+ if(item===RAID_CONFIG.chest||item==='Belroth Amulet Core'||item==='Belroth Ring Core'||item.includes('(Unf)'))return 'Rare Drops';if(item==='Coins')return 'Currency';if(item==='Soul Shard')return 'Soul Shards';if(NONTRADEABLE_ITEMS.has(item))return 'Soul Gems';if(item in RANGED_AMMO)return 'Ammunition';if(item in EQUIPMENT)return 'Equipment';
  if(Object.values(SPECIAL_COMPONENT_DROPS).some(drop=>drop.item===item||drop.extraItem===item))return 'Rare Drops';
  if(item in POTIONS)return 'Potions';if(item in FOOD)return 'Food';
  if(FISH_TO_COOK.includes(item))return 'Fish';if(item.startsWith('Uncut ')||GEMS.includes(item))return 'Gems';
@@ -1146,7 +1347,11 @@ const SPECIAL_SELL_PRICES={
  'Ancient Crystal':490,'Cowhide':35,'Thick Hide':220,
  'Fortune Ring':40000,'Ancient Scholar Charm':20000,
  'Abyssal Blade':85000,'Dragonheart Amulet':150000,
- 'Troll King Ring':35000,'Voidborn Cape':55000
+ 'Troll King Ring':35000,'Voidborn Cape':55000,
+ 'Belroth Amulet Core':120000,'Belroth Ring Core':120000,
+ 'Perfect Amulet (Unf)':160000,'Perfect Ring (Unf)':160000,
+ 'Deepmountain Greatsword':500000,'Deepmountain Warbow':500000,'Deepmountain Soulstaff':500000,
+ 'Perfect Amulet':800000,'Perfect Ring':800000
 };
 function baseSellPrice(item){
  const shop=SHOP_ITEMS.find(x=>x.name===item);if(shop)return Math.max(1,Math.floor(shop.price*GAME_CONFIG.shopSellMultiplier));
@@ -1159,7 +1364,7 @@ function baseSellPrice(item){
  return 15;
 }
 function itemTier(item){
- if(/Prismatic Soul Gem|Eternal Soul Crown|Solar Soul Gem|Voidcaller|Dragonfire Staff|Dragonbone Bow/.test(item))return 'tier-epic';
+ if(/Prismatic Soul Gem|Perfect Ring|Perfect Amulet|Deepmountain|Belroth|Eternal Soul Crown|Solar Soul Gem|Voidcaller|Dragonfire Staff|Dragonbone Bow/.test(item))return 'tier-epic';
  if(/Violet Soul Gem|Azure Soul Gem/.test(item))return 'tier-rare';
  if(/Verdant Soul Gem/.test(item))return 'tier-high';
  if(/Dragonite|Zenyte|Dragonheart|Voidborn|Abyssal|Onyx|Elder|Leviathan|Ancient Scholar|Fortune Ring/.test(item))return 'tier-epic';
@@ -1170,7 +1375,12 @@ function itemTier(item){
 for(const skill of Object.values(SKILLS))for(const a of skill.actions||[])ITEM_META[a.output]={category:itemCategory(a.output)};
 for(const monster of MONSTERS){for(const item of Object.keys(monster.loot))ITEM_META[item]??={category:itemCategory(item)};if(monster.unique)ITEM_META[monster.unique.item]??={category:itemCategory(monster.unique.item)};if(monster.componentDrop){for(const item of [monster.componentDrop.item,monster.componentDrop.extraItem].filter(Boolean))ITEM_META[item]??={category:itemCategory(item)}}for(const key of ['trashTable','seedTable','gemTable'])for(const row of monster[key]||[])ITEM_META[row[0]]??={category:itemCategory(row[0])}}
 for(const item of [...Object.keys(EQUIPMENT),...Object.keys(FOOD),...Object.keys(POTIONS),...Object.keys(FIRE_FUEL),...SHOP_ITEMS.map(x=>x.name),'Coins',...TREASURE_TABLE.map(x=>x[0]),...SOUL_GEMS.map(x=>x.name),'Soul Shard'])ITEM_META[item]??={category:itemCategory(item)};
-function itemArt(item,large=false){return `<span class="item-art ${itemTier(item)} ${large?'big-art':''}" aria-hidden="true">${itemIcon(item)}</span>`}
+function itemVisualClass(item){
+ const m=Object.keys(MATERIAL_MARKS).find(k=>item.includes(k));
+ return m?'metal-'+m.toLowerCase():item.includes('Prismatic')?'metal-prismatic':item.includes('Perfect')?'metal-prismatic':'';
+}
+function itemArt(item,large=false){return `<span class="item-art ${itemTier(item)} ${itemVisualClass(item)} ${large?'big-art':''}" aria-hidden="true">${itemIcon(item)}</span>`}
+
 const esc=x=>String(x).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const fmt=n=>Math.floor(n||0).toLocaleString('en-US');
 const pct=n=>{const value=n*100,decimals=value>0&&value<1?3:1;return value.toFixed(decimals).replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'')+'%'};
@@ -1182,7 +1392,7 @@ const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,
 function newGame(){return {
  xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
- hp:10,monsterIndex:0,monsterHp:null,combatStyle:'attack',rangedAmmo:'Bronze Arrows',staffCharges:{},
+ hp:10,monsterIndex:0,monsterHp:null,raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
  fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
@@ -1332,14 +1542,14 @@ function restore(){
   const migratedStats={...stats,bySkill:{...(stats.bySkill||{})}};
   if(migratedStats.bySkill.herblore!==undefined&&migratedStats.bySkill.alchemy===undefined)migratedStats.bySkill.alchemy=migratedStats.bySkill.herblore;
   state={...base,...raw,xp:{...base.xp,...raw.xp},
-   bank:{...raw.bank},potions:{...(raw.potions||{})},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
+   bank:{...raw.bank},potions:{...(raw.potions||{})},raid:{...base.raid,...(raw.raid||{})},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
    rangedAmmo:raw.rangedAmmo||'Bronze Arrows',staffCharges:{...(raw.staffCharges||{})},
    autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
    stats:{...emptyStats(),...migratedStats,bySkill:{...migratedStats.bySkill},produced:{...(stats.produced||{})},kills:{...(stats.kills||{})},soulsBySource:{...(stats.soulsBySource||{})},soulsByTier:{...(stats.soulsByTier||Object.fromEntries(SOUL_GEMS.map(g=>[g.name,Math.max(0,Number(raw.bank[g.name]||0))]))) }},
    claimed:Array.isArray(raw.claimed)?raw.claimed:[],
    active:validSavedActivity(raw.active)?raw.active:null,
    progress:clamp(Number(raw.progress)||0,0,99.999),
-   monsterHp:Number.isFinite(Number(raw.monsterHp))&&Number(raw.monsterHp)>0?Number(raw.monsterHp):MONSTERS[raw.monsterIndex]?.hp};
+   monsterHp:Number.isFinite(Number(raw.monsterHp))&&Number(raw.monsterHp)>0?Number(raw.monsterHp):(raw.active?.type==='raid'?RAID_WAVES[Math.min(RAID_WAVES.length-1,Math.max(0,Number(raw.raid?.wave)||0))].hp:MONSTERS[raw.monsterIndex]?.hp)};
   state.lastProcessedAt=Number(raw.lastProcessedAt)||Number(raw.lastSaved)||Date.now();
   // Historic saves had Farming and Animal Husbandry before they became Agriculture.
   if(raw.xp.agriculture===undefined&&(raw.xp.farming!==undefined||raw.xp.animalHusbandry!==undefined))state.xp.agriculture=(raw.xp.farming||0)+(raw.xp.animalHusbandry||0);
@@ -1356,6 +1566,8 @@ function restore(){
   if(!RANGED_AMMO[state.rangedAmmo])state.rangedAmmo='Bronze Arrows';
   for(const [name,charges] of Object.entries(state.staffCharges))state.staffCharges[name]=clamp(Math.floor(Number(charges)||0),0,MAGIC_STAVES[name]?.maxCharges||0);
   state.monsterIndex=MONSTERS[state.monsterIndex]?state.monsterIndex:0;
+  raidState();
+  if(state.active?.type==='raid')state.monsterHp=clamp(Number(state.monsterHp)||RAID_WAVES[state.raid.wave].hp,1,RAID_WAVES[state.raid.wave].hp);
   if(!FOOD[state.autoEat.food])state.autoEat.food='Cooked Shrimp';
   if(![15,30,50].includes(Number(state.autoEat.threshold)))state.autoEat.threshold=30;
   state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
@@ -1502,8 +1714,8 @@ function rollSoulGem(source){
  state.stats.soulsCollected=(state.stats.soulsCollected||0)+1;
  state.stats.soulsByTier[gem.name]=(state.stats.soulsByTier[gem.name]||0)+1;
  state.stats.soulsBySource[source]=(state.stats.soulsBySource[source]||0)+1;
- if(gem.name==='Prismatic Soul Gem')note('🌈 MYTHIC SOUL! Found the 1/3000 Prismatic Soul Gem!');
- else if(gem.weight<=29)note(`🌟 ${gem.name} found from ${label(source)}!`);
+ if(gem.name==='Prismatic Soul Gem')note('🌈 MYTHIC SOUL! Found the 1/10000 Prismatic Soul Gem!');
+ else if(gem.weight<=97)note(`🌟 ${gem.name} found from ${label(source)}!`);
  return gem.name;
 }
 function rollMonsterGroup(m,kind){
@@ -1587,7 +1799,8 @@ function chargeStaff(shardsRequested){
  refreshDynamic();save();
 }
 function completeCombat(){
- const m=MONSTERS[state.monsterIndex],mods=gearMods();
+ const m=currentEnemy(),mods=gearMods(),raidFight=state.active?.type==='raid';
+ if(!m){stop(true);return}
  const supplyError=combatSupplyError();
  if(supplyError){note('⏹ '+supplyError);stop(true);return}
  const style=state.combatStyle;
@@ -1609,16 +1822,25 @@ function completeCombat(){
   accuracy=clamp((.62+.008*(attack+mods.attack-m.def))*(1+mods.attackPct),.12,.98);
   maxHit=Math.max(1,Math.floor((2+Math.floor((strength-1)/7)+mods.strength)*(1+mods.strengthPct)));
  }
+ // A raid wave intentionally demands switching styles. Countering its weakness
+ // raises accuracy and damage; brute-forcing with the wrong style is inefficient.
+ const matching=combatType(style)===m.weakness;
+ const affinity=matching?1.30:.35;
+ accuracy=clamp(accuracy*(matching?1.16:.56),.035,.99);
+ maxHit=Math.max(1,Math.floor(maxHit*affinity));
  const damage=Math.random()<accuracy?1+Math.floor(Math.random()*maxHit):0;
  const actualDamage=Math.min(damage,state.monsterHp);
  state.monsterHp=Math.max(0,state.monsterHp-damage);
  const combatXp=actualDamage*5;
  if(combatXp>0){gainXp(style,combatXp);gainXp('hitpoints',combatXp/4)}
  if(state.monsterHp<=0){
-  state.stats.kills[m.name]=(state.stats.kills[m.name]||0)+1;
-  const drops=applyMonsterLoot(m);
-  note(`🏆 Defeated ${m.name}! Loot: ${drops.join(', ')||'Nothing'}`);
-  state.monsterHp=m.hp;
+  if(raidFight){finishRaidWave(m)}
+  else{
+   state.stats.kills[m.name]=(state.stats.kills[m.name]||0)+1;
+   const drops=applyMonsterLoot(m);
+   note(`🏆 Defeated ${m.name}! Loot: ${drops.join(', ')||'Nothing'}`);
+   state.monsterHp=m.hp;
+  }
  }else{
   const effectiveDefence=defence*(1+mods.defencePct)+mods.defence;
   const hitChance=clamp(.65+.008*(m.atk-effectiveDefence),.10,.94);
@@ -1628,7 +1850,7 @@ function completeCombat(){
   state.hp=Math.max(0,state.hp-incoming);
  }
  tryAutoEat();
- if(state.hp<=0){state.hp=maxHp();note(`💔 Defeated by ${m.name}! Respawned at full HP.`);stop(true)}
+ if(state.hp<=0){state.hp=maxHp();note(`💔 Defeated by ${m.name}! ${raidFight?'Wave checkpoint saved. ':''}Respawned at full HP.`);stop(true)}
 }
 
 function complete(){
@@ -1751,20 +1973,20 @@ function claimQuest(id){
  save();
 }
 // ── Presentation / navigation ─────────────────────────────────────────────────
-const NAV_VIEWS=['combat',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
-const NAV_META={combat:['⚔️','Combat'],bank:['🏦','Bank'],shop:['🛒','Shop'],journal:['📜','Journal']};
+const NAV_VIEWS=['combat','raid',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
+const NAV_META={combat:['⚔️','Combat'],raid:['⛰️','Raid'],bank:['🏦','Bank'],shop:['🛒','Shop'],journal:['📜','Journal']};
 function viewLabel(v){return NAV_META[v]?.[1]||label(v)}
 function navIcon(v){return NAV_META[v]?.[0]||SKILLS[v]?.icon||'🔹'}
 function renderNav(){
  el('nav').innerHTML=`<div class="nav-divider">Adventure</div>`+NAV_VIEWS.map((v,i)=>
- `${i===1?'<div class="nav-divider">Skills</div>':''}${v==='bank'?'<div class="nav-divider">Inventory & Goals</div>':''}
- <button class="${ui.view===v?'selected':''}" data-nav="${esc(v)}"><span>${navIcon(v)} ${viewLabel(v)}</span><small data-nav-lvl="${esc(v)}">${v==='combat'?'Lv '+combatLevel():SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':''}</small></button>`).join('');
+ `${i===2?'<div class="nav-divider">Skills</div>':''}${v==='bank'?'<div class="nav-divider">Inventory & Goals</div>':''}
+ <button class="${ui.view===v?'selected':''}" data-nav="${esc(v)}"><span>${navIcon(v)} ${viewLabel(v)}</span><small data-nav-lvl="${esc(v)}">${v==='combat'?'Lv '+combatLevel():v==='raid'?'Wave '+(raidState().wave+1):SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':''}</small></button>`).join('');
  const select=el('mobileSelect');select.innerHTML=NAV_VIEWS.map(v=>`<option value="${v}">${navIcon(v)} ${viewLabel(v)}</option>`).join('');select.value=ui.view;
 }
 function refreshNavLevels(){
  for(const node of document.querySelectorAll('[data-nav-lvl]')){
   const v=node.dataset.navLvl;
-  node.textContent=v==='combat'?'Lv '+combatLevel():SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':'';
+  node.textContent=v==='combat'?'Lv '+combatLevel():v==='raid'?'Wave '+(raidState().wave+1):SKILLS[v]?'Lv '+levelFromXp(state.xp[v]||0):v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':'';
  }
 }
 function navigate(view){if(!NAV_VIEWS.includes(view))return;ui.view=view;renderNav();renderMain();refreshDynamic()}
@@ -1811,15 +2033,47 @@ function renderSkillMain(skill){
  if(skill==='cooking')html+=renderFirePanel();
  if(skill==='enchanting'){
   const soulTotal=SOUL_GEMS.reduce((sum,x)=>sum+x.weight,0);
-  html+=`<div class="info-box"><h3 style="margin:0 0 8px">💠 Soulbound Soul Gems</h3><p>Soul Gems are untradeable at EVERY tier: you cannot buy or sell them. Gathering (Woodcutting, Fishing, Mining, Agriculture) gives an independent ${pct(GAME_CONFIG.soulGemGatherChance)} base roll per action; Combat has an independent ${pct(GAME_CONFIG.soulGemCombatChance)} base roll per monster KILL. The rolls never replace normal loot or treasure. Spirit Sense potions can raise Soul Gem find chance but never alter tier odds.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic Soul Gem: exactly <b>1 in 3,000 Soul Gems</b> (not one in 3,000 actions). Used for the extremely powerful Eternal Soul Crown.</p></div>`;
+  html+=`<div class="info-box"><h3 style="margin:0 0 8px">💠 Soulbound Soul Gems</h3><p>Soul Gems are untradeable at EVERY tier: you cannot buy or sell them. Gathering (Woodcutting, Fishing, Mining, Agriculture) gives an independent ${pct(GAME_CONFIG.soulGemGatherChance)} base roll per action; Combat has an independent ${pct(GAME_CONFIG.soulGemCombatChance)} base roll per monster KILL. The rolls never replace normal loot or treasure. Spirit Sense potions can raise Soul Gem find chance but never alter tier odds.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic Soul Gem: exactly <b>1 in 10,000 Soul Gems</b> (not one in 3,000 actions). Used for the extremely powerful Eternal Soul Crown.</p></div>`;
  }
  if(skill==='fletching')html+=`<div class="info-box"><b>🏹 How Fletching connects to the world</b><p>Chop trees for logs, farm Flax for bowstrings, collect Feathers from Chickens, then smith Arrowheads into finished Arrows. Equip a Bow and select arrows in Combat to train Ranged. Each shot consumes one arrow.</p></div>`;
  if(categories.length>1)html+=`<div class="tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
  html+=`<p class="small subdued">${def.actions.length} available recipes and activities · Each action takes 1 second for testing · Items go straight to your bank.</p>`;
- const actions=def.actions.map((a,i)=>({a,i})).filter(({a})=>chosen==='All'||a.category===chosen);
+ const actions=def.actions.map((a,i)=>({a,i})).filter(({a})=>chosen==='All'||a.category===chosen).sort((x,y)=>x.a.level-y.a.level||x.a.name.localeCompare(y.a.name,'en'));
  html+=`<div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div>`;
  el('main').innerHTML=html;
 }
+
+function raidPanelHtml(){
+ const raid=raidState(),wave=RAID_WAVES[raid.wave],isBoss=!!wave.boss,playing=state.active?.type==='raid';
+ const unlocked=combatLevel()>=RAID_CONFIG.unlockCombatLevel;
+ const bossMissing=isBoss?belrothEntryRequirement():[];
+ const supplies=combatSupplyError();
+ const canStart=unlocked&&!playing&&!bossMissing.length&&!supplies;
+ return `<section class="raid-panel" aria-label="Deep Mountain Expedition">
+ <div class="raid-heading"><div><div class="eyebrow">⛰️ ENDGAME RAID · SAVED CHECKPOINTS</div><h3>Deep Mountain Expedition</h3>
+ <p>12 waves · Fight your way to Belroth. Each completed wave is saved, even if you die, log out or change equipment. Use each enemy's weakness.</p></div><span class="raid-score">🏆 ${fmt(raid.completions)} clears</span></div>
+ <div class="raid-progress"><div style="width:${raid.wave/RAID_WAVES.length*100}%"></div></div>
+ <div class="raid-waves">${RAID_WAVES.map((m,i)=>`<span class="raid-wave ${i<raid.wave?'raid-cleared':i===raid.wave?'raid-current':'raid-locked'}" title="Wave ${i+1}: ${esc(m.name)} · Weak to ${m.weakness}">${i<raid.wave?'✓':i===raid.wave?'⚔️':'🔒'} ${i+1}</span>`).join('')}</div>
+ <div class="raid-current"><div><strong>${isBoss?'👑':'⚔️'} Wave ${raid.wave+1}/${RAID_WAVES.length} · ${esc(wave.name)}</strong>
+ <div class="raid-details">${fmt(wave.hp)} HP · Defence ${wave.def} · Max hit ${wave.maxHit} · <b>Weakness: ${weaknessLabel(wave.weakness)}</b></div></div>
+ <button data-raid-start ${canStart?'':'disabled'}>${playing?'Fighting…':isBoss?'⚔️ Face Belroth':'Enter wave '+(raid.wave+1)}</button></div>
+ ${!unlocked?`<div class="raid-warning">🔒 Requires Combat Level ${RAID_CONFIG.unlockCombatLevel} to enter.</div>`:isBoss&&bossMissing.length?`<div class="raid-warning">🔒 Belroth requires ${esc(bossMissing.join(', '))}. Level up and equip near-best pre-raid gear.</div>`:supplies?`<div class="raid-warning">${esc(supplies)}</div>`:''}
+ <div class="raid-tip">🗡️ Melee · 🏹 Ranged · 🪄 Magic — use the correct style, change weapons in Equipment, and restock food between waves. Belroth is tuned for high-level stats and strong pre-raid gear.</div>
+ <details class="raid-guide"><summary>🗺️ All 12 raid waves and weaknesses</summary><div class="raid-guide-list">${RAID_WAVES.map((m,i)=>`<div class="${i===raid.wave?'active':''}"><span>${i+1}. ${esc(m.name)}</span><b>${weaknessLabel(m.weakness)}</b></div>`).join('')}</div></details>
+ <div class="raid-loot"><strong>🎁 Belroth Expedition Chest</strong><p>The final boss always awards a chest to your Bank. Each chest contains Coins, Soul Shards and a weighted drop: <b>11% Amulet Core</b>, <b>11% Ring Core</b>, <b>3% each BiS weapon</b>, or materials/Solar Soul Gem. Cores become Perfect (Unf) jewellery in Crafting, finished with Prismatic Soul Gems in Enchanting.</p>
+ <div class="raid-chest-row"><span>🎁 Chests owned: <b>${fmt(count(RAID_CONFIG.chest))}</b></span>
+ <button data-open-raid-chest ${count(RAID_CONFIG.chest)>0?'':'disabled'}>Open Chest</button>
+ ${raid.pendingChests?`<button data-raid-claim-pending>Claim ${fmt(raid.pendingChests)} saved chest(s)</button>`:''}</div></div>
+ </section>`;
+}
+function refreshRaidPanel(){
+ const box=el('raidPanel');if(!box)return;
+ // Keep the strategy guide expanded while combat rewards update every second.
+ const guideOpen=!!box.querySelector('.raid-guide[open]');
+ box.innerHTML=raidPanelHtml();
+ if(guideOpen){const guide=box.querySelector('.raid-guide');if(guide)guide.open=true}
+}
+
 function renderCombatMain(){
  const mods=gearMods();
  let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2><p class="section-description">Combat level uses Defence, Hitpoints and your strongest offence: Melee (Attack + Strength), Ranged or Magic. It caps at ${COMBAT_CONFIG.maxLevel}; skills cap at 99.</p></div></div>`;
@@ -1836,9 +2090,10 @@ function renderCombatMain(){
  html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
  html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
  <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote">Only food you own is shown, with remaining quantities. When the selected food runs out, select a new one.</small></div>`;
- html+=`<h3 class="section-title">⚔️ Monsters (${MONSTERS.length})</h3><div class="combat-monsters">${MONSTERS.map((m,i)=>`<div class="monster"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div><p>${fmt(m.hp)} HP · Defence ${m.def} · Max hit ${m.maxHit}<br>Loot: ${Object.keys(m.loot).map(x=>`${itemIcon(x)} ${esc(x)}`).join(', ')||'None'}${['trash','seed','gem'].filter(k=>m[k+'Table']?.length).map(k=>`<br>${k==='trash'?'🗑️ Junk':k==='seed'?'🌰 Seed':'💎 Gem'} table (${pct(m[k+'Chance'])}): ${m[k+'Table'].map(r=>esc(r[0])).join(', ')}`).join('')}${m.componentDrop?`<br><span class="gold">✨ Arcane part: ${esc(m.componentDrop.item)} (${pct(m.componentDrop.chance)})${m.componentDrop.extraItem?', '+esc(m.componentDrop.extraItem)+' ('+pct(m.componentDrop.extraChance)+')':''}</span>`:''}${m.unique?`<br><span class="gold">🌟 ${esc(m.unique.item)} · ${pct(m.unique.chance)} base unique drop</span>`:''}</p><div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div>`).join('')}</div>`;
+ html+=`<div class="info-box"><div class="between"><div><strong>⛰️ Deep Mountain Expedition</strong><p>12 checkpointed endgame waves. Switch combat styles to counter different enemies and face Belroth for rare raid rewards.</p></div><button data-nav="raid">Open Raid →</button></div></div>`;
+ html+=`<h3 class="section-title">⚔️ Monsters (${MONSTERS.length})</h3><div class="combat-monsters">${MONSTERS.map((m,i)=>`<div class="monster"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div><p>${fmt(m.hp)} HP · Defence ${m.def} · Max hit ${m.maxHit}<br><span class="monster-weakness">Weakness: ${weaknessLabel(m.weakness)}</span><br>Loot: ${Object.keys(m.loot).map(x=>`${itemIcon(x)} ${esc(x)}`).join(', ')||'None'}${['trash','seed','gem'].filter(k=>m[k+'Table']?.length).map(k=>`<br>${k==='trash'?'🗑️ Junk':k==='seed'?'🌰 Seed':'💎 Gem'} table (${pct(m[k+'Chance'])}): ${m[k+'Table'].map(r=>esc(r[0])).join(', ')}`).join('')}${m.componentDrop?`<br><span class="gold">✨ Arcane part: ${esc(m.componentDrop.item)} (${pct(m.componentDrop.chance)})${m.componentDrop.extraItem?', '+esc(m.componentDrop.extraItem)+' ('+pct(m.componentDrop.extraChance)+')':''}</span>`:''}${m.unique?`<br><span class="gold">🌟 ${esc(m.unique.item)} · ${pct(m.unique.chance)} base unique drop</span>`:''}</p><div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div>`).join('')}</div>`;
  const total=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
- html+=`<div class="info-box"><b>💠 Soul Gems · separate drop table</b><p>Every monster KILL independently rolls ${pct(GAME_CONFIG.soulGemCombatChance)} for one untradeable Soul Gem and ${pct(GAME_CONFIG.soulShardCombatChance)} for Soul Shards to charge Magic Staves. This cannot remove normal loot, seeds, junk, gems, uniques or treasure. Prismatic is 1 in 3,000 SOUL GEMS. All Soul Gems are untradeable.</p></div>`;
+ html+=`<div class="info-box"><b>💠 Soul Gems · separate drop table</b><p>Every monster KILL independently rolls ${pct(GAME_CONFIG.soulGemCombatChance)} for one untradeable Soul Gem and ${pct(GAME_CONFIG.soulShardCombatChance)} for Soul Shards to charge Magic Staves. This cannot remove normal loot, seeds, junk, gems, uniques or treasure. Prismatic is 1 in 10,000 SOUL GEMS. All Soul Gems are untradeable.</p></div>`;
  html+=`<details class="info-box"><summary>💎 Treasure Table · <strong id="treasureRateText">${pct(TREASURE_CHANCE)} base chance per kill</strong></summary><p>Each kill rolls for a gem. If successful, gem type is selected by relative weight. Luck gear and potions raise the initial treasure chance and unique drop rates.</p><div class="bank-count">Current effective treasure chance: <b id="treasureCurrent">${pct(treasureChance())}</b>. Conditional gem odds below add up to 100%.</div>${TREASURE_TABLE.map(([gem,weight])=>`<div class="between" style="padding:5px 0;border-bottom:1px solid #39526a"><span>${itemIcon(gem)} ${esc(gem)}</span><span class="small">${pct(weight/total)} of gems · <span data-gem-chance="${weight}">${pct(treasureChance()*weight/total)}</span> per kill</span></div>`).join('')}</details>`;
  html+=`<h3 class="section-title">🧪 Active buffs</h3><div id="buffList"></div>`;
  el('main').innerHTML=html;renderFood();renderAutoEatOptions();renderBuffs();
@@ -1916,7 +2171,7 @@ function renderCombatLive(){
  const totalWeight=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
  for(const node of el('main').querySelectorAll('[data-gem-chance]'))node.textContent=pct(treasureChance()*Number(node.dataset.gemChance)/totalWeight);
  for(const node of el('main').querySelectorAll('[data-kill-count]'))node.textContent=fmt(state.stats.kills[node.dataset.killCount]||0);
- renderFood();renderAutoEatOptions();renderBuffs();renderCombatResources();
+ renderFood();renderAutoEatOptions();renderBuffs();renderCombatResources();refreshRaidPanel();
 }
 function renderSkillLive(){
  if(!SKILLS[ui.view]||SKILLS[ui.view].combat)return;
@@ -2066,8 +2321,9 @@ function renderBankDetail(scope){
  const item=ui.bank[scope].selected;
  if(!item||count(item)<1){box.innerHTML='<p class="subdued small">Select an item to equip, eat, use or sell it.</p>';return}
  const equipment=EQUIPMENT[item],potion=POTIONS[item],food=FOOD[item],fuel=FIRE_FUEL[item];
- const detail=NONTRADEABLE_ITEMS.has(item)?'Soulbound. Cannot be bought, sold or traded. Used to power Enchanting recipes.':equipment?gearDescription(equipment):potion?potion.description:food?`Restores ${food} HP`:fuel?`Burns for ${timeFmt(fuel)} in your Cooking fire`:`Stackable ${itemCategory(item).toLowerCase()} item`;
+ const detail=item===RAID_CONFIG.chest?'Raid reward chest. Open it to receive a rare Deep Mountain Expedition item, Coins and Soul Shards. Cannot be traded.' : NONTRADEABLE_ITEMS.has(item)?'Soulbound. Cannot be bought, sold or traded. Used to power Enchanting recipes.':equipment?gearDescription(equipment):potion?potion.description:food?`Restores ${food} HP`:fuel?`Burns for ${timeFmt(fuel)} in your Cooking fire`:`Stackable ${itemCategory(item).toLowerCase()} item`;
  box.innerHTML=`<div class="selected-item">${itemArt(item,true)}<h4>${esc(item)} ×${fmt(count(item))}</h4><p>${esc(detail)}</p><p class="gold">${isTradeable(item)?`Sell value: ${fmt(sellPrice(item))} Coins each`:"🔒 SOULBOUND · Untradeable"}</p><div class="controls">
+ ${item===RAID_CONFIG.chest?`<button data-open-raid-chest>🎁 Open raid chest</button>`:''}
  ${equipment?`<button data-equip="${esc(item)}">Equip</button>`:''}
  ${food?`<button data-eat="${esc(item)}" ${state.hp>=maxHp()?'disabled':''}>Eat +${food} HP</button>`:''}
  ${potion?`<button data-use-potion="${esc(item)}">Use potion</button>`:''}
@@ -2206,8 +2462,30 @@ function renderJournalMain(){
    <div class="recipe-bottom"><span class="recipe-badge ${isReady?'level':''}">${locked?'🔒 Locked':isReady?'Ready to claim':'In progress'}</span><button data-claim="${esc(q.id)}" ${isReady?'':'disabled'}>${isReady?'🎁 Claim rewards':locked?'🔒 Locked':'In progress'}</button></div></div>`;
  }).join('')}</div>`:`<div class="journal-empty">${available.length===0?'🏆 All journal quests completed!':'No quests in this category right now. Try All or another category.'}</div>`}`;
 }
+
+function renderRaidMain(){
+ let html=`<div class="heading"><div><div class="eyebrow">⛰️ Adventure · Endgame</div><h2>Deep Mountain Expedition</h2><p class="section-description">Prepare your equipment, defeat 12 increasingly powerful waves, and claim Belroth's loot chest. Each completed wave saves your checkpoint. Change combat style and equipment between waves.</p></div><span class="recipe-badge level">Combat Lv ${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</span></div>`;
+ html+=`<h3 class="section-title">⚔️ Choose a combat style</h3><div class="combat-choices raid-combat-styles">${['attack','strength','defence','ranged','magic'].map(skill=>`<button data-combat-style="${skill}" class="combat-choice ${state.combatStyle===skill?'selected':''}"><b>${SKILLS[skill].icon} ${label(skill)}</b><span>${state.combatStyle===skill?'✓ Selected':'Select'}</span></button>`).join('')}</div>`;
+ html+=`<div class="combat-resource-grid" style="margin:14px 0">
+ <section class="info-box"><h3>🏹 Ranged Ammo</h3><label class="form-label" for="rangedAmmo">Your arrows</label><select id="rangedAmmo"></select><div id="rangedStatus" class="small subdued"></div></section>
+ <section class="info-box"><h3>🪄 Magic Staff</h3><div id="magicStaffStatus" class="small subdued"></div><div class="flexrow">${[1,5,25].map(n=>`<button data-charge="${n}" class="charge-btn">Charge +${n} shards</button>`).join('')}</div></section>
+ </div>`;
+ html+=`<section class="info-box"><div class="between"><strong>❤️ HP & Supplies</strong><span id="raidHp">${Math.ceil(state.hp)}/${maxHp()} HP</span></div><div class="bar healthbar"><div id="raidHealthFill" class="fill" style="width:${100*state.hp/maxHp()}%"></div></div>
+ <div class="food-controls" id="combatFood"></div><div class="stat-grid"><label><span class="form-label">Auto Eat food</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(n=>`<option value="${n}" ${state.autoEat.threshold===n?'selected':''}>${n}% HP</option>`).join('')}</select></label></div><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><p id="autoEatFoodNote" class="small subdued"></p></section>`;
+ html+=`<div id="raidPanel">${raidPanelHtml()}</div>`;
+ el('main').innerHTML=html;
+ renderFood();renderAutoEatOptions();renderCombatResources();
+}
+function renderRaidLive(){
+ if(ui.view!=='raid')return;
+ if(el('raidHp'))el('raidHp').textContent=`${Math.ceil(state.hp)}/${maxHp()} HP`;
+ if(el('raidHealthFill'))el('raidHealthFill').style.width=clamp(100*state.hp/maxHp(),0,100)+'%';
+ renderFood();renderAutoEatOptions();renderCombatResources();refreshRaidPanel();
+}
+
 function renderMain(){
  if(ui.view==='combat')renderCombatMain();
+ else if(ui.view==='raid')renderRaidMain();
  else if(ui.view==='bank')renderBankMain();
  else if(ui.view==='shop')renderShopMain();
  else if(ui.view==='journal')renderJournalMain();
@@ -2224,9 +2502,9 @@ function renderProgress(){
  if(current?.type==='skill'){
   const action=SKILLS[current.skill]?.actions[current.index];
   name=action?`${SKILLS[current.skill].icon} ${action.name} · ${label(current.skill)}`:'Idle';
- }else if(current?.type==='combat'){
-  const mob=MONSTERS[state.monsterIndex];
-  name=`⚔️ ${mob.name} · Enemy ${Math.ceil(Math.max(0,state.monsterHp))}/${mob.hp} HP · You ${state.hp}/${maxHp()} HP`;
+ }else if(current?.type==='combat'||current?.type==='raid'){
+  const mob=currentEnemy();
+  name=`${current.type==='raid'?'⛰️ Raid':'⚔️'} ${mob.name} · Enemy ${Math.ceil(Math.max(0,state.monsterHp))}/${mob.hp} HP · You ${state.hp}/${maxHp()} HP`;
  }
  el('activityName').textContent=name;el('activityName').title=name;el('progressFill').style.width=clamp(state.progress||0,0,100)+'%';
  el('progressText').textContent=Math.floor(clamp(state.progress||0,0,100))+'%';
@@ -2238,6 +2516,7 @@ function refreshSummary(){
 function refreshDynamic(){
  refreshSummary();refreshNavLevels();
  if(ui.view==='combat')renderCombatLive();
+ else if(ui.view==='raid')renderRaidLive();
  else if(SKILLS[ui.view]&&!SKILLS[ui.view].combat)renderSkillLive();
  else if(ui.view==='bank')renderBankGrid('main');
  else if(ui.view==='shop')renderShopItems();
@@ -2258,6 +2537,9 @@ function handleClick(e){
  if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
  if(b.hasAttribute('data-action'))return startAction(ui.view,Number(b.dataset.action));
  if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));
+ if(b.hasAttribute('data-raid-start'))return startRaidWave();
+ if(b.hasAttribute('data-open-raid-chest'))return openRaidChest();
+ if(b.hasAttribute('data-raid-claim-pending'))return claimPendingRaidChests();
  if(b.hasAttribute('data-charge'))return chargeStaff(Number(b.dataset.charge));
  if(b.hasAttribute('data-combat-style')){
   state.combatStyle=b.dataset.combatStyle;save();renderMain();refreshDynamic();return;
@@ -2367,7 +2649,7 @@ el('resetBtn').onclick=()=>{
 };
 function validSavedActivity(active){
  if(!active||typeof active!=='object')return false;
- if(active.type==='combat')return true;
+ if(active.type==='combat'||active.type==='raid')return true;
  return active.type==='skill'&&!!SKILLS[active.skill]?.actions?.[active.index];
 }
 function offlineSnapshot(){
@@ -2419,7 +2701,7 @@ async function catchUpOffline(){
  if(gap<minMs||!state.active){state.lastProcessedAt=now;return}
  const capMs=Math.max(0,OFFLINE_CONFIG.maxHours)*3600000;
  const rewardedMs=Math.min(gap,capMs),end=start+rewardedMs;
- const actionName=state.active.type==='combat'?`⚔️ ${MONSTERS[state.monsterIndex]?.name||'Combat'}`:
+ const actionName=state.active.type==='raid'?`⛰️ ${RAID_WAVES[raidState().wave]?.name||'Raid'}`:state.active.type==='combat'?`⚔️ ${MONSTERS[state.monsterIndex]?.name||'Combat'}`:
     `${SKILLS[state.active.skill]?.icon||'⚡'} ${SKILLS[state.active.skill]?.actions[state.active.index]?.name||'Activity'}`;
  const before=offlineSnapshot(),actionMs=Math.max(100,Number(state.actionMs)||GAME_CONFIG.actionMs);
  clearActivityFeed(); // The AFK report handles rewards while the page is away.
@@ -2490,6 +2772,6 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 async function boot(){restore();render();if(state.active)await catchUpOffline();lastTick=performance.now();requestAnimationFrame(tick)}
 boot();
 // Expose test helpers for regression checks.
-window.IdleRPGDebug={getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable};
+window.IdleRPGDebug={getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
 </script></body></html>

@@ -5806,7 +5806,7 @@ async function cloudPrepare(){
   const local=cloudLocal(),owner=cloudOwner();
   if(!remote){
    if(local?.xp&&local?.bank){
-    cloudOfferChoice('No cloud character exists for this account. Upload the local Main character, or continue as a guest without cloud syncing?',[[ 'Upload local Main',()=>cloudChooseLocal(null) ],['Keep playing as guest',async()=>{cloudSyncLabel('Guest mode · no cloud sync')}]]);
+    cloudOfferChoice('No cloud character exists for this account yet. Upload your local Main character to enable cloud syncing, or decide later?',[[ 'Upload local Main',()=>cloudChooseLocal(null) ],['Decide later',async()=>{cloudSyncLabel('Signed in · cloud sync paused until a save is selected')}]]);
    }else{cloudReadyUser=userId;cloudRemoteUpdated=null;cloudSyncLabel('✓ Account ready · auto-sync active');}
    return;
   }
@@ -5815,7 +5815,7 @@ async function cloudPrepare(){
   // Always ask on first account association or when local progress differs. Never silently overwrite either copy.
   if(owner!==userId||JSON.stringify(local)!==JSON.stringify(remote.save_data)){
    cloudOfferChoice('Your local Main and cloud Main may have different progress. Choose which character to use. This choice replaces the other copy. Export a backup first if unsure.',[
-    ['Use cloud character',()=>cloudApplyRemote(remote)],['Use local character',()=>cloudChooseLocal(remote)],['Not now (guest)',async()=>{cloudSyncLabel('Guest mode · no cloud sync')}]
+    ['Use cloud character',()=>cloudApplyRemote(remote)],['Use local character',()=>cloudChooseLocal(remote)],['Decide later',async()=>{cloudSyncLabel('Signed in · cloud sync paused until a save is selected')}]
    ]);
   }else{cloudMarkOwner(userId);cloudReadyUser=userId;cloudLastSync=Date.now();cloudSyncLabel('✓ Cloud and local match · auto-sync active')}
  }catch(err){cloudSyncLabel('Cloud unavailable · local guest play continues');onlineStatus('Cloud check: '+(err?.message||err))}

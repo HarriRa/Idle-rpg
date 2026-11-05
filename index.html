@@ -1226,9 +1226,10 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
 .cloud-choice-item{display:inline-flex;flex-direction:column;align-items:center;vertical-align:top;gap:5px;margin:5px 7px 7px 0}
 .cloud-choice-item button{width:100%}
 .cloud-save-age{display:block;color:#d9c69d;font-size:11px;font-weight:700;text-align:center}
+.pet-effect{font-size:11px;color:#a9dfb5;margin:7px 0}.pet-summon{font-size:11px;margin-top:5px;padding:6px 9px}.pet-status{font-size:11px;color:#e7d2a9;padding:4px 9px;border:1px solid #756143;border-radius:12px;white-space:nowrap}
 </style></head>
 <body><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
-<header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v4.4 · Cloud Save</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v4.4 · Cloud Save</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div><span id="petStatus" class="pet-status" aria-live="polite" style="display:block;width:max-content;max-width:95%;margin:6px 14px">🐾 No pet summoned</span></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -1829,6 +1830,26 @@ const BOSS_PETS={
  'Astral Hierophant':['Starling',1/1900,'✨'],
  'Belroth':['Duskling',1/2500,'🐉']
 };
+// v4.8: one cosmetic companion can be summoned at a time. Small passive bonuses.
+const PET_EFFECTS={
+ 'Hillbreaker Giant':{attackPct:.015,description:'+1.5% melee accuracy'},
+ 'Broodmother Vesha':{rangedPct:.015,description:'+1.5% ranged damage'},
+ 'Hollow Magister':{magicPct:.015,description:'+1.5% magic damage'},
+ 'Ashen Warlord':{strengthPct:.02,description:'+2% melee damage'},
+ 'Stormwing Matriarch':{rangedAccuracy:4,description:'+4 ranged accuracy'},
+ 'Astral Hierophant':{xpBonus:.01,description:'+1% training XP'},
+ 'Belroth':{luckBonus:.01,description:'+1% loot luck'}
+};
+function activePetBoss(){
+ const boss=state.activePet;
+ return boss&&BOSS_PETS[boss]&&state.pets?.[boss]===BOSS_PETS[boss][0]?boss:null;
+}
+function renderPetStatus(){
+ const host=document.getElementById('petStatus');if(!host)return;
+ const boss=activePetBoss();
+ host.textContent=boss?`${BOSS_PETS[boss][2]} ${BOSS_PETS[boss][0]} following`:'🐾 No pet summoned';
+ host.title=boss?PET_EFFECTS[boss].description:'Unlock pets from bosses and summon them in Collection Log';
+}
 function collectionLog(){
  if(!state.collectionLog||typeof state.collectionLog!=='object')state.collectionLog={};
  return state.collectionLog;
@@ -2986,7 +3007,7 @@ function newGame(){return {
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
  loadouts:defaultLoadouts(),autoSwitchWeakness:false,raidAutoRun:true,
  recipeLayoutVersion:25,
- pets:{},collectionLog:{},hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
+ pets:{},activePet:null,collectionLog:{},hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
  fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
@@ -3412,6 +3433,10 @@ function gearMods(equipment=state.equipment){
   for(const threshold of [set.two,...(set.count===3?[set.three]:[])]){
    for(const [key,value] of Object.entries(threshold))mods[key]=(mods[key]||0)+Number(value||0);
   }
+ }
+ const summoned=activePetBoss();
+ if(summoned)for(const [stat,value] of Object.entries(PET_EFFECTS[summoned])){
+  if(stat!=='description'&&Object.prototype.hasOwnProperty.call(mods,stat))mods[stat]+=value;
  }
  const perks=permanentBonuses();
  mods.xpBonus+=perks.globalXp;
@@ -5215,14 +5240,17 @@ function renderCollectionMain(){
   const pet=BOSS_PETS[b.name],items=[...(b.bossGearDrops||[]).map(row=>row[0]),...(b.name==='Belroth'?RAID_CONFIG.chestRewards.map(row=>row[0]):[]),pet[0]];
   const found=items.filter(item=>(log[b.name]?.[item]||0)>0).length;
   const petUnlocked=!!state.pets?.[b.name];
+  const summoned=activePetBoss()===b.name;
   return `<article class="recipe-card"><div class="between"><strong class="recipe-title">${esc(b.name)}</strong><span class="recipe-badge">${found}/${items.length}</span></div>
    <div class="small muted">Combat Lv ${b.level} · ${fmt(state.stats.kills[b.name]||0)} kills</div>
-   <div class="collection-pet ${petUnlocked?'owned':''}">${pet[2]} <strong>${esc(pet[0])}</strong> · ${petUnlocked?'Unlocked':'Not obtained'} <span class="muted">(1 in ${fmt(Math.round(1/pet[1]))})</span></div>
+   <div class="collection-pet ${petUnlocked?'owned':''}">${pet[2]} <strong>${esc(pet[0])}</strong> · ${petUnlocked?'Unlocked':'Not obtained'} <span class="muted">(1 in ${fmt(Math.round(1/pet[1]))})</span>
+   <div class="pet-effect">✨ ${esc(PET_EFFECTS[b.name].description)} · Passive while summoned</div>
+   ${petUnlocked?`<button type="button" data-pet-summon="${esc(b.name)}" class="pet-summon ${summoned?'selected':''}">${summoned?'✓ Following · Dismiss':'🐾 Summon companion'}</button>`:''}</div>
    <div class="collection-items">${items.filter(x=>x!==pet[0]).map(item=>`<div class="collection-item ${log[b.name]?.[item]?'owned':''}"><span>${log[b.name]?.[item]?'✓':'◇'} ${esc(item)}</span><strong>${fmt(log[b.name]?.[item]||0)}</strong></div>`).join('')}</div>
   </article>`;
  }).join('');
  const total=Object.keys(state.pets||{}).length;
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Boss hunting</div><h2>🐾 Collection Log</h2><p class="section-description">Track unique boss loot and unlock named companions. Pets are permanent collectibles and do not take bank space.</p></div></div><div class="info-box">🐾 Pets unlocked: <strong>${total}/${bosses.length}</strong> · Collection starts tracking drops from this version onward.</div><div class="skill-cards">${cards}</div>`;
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Boss hunting</div><h2>🐾 Collection Log</h2><p class="section-description">Track unique boss loot and unlock named companions. Pets are permanent collectibles and do not take bank space. Summon one companion at a time for a small passive bonus.</p></div></div><div class="info-box">🐾 Pets unlocked: <strong>${total}/${bosses.length}</strong> · Active: <strong>${activePetBoss()?esc(BOSS_PETS[activePetBoss()][0]):'None'}</strong> · Collection tracks new drops only.</div><div class="skill-cards">${cards}</div>`;
 }
 function renderMain(){
  el('main').dataset.currentView=ui.view;
@@ -5282,7 +5310,7 @@ function refreshDynamic(){
  if(!el('gearOverlay').hidden)renderGearPicker();
  renderProgress();
 }
-function render(){updateProfileUI();renderNav();renderMain();renderSidebar();renderLog();refreshDynamic();renderActivityFeed()}
+function render(){updateProfileUI();renderNav();renderMain();renderSidebar();renderLog();refreshDynamic();renderActivityFeed();renderPetStatus()}
 // Atlas controls: free pan with mouse/finger and wheel-to-zoom. Neither changes travel or character progress.
 let atlasDrag=null;
 document.addEventListener('pointerdown',event=>{
@@ -5347,6 +5375,14 @@ function handleClick(e){
  if(b.hasAttribute('data-quick-fight')){const value=Number(el('combatTarget')?.value);if(MONSTERS[value])return startCombat(value);return;}
  if(b.hasAttribute('data-quick-inspect')){const value=Number(el('combatTarget')?.value);if(MONSTERS[value])return inspectMonster(value);return;}
  if(b.hasAttribute('data-combat-region'))return travelToOvernia(b.dataset.combatRegion);
+ if(b.hasAttribute('data-pet-summon')){
+  const boss=b.dataset.petSummon;
+  if(!BOSS_PETS[boss]||state.pets?.[boss]!==BOSS_PETS[boss][0])return;
+  state.activePet=activePetBoss()===boss?null:boss;
+  save();renderPetStatus();renderCollectionMain();
+  toast(state.activePet?`🐾 ${BOSS_PETS[boss][0]} is following you!`:'🐾 Companion dismissed');
+  return;
+ }
  if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
  if(b.hasAttribute('data-world-open')){ui.regionDetail=b.dataset.worldOpen;ui.regionLandmark=0;ui.regionPlaceOpen=false;ui.worldSection='atlas';renderWorldMain();return;}
  if(b.hasAttribute('data-region-back')){if(ui.regionPlaceOpen){ui.regionPlaceOpen=false;}else{ui.regionDetail=null;}renderWorldMain();return;}

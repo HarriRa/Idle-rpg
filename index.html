@@ -1011,7 +1011,7 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 @media(prefers-reduced-motion:reduce){.over-hp-fill,.over-action-track span{transition:none}}
 </style></head>
 <body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.39 · Enemy Damage Rebalance</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.41 · Food Progression</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -1494,15 +1494,18 @@ SKILLS.alchemy.actions.push(
  A('Brew Spirit Sense Potion','Spirit Sense Potion',75,340,{'Mystic Herb':2,'Azure Soul Gem':1},'Utility')
 );
 
+// v3.41: gentler food progression after the combat damage rebalance.
+// Lobster is a mid-game 90 HP food; 400 HP is reserved for Royal Feast.
+// Manual Eat, Auto Eat and item descriptions all read these values.
 const FOOD={
- 'Cooked Shrimp':4,'Cooked Sardine':6,'Cooked Crab':7,'Cooked Herring':8,
- 'Cooked Trout':12,'Cooked Cod':15,'Cooked Salmon':18,'Cooked Eel':22,
- 'Cooked Tuna':28,'Cooked Lobster':45,'Cooked Swordfish':70,'Cooked Monkfish':95,
- 'Cooked Shark':135,'Cooked Anglerfish':160,'Cooked Manta Ray':185,'Cooked Leviathan':250,
- 'Cooked Chicken':10,'Cooked Beef':25,'Cooked Lamb':32,
- 'Baked Potato':14,'Bread':20,'Carrot Soup':28,'Fish Stew':55,'Meat Pie':75,
- 'Seafood Platter':130,'Royal Feast':250,
- 'Potato':6,'Berries':4,'Egg':5,'Milk':8,'Carrot':8,'Sunfruit':40
+ 'Cooked Shrimp':10,'Cooked Sardine':15,'Cooked Crab':20,'Cooked Herring':25,
+ 'Cooked Trout':35,'Cooked Cod':45,'Cooked Salmon':55,'Cooked Eel':65,
+ 'Cooked Tuna':75,'Cooked Lobster':90,'Cooked Swordfish':115,'Cooked Monkfish':140,
+ 'Cooked Shark':175,'Cooked Anglerfish':215,'Cooked Manta Ray':260,'Cooked Leviathan':315,
+ 'Cooked Chicken':20,'Cooked Beef':60,'Cooked Lamb':80,
+ 'Baked Potato':20,'Bread':35,'Carrot Soup':70,'Fish Stew':115,'Meat Pie':150,
+ 'Seafood Platter':290,'Royal Feast':400,
+ 'Potato':8,'Berries':8,'Egg':10,'Milk':12,'Carrot':10,'Sunfruit':85
 };
 const FISH_TO_COOK=['Shrimp','Sardine','Crab','Herring','Trout','Cod','Salmon','Eel','Tuna','Lobster','Swordfish','Monkfish','Shark','Anglerfish','Manta Ray','Leviathan'];
 FISH_TO_COOK.forEach((fish,i)=>SKILLS.cooking.actions.push(A('Cook '+fish,'Cooked '+fish,[1,5,8,10,15,20,25,30,35,45,55,65,75,80,85,95][i],[20,28,30,35,45,50,65,72,85,115,150,200,260,310,350,480][i],{[fish]:1},'Fish',{requiresFire:true})));

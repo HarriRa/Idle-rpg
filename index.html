@@ -794,15 +794,47 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 .raid-auto-config{background:#182d2b;border:1px solid #4b7162;border-radius:9px;padding:9px;margin:10px 0}
 .raid-auto-config small{display:block;color:#b2c9bf;margin-top:4px}
 @media(max-width:650px){.loadout-quick{padding:5px 6px}.loadout-card-options input{width:90px}}
+
+/* v3.30: OSRS-like compact equipment loadout tabs */
+.loadout-panel-compact{padding:9px;margin:4px 0 9px;background:#172720;border-color:#4d614d;border-radius:9px}
+.loadout-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:7px;font-size:12px}
+.loadout-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.loadout-tab,.loadout-quick-icon{position:relative;display:grid;place-items:center;min-width:0;border:1px solid #536554!important;border-radius:6px!important;background:#24392d!important;color:#e9e2c6!important;box-shadow:inset 0 1px #ffffff13!important;padding:3px!important}
+.loadout-tab{height:46px}
+.loadout-tab:hover:not(:disabled),.loadout-quick-icon:hover:not(:disabled){background:#324b36!important;border-color:#9caf80!important}
+.loadout-tab.is-selected{border-color:#eccb79!important;background:#455338!important;outline:1px solid #dcb975;outline-offset:-2px}
+.loadout-tab.is-equipped::after,.loadout-quick-icon.is-equipped::after{content:'';position:absolute;right:3px;top:3px;width:6px;height:6px;border-radius:50%;background:#8cdd9c;box-shadow:0 0 0 1px #163720}
+.loadout-tab.is-empty{opacity:.65}
+.loadout-tab-art{font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center;min-width:0;max-width:100%;height:27px;overflow:hidden}
+.loadout-tab-art svg{width:24px;height:24px}
+.loadout-tab small,.loadout-quick-icon small{font-size:9px;line-height:1;color:#dbd1af;font-variant-numeric:tabular-nums}
+.loadout-selected{padding-top:7px}
+.loadout-editor-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(96px,105px);gap:5px}
+.loadout-editor-row input,.loadout-editor-row select{font-size:11px;padding:5px 7px;min-height:32px;border-radius:6px}
+.loadout-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px}
+.loadout-actions button{padding:6px 4px;font-size:11px;min-width:0;line-height:1.25}
+.loadout-mini-items{display:flex;flex-wrap:wrap;gap:3px;margin-top:7px}
+.loadout-mini-items span{font-size:15px;padding:1px 3px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #48634b;background:#25392d;border-radius:4px;min-width:23px;min-height:23px}
+.loadout-mini-items svg{width:19px;height:19px}
+.loadout-hint{display:block;margin-top:5px;font-size:10px;color:#aac6ae}
+.loadout-shortcuts{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:7px 0}
+.loadout-shortcuts-label{font-size:11px;color:#b9cab5;font-weight:700}
+.loadout-shortcut-row{display:flex;gap:5px;align-items:center}
+.loadout-quick-icon{width:39px;height:41px}
+.loadout-quick-icon .loadout-tab-art{font-size:18px;height:22px}
+.combat-auto-switch{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;padding:8px 10px;margin:7px 0 11px;border-color:#436a56;background:#182e27}
+.combat-auto-switch .checkbox-row{font-size:12px;font-weight:650}
+.combat-auto-switch small{font-size:11px;color:#afc8bb;line-height:1.3}
+@media(max-width:650px){.loadout-panel-compact{padding:8px}.loadout-tabs{gap:4px}.loadout-tab{height:43px}.loadout-tab-art{font-size:19px}.loadout-shortcuts{margin:6px 0}.loadout-quick-icon{width:38px;height:39px}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.29 · Loadouts & Endless Raids</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.30 · Compact Equipment Tabs</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
 <button type="button" data-nav="skills">📊 Skills</button><button type="button" data-nav="combat">⚔️ Combat</button><button type="button" data-nav="raid">⛰️ Raid</button><button type="button" data-nav="bank">🏦 Bank</button><button type="button" data-nav="journal">📜 Journal <span id="quickReady"></span></button>
 </nav><div id="main"></div></main>
-<aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">🛡️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
+<aside class="panel right"><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">⚔️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><h3 class="section-title">📜 Activity log</h3><div class="log" id="log" aria-live="polite"></div></aside>
 </div><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="monster-inspect-overlay" id="monsterInspectOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="monsterInspectTitle"><div class="monster-inspect-dialog"><div class="between"><h2 id="monsterInspectTitle">Monster details</h2><button type="button" data-inspect-close aria-label="Close monster details">×</button></div><div id="monsterInspectContent"></div></div></div>
@@ -2296,7 +2328,7 @@ function newGame(){return {
  log:['⚔️ Welcome to the expanded Idle RPG world!'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},skillSelection:{},focusExpanded:false,sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null};
+const ui={view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},skillSelection:{},focusExpanded:false,sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null,loadoutTab:0};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRowsDesktop:6,maxRowsMobile:3};
@@ -2578,24 +2610,39 @@ function autoEquipForEnemy(enemy){
  const chosen=matchingAutoEquipment(enemy);
  return chosen?equipEquipmentLoadout(chosen.index,{automatic:true}):false;
 }
+function loadoutRoleIcon(role){return ({melee:'⚔️',ranged:'🏹',magic:'🪄',other:'🛠️'})[role]||'⚔️'}
 function equipmentLoadoutsHtml(compact=false){
  const presets=state.loadouts||defaultLoadouts();
- const buttons=presets.map((row,i)=>{
-  const ready=loadoutAvailability(i),weapon=row.equipment?.weapon;
-  if(compact)return `<button type="button" class="loadout-quick" data-loadout-equip="${i}" ${ready.ok?'':'disabled'} title="${esc(ready.ok?'Equip '+row.name:ready.error)}">${i+1}. ${esc(row.name)} <span>${row.role==='melee'?'⚔️':row.role==='ranged'?'🏹':row.role==='magic'?'🪄':'🛠️'}</span></button>`;
-  const count=row.equipment?Object.values(row.equipment).filter(Boolean).length:0;
-  return `<div class="loadout-card"><div class="loadout-card-heading"><strong>${i+1}. ${esc(row.name)}</strong><span class="small subdued">${row.equipment?count+' pieces saved':'Not saved yet'}</span></div>
-    <div class="loadout-card-options"><label class="loadout-role-label">Role <select data-loadout-role="${i}">${[['melee','⚔️ Melee'],['ranged','🏹 Ranged'],['magic','🪄 Magic'],['other','🛠️ Other']].map(([k,v])=>`<option value="${k}" ${row.role===k?'selected':''}>${v}</option>`).join('')}</select></label>
-    <input type="text" aria-label="Name for set ${i+1}" data-loadout-name="${i}" maxlength="24" value="${esc(row.name)}" placeholder="Set name"></div>
-    <div class="loadout-actions"><button type="button" data-loadout-save="${i}">💾 Save current</button><button type="button" data-loadout-equip="${i}" ${ready.ok?'':'disabled'} title="${esc(ready.ok?'Equip saved items':ready.error)}">🛡️ Equip</button></div>
-    ${row.equipment?`<div class="loadout-mini-items">${EQUIP_SLOTS.filter(slot=>row.equipment[slot]).map(slot=>`<span title="${esc(row.equipment[slot])}">${itemIcon(row.equipment[slot])}</span>`).join('')}</div>`:''}</div>`;
+ if(compact){
+  // One-click equipment shortcuts for Combat and Raid; full editor stays in Equipment.
+  const buttons=presets.map((row,i)=>{
+   const ready=loadoutAvailability(i),icon=row.equipment?.weapon?itemIcon(row.equipment.weapon):loadoutRoleIcon(row.role);
+   const equipped=!!row.equipment&&EQUIP_SLOTS.every(slot=>(row.equipment[slot]||null)===(state.equipment[slot]||null));
+   return `<button type="button" class="loadout-quick-icon ${equipped?'is-equipped':''}" data-loadout-equip="${i}" ${ready.ok?'':'disabled'} title="${esc(ready.ok?'Equip '+row.name:ready.error)}" aria-label="${esc('Equip set '+(i+1)+': '+row.name)}"><span class="loadout-tab-art" aria-hidden="true">${icon}</span><small>${i+1}</small></button>`;
+  }).join('');
+  return `<div class="loadout-shortcuts" aria-label="Quick equipment sets"><span class="loadout-shortcuts-label">⚔️ Sets</span><div class="loadout-shortcut-row">${buttons}</div></div>`;
+ }
+ const i=Math.max(0,Math.min(4,Number(ui.loadoutTab)||0)),row=presets[i];
+ const ready=loadoutAvailability(i),count=row.equipment?Object.values(row.equipment).filter(Boolean).length:0;
+ const tabs=presets.map((preset,index)=>{
+  const icon=preset.equipment?.weapon?itemIcon(preset.equipment.weapon):loadoutRoleIcon(preset.role);
+  const equipped=!!preset.equipment&&EQUIP_SLOTS.every(slot=>(preset.equipment[slot]||null)===(state.equipment[slot]||null));
+  return `<button type="button" class="loadout-tab ${index===i?'is-selected':''} ${equipped?'is-equipped':''} ${preset.equipment?'':'is-empty'}" data-loadout-tab="${index}" aria-label="${esc('Set '+(index+1)+': '+preset.name+(equipped?', equipped':''))}" title="${esc(preset.name+' · '+preset.role+(equipped?' · Equipped':''))}" aria-pressed="${index===i}"><span class="loadout-tab-art" aria-hidden="true">${icon}</span><small>${index+1}</small></button>`;
  }).join('');
- if(compact)return `<div class="loadout-shortcuts" aria-label="Quick equipment sets"><span class="small subdued">Equipment sets</span>${buttons}</div>`;
- return `<section class="loadout-panel"><div class="between"><h3>⚙️ Equipment Sets</h3><span class="small subdued">5 saved sets</span></div>
- <p class="small subdued">An item can be saved in every set. You only need to own one copy to switch between them.</p>
- <label class="checkbox-row loadout-toggle"><input type="checkbox" data-auto-loadouts ${state.autoSwitchWeakness?'checked':''}> Auto-switch to enemy weakness</label>
- <p class="small subdued">Optional: uses only your saved Melee, Ranged and Magic sets. Other is manual only.</p>
- <div class="loadout-list">${buttons}</div></section>`;
+ const preview=row.equipment?EQUIP_SLOTS.filter(slot=>row.equipment[slot]).map(slot=>`<span title="${esc(row.equipment[slot])}">${itemIcon(row.equipment[slot])}</span>`).join(''):'';
+ return `<section class="loadout-panel loadout-panel-compact" aria-label="Equipment sets">
+  <div class="loadout-panel-heading"><strong>⚔️ Equipment Sets</strong><span class="small subdued">${count}/12 items</span></div>
+  <div class="loadout-tabs" role="group" aria-label="Choose an equipment set">${tabs}</div>
+  <div class="loadout-selected">
+   <div class="loadout-editor-row"><input type="text" aria-label="Name for set ${i+1}" data-loadout-name="${i}" maxlength="24" value="${esc(row.name)}" placeholder="Set name"><select aria-label="Role for set ${i+1}" data-loadout-role="${i}">${[['melee','⚔️ Melee'],['ranged','🏹 Ranged'],['magic','🪄 Magic'],['other','🛠️ Other']].map(([k,v])=>`<option value="${k}" ${row.role===k?'selected':''}>${v}</option>`).join('')}</select></div>
+   <div class="loadout-actions"><button type="button" data-loadout-save="${i}">💾 Save current</button><button type="button" data-loadout-equip="${i}" ${ready.ok?'':'disabled'} title="${esc(ready.ok?'Equip saved set':ready.error)}">⚔️ Equip set</button></div>
+   ${preview?`<div class="loadout-mini-items" aria-label="Saved equipment">${preview}</div>`:''}
+   ${!row.equipment?'<span class="loadout-hint">Save your current equipment to this slot.</span>':''}
+  </div>
+ </section>`;
+}
+function combatAutoSwitchHtml(){
+ return `<section class="combat-auto-switch info-box"><label class="checkbox-row"><input type="checkbox" data-auto-loadouts ${state.autoSwitchWeakness?'checked':''}> Auto-switch sets to enemy weakness</label><small>Optional · Uses your saved Melee, Ranged and Magic sets. Other stays manual.</small></section>`;
 }
 function gearMods(equipment=state.equipment){
  const mods={attackPct:0,strengthPct:0,defencePct:0,rangedPct:0,magicPct:0,rangedAccuracy:0,rangedPower:0,magicAccuracy:0,magicPower:0,xpBonus:0,luckBonus:0,soulDropBonus:0,gatherBonus:0,woodcuttingYield:0,miningYield:0,fishingYield:0,agricultureYield:0,
@@ -3395,6 +3442,7 @@ function renderCombatMain(){
  const mods=gearMods();
  let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2></div></div>`;
  html+=equipmentLoadoutsHtml(true);
+ html+=combatAutoSwitchHtml();
  html+=combatTrainingHtml();
  html+=`<details class="info-box combat-xp-details"><summary>Combat skill progress</summary><div class="combat-choices">${['attack','strength','defence','ranged','magic'].map(skill=>`<div class="combat-choice"><b>${SKILLS[skill].icon} ${label(skill)}</b><span data-combat-xp="${skill}">${xpText(skill)}</span><div class="xpbar" style="width:100%"><div class="fill" style="width:${xpFill(skill)}%"></div></div></div>`).join('')}</div></details>`;
  html+=`<div class="combat-resource-grid">
@@ -3767,9 +3815,9 @@ function gearSlotButton(slot){
 function renderGearSidebar(){
  const mods=gearMods();
  const paperSlots=['head','cape','amulet','quiver','weapon','body','shield','legs','gloves','ring'];
- el('sidebar').innerHTML=`<div class="between"><h3 style="margin:0 0 10px">🛡️ Equipment</h3><span class="small subdued">${EQUIP_SLOTS.filter(slot=>!!state.equipment[slot]).length}/${EQUIP_SLOTS.length} equipped</span></div>
+ el('sidebar').innerHTML=`<div class="between"><h3 style="margin:0 0 8px">⚔️ Equipment</h3><span class="small subdued">${EQUIP_SLOTS.filter(slot=>!!state.equipment[slot]).length}/${EQUIP_SLOTS.length} equipped</span></div>
  ${equipmentLoadoutsHtml()}
- <p class="gear-intro">Click any equipment slot to choose items from your bank, or use × to unequip.</p>
+
  <div class="gear-doll"><div class="gear-paper-grid">${paperSlots.map(gearSlotButton).join('')}</div><div class="gear-tools-title">Toolbelt</div><div class="gear-toolbelt">${['axe','pickaxe'].map(gearSlotButton).join('')}</div></div>
  <div class="gear-small-note"></div>
  <div class="equipment-max-hits"><div class="max-hit-heading">⚔️ Your max hits <small>Before enemy weakness</small></div><div class="max-hit-grid">${[['attack','🗡️ Melee'],['ranged','🏹 Ranged'],['magic','🪄 Magic']].map(([style,name])=>`<div><small>${name}</small><strong>${fmt(combatPreview(style).baseMax)}</strong></div>`).join('')}</div><p>Ranged uses selected arrows; Magic uses staff bonuses. Values are potential damage until a bow or charged staff is ready. Hover items to compare.</p></div>
@@ -3957,7 +4005,7 @@ function refreshDynamic(){
   const parent=el('sidebar').closest('.right');const scroll=parent.scrollTop;
   if(ui.sidebarTab==='gear'){
    // Preserve focused loadout name while an action completes.
-   if(!document.activeElement?.hasAttribute('data-loadout-name'))renderGearSidebar();
+   if(!document.activeElement?.hasAttribute('data-loadout-name')&&!document.activeElement?.hasAttribute('data-loadout-role'))renderGearSidebar();
   }else renderPotionPouch();
   parent.scrollTop=scroll;
  }
@@ -3993,6 +4041,7 @@ function handleClick(e){
  if(b.hasAttribute('data-action'))return startAction(ui.view,Number(b.dataset.action));
  if(b.hasAttribute('data-inspect-monster'))return inspectMonster(Number(b.dataset.inspectMonster));
  if(b.hasAttribute('data-inspect-raid'))return inspectMonster(Number(b.dataset.inspectRaid),true);
+ if(b.hasAttribute('data-loadout-tab')){ui.loadoutTab=Number(b.dataset.loadoutTab);renderGearSidebar();return;}
  if(b.hasAttribute('data-loadout-save'))return saveEquipmentLoadout(Number(b.dataset.loadoutSave));
  if(b.hasAttribute('data-loadout-equip'))return equipEquipmentLoadout(Number(b.dataset.loadoutEquip));
  if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));

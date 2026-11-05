@@ -1219,9 +1219,12 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
 .online-launch{position:fixed;bottom:18px;right:18px;z-index:90;border:1px solid #d2b477;border-radius:10px;background:#1b393c;color:#ffe6ae;padding:10px 15px;cursor:pointer;box-shadow:0 5px 20px #0008}.online-overlay{position:fixed;inset:0;z-index:300;background:#000c;display:flex;justify-content:center;align-items:center;padding:16px}.online-overlay[hidden],#onlineSetup[hidden],#onlineAuth[hidden],#onlineLogged[hidden]{display:none!important}.online-dialog{width:min(100%,510px);max-height:90vh;overflow:auto;background:#152d33;color:#e8eee7;border:1px solid #b49b6b;border-radius:14px;padding:22px;box-shadow:0 18px 65px #000c}.online-heading{display:flex;justify-content:space-between;align-items:center}.online-heading h2{margin:0;color:#f7daa0}.online-heading button,.online-dialog button{background:#284a47;color:#f6e1b3;border:1px solid #a58a58;border-radius:8px;padding:9px 12px;cursor:pointer}.online-intro,.online-help{color:#b8cbc7;font-size:13px;line-height:1.5}.online-dialog label{display:block;margin:12px 0;font-size:13px;color:#e5d7b5}.online-dialog input{display:block;width:100%;margin-top:5px;box-sizing:border-box;border-radius:7px;border:1px solid #647b78;background:#0e242b;color:white;padding:10px;font:inherit}.online-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.online-status{font-size:13px;min-height:1.2em;color:#f2d7a0;white-space:pre-wrap}
 
 .online-conflict{padding:12px;margin-top:12px;background:#382c20;border:1px solid #d4aa6e;border-radius:10px;color:#f7e4bd}.online-conflict[hidden]{display:none!important}.online-conflict p{font-size:12px;line-height:1.5}.online-conflict button{margin:4px;font-size:12px}.online-help{line-height:1.5}
+.cloud-choice-item{display:inline-flex;flex-direction:column;align-items:center;vertical-align:top;gap:5px;margin:5px 7px 7px 0}
+.cloud-choice-item button{width:100%}
+.cloud-save-age{display:block;color:#d9c69d;font-size:11px;font-weight:700;text-align:center}
 </style></head>
 <body><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineUpload">☁️ Upload Main now</button><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
-<header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v4.2 · Guest & Auto Cloud Save</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v4.3 · Save Age Labels</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -5760,12 +5763,24 @@ const CLOUD_SYNC_INTERVAL=60000;
 const cloudSyncLabel=msg=>{const target=el('onlineSyncState');if(target)target.textContent=msg};
 const cloudLocal=()=>{try{const raw=localStorage.getItem(SAVE_KEY);return raw?JSON.parse(raw):null}catch{return null}};
 const cloudTime=v=>Number(v?.lastSaved)||0;
+function cloudSaveAgeLabels(local,remote){
+ const localTime=cloudTime(local),remoteTime=cloudTime(remote?.save_data);
+ if(!localTime||!remoteTime||localTime===remoteTime)return ['Save time unavailable','Save time unavailable'];
+ return localTime>remoteTime?['Most recent save','Old save']:['Old save','Most recent save'];
+}
 const cloudOwner=()=>localStorage.getItem(CLOUD_OWNER_KEY);
 const cloudMarkOwner=id=>localStorage.setItem(CLOUD_OWNER_KEY,id);
 const cloudHideChoice=()=>{el('onlineConflict').hidden=true;el('onlineConflict').replaceChildren()};
-function cloudOfferChoice(message,options){
+function cloudOfferChoice(message,options,saveLabels=null){
  const area=el('onlineConflict');area.replaceChildren();const p=document.createElement('p');p.textContent=message;area.append(p);
- for(const [label,fn] of options){const button=document.createElement('button');button.type='button';button.textContent=label;button.onclick=()=>onlineAction(async()=>{await fn();cloudHideChoice()});area.append(button)}
+ for(const [label,fn] of options){
+  const wrapper=document.createElement('div');wrapper.className='cloud-choice-item';
+  const button=document.createElement('button');button.type='button';button.textContent=label;
+  button.onclick=()=>onlineAction(async()=>{await fn();cloudHideChoice()});wrapper.append(button);
+  const age=saveLabels?.[label];
+  if(age){const caption=document.createElement('small');caption.className='cloud-save-age';caption.textContent=age;wrapper.append(caption)}
+  area.append(wrapper);
+ }
  area.hidden=false;el('onlineOverlay').hidden=false;
 }
 async function cloudFetch(){
@@ -5816,7 +5831,7 @@ async function cloudPrepare(){
   if(owner!==userId||JSON.stringify(local)!==JSON.stringify(remote.save_data)){
    cloudOfferChoice('Your local Main and cloud Main may have different progress. Choose which character to use. This choice replaces the other copy. Export a backup first if unsure.',[
     ['Use cloud character',()=>cloudApplyRemote(remote)],['Use local character',()=>cloudChooseLocal(remote)],['Decide later',async()=>{cloudSyncLabel('Signed in · cloud sync paused until a save is selected')}]
-   ]);
+   ],(()=>{const [localAge,cloudAge]=cloudSaveAgeLabels(local,remote);return {'Use cloud character':cloudAge,'Use local character':localAge}})());
   }else{cloudMarkOwner(userId);cloudReadyUser=userId;cloudLastSync=Date.now();cloudSyncLabel('✓ Cloud and local match · auto-sync active')}
  }catch(err){cloudSyncLabel('Cloud unavailable · local guest play continues');onlineStatus('Cloud check: '+(err?.message||err))}
 }

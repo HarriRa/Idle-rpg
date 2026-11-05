@@ -1223,8 +1223,8 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
 .cloud-choice-item button{width:100%}
 .cloud-save-age{display:block;color:#d9c69d;font-size:11px;font-weight:700;text-align:center}
 </style></head>
-<body><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineUpload">☁️ Upload Main now</button><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
-<header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v4.3 · Save Age Labels</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<body><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
+<header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v4.4 · Cloud Save</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -5856,6 +5856,7 @@ const onlineSetView=()=>{
  el('onlineSetup').hidden=!!onlineClient;
  el('onlineAuth').hidden=!onlineClient||!!onlineUser;
  el('onlineLogged').hidden=!onlineUser;
+ el('cloudSaveBtn').hidden=!onlineUser;
  el('onlineIdentity').textContent=onlineUser?'Signed in as '+onlineUser.email:'';
 };
 async function onlineConnect(url,key){
@@ -5886,17 +5887,18 @@ function onlineMainSave(){
  if(!data?.xp||!data?.bank)throw Error('Local Main save is invalid.');
  return data;
 }
-async function onlineUpload(){
- if(!onlineUser)throw Error('Sign in first.');
- if(!inDev())save(); // Never upload a Dev profile.
- const payload=onlineMainSave();
- const {data:existing,error:lookupError}=await onlineClient.from('character_saves').select('updated_at').eq('user_id',onlineUser.id).maybeSingle();
- if(lookupError)throw lookupError;
- const question=existing?'Replace your existing CLOUD save with this LOCAL Main save? This may discard progress from another device.':'Upload your local Main character as your first cloud backup?';
- if(!confirm(question))return;
- const {error}=await onlineClient.from('character_saves').upsert({user_id:onlineUser.id,save_data:payload,updated_at:new Date().toISOString()},{onConflict:'user_id'});
- if(error)throw error;
- cloudMarkOwner(onlineUser.id);cloudRemoteUpdated=null;cloudReadyUser=null;await cloudPrepare();onlineStatus('✓ Main character uploaded. Your local save was not deleted.');
+async function cloudSaveNow(){
+ if(!onlineUser)return;
+ if(cloudUploadBusy){onlineStatus('Cloud save already in progress.');return}
+ if(cloudReadyUser!==onlineUser.id){
+  onlineStatus('Choose your Main save before cloud saving.');
+  await cloudPrepare();return;
+ }
+ // Uses the same remote revision check as auto-sync. Never silently overwrite
+ // a cloud save changed on another device.
+ cloudLastSync=0;
+ await cloudAutoSync();
+ onlineStatus(cloudReadyUser===onlineUser?.id?'✓ Cloudsave complete.':'Cloud save needs attention. Check the save selection.');
 }
 async function onlineDownload(){
  if(!onlineUser)throw Error('Sign in first.');
@@ -5924,7 +5926,7 @@ function setupOnlineUI(){
   onlineStatus('✓ Signed in.');
  });
  el('onlineSignOut').onclick=()=>onlineAction(async()=>{const {error}=await onlineClient.auth.signOut();if(error)throw error;cloudReadyUser=null;cloudGeneration++;cloudSyncLabel('Guest mode · local saves only');onlineStatus('Signed out. Local saves remain available.')});
- el('onlineUpload').onclick=()=>onlineAction(onlineUpload);
+ el('cloudSaveBtn').onclick=()=>onlineAction(cloudSaveNow);
  el('onlineDownload').onclick=()=>onlineAction(onlineDownload);
  try{el('onlineUrl').value=OVERNIA_SUPABASE_URL;el('onlineKey').value=OVERNIA_SUPABASE_PUBLIC_KEY;onlineAction(()=>onlineConnect(OVERNIA_SUPABASE_URL,OVERNIA_SUPABASE_PUBLIC_KEY))}catch(e){console.warn(e)}
  onlineSetView();

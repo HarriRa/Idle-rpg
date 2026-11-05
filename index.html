@@ -1406,6 +1406,13 @@ const SKILLS = {
  attack:{icon:'🗡️',combat:true},strength:{icon:'💪',combat:true},
  defence:{icon:'🛡️',combat:true},ranged:{icon:'🏹',combat:true},magic:{icon:'🪄',combat:true},hitpoints:{icon:'❤️',combat:true}
 };
+// v4.9: high-level botanical progression; append so existing action indexes stay stable.
+SKILLS.agriculture.actions.push(
+ A('Harvest Riftbloom','Riftbloom',88,390,{'Mystic Seed':2,'Moonflower':1},'Crops',{quantity:2}),
+ A('Cultivate Aetherthorn','Aetherthorn',94,580,{'Riftbloom':1,'Sunfruit':2},'Crops',{quantity:2}),
+ A('Grow Void Lotus','Void Lotus',99,900,{'Aetherthorn':2,'Dragon Scale':2},'Crops')
+);
+SKILLS.alchemy.actions.push(A('Brew Extreme Battle Potion','Extreme Battle Potion',98,850,{'Master Battle Potion':1,'Riftbloom':2,'Aetherthorn':2,'Void Lotus':1},'Combat'));
 // More smithing is generated from a small, editable metal progression table.
 const METALS = [
  {name:'Bronze',level:1,forge:5,xp:25,cost:{'Copper Ore':1,'Tin Ore':1},ingot:1},
@@ -1757,6 +1764,7 @@ const POTIONS={
  'Defence Potion':{buff:'defencePct',value:.15,duration:300,description:'+15% Defence for 5 minutes'},
  'Battle Potion':{buffs:{strengthPct:.15,attackPct:.15,defencePct:.15},duration:300,description:'+15% all combat stats for 5 minutes'},
  'Master Battle Potion':{buffs:{strengthPct:.25,attackPct:.25,defencePct:.25},duration:300,description:'+25% all combat stats for 5 minutes'},
+ 'Extreme Battle Potion':{buffs:{strengthPct:.40,attackPct:.40,defencePct:.40,rangedPct:.40,magicPct:.40},duration:360,description:'+40% melee, ranged, magic and defence for 6 minutes'},
  'Wisdom Potion':{buff:'xpBonus',value:.15,duration:300,description:'+15% XP for 5 minutes'},
  'Greater Wisdom Potion':{buff:'xpBonus',value:.25,duration:300,description:'+25% XP for 5 minutes'},
  'Luck Potion':{buff:'luckBonus',value:.25,duration:300,description:'+25% treasure chance for 5 minutes'},
@@ -1828,7 +1836,8 @@ const BOSS_PETS={
  'Ashen Warlord':['Cinderclaw',1/1600,'🔥'],
  'Stormwing Matriarch':['Galecrest',1/1700,'🦅'],
  'Astral Hierophant':['Starling',1/1900,'✨'],
- 'Belroth':['Duskling',1/2500,'🐉']
+ 'Belroth':['Duskling',1/2500,'🐉'],
+ 'Nyxara, the Rift Sovereign':['Noxwing',1/3000,'🌑']
 };
 // v4.8: one cosmetic companion can be summoned at a time. Small passive bonuses.
 const PET_EFFECTS={
@@ -1838,7 +1847,8 @@ const PET_EFFECTS={
  'Ashen Warlord':{strengthPct:.02,description:'+2% melee damage'},
  'Stormwing Matriarch':{rangedAccuracy:4,description:'+4 ranged accuracy'},
  'Astral Hierophant':{xpBonus:.01,description:'+1% training XP'},
- 'Belroth':{luckBonus:.01,description:'+1% loot luck'}
+ 'Belroth':{luckBonus:.01,description:'+1% loot luck'},
+ 'Nyxara, the Rift Sovereign':{defencePct:.02,description:'+2% defence'}
 };
 function activePetBoss(){
  const boss=state.activePet;
@@ -1981,6 +1991,7 @@ const OVERNIA_PLACES=[
  {id:'highspire',name:'Highspire Summit',short:'Highspire',icon:'🏔️',kind:'Mountain · Lv 80–120',x:55,y:16,description:'The spine of the mountain rises beyond the clouds. Ancient dragons nest on shattered watchposts above the entrance to Belroth’s depths.',detail:'The wind is thin, the snow never melts, and stone statues guard a pass built for something much taller than humans.',people:'Durn Highmantle · dwarven pathfinder; Sister Vey · keeper of the peak'},
  {id:'starfall',name:'Starfall Observatory',short:'Starfall',icon:'🌌',kind:'Ruins · Lv 70–105',x:82,y:25,description:'An abandoned observatory glitters with blue crystals. Its night sky appears wrong, as if its builders once watched a different world.',detail:'Seven broken lenses ring the central platform. Some nights, a faint voice counts the stars that have disappeared.',people:'Lys Arden · wandering astronomer; The Watcher · unknown'}
 ];
+OVERNIA_PLACES.push({id:'veilreach',name:'Veilreach Expanse',short:'Veilreach',icon:'🌑',kind:'Riftlands · Lv 105–130',x:94,y:78,description:'A fractured borderland where the world thins and violet lightning splits the black soil. Aetherthorn and void lotus grow around ancient portals.',detail:'The Rift Citadel hangs above the shattered basin, guarded by creatures altered by the breach.',people:'Ilyra Veilkeeper · rift botanist; Kael the Last Sentinel · guardian'});
 const OVERNIA_PLACE_BY_ID=Object.fromEntries(OVERNIA_PLACES.map(p=>[p.id,p]));
 const MONSTER_HOME={
  'Rat':'hearthwick','Chicken':'hearthwick','Wandering Peasant':'hearthwick','Bandit':'hearthwick',
@@ -1989,8 +2000,13 @@ const MONSTER_HOME={
  'Dwarven Miner':'ironhollow','Mithril Golem':'ironhollow','Crystal Sentinel':'ironhollow',
  'Swamp Witch':'mirefen','Hollow Magister':'mirefen','Abyss Warden':'mirefen',
  'Ancient Dragon':'highspire','Ashen Warlord':'highspire','Stormwing Matriarch':'highspire',
- 'Void Overlord':'starfall','Astral Hierophant':'starfall'
+ 'Void Overlord':'starfall','Riftstalker':'veilreach','Aetherbound Knight':'veilreach','Voidscale Wyrm':'veilreach','Astral Hierophant':'starfall'
 };
+MONSTERS.push(
+ {name:'Riftstalker',level:108,hp:1600,def:125,atk:125,maxHit:90,weakness:'ranged',area:'veilreach',loot:{'Riftbloom':2,'Coins':500},unique:null},
+ {name:'Aetherbound Knight',level:116,hp:2300,def:145,atk:138,maxHit:110,weakness:'magic',area:'veilreach',loot:{'Aetherthorn':2,'Coins':700},unique:null},
+ {name:'Voidscale Wyrm',level:125,hp:3300,def:165,atk:155,maxHit:130,weakness:'melee',area:'veilreach',loot:{'Void Lotus':1,'Dragon Scale':4,'Coins':950},unique:{item:'Dragon Arcane Core',chance:.02}}
+);
 for(const m of MONSTERS)m.area=m.area||MONSTER_HOME[m.name]||'hearthwick';
 
 const combatType=style=>style==='ranged'?'ranged':style==='magic'?'magic':'melee';
@@ -2074,6 +2090,26 @@ for(const [name,gear] of Object.entries(RAID_GEAR)){
  registerGear(name,gear);
  if(gear.combatType==='magic')MAGIC_STAVES[name]=gear;
 }
+// The Rift Citadel is a separate raid with its own checkpoint and chest.
+const RIFT_CONFIG={name:'Rift Citadel',unlockCombatLevel:115,chest:'Rift Sovereign Cache',chestRewards:[
+ ['Riftbloom',24,8],['Aetherthorn',20,6],['Void Lotus',18,4],['Prismatic Soul Gem',8,1],
+ ['Sovereign Visor',10,1],['Sovereign Carapace',10,1],['Sovereign Greaves',10,1]
+]};
+NONTRADEABLE_ITEMS.add(RIFT_CONFIG.chest);
+const RIFT_WAVES=[
+ {name:'Riftbound Marauder',level:112,hp:7200,def:135,atk:130,weakness:'melee'},
+ {name:'Aether Warden',level:116,hp:8700,def:148,atk:140,weakness:'magic'},
+ {name:'Voidscale Behemoth',level:120,hp:10200,def:156,atk:150,weakness:'ranged'},
+ {name:'Fractured Oracle',level:124,hp:12000,def:170,atk:165,weakness:'melee'},
+ {name:'Citadel Archon',level:128,hp:15000,def:185,atk:180,weakness:'magic'},
+ {name:'Nyxara, the Rift Sovereign',level:140,hp:55000,def:245,atk:235,weakness:'ranged',boss:true}
+];
+for(const wave of RIFT_WAVES)wave.maxHit=Math.round(enemyReferenceMaxHit(wave.level)*(wave.boss?1.85:1.35));
+for(const [name,slot,def,atk,str,rangedAcc,rangedPower,magicAcc,magicPower] of [
+ ['Sovereign Visor','head',48,24,18,36,22,45,26],
+ ['Sovereign Carapace','body',86,42,32,64,40,80,46],
+ ['Sovereign Greaves','legs',66,33,25,50,32,62,36]
+])registerGear(name,{slot,requiredSkill:'defence',requiredLevel:95,defence:def,attack:atk,strength:str,rangedAccuracy:rangedAcc,rangedPower,magicAccuracy:magicAcc,magicPower});
 // Armour from boss hunts is DROP-ONLY. Early sets beat ordinary smithing
 // offence at their levels while sacrificing protection; late sets rival crafted
 // power gear but do not replace the defensive Bulwark/Warden/Spellguard sets.
@@ -2101,6 +2137,7 @@ for(const [name,stats] of Object.entries(BOSS_ARMOUR))registerGear(name,stats);
 
 // Both thresholds count. 3 pieces give the 2-piece bonus PLUS the 3-piece bonus.
 const GEAR_SETS=[
+ {name:'Sovereign',items:['Sovereign Visor','Sovereign Carapace','Sovereign Greaves'],two:{defencePct:.16,attackPct:.12,rangedPct:.12,magicPct:.12},three:{defence:45,strengthPct:.25,rangedPct:.25,magicPct:.25}},
  {name:'Hillbreaker',items:['Hillbreaker Helm','Hillbreaker Vest','Hillbreaker Greaves'],two:{attackPct:.04},three:{strength:3,attack:5}},
  {name:'Broodstalker',items:['Broodstalker Hood','Broodstalker Tunic','Broodstalker Chaps'],two:{rangedPct:.04},three:{rangedAccuracy:8,rangedPower:4}},
  {name:'Hollowmage',items:['Hollowmage Hood','Hollowmage Robes','Hollowmage Legwraps'],two:{magicPct:.04},three:{magicAccuracy:9,magicPower:4}},
@@ -2129,14 +2166,23 @@ SKILLS.enchanting.actions.push(
 );
 registerGear('Perfect Amulet',{slot:'amulet',attackPct:.80,strengthPct:.80,defencePct:.80,rangedPct:.80,magicPct:.80,xpBonus:.70,luckBonus:.70});
 registerGear('Perfect Ring',{slot:'ring',attackPct:.55,strengthPct:.55,defencePct:.55,rangedPct:.55,magicPct:.55,xpBonus:.55,gatherBonus:.80,soulDropBonus:.60});
+function selectedRaidKey(){return state.raidChoice==='rift'?'rift':'mountain'}
+function selectedRaidConfig(){return selectedRaidKey()==='rift'?RIFT_CONFIG:RAID_CONFIG}
+function selectedRaidWaves(){return selectedRaidKey()==='rift'?RIFT_WAVES:RAID_WAVES}
+function selectRaid(key){
+ if(state.active?.type==='raid'){toast('Stop your current raid before switching');return}
+ state.raidChoice=key==='rift'?'rift':'mountain';state.monsterHp=null;renderMain();save();
+}
 function raidState(){
  state.raid??={wave:0,completions:0,pendingChests:0};
- state.raid.wave=Math.max(0,Math.min(RAID_WAVES.length-1,Math.floor(Number(state.raid.wave)||0)));
- state.raid.completions=Math.max(0,Math.floor(Number(state.raid.completions)||0));
- state.raid.pendingChests=Math.max(0,Math.floor(Number(state.raid.pendingChests)||0));
- return state.raid;
+ state.riftRaid??={wave:0,completions:0,pendingChests:0};
+ const raid=selectedRaidKey()==='rift'?state.riftRaid:state.raid;
+ raid.wave=Math.max(0,Math.min(selectedRaidWaves().length-1,Math.floor(Number(raid.wave)||0)));
+ raid.completions=Math.max(0,Math.floor(Number(raid.completions)||0));
+ raid.pendingChests=Math.max(0,Math.floor(Number(raid.pendingChests)||0));
+ return raid;
 }
-function currentEnemy(){return state.active?.type==='raid'?RAID_WAVES[raidState().wave]:MONSTERS[state.monsterIndex]}
+function currentEnemy(){return state.active?.type==='raid'?selectedRaidWaves()[raidState().wave]:MONSTERS[state.monsterIndex]}
 function belrothEntryRequirement(equipment=state.equipment){
  const problems=[];
  if(combatLevel()<RAID_CONFIG.belrothCombatLevel)problems.push('Combat Level '+RAID_CONFIG.belrothCombatLevel);
@@ -2149,37 +2195,52 @@ function belrothEntryRequirement(equipment=state.equipment){
  if(!adequate.includes(weapon))problems.push('near-endgame '+style+' weapon');
  return problems;
 }
+// Rift Citadel is the post-Deep-Mountain challenge: its sovereign requires
+// endgame progression and equipment earned before the Rift itself.
+function riftSovereignRequirements(equipment=state.equipment){
+ const missing=[];
+ if(combatLevel()<125)missing.push('Combat 125');
+ if(levelFromXp(state.xp.defence||0)<95)missing.push('Defence 95');
+ if(levelFromXp(state.xp.hitpoints||0)<95)missing.push('Hitpoints 95');
+ if((state.raid?.completions||0)<1)missing.push('at least 1 Deep Mountain clear');
+ const priorWeapons=['Deepmountain Greatsword','Deepmountain Warbow','Deepmountain Soulstaff'];
+ if(!priorWeapons.includes(equipment.weapon))missing.push('a Deep Mountain raid weapon');
+ const previousSets=['Ashen Warlord','Stormwing','Astral','Bulwark','Warden','Spellguard','Ravager','Deadeye','Soulweaver'];
+ if(!previousSets.some(name=>{const set=GEAR_SETS.find(x=>x.name===name);return set&&setPieceCount(set,equipment)>=2;}))missing.push('2 pieces of a pre-Rift endgame armour set');
+ return missing;
+}
 function startRaidWave(){
- const raid=raidState(),wave=RAID_WAVES[raid.wave];
- if(combatLevel()<RAID_CONFIG.unlockCombatLevel){toast('Reach Combat '+RAID_CONFIG.unlockCombatLevel+' to enter');return}
+ const raid=raidState(),wave=selectedRaidWaves()[raid.wave],config=selectedRaidConfig();
+ if(combatLevel()<config.unlockCombatLevel){toast('Reach Combat '+config.unlockCombatLevel+' to enter');return}
  autoEquipForEnemy(wave);
- if(wave.boss){const needs=belrothEntryRequirement();if(needs.length){note('🔒 Belroth requires '+needs.join(', '));toast('Belroth requires stronger gear and levels');return}}
+ if(wave.boss&&selectedRaidKey()==='mountain'){const needs=belrothEntryRequirement();if(needs.length){note('🔒 Belroth requires '+needs.join(', '));toast('Belroth requires stronger gear and levels');return}}
+ if(wave.boss&&selectedRaidKey()==='rift'){const needs=riftSovereignRequirements();if(needs.length){note('🔒 Nyxara requires '+needs.join(', '));toast('Nyxara requires pre-Rift endgame gear');return}}
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
  clearActivityFeed();ui.combatLastHit=null;state.active={type:'raid'};state.monsterHp=wave.hp;state.progress=0;
- note(`⛰️ Wave ${raid.wave+1}/${RAID_WAVES.length}: ${wave.name} · Weak to ${equippedCombatStyle()===wave.weakness?'your style':wave.weakness}`);
+ note(`⛰️ Wave ${raid.wave+1}/${selectedRaidWaves().length}: ${wave.name} · Weak to ${equippedCombatStyle()===wave.weakness?'your style':wave.weakness}`);
  renderProgress();renderMain();refreshDynamic();save();
 }
 function awardRaidChest(){
- const raid=raidState();
- if(!add(RAID_CONFIG.chest,1)){
+ const raid=raidState(),config=selectedRaidConfig();
+ if(!add(config.chest,1)){
   raid.pendingChests++;
-  note('📦 Bank full! Belroth chest saved as a pending reward. Free a slot, then claim in the Raid panel.');
- }else note('🏆 Belroth defeated! Belroth Expedition Chest added to your bank.');
+  note('📦 Bank full! Raid chest saved as a pending reward. Free a slot, then claim in the Raid panel.');
+ }else note('🏆 Raid boss defeated! '+config.chest+' added to your bank.');
 }
 function claimPendingRaidChests(){
- const raid=raidState();let moved=0;
- while(raid.pendingChests>0&&bankCanHold(RAID_CONFIG.chest)){
-  if(!add(RAID_CONFIG.chest,1))break;
+ const raid=raidState(),config=selectedRaidConfig();let moved=0;
+ while(raid.pendingChests>0&&bankCanHold(config.chest)){
+  if(!add(config.chest,1))break;
   raid.pendingChests--;moved++;
  }
- if(moved)note('📦 Claimed '+moved+' Belroth Expedition Chest(s).');
+ if(moved)note('📦 Claimed '+moved+' '+config.chest+'(s).');
  else note('Free a bank stack to claim your saved chest.');
  refreshDynamic();save();
 }
 function openRaidChest(){
- const chest=RAID_CONFIG.chest;
+ const config=selectedRaidConfig(),chest=config.chest;
  if(count(chest)<1)return;
- const chosen=weightedPick(RAID_CONFIG.chestRewards);
+ const chosen=weightedPick(config.chestRewards);
  const unique=chosen[0],quantity=chosen[2]||1;
  // Keep the chest untouched unless there is room for its new stack.
  const rewards={[unique]:quantity,'Coins':6000,'Soul Shard':100};
@@ -2189,14 +2250,14 @@ function openRaidChest(){
  if(bankUsed()-freed+needed>GAME_CONFIG.bankSlots){note('🏦 Free bank space before opening the chest.');toast('Not enough bank slots');return}
  add(chest,-1);
  for(const [name,n] of gained)add(name,n);
- recordBossDrop('Belroth',unique);
+ recordBossDrop(selectedRaidKey()==='rift'?'Nyxara, the Rift Sovereign':'Belroth',unique);
  state.stats.coinsEarned=(state.stats.coinsEarned||0)+6000;
- note(`🎁 Belroth's chest: ${quantity} ${unique}, 6,000 Coins and 100 Soul Shards!`);
+ note(`🎁 ${config.name} cache: ${quantity} ${unique}, 6,000 Coins and 100 Soul Shards!`);
  toast('Raid reward: '+unique);
  refreshDynamic();save();
 }
 function finishRaidWave(m){
- const raid=raidState();
+ const raid=raidState(),config=selectedRaidConfig(),waves=selectedRaidWaves();
  state.stats.kills[m.name]=(state.stats.kills[m.name]||0)+1;
  // Raid waves roll Soul Gems and Soul Shards INDEPENDENTLY of completion loot.
  rollSoulGem('combat');
@@ -2207,20 +2268,20 @@ function finishRaidWave(m){
  if(m.boss){
   rollBossPet(m);
   awardRaidChest();raid.completions++;raid.wave=0;
-  note(`⛰️ ${RAID_CONFIG.name} completed ${raid.completions} time(s). A new run begins at Wave 1.`);
+  note(`⛰️ ${config.name} completed ${raid.completions} time(s). A new run begins at Wave 1.`);
  }else{
   raid.wave++;
-  note(`✅ ${m.name} defeated! Checkpoint saved · Wave ${raid.wave+1}/${RAID_WAVES.length} unlocked.`);
+  note(`✅ ${m.name} defeated! Checkpoint saved · Wave ${raid.wave+1}/${waves.length} unlocked.`);
  }
  state.progress=0;state.monsterHp=null;
  if(state.raidAutoRun){
-  const upcoming=RAID_WAVES[raid.wave];
+  const upcoming=waves[raid.wave];
   autoEquipForEnemy(upcoming);
-  const requirements=upcoming.boss?belrothEntryRequirement():[];
+  const requirements=upcoming.boss?(selectedRaidKey()==='mountain'?belrothEntryRequirement():riftSovereignRequirements()):[];
   const supplyError=combatSupplyError();
   if(!requirements.length&&!supplyError){
    state.active={type:'raid'};state.monsterHp=upcoming.hp;
-   if(!offlineRunning)note(`▶ Auto-running wave ${raid.wave+1}/${RAID_WAVES.length}: ${upcoming.name}`);
+   if(!offlineRunning)note(`▶ Auto-running wave ${raid.wave+1}/${waves.length}: ${upcoming.name}`);
   }else{
    state.active=null;
    note(`⏹ Auto-raid paused: ${requirements.length?requirements.join(', '):supplyError}`);
@@ -2866,7 +2927,7 @@ function itemIcon(item){
   'Bulwark Helm':'🪖','Bulwark Plate':'🛡️','Bulwark Legs':'🥾','Ravager Helm':'⛑️','Ravager Plate':'🥋','Ravager Legs':'👖',
   'Warden Hood':'🧢','Warden Coat':'🧥','Warden Guards':'👖','Deadeye Hood':'🎯','Deadeye Jacket':'🦺','Deadeye Chaps':'👖',
   'Spellguard Hood':'🔷','Spellguard Robes':'🔮','Spellguard Legwraps':'👖','Soulweaver Hood':'🟣','Soulweaver Robes':'🪄','Soulweaver Legwraps':'👖',
-  'Healing Potion':'🧪','Greater Healing Potion':'🧫','Superior Healing Potion':'⚗️','Ultimate Healing Potion':'🥤','Strength Potion':'🟥','Accuracy Potion':'🟦','Defence Potion':'🟩','Battle Potion':'🟪','Master Battle Potion':'🔴','Wisdom Potion':'📘','Greater Wisdom Potion':'📙','Luck Potion':'🍀','Greater Luck Potion':'🌟','Ranger Focus Potion':'🏹','Arcane Surge Potion':'🪄'
+  'Healing Potion':'🧪','Greater Healing Potion':'🧫','Superior Healing Potion':'⚗️','Ultimate Healing Potion':'🥤','Strength Potion':'🟥','Accuracy Potion':'🟦','Defence Potion':'🟩','Battle Potion':'🟪','Master Battle Potion':'🔴','Extreme Battle Potion':'💥','Riftbloom':'🌺','Aetherthorn':'🌿','Void Lotus':'🪷','Sovereign Visor':'👑','Sovereign Carapace':'🛡️','Sovereign Greaves':'🦿','Wisdom Potion':'📘','Greater Wisdom Potion':'📙','Luck Potion':'🍀','Greater Luck Potion':'🌟','Ranger Focus Potion':'🏹','Arcane Surge Potion':'🪄'
  };
  const soul=SOUL_GEMS.find(s=>s.name===item); if(soul) return soul.color;
  if(ITEM_ICON_MAP[item]) return ITEM_ICON_MAP[item];
@@ -2905,7 +2966,7 @@ function itemIcon(item){
  return ({Food:'🍲',Equipment:'🛡️',Materials:'🧵','Rare Drops':'🏺',Loot:'🦴',Farming:'🌱',Seeds:'🌰',Wood:'🪵',Bars:'🧱',Ores:'🪨',Ammunition:'🏹',Gems:'💎',Potions:'🧪'})[cat]||'🧩';
 }
 function itemCategory(item){
- if(item===RAID_CONFIG.chest||item==='Belroth Amulet Core'||item==='Belroth Ring Core'||item.includes('(Unf)'))return 'Rare Drops';if(item==='Coins')return 'Currency';if(item==='Soul Shard')return 'Soul Shards';if(NONTRADEABLE_ITEMS.has(item))return 'Soul Gems';if(item in RANGED_AMMO)return 'Ammunition';if(item in EQUIPMENT)return 'Equipment';
+ if(item===RAID_CONFIG.chest||item===RIFT_CONFIG.chest||item==='Belroth Amulet Core'||item==='Belroth Ring Core'||item.includes('(Unf)'))return 'Rare Drops';if(item==='Coins')return 'Currency';if(item==='Soul Shard')return 'Soul Shards';if(NONTRADEABLE_ITEMS.has(item))return 'Soul Gems';if(item in RANGED_AMMO)return 'Ammunition';if(item in EQUIPMENT)return 'Equipment';
  if(Object.values(SPECIAL_COMPONENT_DROPS).some(drop=>drop.item===item||drop.extraItem===item))return 'Rare Drops';
  if(item in POTIONS)return 'Potions';if(item in FOOD)return 'Food';
  if(FISH_TO_COOK.includes(item))return 'Fish';if(item.startsWith('Uncut ')||GEMS.includes(item))return 'Gems';
@@ -3007,7 +3068,7 @@ function newGame(){return {
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
  loadouts:defaultLoadouts(),autoSwitchWeakness:false,raidAutoRun:true,
  recipeLayoutVersion:25,
- pets:{},activePet:null,collectionLog:{},hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
+ pets:{},activePet:null,collectionLog:{},hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},riftRaid:{wave:0,completions:0,pendingChests:0},raidChoice:'mountain',combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
  fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
@@ -3268,7 +3329,7 @@ function restore(){
    claimed:Array.isArray(raw.claimed)?raw.claimed:[],
    active:validSavedActivity(raw.active)?raw.active:null,
    progress:clamp(Number(raw.progress)||0,0,99.999),
-   monsterHp:Number.isFinite(Number(raw.monsterHp))&&Number(raw.monsterHp)>0?Number(raw.monsterHp):(raw.active?.type==='raid'?RAID_WAVES[Math.min(RAID_WAVES.length-1,Math.max(0,Number(raw.raid?.wave)||0))].hp:MONSTERS[raw.monsterIndex]?.hp)};
+   monsterHp:Number.isFinite(Number(raw.monsterHp))&&Number(raw.monsterHp)>0?Number(raw.monsterHp):(raw.active?.type==='raid'?(raw.raidChoice==='rift'?RIFT_WAVES:RAID_WAVES)[Math.min((raw.raidChoice==='rift'?RIFT_WAVES:RAID_WAVES).length-1,Math.max(0,Number((raw.raidChoice==='rift'?raw.riftRaid:raw.raid)?.wave)||0))].hp:MONSTERS[raw.monsterIndex]?.hp)};
   // v3.25: return unused legacy Feather Bundles to their original Feathers.
   const bundles=Math.max(0,Number(state.bank['Feather Bundle'])||0);
   if(bundles)state.bank.Feather=(Number(state.bank.Feather)||0)+bundles*2;
@@ -3309,7 +3370,7 @@ function restore(){
   for(const [name,charges] of Object.entries(state.staffCharges))state.staffCharges[name]=clamp(Math.floor(Number(charges)||0),0,MAGIC_STAVES[name]?.maxCharges||0);
   state.monsterIndex=MONSTERS[state.monsterIndex]?state.monsterIndex:0;
   raidState();
-  if(state.active?.type==='raid')state.monsterHp=clamp(Number(state.monsterHp)||RAID_WAVES[state.raid.wave].hp,1,RAID_WAVES[state.raid.wave].hp);
+  if(state.active?.type==='raid')state.monsterHp=clamp(Number(state.monsterHp)||selectedRaidWaves()[raidState().wave].hp,1,selectedRaidWaves()[raidState().wave].hp);
   if(!FOOD[state.autoEat.food])state.autoEat.food='Cooked Shrimp';
   if(![15,30,50].includes(Number(state.autoEat.threshold)))state.autoEat.threshold=30;
   state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
@@ -4507,28 +4568,28 @@ function filterRecipeCards(){
 }
 
 function raidPanelHtml(){
- const raid=raidState(),wave=RAID_WAVES[raid.wave],isBoss=!!wave.boss,playing=state.active?.type==='raid';
- const unlocked=combatLevel()>=RAID_CONFIG.unlockCombatLevel;
+ const raid=raidState(),config=selectedRaidConfig(),waves=selectedRaidWaves(),rift=selectedRaidKey()==='rift',wave=waves[raid.wave],isBoss=!!wave.boss,playing=state.active?.type==='raid';
+ const unlocked=combatLevel()>=config.unlockCombatLevel;
  const planned=matchingAutoEquipment(wave);
  const plannedEquipment=planned?.equipment||state.equipment;
- const bossMissing=isBoss?belrothEntryRequirement(plannedEquipment):[];
+ const bossMissing=isBoss?(rift?riftSovereignRequirements(plannedEquipment):belrothEntryRequirement(plannedEquipment)):[];
  const supplies=combatSupplyError(plannedEquipment);
  const canStart=unlocked&&!playing&&!bossMissing.length&&!supplies;
- return `<section class="raid-panel" aria-label="Deep Mountain Expedition">
- <div class="raid-heading"><div><div class="eyebrow">⛰️ ENDGAME RAID · SAVED CHECKPOINTS</div><h3>Deep Mountain Expedition</h3>
- <p>12 waves · Fight your way to Belroth. Each completed wave is saved, even if you die, log out or change equipment. Use each enemy's weakness.</p></div><span class="raid-score">🏆 ${fmt(raid.completions)} clears</span></div>
- <div class="raid-auto-config"><label class="checkbox-row"><input type="checkbox" data-raid-auto-run ${state.raidAutoRun?'checked':''}> Auto-continue waves & repeat raids</label><small>Stops if you die, run out of supplies or cannot enter Belroth.</small></div>
- <div class="raid-progress"><div style="width:${raid.wave/RAID_WAVES.length*100}%"></div></div>
- <div class="raid-waves">${RAID_WAVES.map((m,i)=>`<span class="raid-wave ${i<raid.wave?'raid-cleared':i===raid.wave?'raid-current':'raid-locked'}" title="Wave ${i+1}: ${esc(m.name)} · Weak to ${m.weakness}">${i<raid.wave?'✓':i===raid.wave?'⚔️':'🔒'} ${i+1}</span>`).join('')}</div>
- <div class="raid-current"><div><strong>${isBoss?'👑':'⚔️'} Wave ${raid.wave+1}/${RAID_WAVES.length} · ${esc(wave.name)}</strong>
+ return `<div class="tabs"><button data-select-raid="mountain" ${rift?'':'class="selected"'}>⛰️ Deep Mountain</button><button data-select-raid="rift" ${rift?'class="selected"':''}>🌑 Rift Citadel</button></div><section class="raid-panel" aria-label="${config.name}">
+ <div class="raid-heading"><div><div class="eyebrow">⛰️ ENDGAME RAID · SAVED CHECKPOINTS</div><h3>${config.name}</h3>
+ <p>${waves.length} waves · Fight your way to ${rift?'Nyxara':'Belroth'}. Each completed wave is saved, even if you die, log out or change equipment. Use each enemy's weakness.</p></div><span class="raid-score">🏆 ${fmt(raid.completions)} clears</span></div>
+ <div class="raid-auto-config"><label class="checkbox-row"><input type="checkbox" data-raid-auto-run ${state.raidAutoRun?'checked':''}> Auto-continue waves & repeat raids</label><small>Stops if you die, run out of supplies or cannot enter a final boss.</small></div>
+ <div class="raid-progress"><div style="width:${raid.wave/waves.length*100}%"></div></div>
+ <div class="raid-waves">${waves.map((m,i)=>`<span class="raid-wave ${i<raid.wave?'raid-cleared':i===raid.wave?'raid-current':'raid-locked'}" title="Wave ${i+1}: ${esc(m.name)} · Weak to ${m.weakness}">${i<raid.wave?'✓':i===raid.wave?'⚔️':'🔒'} ${i+1}</span>`).join('')}</div>
+ <div class="raid-current"><div><strong>${isBoss?'👑':'⚔️'} Wave ${raid.wave+1}/${waves.length} · ${esc(wave.name)}</strong>
  <div class="raid-details">${fmt(wave.hp)} HP · Defence ${wave.def} · Max hit ${wave.maxHit} · <b>Weakness: ${weaknessLabel(wave.weakness)}</b></div></div>
- <div class="monster-actions"><button data-inspect-raid="${raid.wave}">🔎 Inspect</button><button data-raid-start ${canStart?'':'disabled'}>${playing?'Fighting…':isBoss?'⚔️ Face Belroth':'Enter wave '+(raid.wave+1)}</button></div></div>
- ${!unlocked?`<div class="raid-warning">🔒 Requires Combat Level ${RAID_CONFIG.unlockCombatLevel} to enter.</div>`:isBoss&&bossMissing.length?`<div class="raid-warning">🔒 Belroth requires ${esc(bossMissing.join(', '))}. Level up and equip near-best pre-raid gear.</div>`:supplies?`<div class="raid-warning">${esc(supplies)}</div>`:''}
- <div class="raid-tip">🗡️ Melee · 🏹 Ranged · 🪄 Magic — use the correct style, change weapons in Equipment, and restock food between waves. Belroth is tuned for high-level stats and strong pre-raid gear.</div>
- <details class="raid-guide"><summary>🗺️ All 12 raid waves and weaknesses</summary><div class="raid-guide-list">${RAID_WAVES.map((m,i)=>`<div class="${i===raid.wave?'active':''}"><span>${i+1}. ${esc(m.name)}</span><b>${weaknessLabel(m.weakness)}</b><button data-inspect-raid="${i}" type="button">Inspect</button></div>`).join('')}</div></details>
- <div class="raid-loot"><strong>🎁 Belroth Expedition Chest</strong><p>The final boss always awards a chest to your Bank. Each chest contains Coins, Soul Shards and a weighted drop: <b>11% Amulet Core</b>, <b>11% Ring Core</b>, <b>3% each BiS weapon</b>, or materials/Solar Soul Gem. Cores become Perfect (Unf) jewellery in Crafting, finished with Prismatic Soul Gems in Enchanting.</p>
- <div class="raid-chest-row"><span>🎁 Chests owned: <b>${fmt(count(RAID_CONFIG.chest))}</b></span>
- <button data-open-raid-chest ${count(RAID_CONFIG.chest)>0?'':'disabled'}>Open Chest</button>
+ <div class="monster-actions"><button data-inspect-raid="${raid.wave}">🔎 Inspect</button><button data-raid-start ${canStart?'':'disabled'}>${playing?'Fighting…':isBoss?(rift?'⚔️ Face Nyxara':'⚔️ Face Belroth'):'Enter wave '+(raid.wave+1)}</button></div></div>
+ ${!unlocked?`<div class="raid-warning">🔒 Requires Combat Level ${config.unlockCombatLevel} to enter.</div>`:isBoss&&bossMissing.length?`<div class="raid-warning">🔒 Final boss requires ${esc(bossMissing.join(', '))}. Complete the previous raid and equip near-BiS pre-Rift gear.</div>`:supplies?`<div class="raid-warning">${esc(supplies)}</div>`:''}
+ <div class="raid-tip">🗡️ Melee · 🏹 Ranged · 🪄 Magic — use the correct style, change weapons in Equipment, and restock food between waves. Belroth requires strong gear. Nyxara is tougher and requires a Deep Mountain clear, its raid weapon and pre-Rift endgame armour.</div>
+ <details class="raid-guide"><summary>🗺️ All ${waves.length} raid waves and weaknesses</summary><div class="raid-guide-list">${waves.map((m,i)=>`<div class="${i===raid.wave?'active':''}"><span>${i+1}. ${esc(m.name)}</span><b>${weaknessLabel(m.weakness)}</b><button data-inspect-raid="${i}" type="button">Inspect</button></div>`).join('')}</div></details>
+ <div class="raid-loot"><strong>🎁 ${config.chest}</strong><p>${rift?'Nyxara awards a cache with a chance at the Sovereign hybrid set (10% per piece), rare herbs and Prismatic Soul Gems. Full set boosts melee, ranged and magic.':'The final boss awards a chest with Coins, Soul Shards, rare weapons and jewellery cores.'}</p>
+ <div class="raid-chest-row"><span>🎁 Chests owned: <b>${fmt(count(config.chest))}</b></span>
+ <button data-open-raid-chest ${count(config.chest)>0?'':'disabled'}>Open Chest</button>
  ${raid.pendingChests?`<button data-raid-claim-pending>Claim ${fmt(raid.pendingChests)} saved chest(s)</button>`:''}</div></div>
  </section>`;
 }
@@ -4544,7 +4605,7 @@ function monsterLootRow(item,description,unique=false){
  return `<div class="monster-loot-row ${unique?'unique':''}">${itemArt(item)}<div><b>${esc(item)}</b><small>${esc(description)}</small></div></div>`;
 }
 function inspectMonster(index,raid=false){
- const m=raid?RAID_WAVES[index]:MONSTERS[index],overlay=el('monsterInspectOverlay'),out=el('monsterInspectContent');
+ const m=raid?selectedRaidWaves()[index]:MONSTERS[index],overlay=el('monsterInspectOverlay'),out=el('monsterInspectContent');
  if(!m||!overlay||!out)return;
  const treasurePct=pct(treasureChance());
  let drops=[];
@@ -4604,7 +4665,7 @@ function refreshCombatTraining(){
 }
 // Battle HUD: the two bars share one actual Overnia action tick. They are not independent timers.
 function combatArenaHtml(mode){
- const raid=mode==='raid',enemy=raid?RAID_WAVES[raidState().wave]:MONSTERS[state.monsterIndex];
+ const raid=mode==='raid',enemy=raid?selectedRaidWaves()[raidState().wave]:MONSTERS[state.monsterIndex];
  const active=state.active?.type===mode;
  const style=equippedCombatStyle(),styleIcon={melee:'⚔️',ranged:'🏹',magic:'🪄'}[style]||'⚔️';
  const playerMax=maxHp(),playerHp=clamp(Number(state.hp)||0,0,playerMax);
@@ -4613,7 +4674,7 @@ function combatArenaHtml(mode){
  const choices=raid?[]:MONSTERS.map((m,i)=>({m,i})).filter(({m})=>m.area===state.world.location).sort((a,b)=>a.m.level-b.m.level||a.m.name.localeCompare(b.m.name,'en'));
  const selected=choices.some(({i})=>i===ui.combatTargetIndex)?ui.combatTargetIndex:(choices.some(({i})=>i===state.monsterIndex)?state.monsterIndex:choices[0]?.i);
  return `<section class="over-arena" id="combatArena" data-arena-mode="${mode}" aria-label="${raid?'Raid':'Combat'} battle overview">
-  <div class="over-arena-heading"><span class="over-arena-kicker">⚔️ BATTLE</span><b data-arena-status>${active?'● In combat':'○ Ready to fight'}</b><span class="over-arena-round">${raid?'Wave '+(raidState().wave+1)+' / '+RAID_WAVES.length:'Overnia · '+esc(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness')}</span></div>
+  <div class="over-arena-heading"><span class="over-arena-kicker">⚔️ BATTLE</span><b data-arena-status>${active?'● In combat':'○ Ready to fight'}</b><span class="over-arena-round">${raid?'Wave '+(raidState().wave+1)+' / '+selectedRaidWaves().length:'Overnia · '+esc(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness')}</span></div>
   ${raid?'':`<div class="over-arena-target"><label for="combatTarget">Target</label><select id="combatTarget" aria-label="Choose monster to fight">${choices.map(({m,i})=>`<option value="${i}" ${selected===i?'selected':''}>Lv ${m.level} · ${esc(m.name)}</option>`).join('')}</select><button type="button" data-quick-inspect title="Inspect selected monster">🔎</button><button type="button" data-quick-fight>⚔️ Fight</button></div>`}
   <div class="over-arena-grid">
    <article class="over-fighter over-fighter-player">
@@ -4641,7 +4702,7 @@ function combatArenaHtml(mode){
 }
 function refreshCombatArena(){
  const root=el('combatArena');if(!root)return;
- const mode=root.dataset.arenaMode,raid=mode==='raid',enemy=raid?RAID_WAVES[raidState().wave]:MONSTERS[state.monsterIndex];
+ const mode=root.dataset.arenaMode,raid=mode==='raid',enemy=raid?selectedRaidWaves()[raidState().wave]:MONSTERS[state.monsterIndex];
  if(!enemy)return;
  const active=state.active?.type===mode;
  const set=(attr,value)=>{const node=root.querySelector(`[${attr}]`);if(node&&node.textContent!==String(value))node.textContent=value;return node};
@@ -4675,7 +4736,7 @@ function refreshCombatArena(){
  set('data-arena-tip',active?'Your attack resolves first; the enemy counters if still alive.':'Choose a monster to start fighting.');
  const xpRate=combatXpMultiplier(enemy,raid);
  set('data-arena-interval',(xpRate>1?'Combat XP ×'+xpRate.toFixed(1)+(active?' · ':''):'')+(active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':''));
- const round=root.querySelector('.over-arena-round');if(round)round.textContent=raid?'Wave '+(raidState().wave+1)+' / '+RAID_WAVES.length:'Overnia · '+(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness');
+ const round=root.querySelector('.over-arena-round');if(round)round.textContent=raid?'Wave '+(raidState().wave+1)+' / '+selectedRaidWaves().length:'Overnia · '+(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness');
  const last=ui.combatLastHit;
  const matching=last?.mode===mode&&last?.enemy===enemy.name&&performance.now()-last.at<12000;
  set('data-arena-player-last',matching?(last.strikes?'Double strike · '+last.strikes.map(fmt).join(' + ')+' = '+fmt(last.dealt):last.dealt?'Last hit · '+fmt(last.dealt)+' damage':'Last hit · Miss'):'Last hit · —');
@@ -5210,7 +5271,7 @@ function renderJournalMain(){
 }
 
 function renderRaidMain(){
- let html=`<div class="heading"><div><div class="eyebrow">⛰️ Adventure · Endgame</div><h2>Deep Mountain Expedition</h2><p class="section-description">Prepare your equipment, defeat 12 increasingly powerful waves, and claim Belroth's loot chest. Each completed wave saves your checkpoint. Change your weapon to change combat style between waves.</p></div><span class="recipe-badge level">Combat Lv ${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</span></div>`;
+ let html=`<div class="heading"><div><div class="eyebrow">⛰️ Adventure · Endgame</div><h2>${selectedRaidConfig().name}</h2><p class="section-description">Prepare your equipment, defeat powerful waves, and claim your raid chest. Each completed wave saves your checkpoint. Change your weapon to change combat style between waves.</p></div><span class="recipe-badge level">Combat Lv ${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</span></div>`;
  html+=combatArenaHtml('raid');
  html+=equipmentLoadoutsHtml(true);
  html+=combatTrainingHtml();
@@ -5235,9 +5296,9 @@ function renderRaidLive(){
 
 function renderCollectionMain(){
  const log=collectionLog();
- const bosses=[...HUNT_BOSSES,RAID_WAVES.find(w=>w.name==='Belroth')];
+ const bosses=[...HUNT_BOSSES,RAID_WAVES.find(w=>w.name==='Belroth'),RIFT_WAVES.find(w=>w.boss)];
  const cards=bosses.map(b=>{
-  const pet=BOSS_PETS[b.name],items=[...(b.bossGearDrops||[]).map(row=>row[0]),...(b.name==='Belroth'?RAID_CONFIG.chestRewards.map(row=>row[0]):[]),pet[0]];
+  const pet=BOSS_PETS[b.name],items=[...(b.bossGearDrops||[]).map(row=>row[0]),...(b.name==='Belroth'?RAID_CONFIG.chestRewards.map(row=>row[0]):b.name==='Nyxara, the Rift Sovereign'?RIFT_CONFIG.chestRewards.map(row=>row[0]):[]),pet[0]];
   const found=items.filter(item=>(log[b.name]?.[item]||0)>0).length;
   const petUnlocked=!!state.pets?.[b.name];
   const summoned=activePetBoss()===b.name;
@@ -5249,8 +5310,18 @@ function renderCollectionMain(){
    <div class="collection-items">${items.filter(x=>x!==pet[0]).map(item=>`<div class="collection-item ${log[b.name]?.[item]?'owned':''}"><span>${log[b.name]?.[item]?'✓':'◇'} ${esc(item)}</span><strong>${fmt(log[b.name]?.[item]||0)}</strong></div>`).join('')}</div>
   </article>`;
  }).join('');
+ const raidLogCards=[{key:'mountain',name:'⛰️ Deep Mountain Expedition',boss:'Belroth',config:RAID_CONFIG,raid:state.raid},{key:'rift',name:'🌑 Rift Citadel',boss:'Nyxara, the Rift Sovereign',config:RIFT_CONFIG,raid:state.riftRaid}].map(entry=>{
+  const pet=BOSS_PETS[entry.boss];
+  const unique=entry.config.chestRewards.map(r=>r[0]);
+  const found=unique.filter(item=>(log[entry.boss]?.[item]||0)>0).length;
+  const owned=!!state.pets?.[entry.boss];
+  return `<article class="recipe-card"><div class="between"><strong class="recipe-title">${esc(entry.name)}</strong><span class="recipe-badge">${found+(owned?1:0)}/${unique.length+1} collected</span></div>
+   <div class="small muted">${fmt(entry.raid?.completions||0)} clears · ${fmt(state.stats.kills[entry.boss]||0)} boss kills</div>
+   <div class="collection-items">${unique.map(item=>`<div class="collection-item ${log[entry.boss]?.[item]?'owned':''}"><span>${log[entry.boss]?.[item]?'✓':'◇'} ${esc(item)}</span><strong>${fmt(log[entry.boss]?.[item]||0)}</strong></div>`).join('')}</div>
+   <div class="collection-pet ${owned?'owned':''}">${pet[2]} <strong>${esc(pet[0])}</strong> · ${owned?'Unlocked':'Not obtained'} · 1/${fmt(Math.round(1/pet[1]))}</div></article>`;
+ }).join('');
  const total=Object.keys(state.pets||{}).length;
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Boss hunting</div><h2>🐾 Collection Log</h2><p class="section-description">Track unique boss loot and unlock named companions. Pets are permanent collectibles and do not take bank space. Summon one companion at a time for a small passive bonus.</p></div></div><div class="info-box">🐾 Pets unlocked: <strong>${total}/${bosses.length}</strong> · Active: <strong>${activePetBoss()?esc(BOSS_PETS[activePetBoss()][0]):'None'}</strong> · Collection tracks new drops only.</div><div class="skill-cards">${cards}</div>`;
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Boss hunting</div><h2>🐾 Collection Log</h2><p class="section-description">Track unique boss loot and unlock named companions. Pets are permanent collectibles and do not take bank space. Summon one companion at a time for a small passive bonus.</p></div></div><div class="info-box">🐾 Pets unlocked: <strong>${total}/${bosses.length}</strong> · Active: <strong>${activePetBoss()?esc(BOSS_PETS[activePetBoss()][0]):'None'}</strong> · Collection tracks new drops only.</div><h3 class="section-title">🏰 Raid Collection Logs</h3><div class="skill-cards">${raidLogCards}</div><h3 class="section-title">⚔️ Boss Collection Log</h3><div class="skill-cards">${cards}</div>`;
 }
 function renderMain(){
  el('main').dataset.currentView=ui.view;
@@ -5437,6 +5508,7 @@ function handleClick(e){
  if(b.hasAttribute('data-loadout-save'))return saveEquipmentLoadout(Number(b.dataset.loadoutSave));
  if(b.hasAttribute('data-loadout-equip'))return equipEquipmentLoadout(Number(b.dataset.loadoutEquip));
  if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));
+ if(b.hasAttribute('data-select-raid'))return selectRaid(b.dataset.selectRaid);
  if(b.hasAttribute('data-raid-start'))return startRaidWave();
  if(b.hasAttribute('data-open-raid-chest'))return openRaidChest();
  if(b.hasAttribute('data-raid-claim-pending'))return claimPendingRaidChests();
@@ -5679,7 +5751,7 @@ async function catchUpOffline(){
  if(gap<minMs||!state.active){state.lastProcessedAt=now;return}
  const capMs=Math.max(0,OFFLINE_CONFIG.maxHours)*3600000;
  const rewardedMs=Math.min(gap,capMs),end=start+rewardedMs;
- const actionName=state.active.type==='raid'?`⛰️ ${RAID_WAVES[raidState().wave]?.name||'Raid'}`:state.active.type==='combat'?`⚔️ ${MONSTERS[state.monsterIndex]?.name||'Combat'}`:
+ const actionName=state.active.type==='raid'?`⛰️ ${selectedRaidWaves()[raidState().wave]?.name||'Raid'}`:state.active.type==='combat'?`⚔️ ${MONSTERS[state.monsterIndex]?.name||'Combat'}`:
     `${SKILLS[state.active.skill]?.icon||'⚡'} ${SKILLS[state.active.skill]?.actions[state.active.index]?.name||'Activity'}`;
  const before=offlineSnapshot(),actionMs=actionDurationMs();
  clearActivityFeed(); // The AFK report handles rewards while the page is away.
@@ -5783,7 +5855,7 @@ function devRefresh(message){
 }
 function buildDevOptions(){
  el('devSkill').innerHTML=Object.keys(SKILLS).map(k=>`<option value="${esc(k)}">${esc(label(k))}</option>`).join('');
- const all=new Set([...Object.keys(ITEM_META),...Object.keys(EQUIPMENT),...Object.keys(POTIONS),...Object.keys(FOOD),...SHOP_ITEMS.map(x=>x.name),'Coins',RAID_CONFIG.chest]);
+ const all=new Set([...Object.keys(ITEM_META),...Object.keys(EQUIPMENT),...Object.keys(POTIONS),...Object.keys(FOOD),...SHOP_ITEMS.map(x=>x.name),'Coins',RAID_CONFIG.chest,RIFT_CONFIG.chest]);
  el('devItemList').innerHTML=[...all].sort().map(x=>`<option value="${esc(x)}"></option>`).join('');
  el('devMonster').innerHTML=MONSTERS.map((m,i)=>({m,i})).sort((a,b)=>a.m.level-b.m.level||a.m.name.localeCompare(b.m.name,'en')).map(({m,i})=>`<option value="${i}">Lv ${m.level} · ${esc(m.name)}</option>`).join('');
  el('devWave').innerHTML=RAID_WAVES.map((m,i)=>`<option value="${i}">${i+1}. ${esc(m.name)}</option>`).join('');
@@ -5816,7 +5888,7 @@ function handleDevAction(action){
  if(action==='give-item'||action==='give-coins'){
   const name=action==='give-coins'?'Coins':el('devItem').value.trim();
   const qty=devPositiveNumber('devQuantity',1000000000);
-  if(!qty||!Object.hasOwn(ITEM_META,name)&&name!=='Coins'&&name!==RAID_CONFIG.chest)return devStatus('Select a known item and valid quantity.');
+  if(!qty||!Object.hasOwn(ITEM_META,name)&&name!=='Coins'&&name!==RAID_CONFIG.chest&&name!==RIFT_CONFIG.chest)return devStatus('Select a known item and valid quantity.');
   if(!add(name,qty))return devStatus('Bank full. Free a stack first.');
   return devRefresh(fmt(qty)+' × '+name+' added to DEV.');
  }

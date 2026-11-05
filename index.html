@@ -1279,7 +1279,7 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
  </section>
  </div><div id="devStatus" role="status" aria-live="polite"></div>
 </div></div>
-<div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
+<div class="afk-overlay" id="chestLootOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="chestLootTitle"><div class="afk-dialog"><h2 id="chestLootTitle">🎁 Chest rewards</h2><div id="chestLootReport"></div><button class="afk-continue" id="chestLootContinue">Continue adventure →</button></div></div><div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
 // IDLE RPG v3.29 · LOADOUTS & ENDLESS RAIDS · CHANGE GAME SETTINGS HERE
@@ -2236,25 +2236,53 @@ function claimPendingRaidChests(){
  else note('Free a bank stack to claim your saved chest.');
  refreshDynamic();save();
 }
-function openRaidChest(){
- const config=selectedRaidConfig(),chest=config.chest;
- if(count(chest)<1)return;
- const chosen=weightedPick(config.chestRewards);
- const unique=chosen[0],quantity=chosen[2]||1;
- // Keep the chest untouched unless there is room for its new stack.
- const rewards={[unique]:quantity,'Coins':6000,'Soul Shard':100};
- const gained=Object.entries(rewards);
- const freed=count(chest)===1?1:0;
- const needed=gained.filter(([name])=>count(name)<1).length;
- if(bankUsed()-freed+needed>GAME_CONFIG.bankSlots){note('🏦 Free bank space before opening the chest.');toast('Not enough bank slots');return}
- add(chest,-1);
- for(const [name,n] of gained)add(name,n);
- recordBossDrop(selectedRaidKey()==='rift'?'Nyxara, the Rift Sovereign':'Belroth',unique);
- state.stats.coinsEarned=(state.stats.coinsEarned||0)+6000;
- note(`🎁 ${config.name} cache: ${quantity} ${unique}, 6,000 Coins and 100 Soul Shards!`);
- toast('Raid reward: '+unique);
+function openRaidChest(chestName,mode='one'){
+ const config=[RAID_CONFIG,RIFT_CONFIG].find(c=>c.chest===chestName);
+ if(!config)return;
+ const available=count(chestName);
+ if(!available)return toast('No chests to open');
+ const quantity=mode==='all'?available:1;
+ // Simulate all rewards first, so a full bank cannot consume chests without granting loot.
+ const rewards={};const uniques={};
+ for(let i=0;i<quantity;i++){
+  const chosen=weightedPick(config.chestRewards);
+  const name=chosen[0],amount=chosen[2]||1;
+  rewards[name]=(rewards[name]||0)+amount;
+  uniques[name]=(uniques[name]||0)+amount;
+ }
+ rewards.Coins=(rewards.Coins||0)+6000*quantity;
+ rewards['Soul Shard']=(rewards['Soul Shard']||0)+100*quantity;
+ const freed=available===quantity?1:0;
+ const needed=Object.keys(rewards).filter(name=>count(name)===0&&!isPotion(name)).length;
+ if(bankUsed()-freed+needed>GAME_CONFIG.bankSlots){
+  toast('Not enough bank slots for all rewards');
+  note('🏦 Free bank space before opening '+quantity+' chest(s).');
+  return;
+ }
+ const snapshotBank={...state.bank},snapshotPotions={...state.potions};
+ add(chestName,-quantity);
+ for(const [name,amount] of Object.entries(rewards)){
+  if(!add(name,amount)){
+   state.bank=snapshotBank;state.potions=snapshotPotions;
+   toast('Could not open chest. No items consumed.');return;
+  }
+ }
+ const boss=chestName===RIFT_CONFIG.chest?'Nyxara, the Rift Sovereign':'Belroth';
+ for(const name of Object.keys(uniques))recordBossDrop(boss,name);
+ state.stats.coinsEarned=(state.stats.coinsEarned||0)+6000*quantity;
+ note('🎁 Opened '+quantity+' '+chestName+(quantity===1?'':'s')+'.');
  refreshDynamic();save();
+ showChestLootReport(chestName,quantity,rewards);
 }
+function showChestLootReport(chestName,quantity,rewards){
+ const overlay=el('chestLootOverlay'),body=el('chestLootReport');
+ if(!overlay||!body)return;
+ el('chestLootTitle').textContent='🎁 '+chestName;
+ const rows=Object.entries(rewards).sort((a,b)=>a[0]==='Coins'?1:b[0]==='Coins'?-1:0);
+ body.innerHTML=`<div class="afk-hero"><div class="eyebrow">Chest rewards</div><div class="afk-time">${fmt(quantity)} ${quantity===1?'chest':'chests'} opened</div><div class="subdued small">All rewards have been added to your bank.</div></div><div class="afk-section"><h3>Loot received</h3><div class="afk-list">${rows.map(([name,amount])=>`<div class="afk-item">${itemArt(name)}<span class="detail">${esc(name)}</span><b>+${fmt(amount)}</b></div>`).join('')}</div></div>`;
+ overlay.hidden=false;
+}
+
 function finishRaidWave(m){
  const raid=raidState(),config=selectedRaidConfig(),waves=selectedRaidWaves();
  state.stats.kills[m.name]=(state.stats.kills[m.name]||0)+1;
@@ -4617,7 +4645,7 @@ function raidPanelHtml(){
  <details class="raid-guide"><summary>🗺️ All ${waves.length} raid waves and weaknesses</summary><div class="raid-guide-list">${waves.map((m,i)=>`<div class="${i===raid.wave?'active':''}"><span>${i+1}. ${esc(m.name)}</span><b>${weaknessLabel(m.weakness)}</b><button data-inspect-raid="${i}" type="button">Inspect</button></div>`).join('')}</div></details>
  <div class="raid-loot"><strong>🎁 ${config.chest}</strong><p>${rift?'Nyxara awards a cache with a chance at the Sovereign hybrid set (10% per piece), rare herbs and Prismatic Soul Gems. Full set boosts melee, ranged and magic.':'The final boss awards a chest with Coins, Soul Shards, rare weapons and jewellery cores.'}</p>
  <div class="raid-chest-row"><span>🎁 Chests owned: <b>${fmt(count(config.chest))}</b></span>
- <button data-open-raid-chest ${count(config.chest)>0?'':'disabled'}>Open Chest</button>
+ <button data-open-raid-chest="${esc(config.chest)}" data-chest-mode="one" ${count(config.chest)>0?'':'disabled'}>Open 1</button><button data-open-raid-chest="${esc(config.chest)}" data-chest-mode="all" ${count(config.chest)>0?'':'disabled'}>Open All</button>
  ${raid.pendingChests?`<button data-raid-claim-pending>Claim ${fmt(raid.pendingChests)} saved chest(s)</button>`:''}</div></div>
  </section>`;
 }
@@ -5149,9 +5177,9 @@ function renderBankDetail(scope){
  const item=ui.bank[scope].selected;
  if(!item||count(item)<1){box.innerHTML='<p class="subdued small">Select an item to equip, eat, use or sell it.</p>';return}
  const equipment=EQUIPMENT[item],potion=POTIONS[item],food=FOOD[item],fuel=FIRE_FUEL[item];
- const detail=item===RAID_CONFIG.chest?'Raid reward chest. Open it to receive a rare Deep Mountain Expedition item, Coins and Soul Shards. Cannot be traded.' : NONTRADEABLE_ITEMS.has(item)?'Soulbound. Cannot be bought, sold or traded. Used to power Enchanting recipes.':equipment?gearDescription(equipment):potion?potion.description:food?`Restores ${food} HP`:fuel?`Burns for ${timeFmt(fuel)} in your Cooking fire`:`Stackable ${itemCategory(item).toLowerCase()} item`;
+ const detail=item===RAID_CONFIG.chest||item===RIFT_CONFIG.chest?'Raid reward chest. Open to receive raid loot, Coins and Soul Shards. Cannot be traded.' : NONTRADEABLE_ITEMS.has(item)?'Soulbound. Cannot be bought, sold or traded. Used to power Enchanting recipes.':equipment?gearDescription(equipment):potion?potion.description:food?`Restores ${food} HP`:fuel?`Burns for ${timeFmt(fuel)} in your Cooking fire`:`Stackable ${itemCategory(item).toLowerCase()} item`;
  box.innerHTML=`<div class="selected-item">${itemArt(item,true)}<h4>${esc(item)} ×${fmt(count(item))}</h4><p>${esc(detail)}</p><p class="gold">${isTradeable(item)?`Sell value: ${fmt(sellPrice(item))} Coins each`:"🔒 SOULBOUND · Untradeable"}</p><div class="controls">
- ${item===RAID_CONFIG.chest?`<button data-open-raid-chest>🎁 Open raid chest</button>`:''}
+ ${[RAID_CONFIG.chest,RIFT_CONFIG.chest].includes(item)?`<button data-open-raid-chest="${esc(item)}" data-chest-mode="one">🎁 Open 1</button><button data-open-raid-chest="${esc(item)}" data-chest-mode="all">🎁 Open All</button>`:''}
  ${equipment?`<button data-equip="${esc(item)}">Equip</button>`:''}
  ${food?`<button data-eat="${esc(item)}" ${state.hp>=maxHp()?'disabled':''}>Eat +${food} HP</button>`:''}
  ${potion?`<button data-use-potion="${esc(item)}">Use potion</button>`:''}
@@ -5545,7 +5573,7 @@ function handleClick(e){
  if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));
  if(b.hasAttribute('data-select-raid'))return selectRaid(b.dataset.selectRaid);
  if(b.hasAttribute('data-raid-start'))return startRaidWave();
- if(b.hasAttribute('data-open-raid-chest'))return openRaidChest();
+ if(b.hasAttribute('data-open-raid-chest'))return openRaidChest(b.dataset.openRaidChest,b.dataset.chestMode||'one');
  if(b.hasAttribute('data-raid-claim-pending'))return claimPendingRaidChests();
  if(b.hasAttribute('data-charge'))return chargeStaff(Number(b.dataset.charge));
 
@@ -5825,6 +5853,7 @@ async function catchUpOffline(){
  showOfflineReport(before,gap/1000,rewardedMs/1000,actionName,completed);
  el('afkContinue').hidden=false;
 }
+el('chestLootContinue').onclick=()=>{el('chestLootOverlay').hidden=true;};
 el('afkContinue').onclick=()=>{el('afkOverlay').hidden=true;el('afkContinue').hidden=false;};
 function tick(t){
  if(offlineRunning){lastTick=t;requestAnimationFrame(tick);return}

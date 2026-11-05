@@ -965,9 +965,53 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 .world-recruit-card .world-quest-body{padding:4px 11px 11px}
 .world-recruit-card .world-quest-body p{margin:6px 0}
 .world-quest:not(.world-recruit-card)>.world-quest-body{padding:0}
+
+/* v3.36 — Melvor-style readable battle duel, custom Overnia artwork and spacing. */
+.over-arena{position:relative;margin:10px 0 15px;padding:12px;border:1px solid #866f49;border-radius:14px;background:linear-gradient(145deg,#2a2621 0%,#1c2525 55%,#26221d 100%);box-shadow:0 8px 24px #0003;overflow:hidden}
+.over-arena::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 20% 10%,#97c49c12,transparent 55%),radial-gradient(ellipse at 85% 15%,#ef847015,transparent 55%);pointer-events:none}
+.over-arena-heading,.over-arena-footer{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;position:relative}
+.over-arena-heading{margin-bottom:10px;color:#e9d7b2;font-size:11px}
+.over-arena-heading b{font-size:11px;color:#a3d7bd;letter-spacing:.02em}
+.over-arena:not(.is-active) .over-arena-heading b{color:#d2baa0}
+.over-arena-kicker{font-size:10px;letter-spacing:.16em;font-weight:900;color:#efd497}
+.over-arena-round{margin-left:auto;color:#c4b99c;font-size:10px}
+.over-arena-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:11px}
+.over-fighter{min-width:0;position:relative;border:1px solid #536e5b;border-radius:11px;padding:12px;background:linear-gradient(180deg,#283b31,#1c2b28 94%);display:flex;flex-direction:column;gap:7px}
+.over-fighter-enemy{border-color:#805349;background:linear-gradient(180deg,#392a2a,#292326 94%)}
+.over-fighter-head{display:flex;align-items:center;gap:9px;min-width:0;min-height:43px}
+.over-fighter-avatar{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:10px;border:1px solid #8ca18955;background:#ffffff0d;font-size:25px;line-height:1}
+.over-fighter-enemy .over-fighter-avatar{border-color:#c48b7655}
+.over-fighter-identity{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.over-fighter-identity small{font-size:9px;letter-spacing:.08em;font-weight:800;color:#b2c5b1}
+.over-fighter-enemy .over-fighter-identity small{color:#d7aea2}
+.over-fighter-identity strong{font-size:14px;color:#f1e7d3;line-height:1.2;overflow-wrap:anywhere}
+.over-combat-style{white-space:nowrap;font-size:9px;font-weight:750;color:#dfd0a7;background:#131e1b;border:1px solid #526b59;border-radius:6px;padding:4px 6px}
+.over-health-numbers{display:flex;justify-content:space-between;align-items:baseline;gap:7px;font-size:11px;color:#c3d6c8}
+.over-fighter-enemy .over-health-numbers{color:#e6b9ad}
+.over-health-numbers strong{font-size:15px;color:#fff0dc;font-variant-numeric:tabular-nums;white-space:nowrap}
+.over-hp-track{height:18px;overflow:hidden;border:1px solid #668371;border-radius:6px;background:#15211b;box-shadow:inset 0 2px 4px #0006}
+.over-fighter-enemy .over-hp-track{border-color:#94635a;background:#241919}
+.over-hp-fill{display:block;height:100%;background:linear-gradient(180deg,#74d5a0,#2d9465)!important;transition:width .22s ease;box-shadow:inset 0 1px 0 #e6ffe544}
+.over-fighter-enemy .over-hp-fill{background:linear-gradient(180deg,#f39181,#b84245)!important}
+.over-fighter-metrics{display:flex;flex-wrap:wrap;gap:5px 13px;justify-content:space-between;font-size:10px;color:#b6c8b8}
+.over-fighter-enemy .over-fighter-metrics{color:#d1b5ae}
+.over-fighter-metrics b{color:#f6dfaf;font-variant-numeric:tabular-nums}
+.over-action-meta{display:flex;justify-content:space-between;gap:6px;font-size:10px;margin-top:auto;color:#c2d3c4}
+.over-fighter-enemy .over-action-meta{color:#dfc2b9}
+.over-action-meta b{color:#f7e4b7;font-variant-numeric:tabular-nums}
+.over-action-track{height:5px;border-radius:4px;overflow:hidden;background:#101a19}
+.over-action-track span{display:block;height:100%;background:#a7d0ae;width:0;transition:width .07s linear}
+.over-fighter-enemy .over-action-track span{background:#d99580}
+.over-last-hit{font-size:10px;line-height:1.2;color:#a8bfae;min-height:12px}
+.over-fighter-enemy .over-last-hit{color:#cda79b}
+.over-arena-versus{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);background:#272621;border:1px solid #b69a6c;border-radius:50%;height:29px;width:29px;display:grid;place-items:center;font-size:9px;font-weight:900;color:#f3d39c;pointer-events:none;box-shadow:0 3px 9px #0008}
+.over-arena-footer{margin-top:9px;font-size:10px;color:#b1ad9f;line-height:1.4}
+.over-arena-footer span:last-child{color:#d9c59c;font-variant-numeric:tabular-nums}
+@media(max-width:650px){.over-arena{padding:8px;margin:8px 0 12px}.over-arena-grid{gap:7px}.over-fighter{padding:8px;gap:7px}.over-fighter-head{gap:5px;flex-wrap:wrap}.over-fighter-avatar{width:27px;height:27px;font-size:18px;border-radius:6px}.over-fighter-identity small{font-size:8px}.over-fighter-identity strong{font-size:11px}.over-combat-style{font-size:8px;padding:2px 4px}.over-health-numbers{font-size:9px;flex-wrap:wrap;gap:1px}.over-health-numbers strong{font-size:12px}.over-fighter-metrics{font-size:9px;gap:3px}.over-action-meta{font-size:9px}.over-arena-versus{height:23px;width:23px;font-size:8px}.over-arena-round{font-size:9px}.over-arena-footer{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.over-hp-fill,.over-action-track span{transition:none}}
 </style></head>
 <body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.35 · Overnian Metals</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.36 · Battle HUD</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -1773,7 +1817,7 @@ function startRaidWave(){
  autoEquipForEnemy(wave);
  if(wave.boss){const needs=belrothEntryRequirement();if(needs.length){note('🔒 Belroth requires '+needs.join(', '));toast('Belroth requires stronger gear and levels');return}}
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
- clearActivityFeed();state.active={type:'raid'};state.monsterHp=wave.hp;state.progress=0;
+ clearActivityFeed();ui.combatLastHit=null;state.active={type:'raid'};state.monsterHp=wave.hp;state.progress=0;
  note(`⛰️ Wave ${raid.wave+1}/${RAID_WAVES.length}: ${wave.name} · Weak to ${equippedCombatStyle()===wave.weakness?'your style':wave.weakness}`);
  renderProgress();renderMain();refreshDynamic();save();
 }
@@ -3073,7 +3117,7 @@ function startCombat(index){
  if(MONSTERS[index].area!==state.world.location&&!inDev()){toast('Travel to '+OVERNIA_PLACE_BY_ID[MONSTERS[index].area].short+' first');return}
  autoEquipForEnemy(MONSTERS[index]);
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
- clearActivityFeed();state.monsterIndex=index;state.monsterHp=MONSTERS[index].hp;
+ clearActivityFeed();ui.combatLastHit=null;state.monsterIndex=index;state.monsterHp=MONSTERS[index].hp;
  state.active={type:'combat'};state.progress=0;note(`⚔️ Fighting ${MONSTERS[index].name}`);renderProgress();refreshDynamic();save();
 }
 function stop(silent=false){state.active=null;state.progress=0;if(!silent)note('⏹ Activity stopped.');refreshDynamic();renderProgress();save()}
@@ -3264,6 +3308,7 @@ function completeCombat(){
   const staff=magicStaffEquipped();state.staffCharges[staff]--;state.stats.magicCasts=(state.stats.magicCasts||0)+1;
  }
  const damage=Math.random()<accuracy?1+Math.floor(Math.random()*maxHit):0;
+ let incoming=0,countered=false;
  const actualDamage=Math.min(damage,state.monsterHp);
  state.monsterHp=Math.max(0,state.monsterHp-damage);
  const combatXp=actualDamage*5;
@@ -3281,13 +3326,15 @@ function completeCombat(){
    state.monsterHp=m.hp;
   }
  }else{
+  countered=true;
   const effectiveDefence=defence*(1+mods.defencePct)+mods.defence;
   const hitChance=clamp(.65+.008*(m.atk-effectiveDefence),.10,.94);
   const rawHit=Math.random()<hitChance?1+Math.floor(Math.random()*m.maxHit):0;
   const mitigation=Math.floor((defence-1)/8)*(1+mods.defencePct)+(mods.block||0);
-  const incoming=Math.max(0,rawHit-Math.floor(mitigation));
+  incoming=Math.max(0,rawHit-Math.floor(mitigation));
   state.hp=Math.max(0,state.hp-incoming);
  }
+ if(!offlineRunning)ui.combatLastHit={mode:raidFight?'raid':'combat',enemy:m.name,dealt:actualDamage,taken:incoming,countered,at:performance.now()};
  tryAutoEat();
  if(state.hp<=0){state.hp=maxHp();note(`💔 Defeated by ${m.name}! ${raidFight?'Wave checkpoint saved. ':''}Respawned at full HP.`);stop(true)}
 }
@@ -4030,9 +4077,86 @@ function refreshCombatTraining(){
   if(level)level.textContent='Lv '+levelFromXp(state.xp[opt.dataset.combatXpSelect]||0);
  }
 }
+// Battle HUD: the two bars share one actual Overnia action tick. They are not independent timers.
+function combatArenaHtml(mode){
+ const raid=mode==='raid',enemy=raid?RAID_WAVES[raidState().wave]:MONSTERS[state.monsterIndex];
+ const active=state.active?.type===mode;
+ const style=equippedCombatStyle(),styleIcon={melee:'⚔️',ranged:'🏹',magic:'🪄'}[style]||'⚔️';
+ const playerMax=maxHp(),playerHp=clamp(Number(state.hp)||0,0,playerMax);
+ const enemyHp=active?clamp(Number(state.monsterHp)||0,0,enemy.hp):enemy.hp;
+ const hit=combatPreview(style,state.equipment,enemy);
+ return `<section class="over-arena" id="combatArena" data-arena-mode="${mode}" aria-label="${raid?'Raid':'Combat'} battle overview">
+  <div class="over-arena-heading"><span class="over-arena-kicker">⚔️ BATTLE</span><b data-arena-status>${active?'● In combat':'○ Ready to fight'}</b><span class="over-arena-round">${raid?'Wave '+(raidState().wave+1)+' / '+RAID_WAVES.length:'Overnia · '+esc(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness')}</span></div>
+  <div class="over-arena-grid">
+   <article class="over-fighter over-fighter-player">
+    <div class="over-fighter-head"><span class="over-fighter-avatar" aria-hidden="true">🛡️</span><div class="over-fighter-identity"><small>YOU · LEVEL <span data-arena-player-level>${combatLevel()}</span></small><strong>Adventurer</strong></div><span class="over-combat-style" data-arena-style>${styleIcon} ${style.toUpperCase()}</span></div>
+    <div class="over-health-numbers"><b>❤️ Your HP</b><strong data-arena-player-hp>${fmt(Math.ceil(playerHp))} / ${fmt(playerMax)}</strong></div>
+    <div class="over-hp-track" role="progressbar" aria-label="Your remaining Hitpoints" aria-valuemin="0" aria-valuemax="${playerMax}" aria-valuenow="${Math.ceil(playerHp)}" data-arena-player-track><span class="over-hp-fill" data-arena-player-fill style="width:${(playerHp/playerMax*100).toFixed(2)}%"></span></div>
+    <div class="over-fighter-metrics"><span>Max hit <b data-arena-player-max>${fmt(hit.maxHit)}</b></span><span>Hit chance <b data-arena-accuracy>${Math.round(hit.accuracy*100)}%</b></span></div>
+    <div class="over-action-meta"><span>⚔️ Your attack</span><b data-arena-player-action>${active?'Next exchange':'Not attacking'}</b></div>
+    <div class="over-action-track"><span data-arena-player-action-fill style="width:${active?clamp(state.progress,0,100):0}%"></span></div>
+    <div class="over-last-hit" data-arena-player-last aria-live="off">Last hit · —</div>
+   </article>
+   <div class="over-arena-versus" aria-hidden="true">VS</div>
+   <article class="over-fighter over-fighter-enemy">
+    <div class="over-fighter-head"><span class="over-fighter-avatar" data-arena-enemy-icon aria-hidden="true">${monsterIcon(enemy)}</span><div class="over-fighter-identity"><small>ENEMY · LEVEL <span data-arena-enemy-level>${enemy.level}</span></small><strong data-arena-enemy-name>${esc(enemy.name)}</strong></div></div>
+    <div class="over-health-numbers"><b>☠️ Enemy HP</b><strong data-arena-enemy-hp>${fmt(Math.ceil(enemyHp))} / ${fmt(enemy.hp)}</strong></div>
+    <div class="over-hp-track" role="progressbar" aria-label="Enemy remaining Hitpoints" aria-valuemin="0" aria-valuemax="${enemy.hp}" aria-valuenow="${Math.ceil(enemyHp)}" data-arena-enemy-track><span class="over-hp-fill" data-arena-enemy-fill style="width:${(enemyHp/enemy.hp*100).toFixed(2)}%"></span></div>
+    <div class="over-fighter-metrics"><span>Max hit <b data-arena-enemy-max>${fmt(enemy.maxHit)}</b></span><span>Weak to <b data-arena-weakness>${weaknessLabel(enemy.weakness)}</b></span></div>
+    <div class="over-action-meta"><span>⚔️ Counterattack</span><b data-arena-enemy-action>${active?'Next exchange':'Not attacking'}</b></div>
+    <div class="over-action-track"><span data-arena-enemy-action-fill style="width:${active?clamp(state.progress,0,100):0}%"></span></div>
+    <div class="over-last-hit" data-arena-enemy-last aria-live="off">Last hit · —</div>
+   </article>
+  </div>
+  <div class="over-arena-footer"><span data-arena-tip>${active?'Your attack resolves first; the enemy counters if still alive.':'Choose a monster to start fighting.'}</span><span data-arena-interval>${active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':''}</span></div>
+ </section>`;
+}
+function refreshCombatArena(){
+ const root=el('combatArena');if(!root)return;
+ const mode=root.dataset.arenaMode,raid=mode==='raid',enemy=raid?RAID_WAVES[raidState().wave]:MONSTERS[state.monsterIndex];
+ if(!enemy)return;
+ const active=state.active?.type===mode;
+ const set=(attr,value)=>{const node=root.querySelector(`[${attr}]`);if(node&&node.textContent!==String(value))node.textContent=value;return node};
+ const playerMax=Math.max(1,maxHp()),pHp=clamp(Number(state.hp)||0,0,playerMax);
+ const eHp=active?clamp(Number(state.monsterHp)||0,0,enemy.hp):enemy.hp;
+ const preview=combatPreview(equippedCombatStyle(),state.equipment,enemy);
+ const hpValues=[['player',pHp,playerMax],['enemy',eHp,enemy.hp]];
+ for(const [who,hp,max] of hpValues){
+  set(`data-arena-${who}-hp`,`${fmt(Math.ceil(hp))} / ${fmt(max)}`);
+  const bar=root.querySelector(`[data-arena-${who}-fill]`);if(bar)bar.style.width=(hp/max*100).toFixed(2)+'%';
+  const track=root.querySelector(`[data-arena-${who}-track]`);if(track){track.setAttribute('aria-valuenow',String(Math.ceil(hp)));track.setAttribute('aria-valuemax',String(max));}
+ }
+ const style=equippedCombatStyle();
+ set('data-arena-status',active?'● In combat':'○ Ready to fight');
+ set('data-arena-player-level',combatLevel());
+ set('data-arena-enemy-name',enemy.name);
+ set('data-arena-enemy-level',enemy.level);
+ set('data-arena-enemy-icon',monsterIcon(enemy));
+ set('data-arena-style',({melee:'⚔️',ranged:'🏹',magic:'🪄'}[style]||'⚔️')+' '+style.toUpperCase());
+ set('data-arena-player-max',fmt(preview.maxHit));
+ set('data-arena-accuracy',Math.round(preview.accuracy*100)+'%');
+ set('data-arena-enemy-max',fmt(enemy.maxHit));
+ set('data-arena-weakness',weaknessLabel(enemy.weakness));
+ const elapsed=active?clamp(Number(state.progress)||0,0,100):0;
+ const left=((100-elapsed)/100*actionDurationMs()/1000).toFixed(1)+'s';
+ set('data-arena-player-action',active?left:'Not attacking');
+ set('data-arena-enemy-action',active?left:'Not attacking');
+ for(const which of ['player','enemy']){
+  const bar=root.querySelector(`[data-arena-${which}-action-fill]`);if(bar)bar.style.width=elapsed.toFixed(2)+'%';
+ }
+ set('data-arena-tip',active?'Your attack resolves first; the enemy counters if still alive.':'Choose a monster to start fighting.');
+ set('data-arena-interval',active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':'');
+ const round=root.querySelector('.over-arena-round');if(round)round.textContent=raid?'Wave '+(raidState().wave+1)+' / '+RAID_WAVES.length:'Overnia · '+(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness');
+ const last=ui.combatLastHit;
+ const matching=last?.mode===mode&&last?.enemy===enemy.name&&performance.now()-last.at<12000;
+ set('data-arena-player-last',matching?(last.dealt?'Last hit · '+fmt(last.dealt)+' damage':'Last hit · Miss'):'Last hit · —');
+ set('data-arena-enemy-last',matching?(last.countered?(last.taken?'Last hit · '+fmt(last.taken)+' damage':'Last hit · Miss / blocked'):'No counterattack'):'Last hit · —');
+ root.classList.toggle('is-active',active);
+}
 function renderCombatMain(){
  const mods=gearMods();
  let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2></div></div>`;
+ html+=combatArenaHtml('combat');
  html+=equipmentLoadoutsHtml(true);
  html+=combatAutoSwitchHtml();
  html+=combatTrainingHtml();
@@ -4045,7 +4169,7 @@ function renderCombatMain(){
   <div id="magicStaffStatus" class="combat-resource-count"></div>
   <div class="flexrow">${[1,5,25].map(n=>`<button data-charge="${n}" class="charge-btn">🔹 Charge +${n} shard${n>1?'s':''}</button>`).join('')}</div>
   </section></div>`;
- html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><div class="bar healthbar"><div class="fill" id="healthFill" style="width:${state.hp/maxHp()*100}%"></div></div><small class="subdued">Each Hitpoints level adds 10 HP.</small></div>`;
+ html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><small class="subdued">Each Hitpoints level adds 10 HP.</small></div>`;
  html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
  html+=`<div class="combat-max-row"><span>⚔️ Max hits <small>(before enemy weakness)</small></span>${[['attack','Melee'],['ranged','Ranged'],['magic','Magic']].map(([style,name])=>`<b>${name} <strong data-current-max="${style}">${fmt(combatPreview(style).baseMax)}</strong></b>`).join('')}</div>`;
  html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
@@ -4127,6 +4251,7 @@ function renderCombatResources(){
 }
 function renderCombatLive(){
  if(ui.view!=='combat')return;
+ refreshCombatArena();
  refreshCombatTraining();
  const c=el('combatLevelDisplay');if(c)c.textContent=combatLevel();
  for(const skill of ['attack','strength','defence','ranged','magic']){
@@ -4529,13 +4654,14 @@ function renderJournalMain(){
 
 function renderRaidMain(){
  let html=`<div class="heading"><div><div class="eyebrow">⛰️ Adventure · Endgame</div><h2>Deep Mountain Expedition</h2><p class="section-description">Prepare your equipment, defeat 12 increasingly powerful waves, and claim Belroth's loot chest. Each completed wave saves your checkpoint. Change your weapon to change combat style between waves.</p></div><span class="recipe-badge level">Combat Lv ${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</span></div>`;
+ html+=combatArenaHtml('raid');
  html+=equipmentLoadoutsHtml(true);
  html+=combatTrainingHtml();
  html+=`<div class="combat-resource-grid" style="margin:14px 0">
  <section class="info-box"><h3>🏹 Ranged Ammo</h3><label class="form-label" for="rangedAmmo">Your arrows</label><select id="rangedAmmo"></select><div id="rangedStatus" class="small subdued"></div></section>
  <section class="info-box"><h3>🪄 Magic Staff</h3><div id="magicStaffStatus" class="small subdued"></div><div class="flexrow">${[1,5,25].map(n=>`<button data-charge="${n}" class="charge-btn">Charge +${n} shards</button>`).join('')}</div></section>
  </div>`;
- html+=`<section class="info-box"><div class="between"><strong>❤️ HP & Supplies</strong><span id="raidHp">${Math.ceil(state.hp)}/${maxHp()} HP</span></div><div class="bar healthbar"><div id="raidHealthFill" class="fill" style="width:${100*state.hp/maxHp()}%"></div></div>
+ html+=`<section class="info-box"><div class="between"><strong>🍽️ Food & Auto Eat</strong><span id="raidHp">${Math.ceil(state.hp)}/${maxHp()} HP</span></div>
  <div class="food-controls" id="combatFood"></div><div class="stat-grid"><label><span class="form-label">Auto Eat food</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(n=>`<option value="${n}" ${state.autoEat.threshold===n?'selected':''}>${n}% HP</option>`).join('')}</select></label></div><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><p id="autoEatFoodNote" class="small subdued"></p></section>`;
  html+=`<div id="raidPanel">${raidPanelHtml()}</div>`;
  el('main').innerHTML=html;
@@ -4543,6 +4669,7 @@ function renderRaidMain(){
 }
 function renderRaidLive(){
  if(ui.view!=='raid')return;
+ refreshCombatArena();
  refreshCombatTraining();
  if(el('raidHp'))el('raidHp').textContent=`${Math.ceil(state.hp)}/${maxHp()} HP`;
  if(el('raidHealthFill'))el('raidHealthFill').style.width=clamp(100*state.hp/maxHp(),0,100)+'%';
@@ -4952,6 +5079,7 @@ function tick(t){
   state.progress+=dt/actionDurationMs()*100;
   if(state.progress>=100){state.progress-=100;complete()}
   renderProgress();
+  if(ui.view==='combat'||ui.view==='raid')refreshCombatArena();
  }
  state.lastProcessedAt=Date.now();
  // Potion / fire counters use wall time. Updating once per second avoids excess DOM churn.

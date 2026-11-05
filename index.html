@@ -877,9 +877,32 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 
 .world-rumor{padding:10px 12px;margin-top:11px;background:#1c2c25;border-left:3px solid #af9461;color:#d5dac7;font-size:12px;line-height:1.45;border-radius:4px}
 .world-rumor b{color:#eed2a2}
+
+.world-map-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0 10px}
+.world-map-toolbar small{color:#b7c7b8;font-size:11px}
+.world-map-zoom{display:flex;gap:6px;flex-wrap:wrap}
+.world-map-zoom button{padding:6px 10px;font-size:11px;min-width:44px}
+.world-map-shell{height:390px;position:relative;overflow:hidden;border:1px solid #7b7158;border-radius:14px;background:linear-gradient(180deg,#34434b,#2b373b 42%,#233028);box-shadow:inset 0 0 0 3px #1118,0 8px 22px #0004}
+.world-map{height:auto;background:none;box-shadow:none;border:none;border-radius:0}
+.world-map-inner{position:absolute;inset:0;transform-origin:0 0;transition:transform .22s ease}
+.world-map-art{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.world-map-vignette{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 70px #060c10cc;background:linear-gradient(180deg,#f4f7ff10,transparent 18%,transparent 72%,#0000002e)}
+.world-pin{min-width:62px;max-width:104px;background:#24312bcc!important;border-color:#d7c28f!important}
+.world-pin span{font-size:22px}
+.world-pin small{font-size:10px}
+.world-pin.is-current{background:#504f3ae8!important;outline:2px solid #b5d5d8}
+.world-map-caption{left:14px;bottom:12px;font-size:10px;color:#dfe7d4;letter-spacing:.12em}
+.world-location-grid{gap:7px}
+.world-location{padding:8px!important}
+.world-hired-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-bottom:8px}
+.world-hired-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.world-hired-actions span{font-size:11px;color:#d5e5cb}
+@media(max-width:1000px){.world-map-shell{height:330px}}
+@media(max-width:650px){.world-map-shell{height:280px}.world-map-toolbar{align-items:flex-start}.world-map-toolbar small{width:100%}.world-pin{min-width:51px;max-width:78px}.world-pin span{font-size:18px}.world-pin small{font-size:9px}.world-hired-list{grid-template-columns:1fr}}
+
 </style></head>
 <body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.31 · The Living World</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.32 · Atlas & Hirelings</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -1840,10 +1863,18 @@ const OVERNIA_RUMORS={
   ['The Watcher','Six bells above. One bell below. The seventh always lies.']]
 };
 const OVERNIA_HIRELINGS=[
- {id:'fenn',name:'Fenn the Woodcutter',icon:'🪓',desc:'A cheerful villager who knows every trail into Elderbough.',skill:'woodcutting',item:'Logs',every:45000,fee:650,xp:4},
- {id:'bruni',name:'Bruni’s Apprentice',icon:'⛏️',desc:'A dwarf who brings back iron ore from the foothill veins.',skill:'mining',item:'Iron Ore',every:65000,fee:1600,xp:7},
- {id:'nella',name:'Nella the Angler',icon:'🎣',desc:'Supplies the village kitchens with trout from the river.',skill:'fishing',item:'Trout',every:50000,fee:1100,xp:5},
- {id:'eilith',name:'Eilith the Forager',icon:'🌿',desc:'An elven scout who returns with medicinal herbs.',skill:'agriculture',item:'Herb',every:80000,fee:2400,xp:9}
+ {id:'fenn',area:'elderbough',name:'Fenn the Woodcutter',icon:'🪓',desc:'A seasoned forester who cuts steady bundles from the safer Elderbough routes.',skill:'woodcutting',item:'Oak Logs',every:34000,fee:12000,xp:10},
+ {id:'nella',area:'hearthwick',name:'Nella the River Angler',icon:'🎣',desc:'A dockside expert who supplies inns with fresh trout and salmon.',skill:'fishing',item:'Trout',every:26000,fee:10000,xp:9},
+ {id:'bruni',area:'ironhollow',name:'Bruni’s Apprentice',icon:'⛏️',desc:'A young dwarf trusted with the upper mine veins and ore carts.',skill:'mining',item:'Iron Ore',every:30000,fee:14000,xp:11},
+ {id:'eilith',area:'elderbough',name:'Eilith the Forager',icon:'🌿',desc:'An elven scout who returns with herbs, roots and field knowledge.',skill:'agriculture',item:'Herb',every:38000,fee:15000,xp:12},
+ {id:'pella',area:'hearthwick',name:'Pella the Cook',icon:'🍲',desc:'A tavern cook who turns market fish into filling meals while you adventure.',skill:'cooking',item:'Cooked Trout',every:52000,fee:18000,xp:13},
+ {id:'garron',area:'stonewake',name:'Garron the Hunter',icon:'🏹',desc:'A hillside trapper who gathers feathers and arrows from the giant road.',skill:'fletching',item:'Feather',every:19000,fee:11000,xp:8},
+ {id:'sivra',area:'hearthwick',name:'Sivra the Fletcher',icon:'🪶',desc:'A patient craftswoman who delivers ready-to-use arrow shafts.',skill:'fletching',item:'Normal Arrow Shaft',every:28000,fee:13000,xp:10},
+ {id:'rurik',area:'ironhollow',name:'Rurik Forgehand',icon:'🔥',desc:'A dwarven smith who turns ore stores into useful bars and training insights.',skill:'smithing',item:'Iron Bar',every:56000,fee:22000,xp:16},
+ {id:'mira',area:'hearthwick',name:'Mira the Tailor',icon:'🧵',desc:'A market craftswoman who prepares cloth and simple components.',skill:'crafting',item:'Linen',every:42000,fee:16000,xp:12},
+ {id:'ysra',area:'mirefen',name:'Witch Ysra',icon:'🧪',desc:'An unsettling marsh alchemist who brews practical healing tonics.',skill:'alchemy',item:'Minor Healing Potion',every:64000,fee:26000,xp:18},
+ {id:'lys',area:'starfall',name:'Lys the Starchanter',icon:'✨',desc:'An astronomer-mystic who refines stray soul shards into useful enchantment stock.',skill:'enchanting',item:'Faded Soul Gem',every:78000,fee:32000,xp:22},
+ {id:'toma',area:'highspire',name:'Toma the Goat-Herder',icon:'🥩',desc:'A mountain herder who trades in hardy trail rations and smoked meat.',skill:'agriculture',item:'Cooked Lobster',every:90000,fee:38000,xp:25}
 ];
 const OVERNIA_HIRE_BY_ID=Object.fromEntries(OVERNIA_HIRELINGS.map(x=>[x.id,x]));
 // Journal objectives provide longer-term progression and Coins for shopping.
@@ -2530,7 +2561,7 @@ function newGame(){return {
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
  loadouts:defaultLoadouts(),autoSwitchWeakness:false,raidAutoRun:true,
  recipeLayoutVersion:25,
- hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hire:null},raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
+ hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
  fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
@@ -2689,8 +2720,9 @@ function restore(){
   raw.recipeLayoutVersion=25;
   const migratedStats={...stats,bySkill:{...(stats.bySkill||{})}};
   if(migratedStats.bySkill.herblore!==undefined&&migratedStats.bySkill.alchemy===undefined)migratedStats.bySkill.alchemy=migratedStats.bySkill.herblore;
+  const migratedHires=Array.isArray(raw.world?.hires)?raw.world.hires:(raw.world?.hire?[raw.world.hire]:[]);
   state={...base,...raw,xp:{...base.xp,...raw.xp},
-   bank:{...raw.bank},potions:{...(raw.potions||{})},raid:{...base.raid,...(raw.raid||{})},world:{...base.world,...(raw.world||{}),visited:Array.isArray(raw.world?.visited)?raw.world.visited.filter(id=>OVERNIA_PLACE_BY_ID[id]):['hearthwick'],started:{...(raw.world?.started||{})},completed:Array.isArray(raw.world?.completed)?raw.world.completed:[],hire:raw.world?.hire||null},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
+   bank:{...raw.bank},potions:{...(raw.potions||{})},raid:{...base.raid,...(raw.raid||{})},world:{...base.world,...(raw.world||{}),visited:Array.isArray(raw.world?.visited)?raw.world.visited.filter(id=>OVERNIA_PLACE_BY_ID[id]):['hearthwick'],started:{...(raw.world?.started||{})},completed:Array.isArray(raw.world?.completed)?raw.world.completed:[],hires:migratedHires.filter(h=>h&&typeof h.id==='string'),mapZoom:Math.min(2.4,Math.max(1,Number(raw.world?.mapZoom)||1))},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
    loadouts:normalizeLoadouts(raw.loadouts),autoSwitchWeakness:raw.autoSwitchWeakness===true,raidAutoRun:raw.raidAutoRun!==false,
    rangedAmmo:raw.rangedAmmo||'Bronze Arrows',staffCharges:{...(raw.staffCharges||{})},
    autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
@@ -3411,36 +3443,54 @@ function claimWorldQuest(id){
  state.world.completed.push(id);
  note(`🏅 ${quest.title} completed · +${fmt(quest.coins)} GP!`);save();render();
 }
-function activeOverniaHire(){
- const hire=state.world?.hire;
- return hire&&OVERNIA_HIRE_BY_ID[hire.id]?hire:null;
+function activeOverniaHires(){
+ const hires=Array.isArray(state.world?.hires)?state.world.hires:[];
+ return hires.filter(h=>h&&OVERNIA_HIRE_BY_ID[h.id]);
 }
+function activeOverniaHire(){return activeOverniaHires()[0]||null}
 function hireOverniaHelper(id){
- if(state.world.location!=='hearthwick')return toast('Hire helpers in Hearthwick Village');
- if(activeOverniaHire())return toast('You already have a hired helper');
- const helper=OVERNIA_HIRE_BY_ID[id];if(!helper||count('Coins')<helper.fee)return toast('Not enough Coins');
+ const helper=OVERNIA_HIRE_BY_ID[id];
+ if(!helper)return;
+ if(state.world.location!==helper.area)return toast(`Hire ${helper.name} in ${OVERNIA_PLACE_BY_ID[helper.area]?.name||'their home region'}`);
+ const hires=activeOverniaHires();
+ if(hires.length>=2)return toast('You can only manage two active helpers at once');
+ if(hires.some(h=>h.id===id))return toast(`${helper.name} is already under contract`);
+ if(count('Coins')<helper.fee)return toast('Not enough Coins');
  const now=Date.now();
  add('Coins',-helper.fee);
- state.world.hire={id,until:now+2*3600*1000,lastAt:now,carry:0};
+ const duration=2*3600*1000;
+ state.world.hires=[...hires,{id,until:now+duration,lastAt:now,carry:0}];
  note(`🤝 ${helper.name} hired for 2 hours.`);save();renderWorldMain();
 }
+function endOverniaHire(id){
+ const hires=activeOverniaHires();
+ const hire=hires.find(h=>h.id===id);if(!hire)return;
+ processHireling(Date.now());
+ state.world.hires=activeOverniaHires().filter(h=>h.id!==id);
+ note(`⌛ Contract ended: ${OVERNIA_HIRE_BY_ID[id]?.name||'Helper'}.`);save();renderWorldMain();
+}
 function processHireling(now=Date.now()){
- const hire=activeOverniaHire();if(!hire)return;
- const helper=OVERNIA_HIRE_BY_ID[hire.id];
- const start=Math.max(0,Number(hire.lastAt)||now);
- const end=Math.max(start,Math.min(now,Number(hire.until)||now));
- const duration=Math.min(24*3600000,Math.max(0,end-start));
- const accumulated=Math.max(0,Number(hire.carry)||0)+duration;
- const units=Math.min(100000,Math.floor(accumulated/helper.every));
- hire.carry=accumulated-units*helper.every;
- hire.lastAt=end;
- if(units>0){
-  if(add(helper.item,units)){
-   gainXp(helper.skill,helper.xp*units);
-   if(!offlineRunning)note(`${helper.icon} ${helper.name} returned with ${fmt(units)} ${helper.item}.`);
-  }else if(!offlineRunning)note(`🏦 ${helper.name} could not deposit their supplies. Free a bank slot.`);
+ const hires=activeOverniaHires();if(!hires.length)return;
+ const remaining=[];
+ for(const hire of hires){
+  const helper=OVERNIA_HIRE_BY_ID[hire.id];if(!helper)continue;
+  const start=Math.max(0,Number(hire.lastAt)||now);
+  const end=Math.max(start,Math.min(now,Number(hire.until)||now));
+  const duration=Math.min(24*3600000,Math.max(0,end-start));
+  const accumulated=Math.max(0,Number(hire.carry)||0)+duration;
+  const units=Math.min(100000,Math.floor(accumulated/helper.every));
+  hire.carry=accumulated-units*helper.every;
+  hire.lastAt=end;
+  if(units>0){
+   if(add(helper.item,units)){
+    gainXp(helper.skill,helper.xp*units);
+    if(!offlineRunning)note(`${helper.icon} ${helper.name} delivered ${fmt(units)} ${helper.item}.`);
+   }else if(!offlineRunning)note(`🏦 ${helper.name} could not deposit their supplies. Free a bank slot.`)
+  }
+  if(now<hire.until)remaining.push(hire);
+  else if(!offlineRunning)note(`⌛ ${helper.name}'s contract ended.`);
  }
- if(now>=hire.until){state.world.hire=null;if(!offlineRunning)note(`⌛ ${helper.name}'s contract ended.`)}
+ state.world.hires=remaining;
 }
 function overniaMiniQuest(quest){
  const done=state.world.completed.includes(quest.id),accepted=!!state.world.started[quest.id];
@@ -3463,33 +3513,48 @@ function overhearOverniaRumor(){
  const slot=el('worldRumor');if(slot)slot.innerHTML=`<b>${esc(rumor[0])}:</b> “${esc(rumor[1])}”`;
 }
 function renderWorldMain(){
- const place=overniaAt(),world=state.world,hire=activeOverniaHire();
+ const place=overniaAt(),world=state.world,hires=activeOverniaHires();
  const areaMobs=MONSTERS.filter(m=>m.area===place.id);
  const quests=OVERNIA_WORLD_QUESTS.filter(q=>q.area===place.id);
+ const zoom=Math.min(2.4,Math.max(1,Number(state.world.mapZoom)||1));
+ const tx=(50-zoom*place.x).toFixed(2),ty=(50-zoom*place.y).toFixed(2);
  const pins=OVERNIA_PLACES.map(p=>`<button class="world-pin ${p.id===place.id?'is-current':''}" data-world-travel="${p.id}" style="left:${p.x}%;top:${p.y}%" aria-label="Travel to ${esc(p.name)}" title="${esc(p.name)}"><span>${p.icon}</span><small>${esc(p.short)}</small></button>`).join('');
- const help=hire?OVERNIA_HIRE_BY_ID[hire.id]:null;
- const remaining=hire?Math.max(0,Math.ceil((hire.until-Date.now())/60000)):0;
+ const availableHelpers=OVERNIA_HIRELINGS.filter(h=>h.area===place.id&&!hires.some(active=>active.id===h.id));
  const rumor=(OVERNIA_RUMORS[place.id]||OVERNIA_RUMORS.hearthwick)[(Number(ui.overniaRumor)||0)%(OVERNIA_RUMORS[place.id]?.length||3)];
- el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">The living lands of Overnia</div><h2>🗺️ World Map</h2><p class="section-description">An ancient mountain, a forest that remembers, and a village full of stories.</p></div><span class="recipe-badge">${world.visited.length} / ${OVERNIA_PLACES.length} explored</span></div>
- <div class="world-map" aria-label="Overnia interactive regional map">
-  <svg class="world-map-art" viewBox="0 0 900 410" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><linearGradient id="ovGround" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#204937"/><stop offset=".53" stop-color="#3c5f47"/><stop offset="1" stop-color="#71694c"/></linearGradient></defs>
-   <rect width="900" height="410" fill="url(#ovGround)"/><path d="M470 -20L625 135 695 30 810 175 900 80V-20Z" fill="#708b8c"/><path d="M585 5L626 135 697 24 760 119 806 25 900 80V-20Z" fill="#a8acaa"/><path d="M575 34L613 90 626 135 645 91 692 39 669 63 636 65 618 52Z" fill="#e0e1d4"/><path d="M695 22L749 106 806 25 785 72 755 56 737 62Z" fill="#e6e9dc"/>
-   <path d="M-10 85Q112 15 220 90T445 72T640 160L910 260V430H-10Z" fill="#365d46"/><path d="M-20 170Q145 135 290 220T590 225T920 325V430H-10Z" fill="#456f52"/><path d="M325 -10Q405 104 330 180Q250 250 370 305Q490 335 470 420" fill="none" stroke="#6fb6c0" stroke-width="25" opacity=".67"/><path d="M325 -10Q405 104 330 180Q250 250 370 305Q490 335 470 420" fill="none" stroke="#a0d1ca" stroke-width="6" opacity=".7"/>
-   <path d="M20 390Q170 310 295 330Q415 350 470 280Q520 220 610 244Q700 240 800 185" stroke="#c3ae7b" stroke-width="14" fill="none" stroke-linecap="round" opacity=".75" stroke-dasharray="7 13"/>
-   ${Array.from({length:24},(_,i)=>{const x=35+(i*71)%865,y=90+(i*79)%290;return `<path d="M${x} ${y} l-11 17 h7 l-7 12 h22 l-7 -12 h7Z" fill="${i%3===0?'#1b3e30':'#234c35'}" opacity=".75"/>`}).join('')}
-   <g fill="#acac90"><rect x="416" y="274" width="45" height="36" rx="2"/><path d="M405 274L440 249 473 274Z" fill="#a46e50"/><rect x="440" y="287" width="8" height="23" fill="#4d4030"/></g>
-  </svg><div class="world-map-vignette"></div>${pins}<div class="world-map-caption">OVERNIA · Seven regions · Travel instantly (prototype)</div></div>
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">The living lands of Overnia</div><h2>🗺️ World Map</h2><p class="section-description">Travel the holds, forests and mountain roads of Overnia. Zoom in to inspect the routes and landmarks.</p></div><span class="recipe-badge">${world.visited.length} / ${OVERNIA_PLACES.length} explored</span></div>
+ <div class="world-map-toolbar"><div class="world-map-zoom"><button data-world-zoom="out">−</button><button data-world-zoom="reset">Full</button><button data-world-zoom="in">＋</button><button data-world-zoom="focus">Focus</button></div><small>Zoom ${zoom.toFixed(1)}× · current view centers on ${esc(place.short)}</small></div>
+ <div class="world-map-shell" aria-label="Overnia interactive regional map"><div class="world-map-inner" style="transform:translate(${tx}%,${ty}%) scale(${zoom})">
+  <svg class="world-map-art" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><linearGradient id="ovSea" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#49636c"/><stop offset="1" stop-color="#30424a"/></linearGradient><linearGradient id="ovLand" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#566a4f"/><stop offset=".55" stop-color="#738164"/><stop offset="1" stop-color="#8b7a5d"/></linearGradient><linearGradient id="ovSnow" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#eef2ef"/><stop offset="1" stop-color="#aeb8b0"/></linearGradient></defs>
+   <rect width="1000" height="620" fill="url(#ovSea)"/>
+   <path d="M72 563Q148 501 255 507T420 466T587 461T738 401T919 359L950 563L72 563Z" fill="#2a3940" opacity=".42"/>
+   <path d="M25 525Q125 480 228 475T436 430T615 436T802 368T969 315L1000 620H0Z" fill="url(#ovLand)"/>
+   <path d="M84 449Q160 372 222 321T361 246T485 182T599 188T740 143T919 70" fill="none" stroke="#7f8c6e" stroke-width="56" opacity=".28" stroke-linecap="round"/>
+   <path d="M84 449Q160 372 222 321T361 246T485 182T599 188T740 143T919 70" fill="none" stroke="#90a086" stroke-width="22" opacity=".5" stroke-linecap="round"/>
+   <path d="M735 23l59 96 35-44 44 69 35-32 39 54 24 154-262 18 7-88 18-72 23-79z" fill="#7f8e92"/>
+   <path d="M687 88l46 74 31-39 37 60 28-31 33 44 24 120-214 11 11-73 4-74z" fill="#96a0a1"/>
+   <path d="M645 162l34 48 26-25 24 33 24-25 23 30 22 70-190 10 11-60 26-53z" fill="#adb4ae"/>
+   <path d="M712 70l23 41 26-22 25 34 22-24 18 23 20 38" fill="none" stroke="url(#ovSnow)" stroke-width="20" stroke-linecap="round" opacity=".95"/>
+   <path d="M408 6Q447 118 404 196Q360 273 417 335Q477 401 466 508" fill="none" stroke="#6db2bf" stroke-width="27" opacity=".64" stroke-linecap="round"/>
+   <path d="M408 6Q447 118 404 196Q360 273 417 335Q477 401 466 508" fill="none" stroke="#a4d4d5" stroke-width="7" opacity=".78" stroke-linecap="round"/>
+   <path d="M111 520Q200 469 297 452T501 421T690 374T832 283" fill="none" stroke="#ccb585" stroke-width="13" opacity=".8" stroke-dasharray="1 24" stroke-linecap="round"/>
+   <path d="M117 513Q205 462 303 444T508 413T692 366T835 276" fill="none" stroke="#776146" stroke-width="3" opacity=".7" stroke-dasharray="12 16" stroke-linecap="round"/>
+   <g opacity=".8">${Array.from({length:34},(_,i)=>{const x=90+(i*71)%820,y=150+(i*57)%330;return `<path d="M${x} ${y} l-14 25 h9 l-10 16 h29 l-9 -16 h10Z" fill="${i%4===0?'#294833':i%3===0?'#33543a':'#406444'}"/>`;}).join('')}</g>
+   <g opacity=".82">${Array.from({length:22},(_,i)=>{const x=560+(i*37)%250,y=130+(i*29)%130;return `<path d="M${x} ${y} l-22 33 h16 l-13 22 h39 l-13 -22 h16Z" fill="${i%2===0?'#8a9898':'#9fa8a5'}"/>`;}).join('')}</g>
+   <g fill="#b39672" stroke="#4e3a29" stroke-width="3"><path d="M453 428h70v47h-70z"/><path d="M441 428l48-41 48 41z" fill="#915f44"/><rect x="482" y="448" width="13" height="27" fill="#4b3829"/><circle cx="459" cy="451" r="7" fill="#f3d07a"/><circle cx="516" cy="451" r="7" fill="#f3d07a"/><rect x="433" y="442" width="7" height="20" fill="#604733"/><rect x="527" y="442" width="7" height="20" fill="#604733"/></g>
+  </svg><div class="world-map-vignette"></div>${pins}</div><div class="world-map-caption">OVERNIA · Click a region to travel · Zoom in to inspect holds, roads and the mountain spine</div></div>
  <div class="world-location-grid">${OVERNIA_PLACES.map(p=>`<button data-world-travel="${p.id}" class="world-location ${p.id===place.id?'is-current':''}"><span>${p.icon}</span><b>${esc(p.short)}</b><small>${esc(p.kind)}</small></button>`).join('')}</div>
  <section class="world-scene"><div class="world-scene-head"><div><div class="eyebrow">Now exploring</div><h3>${place.icon} ${esc(place.name)}</h3></div><span class="recipe-badge">${esc(place.kind)}</span></div><p>${esc(place.description)}</p><p class="world-lore">${esc(place.detail)}</p><div class="world-npcs">🗣️ ${esc(place.people)}</div><div class="world-rumor" id="worldRumor"><b>${esc(rumor[0])}:</b> “${esc(rumor[1])}”</div><div class="world-scene-actions"><button data-world-rumor>💬 Hear another tale</button><button data-nav="combat">⚔️ Hunt ${areaMobs.length} local creatures</button>${place.id==='hearthwick'?'<button data-nav="shop">🛒 Village market</button>':''}</div></section>
  <div class="world-section-head"><h3>📜 Local stories</h3><small>${quests.filter(q=>world.completed.includes(q.id)).length}/${quests.length} finished</small></div>
  <div class="world-quests">${quests.map(overniaMiniQuest).join('')}</div>
- <section class="world-hire-panel"><div class="world-section-head"><h3>🤝 Hire a helping hand</h3><small>Contracts · 2 hours</small></div>
- ${help?`<div class="world-hired"><b>${help.icon} ${esc(help.name)}</b><span>Collecting ${esc(help.item)} · ~<span id="worldHireTime">${remaining} min</span> remaining</span></div>`:place.id==='hearthwick'?`<div class="world-hire-grid">${OVERNIA_HIRELINGS.map(h=>`<div class="world-worker"><b>${h.icon} ${esc(h.name)}</b><small>${esc(h.desc)}</small><div class="between"><span>+1 ${esc(h.item)} / ${Math.round(h.every/1000)}s · minor ${label(h.skill)} XP</span></div><button data-world-hire="${h.id}" ${count('Coins')<h.fee?'disabled':''}>Hire · ${fmt(h.fee)} GP</button></div>`).join('')}</div>`:'<p class="subdued small">Visit Hearthwick Village to hire a villager, dwarf or elven scout. Hired help continues working wherever you travel.</p>'}</section>
+ <section class="world-hire-panel"><div class="world-section-head"><h3>🤝 Hire local help</h3><small>${hires.length}/2 active · helpers work for 2 hours</small></div>
+ ${hires.length?`<div class="world-hired-list">${hires.map(h=>{const helper=OVERNIA_HIRE_BY_ID[h.id],mins=Math.max(0,Math.ceil((h.until-Date.now())/60000));return `<div class="world-hired"><div><b>${helper.icon} ${esc(helper.name)}</b><div class="subdued small">${OVERNIA_PLACE_BY_ID[helper.area]?.short||'Unknown'} · ${esc(helper.item)} · about 1 every ${Math.round(helper.every/1000)}s</div></div><div class="world-hired-actions"><span data-world-hire-time="${esc(h.id)}">${mins} min left</span><button data-world-hire-end="${esc(h.id)}">End contract</button></div></div>`;}).join('')}</div>`:''}
+ ${availableHelpers.length&&hires.length<2?`<div class="world-hire-grid">${availableHelpers.map(h=>`<div class="world-worker"><b>${h.icon} ${esc(h.name)}</b><small>${esc(h.desc)}</small><div class="between"><span>${OVERNIA_PLACE_BY_ID[h.area]?.short||''}</span><span>Fee ${fmt(h.fee)} GP</span></div><div class="between"><span>+1 ${esc(h.item)} / ${Math.round(h.every/1000)}s</span><span>+${fmt(h.xp)} ${label(h.skill)} XP</span></div><button data-world-hire="${h.id}" ${count('Coins')<h.fee?'disabled':''}>Hire</button></div>`).join('')}</div>`:`<p class="subdued small">${hires.length>=2?'You already have two active helpers.':'No helpers are currently available here. Travel to another settlement or landmark to recruit local specialists.'}</p>`}</section>
  <details class="world-chronicle"><summary>📖 Chronicles of Overnia · The Seven Lost Bells</summary><p>Old songs say the mountain once held seven bells, forged by the first dwarven clans to warn forest, village and sky of what slept below. One by one, their voices went silent. The elves believe the roots of Elderbough swallowed the echoes; the dwarves say something below Ironhollow has begun to ring them from inside the stone.</p><p>Hearthwick still celebrates the Lantern Feast each autumn. Between the laughter of tavern regulars, frightened merchants speak of missing stars over Starfall and a crown buried under Highspire. Nobody agrees who wore that crown—only that Belroth remembers.</p></details>`;
 }
 function refreshWorldLive(){
- const timer=el('worldHireTime');if(timer){const h=activeOverniaHire();timer.textContent=h?Math.max(0,Math.ceil((h.until-Date.now())/60000))+' min':'Finished'}
+ document.querySelectorAll('[data-world-hire-time]').forEach(node=>{const id=node.getAttribute('data-world-hire-time');const hire=activeOverniaHires().find(h=>h.id===id);node.textContent=hire?Math.max(0,Math.ceil((hire.until-Date.now())/60000))+' min left':'Finished';});
  for(const quest of OVERNIA_WORLD_QUESTS.filter(q=>q.area===state.world.location)){
+
   if(!state.world.started[quest.id]||state.world.completed.includes(quest.id))continue;
   const progress=Math.min(quest.objective.amount,worldQuestProgress(quest));
   const countNode=el('main')?.querySelector(`[data-world-quest-count="${quest.id}"]`);
@@ -4369,9 +4434,11 @@ function handleClick(e){
  }
  if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
  if(b.hasAttribute('data-world-travel'))return travelToOvernia(b.dataset.worldTravel);
+ if(b.hasAttribute('data-world-zoom')){const action=b.dataset.worldZoom;const levels=[1,1.35,1.75,2.1,2.4];const current=Math.min(2.4,Math.max(1,Number(state.world.mapZoom)||1));let next=current;if(action==='in')next=levels.find(v=>v>current+0.01)||2.4;else if(action==='out')next=[...levels].reverse().find(v=>v<current-0.01)||1;else if(action==='focus')next=Math.max(current,1.75);else next=1;state.world.mapZoom=next;save();renderWorldMain();return;}
  if(b.hasAttribute('data-world-accept'))return acceptWorldQuest(b.dataset.worldAccept);
  if(b.hasAttribute('data-world-claim'))return claimWorldQuest(b.dataset.worldClaim);
  if(b.hasAttribute('data-world-hire'))return hireOverniaHelper(b.dataset.worldHire);
+ if(b.hasAttribute('data-world-hire-end'))return endOverniaHire(b.dataset.worldHireEnd);
  if(b.hasAttribute('data-world-rumor'))return overhearOverniaRumor();
  if(b.hasAttribute('data-skills-filter')){ui.skillsFilter=b.dataset.skillsFilter;renderSkillsOverview();return;}
  if(b.hasAttribute('data-skill-open')){const skill=b.dataset.skillOpen;if(!Object.hasOwn(SKILLS,skill))return; if(SKILLS[skill].combat){navigate('combat');}else navigate(skill);return;}
@@ -4807,6 +4874,6 @@ async function boot(){
 }
 boot();
 // Expose test helpers for regression checks.
-window.IdleRPGDebug={OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
+window.IdleRPGDebug={OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,activeOverniaHires,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
 </script></body></html>

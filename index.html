@@ -1350,7 +1350,7 @@ const SKILLS = {
  smithing:{icon:'🔨',description:'Forge weapons and armour. Gallium comes from the cliff seams; Oxedo is the dark alloy of the deep dwarven holds.',actions:[]},
  crafting:{icon:'🧵',description:'Cut gems, process hides and wool, craft armour, amulets, and powerful rings.',actions:[]},
  cooking:{icon:'🍳',description:'Cook fish and meals over a lit wood fire. Fuel burns for real time, even while you train another skill.',actions:[]},
- agriculture:{icon:'🌱',description:'Grow crops, herbs and animal feed. Care for animals for wool, hides, milk, meat and eggs.',actions:[
+ agriculture:{icon:'🌱',description:'Grow crops and rare herbs, raise livestock and griffins, then hatch and breed dragons at high levels. Dragon Eggs drop from dragon combat.',actions:[
    A('Gather Common Herbs','Herb',1,20,{},'Crops'),
    A('Harvest Potatoes','Potato',5,28,{},'Crops'),
    A('Grow Wheat','Wheat',8,30,{},'Crops'),
@@ -1368,9 +1368,17 @@ const SKILLS = {
    A('Milk Cow','Milk',15,50,{'Wheat':2},'Animals',{quantity:2}),
    A('Raise Cattle','Raw Beef',20,65,{'Wheat':3},'Animals',{bonus:{'Cowhide':1}}),
    A('Feed Lambs','Raw Lamb',25,75,{'Wheat':2},'Animals',{bonus:{'Wool':1}}),
-   A('Collect Feathers','Feather',35,90,{'Wheat':2},'Animals',{quantity:5}),
+   A('Collect Feathers','Feather',10,90,{'Wheat':2},'Animals',{quantity:5}),
    A('Raise Mountain Goats','Goat Horn',55,145,{'Corn':2},'Animals',{bonus:{'Milk':2}}),
-   A('Breed Exotic Cattle','Thick Hide',75,255,{'Corn':3,'Sunfruit':1},'Animals')
+   A('Breed Exotic Cattle','Thick Hide',75,255,{'Corn':3,'Sunfruit':1},'Animals'),
+   // New actions are appended to preserve old save action indexes.
+   A('Tend Beehives','Honey',35,105,{'Flax':1},'Animals',{quantity:2}),
+   A('Raise Wild Boars','Raw Beef',45,135,{'Corn':2},'Animals',{quantity:2,bonus:{'Thick Hide':1}}),
+   A('Cultivate Moonflowers','Moonflower',60,195,{'Highland Seed':1,'Mystic Herb':1},'Crops',{quantity:2}),
+   A('Breed Highland Griffins','Griffin Feather',80,340,{'Sunfruit':2,'Raw Chicken':2},'Animals',{quantity:3,chanceBonus:{item:'Griffin Talon',chance:.12}}),
+   A('Hatch Dragon Egg','Dragon Hatchling',90,550,{'Dragon Egg':1,'Sunfruit':3,'Mystic Herb':2},'Dragons',{chanceBonus:{item:'Dragon Scale',chance:.30,quantity:2}}),
+   A('Raise Young Dragon','Dragon Scale',95,700,{'Dragon Hatchling':1,'Raw Beef':4,'Mystic Herb':2},'Dragons',{quantity:5,chanceBonus:{item:'Dragon Arcane Core',chance:.035}}),
+   A('Breed Elder Dragons','Dragon Scale',99,1050,{'Dragon Egg':1,'Dragon Hatchling':1,'Sunfruit':5,'Mystic Herb':3},'Dragons',{quantity:10,chanceBonus:{item:'Dragon Bowstring',chance:.15}})
  ]},
  alchemy:{icon:'⚗️',description:'Brew healing, combat and skill potions from farming, monster materials and minerals.',actions:[
    A('Brew Healing Potion','Healing Potion',1,45,{'Herb':2,'Berries':1},'Healing'),
@@ -1833,6 +1841,16 @@ const OVERNIA_NEW_MONSTERS=[
 ];
 for(const [name,level,hp,def,atk,maxHit,weakness,area,loot] of OVERNIA_NEW_MONSTERS)
  MONSTERS.push({name,level,hp,def,atk,maxHit,weakness,area,loot,unique:null});
+// High-level dragon hunts. Appended to keep existing monster indexes stable.
+MONSTERS.push(
+ {name:'Ember Dragon',level:96,hp:1100,def:94,atk:101,maxHit:70,weakness:'magic',area:'highspire',loot:{Coins:290,'Dragon Scale':3},unique:null,dragonEggChance:.065},
+ {name:'Elder Sky Dragon',level:112,hp:1750,def:110,atk:116,maxHit:90,weakness:'ranged',area:'highspire',loot:{Coins:480,'Dragon Scale':5},unique:null,dragonEggChance:.11}
+);
+// Existing drakes and ancient dragons can also drop eggs.
+for(const foe of MONSTERS){
+ if(foe.name==='Frostfang Drake')foe.dragonEggChance=.025;
+ if(foe.name==='Ancient Dragon')foe.dragonEggChance=.045;
+}
 // v3.39: enemy damage follows the same 1–120 progression as player attacks.
 // Values represent RAW max hits before the player's defence/armour reduction.
 // Interpolating anchored tiers makes newly added monsters scale automatically,
@@ -3462,6 +3480,12 @@ function completeSkill(){
  if(action.bonus)for(const [item,n] of Object.entries(action.bonus)){
   if(add(item,n))bonuses.push(`${n} ${item}`);else note(`🏦 Extra ${item} could not fit in bank.`);
  }
+ // Rare animal/dragon rewards roll independently of regular harvests.
+ if(action.chanceBonus&&Math.random()<action.chanceBonus.chance){
+  const item=action.chanceBonus.item,n=action.chanceBonus.quantity||1;
+  if(add(item,n))bonuses.push(`${n} ${item} (rare)`);
+  else note(`🏦 Rare ${item} could not fit in bank.`);
+ }
  const xp=gainXp(skill,action.xp);
  if(['woodcutting','fishing','mining','agriculture'].includes(skill))rollSoulGem(skill);
  state.stats.bySkill[skill]=(state.stats.bySkill[skill]||0)+1;
@@ -3517,6 +3541,11 @@ function applyMonsterLoot(m){
    if(add(item,qty)){drops.push(`${qty} ${item}`);if(isCoins)state.stats.coinsEarned+=qty}
    else note(`🏦 Bank full; missed ${item} drop.`);
   }
+ }
+ // Dragon Eggs are rare independent drops, never guaranteed by normal loot.
+ if(m.dragonEggChance&&Math.random()<m.dragonEggChance){
+  if(add('Dragon Egg',1)){drops.push('🥚 Dragon Egg');note('🥚 RARE DROP! Dragon Egg')}
+  else note('🏦 Bank full; missed Dragon Egg drop.');
  }
  // All side tables are separate rolls. Regular loot and treasure never replace them.
  for(const type of ['trash','seed','gem']){
@@ -4281,7 +4310,7 @@ function recipeCard(action,index,skill){
  return `<article class="recipe-card ${locked?'is-locked':''} ${selected?'is-focused':''}" data-recipe="${index}">
   <button type="button" class="recipe-select" data-recipe-pick="${index}" aria-pressed="${selected?'true':'false'}" title="View ${esc(action.name)} details">
    <span class="recipe-illustration">${itemArt(action.output)}</span>
-   <span class="recipe-select-copy"><strong class="recipe-title">${esc(action.name)}</strong><small class="recipe-detail">Lv ${action.level} · +${fmt(action.xp)} XP · ×${action.quantity||1}</small></span>
+   <span class="recipe-select-copy"><strong class="recipe-title">${esc(action.name)}</strong><small class="recipe-detail">Lv ${action.level} · +${fmt(action.xp)} XP · ×${action.quantity||1}${action.chanceBonus?' · '+Math.round(action.chanceBonus.chance*1000)/10+'% '+esc(action.chanceBonus.item):''}</small></span>
    <span class="recipe-state">${already?'●':locked?'🔒':'›'}</span>
   </button>
   <div class="recipe-quick-details">

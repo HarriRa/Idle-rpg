@@ -1075,9 +1075,45 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 .combat-region-mobile{display:none}
 @media(max-width:980px){.combat-region-chips{display:none}.combat-region-mobile{display:flex;align-items:center;gap:9px}.combat-region-mobile span{white-space:nowrap;font-size:11px;color:#bccfc3}.combat-region-mobile select{flex:1;min-width:0;max-width:100%;height:32px;padding:4px 9px;font-size:12px;border:1px solid #648474;border-radius:7px;background:#182a26;color:#f5eaca}}
 @media(max-width:650px){.combat-region-picker{padding:7px 9px;margin-bottom:8px}.combat-region-top{margin-bottom:5px}.combat-region-mobile select{font-size:11px}}
+
+/* v3.44 - Compact workspaces. Only one short page of actions is visible at once. */
+.skill-cards .recipe-card[hidden]{display:none!important}
+.skill-stage{min-height:0!important;margin-bottom:8px}
+.stage-details{padding:10px 14px}
+.stage-title{gap:7px}.stage-title h2{font-size:20px}
+.stage-icon{width:32px;height:32px;font-size:20px}
+.skill-stage-decoration{font-size:65px;right:15px;top:2px}
+.skill-stage .xpbar{margin-top:5px}
+.skill-browser{padding:9px}
+.skill-browser .workspace-title{margin-bottom:4px}
+.skill-browser .skill-category-tabs{margin:3px 0 5px;padding-bottom:3px}
+.skill-browser .skill-toolbar{margin:3px 0 8px;padding:6px}
+.skill-browser .skill-cards{gap:5px}
+.skill-browser .recipe-card{padding:6px 8px!important;gap:3px 5px}
+.skill-browser .recipe-card .recipe-illustration .item-art{width:32px;height:32px;font-size:20px}
+.skill-browser .recipe-card .recipe-select-copy .recipe-detail{margin-top:1px}
+.skill-browser .recipe-card .recipe-quick-details{gap:2px 5px}
+.compact-pager{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:9px 0 2px;padding:8px 9px;border:1px solid #4f6651;background:#203128;border-radius:8px}
+.pager-summary{color:#b9cdb8;font-size:11px;line-height:1.3}
+.pager-actions{display:flex;align-items:center;gap:6px;margin-left:auto}
+.pager-actions button{min-width:36px;padding:5px 10px;font-size:16px;line-height:1.2}
+.pager-position{min-width:40px;text-align:center;color:#f1ddaa;font-size:11px;font-weight:700;white-space:nowrap}
+@media(max-width:1150px){.skill-inspector{grid-row:1}.skill-workspace{gap:6px}.skill-focus .focus-specs{margin:4px 0 8px}}
+@media(max-width:650px){.skill-stage{margin-bottom:6px}.stage-details{padding:8px 10px}.stage-icon{display:none}.stage-title h2{font-size:18px}.skill-browser{padding:7px}.skill-browser .skill-toolbar{padding:5px}.skill-browser .recipe-card{min-height:51px;padding:5px!important}.skill-inspector .skill-focus{padding:7px}.skill-inspector .focus-expand-toggle{padding:3px 7px!important}.skill-workspace{gap:5px}.compact-pager{margin-top:6px;padding:6px 8px}}
+
+
+.skill-fire-drawer{border:1px solid #6b654b;background:#2b2c23;border-radius:8px;margin:0 0 7px;overflow:hidden}
+.skill-fire-drawer>summary{cursor:pointer;padding:9px 12px;color:#f0d6ab;font-size:12px;font-weight:700;list-style-position:inside}
+.skill-fire-drawer>summary:hover{background:#42372a}
+.skill-fire-drawer>.info-box{margin:0;border:0;border-top:1px solid #6b654b;border-radius:0}
+
+
+.pager-position select{font-size:11px;color:#f1dfad;background:#2c402e;border:1px solid #556d54;border-radius:5px;padding:5px 4px;min-width:58px;max-width:96px;cursor:pointer}
+.pager-position select:focus-visible{outline:2px solid #d0b978}
+
 </style></head>
 <body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.43 · Combat Travel</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.44 · Compact Workspaces</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -2795,7 +2831,7 @@ function newGame(){return {
  log:['🌄 Welcome to Overnia. The village bells ring beneath the mountain.'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={worldSection:'atlas',worldMapExpanded:false,worldMapPanMode:false,worldMapPanX:0,worldMapPanY:0,combatPanel:'fight',combatMonsterFilter:'all',combatTargetIndex:null,overniaRumor:0,view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},skillSelection:{},focusExpanded:false,sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null,loadoutTab:0};
+const ui={worldSection:'atlas',worldMapExpanded:false,worldMapPanMode:false,worldMapPanX:0,worldMapPanY:0,combatPanel:'fight',combatMonsterFilter:'all',combatTargetIndex:null,overniaRumor:0,view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},skillPage:{},skillSelection:{},focusExpanded:false,sidebarTab:'bank',shopCategory:'All',shopPage:0,shopQty:1,journalPage:0,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null,loadoutTab:0};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRowsDesktop:6,maxRowsMobile:3};
@@ -4110,7 +4146,7 @@ function renderSkillMain(skill){
  const skillTitle='Grandmaster '+labelSkillForQuest(skill);
  if(boosts.titles.includes(skillTitle))html+=`<div class="mastery-titles">🏅 ${esc(skillTitle)} — 10,000,000 lifetime actions completed</div>`;
  if(speed||yieldBoost)html+=`<div class="perk-status">🏅 Mastery perks: ${speed?`${(speed*100).toFixed(0)}% faster actions`:''}${speed&&yieldBoost?' · ':''}${yieldBoost?`+${(yieldBoost*100).toFixed(0)}% bonus resources`:''}</div>`;
- if(skill==='cooking')html+=renderFirePanel();
+ if(skill==='cooking')html+=`<details class="skill-fire-drawer"><summary>🔥 Cooking Fire <span class="subdued small">· Fuel &amp; fire controls</span></summary>${renderFirePanel()}</details>`;
  if(skill==='enchanting'){
   const soulTotal=SOUL_GEMS.reduce((sum,x)=>sum+x.weight,0);
   html+=`<details class="info-box skill-guide"><summary>💠 Soulbound Soul Gems and drop rates</summary><p>Gathering: ${pct(GAME_CONFIG.soulGemGatherChance)} per action · Combat: ${pct(GAME_CONFIG.soulGemCombatChance)} per kill. Soul Gems cannot be traded.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic: <b>1 in 10,000 Soul Gems</b>.</p></details>`;
@@ -4120,32 +4156,58 @@ function renderSkillMain(skill){
  const skillMode=ui.skillMode[skill]||'all';
  const actions=def.actions.map((a,i)=>({a,i})).filter(({a})=>chosen==='All'||a.category===chosen).sort((x,y)=>x.a.level-y.a.level||x.a.name.localeCompare(y.a.name,'en'));
  selectedSkillAction(skill,actions);
+ if(!Number.isInteger(ui.skillPage[skill])){
+  // First visit: open near the most appropriate activity instead of the lowest-level recipes.
+  const index=actions.findIndex(({i})=>i===ui.skillSelection[skill]);
+  ui.skillPage[skill]=Math.max(0,Math.floor(Math.max(0,index)/skillPageSize()));
+ }
  html+=`<div class="skill-workspace"><section class="skill-browser" aria-label="${esc(label(skill))} available activities">
   <div class="workspace-title"><h3>Activities</h3></div>`;
  if(categories.length>1)html+=`<div class="tabs skill-category-tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
  html+=`<div class="skill-toolbar"><label class="skill-search-box">🔎 <input type="search" data-skill-search autocomplete="off" placeholder="Search activities and items…" value="${esc(skillSearch)}" aria-label="Search ${esc(label(skill))} actions"></label>
  <div class="skill-filter-modes" role="group" aria-label="Filter actions">${[['all','All'],['unlocked','Unlocked'],['craftable','Ready']].map(([id,name])=>`<button type="button" data-skill-mode="${id}" class="${skillMode===id?'selected':''}">${name}</button>`).join('')}</div></div>
- <div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div></section>
+ <div class="skill-cards" id="skillCards">${actions.map(({a,i})=>recipeCard(a,i,skill)).join('')}</div>
+ <div class="compact-pager skill-pager" id="skillPager" aria-label="Activity pages"></div></section>
  <aside class="skill-inspector" aria-label="Active recipe details">${renderSkillFocus(skill)}</aside></div>`;
  el('main').innerHTML=html;
  filterRecipeCards();
+}
+const skillPageSize=()=>innerWidth<=650?4:6;
+function compactPagerMarkup(kind,page,pages,count,from,to){
+ if(count===0)return `<div class="pager-summary">Nothing matches. Try another category or search.</div>`;
+ return `<div class="pager-summary">${from}–${to} of ${count}</div>
+  <div class="pager-actions"><button type="button" data-compact-page="${kind}" data-delta="-1" ${page===0?'disabled':''} aria-label="Previous page">‹</button>
+  <label class="pager-position" aria-label="Jump to a page"><select data-compact-jump="${kind}" aria-label="Select page">${Array.from({length:pages},(_,i)=>`<option value="${i}" ${i===page?'selected':''}>${i+1} / ${pages}</option>`).join('')}</select></label>
+  <button type="button" data-compact-page="${kind}" data-delta="1" ${page>=pages-1?'disabled':''} aria-label="Next page">›</button></div>`;
 }
 function filterRecipeCards(){
  const skill=ui.view;
  if(!SKILLS[skill]||SKILLS[skill].combat)return;
  const query=(ui.skillSearch[skill]||'').trim().toLowerCase();
  const mode=ui.skillMode[skill]||'all';
- let n=0;
- for(const card of el('main').querySelectorAll('[data-recipe]')){
+ const cards=[...el('main').querySelectorAll('#skillCards [data-recipe]')];
+ const level=levelFromXp(state.xp[skill]||0);
+ const matches=cards.filter(card=>{
   const a=SKILLS[skill].actions[Number(card.dataset.recipe)];
-  const level=levelFromXp(state.xp[skill]||0);
   const unlocked=level>=a.level;
   const ready=unlocked&&canPay(a.cost)&&(!a.requiresFire||fireBurning()||nextAutoFuel());
-  const labelText=[a.name,a.output,a.category,...Object.keys(a.cost||{})].join(' ').toLowerCase();
-  card.hidden=!!(query&&!labelText.includes(query) || mode==='unlocked'&&!unlocked || mode==='craftable'&&!ready);
-  if(!card.hidden)n++;
+  const searchWords=[a.name,a.output,a.category,...Object.keys(a.cost||{})].join(' ').toLowerCase();
+  return (!query||searchWords.includes(query))&&(mode!=='unlocked'||unlocked)&&(mode!=='craftable'||ready);
+ });
+ const size=skillPageSize(),pages=Math.max(1,Math.ceil(matches.length/size));
+ const page=clamp(Number(ui.skillPage[skill])||0,0,pages-1);
+ ui.skillPage[skill]=page;
+ const displayed=new Set(matches.slice(page*size,(page+1)*size));
+ for(const card of cards)card.hidden=!displayed.has(card);
+ const pager=el('skillPager');
+ if(pager){
+  const from=matches.length?page*size+1:0,to=Math.min(matches.length,(page+1)*size);
+  const label=`${from}–${to} of ${matches.length}`;
+  if(pager.dataset.caption!==`${label}:${page}:${pages}`){
+   pager.innerHTML=compactPagerMarkup('skill',page,pages,matches.length,from,to);
+   pager.dataset.caption=`${label}:${page}:${pages}`;
+  }
  }
- 
 }
 
 function raidPanelHtml(){
@@ -4772,13 +4834,18 @@ function renderShopMain(){
  el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Trading Post</div><h2>🛒 General Shop</h2><p class="section-description">Buy supplies and sell items for Coins.</p></div><div class="stat-tile"><small>Your Coins</small><strong class="gold" id="shopCoins">🪙 ${fmt(count('Coins'))}</strong></div></div>
  <div class="shop-quantity"><span class="small subdued">Buy quantity</span><div class="shop-quantity-buttons">${[1,10,100,1000,10000].map(q=>`<button type="button" data-shop-qty="${q}" class="${ui.shopQty===q?'selected':''}" aria-pressed="${ui.shopQty===q}">${fmt(q)}</button>`).join('')}</div></div>
  <div class="tabs" id="shopTabs">${categories.map(x=>`<button data-shop-cat="${esc(x)}" class="${ui.shopCategory===x?'selected':''}">${esc(x)}</button>`).join('')}</div>
- <div class="shop-grid" id="shopGrid"></div><div class="info-box"><b>💰 How selling works</b><p>Select an item in your Bank (the sidebar stays open while you visit the Shop), then choose Sell 1, Sell 10, or Sell All. Potions can be sold from their separate Potion Pouch.</p></div>`;
+ <div class="shop-grid" id="shopGrid"></div><div class="compact-pager" id="shopPager" aria-label="Shop pages"></div><div class="info-box"><b>💰 How selling works</b><p>Select an item in your Bank (the sidebar stays open while you visit the Shop), then choose Sell 1, Sell 10, or Sell All. Potions can be sold from their separate Potion Pouch.</p></div>`;
  renderShopItems();
 }
 function renderShopItems(){
  const grid=el('shopGrid');if(!grid)return;
  if(el('shopCoins'))el('shopCoins').textContent='🪙 '+fmt(count('Coins'));
- grid.innerHTML=SHOP_ITEMS.filter(x=>ui.shopCategory==='All'||x.category===ui.shopCategory).map(x=>{
+ const offers=SHOP_ITEMS.filter(x=>ui.shopCategory==='All'||x.category===ui.shopCategory);
+ const size=innerWidth<=650?8:12,pages=Math.max(1,Math.ceil(offers.length/size));
+ ui.shopPage=clamp(ui.shopPage,0,pages-1);
+ const from=offers.length?ui.shopPage*size+1:0,to=Math.min(offers.length,(ui.shopPage+1)*size);
+ const pager=el('shopPager');if(pager)pager.innerHTML=compactPagerMarkup('shop',ui.shopPage,pages,offers.length,from,to);
+ grid.innerHTML=offers.slice(ui.shopPage*size,(ui.shopPage+1)*size).map(x=>{
   const cost=x.price*ui.shopQty;
   return `<div class="shop-card" data-item-preview="${esc(x.name)}">${itemArt(x.name)}<div class="shop-card-content"><h3>${esc(x.name)}</h3><div class="shop-stock">Owned ${fmt(count(x.name))} · ${fmt(x.price)} GP/ea</div><div class="shop-checkout"><strong class="gold">🪙 ${fmt(cost)}</strong><button data-buy="${esc(x.name)}" ${count('Coins')<cost||!bankCanHold(x.name)?'disabled':''}>Buy ×${fmt(ui.shopQty)}</button></div></div></div>`;
  }).join('');
@@ -4810,11 +4877,15 @@ function renderJournalMain(){
    const rank=q=>q.test(state)?0:1;
    return rank(a)-rank(b);
   });
+ const journalSize=innerWidth<=650?4:6,journalPages=Math.max(1,Math.ceil(visible.length/journalSize));
+ ui.journalPage=clamp(ui.journalPage,0,journalPages-1);
+ const journalFrom=visible.length?ui.journalPage*journalSize+1:0,journalTo=Math.min(visible.length,(ui.journalPage+1)*journalSize);
+ const shown=visible.slice(ui.journalPage*journalSize,(ui.journalPage+1)*journalSize);
  el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Achievements · Tiered challenges</div><h2>📜 Adventurer's Journal</h2><p class="section-description">Only your current tier is shown. Lifetime actions count toward future tiers, up to 10 million. Claim rewards to reveal the next tier and earn permanent mastery perks.</p></div><span class="recipe-badge level">${completed} / ${QUESTS.length} claimed</span></div>
  <div class="journal-summary-mini"><div><small>🎁 Rewards ready</small><strong class="positive">${ready}</strong></div><div><small>📜 Quests available</small><strong>${available.length}</strong></div><div><small>⚡ Lifetime actions</small><strong>${fmt(questTotalActions(state))}</strong></div></div><details class="journal-extra-stats"><summary>More journal statistics</summary><span>⚔️ ${fmt(questTotalKills(state))} monster kills</span><span>💠 ${fmt(state.stats.soulsCollected||0)} Soul Gems found</span><span>🏅 ${completed} claimed rewards</span></details>
  <div class="journal-toolbar"><div class="journal-filter">${categories.map(cat=>`<button class="${ui.journalCategory===cat?'selected':''}" data-journal-category="${cat}">${cat==='Ready'?'🎁 Ready ('+ready+')':cat}</button>`).join('')}</div>
  <button type="button" data-claim-ready class="claim-ready-button" ${ready?'':'disabled'}>🎁 Claim ${ready} ready</button></div>
- ${visible.length?`<div class="skill-cards">${visible.map(q=>{
+ ${visible.length?`<div class="skill-cards">${shown.map(q=>{
   const locked=false; // Locked quests are filtered out entirely.
   const isReady=!locked&&q.test(state),progress=journalQuestProgress(q,state);
   const goal=Math.max(1,Number(q.target||1));
@@ -4829,7 +4900,7 @@ function renderJournalMain(){
    ${q.chain?`<div class="journal-chain-note">${isReady?'Claim rewards to unlock the next tier.':'Earlier actions already count toward higher tiers.'}</div>`:''}` }
    <div class="quest-rewards">${questRewardHtml(q)}</div>
    <div class="recipe-bottom"><span class="recipe-badge ${isReady?'level':''}">${locked?'🔒 Locked':isReady?'Ready to claim':'In progress'}</span><button data-claim="${esc(q.id)}" ${isReady?'':'disabled'}>${isReady?'🎁 Claim rewards':locked?'🔒 Locked':'In progress'}</button></div></div>`;
- }).join('')}</div>`:`<div class="journal-empty">${available.length===0?'🏆 All available quests completed!':'No quests in this category right now. Try All or another category.'}</div>`}`;
+ }).join('')}</div><div class="compact-pager" aria-label="Journal pages">${compactPagerMarkup('journal',ui.journalPage,journalPages,visible.length,journalFrom,journalTo)}</div>`:`<div class="journal-empty">${available.length===0?'🏆 All available quests completed!':'No quests in this category right now. Try All or another category.'}</div>`}`;
 }
 
 function renderRaidMain(){
@@ -5029,13 +5100,20 @@ function handleClick(e){
  if(b.hasAttribute('data-raid-claim-pending'))return claimPendingRaidChests();
  if(b.hasAttribute('data-charge'))return chargeStaff(Number(b.dataset.charge));
 
+ if(b.hasAttribute('data-compact-page')){
+  const kind=b.dataset.compactPage,step=Number(b.dataset.delta)||0;
+  if(kind==='skill'&&SKILLS[ui.view]&&!SKILLS[ui.view].combat){ui.skillPage[ui.view]=Math.max(0,(ui.skillPage[ui.view]||0)+step);filterRecipeCards();}
+  else if(kind==='shop'){ui.shopPage=Math.max(0,ui.shopPage+step);renderShopItems();}
+  else if(kind==='journal'){ui.journalPage=Math.max(0,ui.journalPage+step);renderJournalMain();}
+  return;
+ }
  if(b.hasAttribute('data-skill-mode')){
-  ui.skillMode[ui.view]=b.dataset.skillMode;
+  ui.skillPage[ui.view]=0;ui.skillMode[ui.view]=b.dataset.skillMode;
   for(const node of el('main').querySelectorAll('[data-skill-mode]'))node.classList.toggle('selected',node.dataset.skillMode===ui.skillMode[ui.view]);
   filterRecipeCards();return;
  }
- if(b.hasAttribute('data-skill-tab')){ui.skillTab[ui.view]=b.dataset.skillTab;delete ui.skillSelection[ui.view];renderMain();refreshDynamic();return}
- if(b.hasAttribute('data-shop-cat')){ui.shopCategory=b.dataset.shopCat;renderMain();refreshDynamic();return}
+ if(b.hasAttribute('data-skill-tab')){ui.skillTab[ui.view]=b.dataset.skillTab;ui.skillPage[ui.view]=0;delete ui.skillSelection[ui.view];renderMain();refreshDynamic();return}
+ if(b.hasAttribute('data-shop-cat')){ui.shopCategory=b.dataset.shopCat;ui.shopPage=0;renderMain();refreshDynamic();return}
  if(b.hasAttribute('data-shop-qty')){ui.shopQty=Number(b.dataset.shopQty);renderShopMain();return}
  if(b.hasAttribute('data-buy'))return buy(b.dataset.buy,ui.shopQty);
  if(b.hasAttribute('data-burn'))return lightFire(b.dataset.burn);
@@ -5052,7 +5130,7 @@ function handleClick(e){
   return;
  }
  if(b.hasAttribute('data-claim'))return claimQuest(b.dataset.claim);
- if(b.hasAttribute('data-journal-category')){ui.journalCategory=b.dataset.journalCategory;renderJournalMain();return;}
+ if(b.hasAttribute('data-journal-category')){ui.journalCategory=b.dataset.journalCategory;ui.journalPage=0;renderJournalMain();return;}
  if(b.hasAttribute('data-bank-tab'))return bankSelectTab(b.dataset.bankTab,b.dataset.tabId);
  if(b.hasAttribute('data-bank-new'))return bankCreateTab();
  if(b.hasAttribute('data-bank-rename'))return bankRenameTab(b.dataset.bankRename);
@@ -5067,6 +5145,13 @@ function handleClick(e){
 }
 function handleInput(e){
  const t=e.target;
+ if(t.hasAttribute('data-compact-jump')){
+  const kind=t.dataset.compactJump,page=Math.max(0,Math.floor(Number(t.value)||0));
+  if(kind==='skill'&&SKILLS[ui.view]&&!SKILLS[ui.view].combat){ui.skillPage[ui.view]=page;filterRecipeCards();}
+  else if(kind==='shop'){ui.shopPage=page;renderShopItems();}
+  else if(kind==='journal'){ui.journalPage=page;renderJournalMain();}
+  return;
+ }
  if(t.hasAttribute('data-auto-loadouts')){
   state.autoSwitchWeakness=!!t.checked;
   if(state.autoSwitchWeakness&&state.active&&['combat','raid'].includes(state.active.type))autoEquipForEnemy(currentEnemy());
@@ -5093,7 +5178,7 @@ function handleInput(e){
   return;
  }
  if(t.hasAttribute('data-skill-search')){
-  ui.skillSearch[ui.view]=t.value;filterRecipeCards();return;
+  ui.skillSearch[ui.view]=t.value;ui.skillPage[ui.view]=0;filterRecipeCards();return;
  }
 
  if(t.hasAttribute('data-skills-sort')){ui.skillsSort=t.value;renderSkillsOverview();return;}

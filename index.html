@@ -2090,7 +2090,7 @@ RAID_WAVES.forEach((wave,i)=>{
 });
 const RAID_GEAR={
  'Deepmountain Greatsword':{slot:'weapon',requiredSkill:'attack',requiredLevel:95,attack:130,strength:93},
- 'Deepmountain Warbow':{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:95,rangedAccuracy:179,rangedPower:115},
+ 'Deepmountain Warbow':{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:95,rangedAccuracy:179,rangedPower:115,doubleHit:true},
  'Deepmountain Soulstaff':{slot:'weapon',combatType:'magic',requiredSkill:'magic',requiredLevel:95,magicAccuracy:245,magicPower:159,maxCharges:2600}
 };
 for(const [name,gear] of Object.entries(RAID_GEAR)){
@@ -3765,7 +3765,7 @@ function combatSupplyError(equipment=state.equipment){
   const bow=equipment.weapon;
   if(EQUIPMENT[bow]?.combatType!=='ranged')return 'Equip a Bow from your bank to use Ranged.';
   const ammo=RANGED_AMMO[state.rangedAmmo];
-  if(!ammo||count(state.rangedAmmo)<(EQUIPMENT[equipment.weapon]?.doubleHit?2:1))return 'Not enough selected arrows. Twinstrike Crossbow uses 2 per attack.';
+  if(!ammo||count(state.rangedAmmo)<(EQUIPMENT[equipment.weapon]?.doubleHit?2:1))return 'Not enough selected arrows. Double-hit ranged weapons use 2 arrows per attack.';
   if(levelFromXp(state.xp.ranged||0)<ammo.level)return `Need Ranged level ${ammo.level} for ${state.rangedAmmo}.`;
  }
  if(equippedCombatStyle(equipment)==='magic'){
@@ -3849,7 +3849,7 @@ function completeCombat(){
  }else if(style==='magic'){
   const staff=magicStaffEquipped();state.staffCharges[staff]--;state.stats.magicCasts=(state.stats.magicCasts||0)+1;
  }
- // Single-hit weapons roll once; crossbow rolls each strike separately.
+ // Single-hit weapons roll once; double-hit ranged weapons roll each strike separately.
  const rolledStrikes=strikeMaxes.map(hitMax=>Math.random()<accuracy?1+Math.floor(Math.random()*hitMax):0);
  const damage=rolledStrikes.reduce((sum,hit)=>sum+hit,0);
  let incoming=0,countered=false;

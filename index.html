@@ -1011,7 +1011,7 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 @media(prefers-reduced-motion:reduce){.over-hp-fill,.over-action-track span{transition:none}}
 </style></head>
 <body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.38 · Combat XP Rebalance</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.39 · Enemy Damage Rebalance</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -1617,14 +1617,38 @@ const OVERNIA_NEW_MONSTERS=[
 ];
 for(const [name,level,hp,def,atk,maxHit,weakness,area,loot] of OVERNIA_NEW_MONSTERS)
  MONSTERS.push({name,level,hp,def,atk,maxHit,weakness,area,loot,unique:null});
-// Reforged combat: low level foes stay fragile, so a trained hero can finish
-// them in one blow. Higher tiers gain health and more meaningful counterattacks.
-// Mutate in place: save files and quest goals rely on stable monster IDs/indices.
+// v3.39: enemy damage follows the same 1–120 progression as player attacks.
+// Values represent RAW max hits before the player's defence/armour reduction.
+// Interpolating anchored tiers makes newly added monsters scale automatically,
+// while named monster roles keep their own identity and difficulty.
+const ENEMY_HIT_CURVE=[
+ [1,3],[10,25],[20,55],[30,88],[40,132],[50,175],
+ [60,210],[70,258],[80,315],[90,365],[100,410],[110,455],[120,510]
+];
+function enemyReferenceMaxHit(level){
+ const lv=Math.max(1,Math.min(120,Number(level)||1));
+ for(let i=1;i<ENEMY_HIT_CURVE.length;i++){
+  const [endLevel,endHit]=ENEMY_HIT_CURVE[i], [startLevel,startHit]=ENEMY_HIT_CURVE[i-1];
+  if(lv<=endLevel)return Math.round(startHit+(endHit-startHit)*(lv-startLevel)/(endLevel-startLevel));
+ }
+ return ENEMY_HIT_CURVE.at(-1)[1];
+}
+function enemyDamageIdentity(foe){
+ if(foe.bossTier==='late')return 1.28;
+ if(foe.bossTier==='early')return 1.18;
+ if(foe.boss)return 1.2;
+ if(['Rat','Chicken','Cellar Rat','Wandering Peasant'].includes(foe.name))return .74;
+ if(/Giant|Troll|Golem|Drake|Dragon|Overlord|Abomination|Bruiser|Revenant|Warlord|Colossus/.test(foe.name))return 1.11;
+ if(/Wisp|Sprite|Seer/.test(foe.name))return .94;
+ return 1;
+}
+// Retain the existing enemy order/IDs, loot, XP, weakness and HP progression.
+// Only their outgoing max hit is recalibrated here.
 for(const foe of MONSTERS){
  const above=Math.max(0,foe.level-25);
  const hpFactor=1+6*Math.pow(above/80,1.35);
  foe.hp=Math.round(foe.hp*hpFactor*(foe.boss?1.3:1));
- foe.maxHit=Math.max(1,Math.round(foe.maxHit*(1+above/125)));
+ foe.maxHit=Math.max(1,Math.round(enemyReferenceMaxHit(foe.level)*enemyDamageIdentity(foe)));
 }
 
 
@@ -1746,11 +1770,14 @@ const RAID_WAVES=[
  {name:'Belroth’s Warden',level:115,hp:1150,def:125,atk:141,maxHit:94,weakness:'melee'},
  {name:'Belroth',level:120,hp:9000,def:170,atk:190,maxHit:411,weakness:'magic',boss:true}
 ];
-// Raids remain sustained fights with powerful weapons and higher player damage.
-// Preserve Belroth's signature 411 max hit, but let his HP withstand BiS bursts.
+// Raid opponents scale from elite-level melee/ranged/magic damage.
+// Belroth is deliberately stronger than the penultimate wave; his former
+// 411 maximum belonged to the old damage scale, before v3.37's player buff.
 RAID_WAVES.forEach((wave,i)=>{
  wave.hp=Math.round(wave.hp*(wave.boss?5.5:7+i*.2));
- if(!wave.boss)wave.maxHit=Math.round(wave.maxHit*(1.2+i*.045));
+ wave.maxHit=wave.boss
+  ? Math.round(enemyReferenceMaxHit(wave.level)*1.48)
+  : Math.round(enemyReferenceMaxHit(wave.level)*(1.04+i*.015));
 });
 const RAID_GEAR={
  'Deepmountain Greatsword':{slot:'weapon',requiredSkill:'attack',requiredLevel:95,attack:130,strength:93},
@@ -3380,11 +3407,15 @@ function completeCombat(){
   }
  }else{
   countered=true;
-  const effectiveDefence=defence*(1+mods.defencePct)+mods.defence;
-  const hitChance=clamp(.65+.008*(m.atk-effectiveDefence),.10,.94);
+  const effectiveDefence=Math.max(0,defence*(1+mods.defencePct)+mods.defence);
+  // The old linear formula pinned armoured players at only 10% enemy accuracy.
+  // A level-matched enemy should still land hits, while much weaker foes miss.
+  const hitChance=clamp((m.atk+16)/(m.atk+16+effectiveDefence*.55),.05,.94);
   const rawHit=Math.random()<hitChance?1+Math.floor(Math.random()*m.maxHit):0;
-  const mitigation=Math.floor((defence-1)/8)*(1+mods.defencePct)+(mods.block||0);
-  incoming=Math.max(0,rawHit-Math.floor(mitigation));
+  // Max hits are offensive strength; actual damage is reduced by protection.
+  // Percentage armour makes Defence and tank gear meaningful at high damage.
+  const armourReduction=clamp(.04+effectiveDefence/900,.04,.55);
+  incoming=Math.max(0,Math.floor(rawHit*(1-armourReduction))-Math.max(0,mods.block||0));
   state.hp=Math.max(0,state.hp-incoming);
  }
  if(!offlineRunning)ui.combatLastHit={mode:raidFight?'raid':'combat',enemy:m.name,dealt:actualDamage,strikes:rolledStrikes.length>1?rolledStrikes:null,taken:incoming,countered,at:performance.now()};
@@ -4155,7 +4186,7 @@ function combatArenaHtml(mode){
     <div class="over-fighter-head"><span class="over-fighter-avatar" data-arena-enemy-icon aria-hidden="true">${monsterIcon(enemy)}</span><div class="over-fighter-identity"><small>ENEMY · LEVEL <span data-arena-enemy-level>${enemy.level}</span></small><strong data-arena-enemy-name>${esc(enemy.name)}</strong></div></div>
     <div class="over-health-numbers"><b>☠️ Enemy HP</b><strong data-arena-enemy-hp>${fmt(Math.ceil(enemyHp))} / ${fmt(enemy.hp)}</strong></div>
     <div class="over-hp-track" role="progressbar" aria-label="Enemy remaining Hitpoints" aria-valuemin="0" aria-valuemax="${enemy.hp}" aria-valuenow="${Math.ceil(enemyHp)}" data-arena-enemy-track><span class="over-hp-fill" data-arena-enemy-fill style="width:${(enemyHp/enemy.hp*100).toFixed(2)}%"></span></div>
-    <div class="over-fighter-metrics"><span>Max hit <b data-arena-enemy-max>${fmt(enemy.maxHit)}</b></span><span>Weak to <b data-arena-weakness>${weaknessLabel(enemy.weakness)}</b></span></div>
+    <div class="over-fighter-metrics"><span title="Before armour and Defence reduce the hit">Raw max hit <b data-arena-enemy-max>${fmt(enemy.maxHit)}</b></span><span>Weak to <b data-arena-weakness>${weaknessLabel(enemy.weakness)}</b></span></div>
     <div class="over-action-meta"><span>⚔️ Counterattack</span><b data-arena-enemy-action>${active?'Next exchange':'Not attacking'}</b></div>
     <div class="over-action-track"><span data-arena-enemy-action-fill style="width:${active?clamp(state.progress,0,100):0}%"></span></div>
     <div class="over-last-hit" data-arena-enemy-last aria-live="off">Last hit · —</div>
@@ -5281,6 +5312,6 @@ async function boot(){
 }
 boot();
 // Expose test helpers for regression checks.
-window.IdleRPGDebug={combatXpMultiplier,OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,OVERNIA_REGION_LORE,OVERNIA_RECRUITMENT_QUESTS,hireOverniaHelper,worldQuestReady,worldQuestProgress,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,activeOverniaHires,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
+window.IdleRPGDebug={enemyReferenceMaxHit,enemyDamageIdentity,combatXpMultiplier,OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,OVERNIA_REGION_LORE,OVERNIA_RECRUITMENT_QUESTS,hireOverniaHelper,worldQuestReady,worldQuestProgress,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,activeOverniaHires,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
 </script></body></html>

@@ -2104,7 +2104,7 @@ const RIFT_WAVES=[
  {name:'Citadel Archon',level:128,hp:15000,def:185,atk:180,weakness:'magic'},
  {name:'Nyxara, the Rift Sovereign',level:140,hp:55000,def:245,atk:235,weakness:'ranged',boss:true}
 ];
-for(const wave of RIFT_WAVES)wave.maxHit=Math.round(enemyReferenceMaxHit(wave.level)*(wave.boss?1.85:1.35));
+for(const wave of RIFT_WAVES)wave.maxHit=wave.boss?1600:Math.round(enemyReferenceMaxHit(wave.level)*1.35);
 for(const [name,slot,def,atk,str,rangedAcc,rangedPower,magicAcc,magicPower] of [
  ['Sovereign Visor','head',48,24,18,36,22,45,26],
  ['Sovereign Carapace','body',86,42,32,64,40,80,46],
@@ -2197,24 +2197,16 @@ function belrothEntryRequirement(equipment=state.equipment){
 }
 // Rift Citadel is the post-Deep-Mountain challenge: its sovereign requires
 // endgame progression and equipment earned before the Rift itself.
-function riftSovereignRequirements(equipment=state.equipment){
- const missing=[];
- if(combatLevel()<125)missing.push('Combat 125');
- if(levelFromXp(state.xp.defence||0)<95)missing.push('Defence 95');
- if(levelFromXp(state.xp.hitpoints||0)<95)missing.push('Hitpoints 95');
- if((state.raid?.completions||0)<1)missing.push('at least 1 Deep Mountain clear');
- const priorWeapons=['Deepmountain Greatsword','Deepmountain Warbow','Deepmountain Soulstaff'];
- if(!priorWeapons.includes(equipment.weapon))missing.push('a Deep Mountain raid weapon');
- const previousSets=['Ashen Warlord','Stormwing','Astral','Bulwark','Warden','Spellguard','Ravager','Deadeye','Soulweaver'];
- if(!previousSets.some(name=>{const set=GEAR_SETS.find(x=>x.name===name);return set&&setPieceCount(set,equipment)>=2;}))missing.push('2 pieces of a pre-Rift endgame armour set');
- return missing;
+function riftSovereignRequirements(){
+ return (state.raid?.completions||0)<1?['at least 1 Deep Mountain clear']:[];
 }
+
 function startRaidWave(){
  const raid=raidState(),wave=selectedRaidWaves()[raid.wave],config=selectedRaidConfig();
  if(combatLevel()<config.unlockCombatLevel){toast('Reach Combat '+config.unlockCombatLevel+' to enter');return}
  autoEquipForEnemy(wave);
  if(wave.boss&&selectedRaidKey()==='mountain'){const needs=belrothEntryRequirement();if(needs.length){note('🔒 Belroth requires '+needs.join(', '));toast('Belroth requires stronger gear and levels');return}}
- if(wave.boss&&selectedRaidKey()==='rift'){const needs=riftSovereignRequirements();if(needs.length){note('🔒 Nyxara requires '+needs.join(', '));toast('Nyxara requires pre-Rift endgame gear');return}}
+ if(wave.boss&&selectedRaidKey()==='rift'){const needs=riftSovereignRequirements();if(needs.length){note('🔒 Nyxara requires '+needs.join(', '));toast('Complete Deep Mountain once before Nyxara');return}}
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
  clearActivityFeed();ui.combatLastHit=null;state.active={type:'raid'};state.monsterHp=wave.hp;state.progress=0;
  note(`⛰️ Wave ${raid.wave+1}/${selectedRaidWaves().length}: ${wave.name} · Weak to ${equippedCombatStyle()===wave.weakness?'your style':wave.weakness}`);
@@ -3071,7 +3063,7 @@ function newGame(){return {
  pets:{},activePet:null,collectionLog:{},hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},riftRaid:{wave:0,completions:0,pendingChests:0},raidChoice:'mountain',combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
- fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
+ fireUntil:0,fireLastFuel:null,bonfireUntil:0,bonfireBoost:0,buffs:{},stats:emptyStats(),claimed:[],
  log:['🌄 Welcome to Overnia. The village bells ring beneath the mountain.'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
@@ -3212,7 +3204,8 @@ const levelFromXp=xp=>{
  return low;
 };
 const label=s=>SKILLS[s]?.name||s.replace(/^./,c=>c.toUpperCase());
-const maxHp=()=>levelFromXp(state.xp.hitpoints||0)*10;
+const bonfireBoost=()=>state.bonfireUntil>Date.now()?Math.min(.20,Math.max(0,Number(state.bonfireBoost)||0)):0;
+const maxHp=()=>Math.floor(levelFromXp(state.xp.hitpoints||0)*10*(1+bonfireBoost()));
 const clamp=(x,lo,hi)=>Math.max(lo,Math.min(hi,x));
 function combatLevel(){
  // Defence and HP always count. The best of melee (Attack + Strength),
@@ -3373,6 +3366,8 @@ function restore(){
   if(state.active?.type==='raid')state.monsterHp=clamp(Number(state.monsterHp)||selectedRaidWaves()[raidState().wave].hp,1,selectedRaidWaves()[raidState().wave].hp);
   if(!FOOD[state.autoEat.food])state.autoEat.food='Cooked Shrimp';
   if(![15,30,50].includes(Number(state.autoEat.threshold)))state.autoEat.threshold=30;
+  state.bonfireUntil=Math.max(0,Number(state.bonfireUntil)||0);
+  state.bonfireBoost=clamp(Number(state.bonfireBoost)||0,0,.20);
   state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
   if(!Number.isFinite(state.fireUntil))state.fireUntil=0;
   // Upgrade v3.12 saves: transfer any existing potions into their independent pouch.
@@ -3533,6 +3528,31 @@ function lightFire(item){
  state.fireLastFuel=item;state.stats.logsBurned++;
  note(`🔥 Added ${item}: +${timeFmt(FIRE_FUEL[item])} fire time.`);
  refreshDynamic();save();
+}
+// Cooking bonfire: separate from cooking fuel; no XP and no Cooking level requirement.
+const BONFIRE_BONUSES={'Logs':.02,'Oak Logs':.04,'Willow Logs':.06,'Maple Logs':.08,'Yew Logs':.11,'Magic Logs':.14,'Redwood Logs':.17,'Elder Logs':.20};
+const BONFIRE_MAX_MS=24*60*60*1000;
+function fuelBonfire(item,requested){
+ if(!Object.hasOwn(BONFIRE_BONUSES,item))return;
+ const now=Date.now(),remaining=Math.max(0,(Number(state.bonfireUntil)||0)-now);
+ const slots=Math.floor((BONFIRE_MAX_MS-remaining)/60000);
+ const qty=Math.min(Math.max(0,Math.floor(requested)),Math.max(0,count(item)),slots);
+ if(qty<1){toast(slots<1?'Bonfire already has 24 hours of fuel.':'Not enough logs.');return}
+ const previousMax=maxHp(),oldHp=state.hp;
+ if(!add(item,-qty))return;
+ state.bonfireUntil=now+remaining+qty*60000;
+ state.bonfireBoost=Math.max(remaining>0?bonfireBoost():0,BONFIRE_BONUSES[item]);
+ state.hp=Math.min(maxHp(),oldHp+Math.max(0,maxHp()-previousMax));
+ note(`🔥 Bonfire: ${qty} ${item} added · +${Math.round(bonfireBoost()*100)}% max HP · no XP.`);
+ renderMain();refreshDynamic();save();
+}
+function renderBonfirePanel(){
+ const remaining=Math.max(0,Math.ceil(((Number(state.bonfireUntil)||0)-Date.now())/60000));
+ return `<section class="info-box" style="border-color:#b98648"><h3 style="margin:0">🔥 Bonfire · Max HP Boost</h3>
+ <p>Feed your bonfire with logs to boost maximum HP. Each log adds 1 minute (up to 1,440 logs / 24 hours). Stronger logs grant stronger HP bonuses. No XP. The highest active log tier sets the bonus; adding weaker logs only extends its duration. This bonfire is separate from your Cooking Fire.</p>
+ <p><b id="bonfireStatus">${remaining?`${Math.round(bonfireBoost()*100)}% max HP · ${remaining} min remaining`:'Inactive'}</b></p>
+ <div class="fire-log-grid">${Object.entries(BONFIRE_BONUSES).map(([item,boost])=>`<div class="fire-tile"><b>${itemIcon(item)} ${esc(item)}</b><div class="small">+${Math.round(boost*100)}% max HP · Owned: ${fmt(count(item))}</div><div class="flexrow"><button data-bonfire="${esc(item)}" data-bonfire-qty="1" ${count(item)<1||remaining>=1440?'disabled':''}>+1 min</button><button data-bonfire="${esc(item)}" data-bonfire-qty="60" ${count(item)<1||remaining>=1440?'disabled':''}>+60 min</button><button data-bonfire="${esc(item)}" data-bonfire-qty="1440" ${count(item)<1||remaining>=1440?'disabled':''}>Fill 24h</button></div></div>`).join('')}</div>
+ <p class="small subdued">Buttons use as many logs as you own, up to the remaining 24-hour limit. Cooking still uses its own fire fuel.</p></section>`;
 }
 const fireRemaining=()=>Math.max(0,(state.fireUntil-gameNow())/1000);
 const fireBurning=()=>fireRemaining()>0;
@@ -3781,6 +3801,7 @@ function combatXpMultiplier(enemy,raidFight=false){
  return raidFight?2:Number(enemy?.level||0)>=60?1.5:1;
 }
 function completeCombat(){
+ state.hp=Math.min(state.hp,maxHp());
  const m=currentEnemy(),mods=gearMods(),raidFight=state.active?.type==='raid';
  if(!m){stop(true);return}
  const supplyError=combatSupplyError();
@@ -4503,7 +4524,7 @@ function renderSkillMain(skill){
  const skillTitle='Grandmaster '+labelSkillForQuest(skill);
  if(boosts.titles.includes(skillTitle))html+=`<div class="mastery-titles">🏅 ${esc(skillTitle)} — 10,000,000 lifetime actions completed</div>`;
  if(speed||yieldBoost)html+=`<div class="perk-status">🏅 Mastery perks: ${speed?`${(speed*100).toFixed(0)}% faster actions`:''}${speed&&yieldBoost?' · ':''}${yieldBoost?`+${(yieldBoost*100).toFixed(0)}% bonus resources`:''}</div>`;
- if(skill==='cooking')html+=`<details class="skill-fire-drawer"><summary>🔥 Cooking Fire <span class="subdued small">· Fuel &amp; fire controls</span></summary>${renderFirePanel()}</details>`;
+ if(skill==='cooking')html+=`<details class="skill-fire-drawer"><summary>🔥 Cooking Fire <span class="subdued small">· Fuel &amp; fire controls</span></summary>${renderFirePanel()}</details><details class="skill-fire-drawer" open><summary>🔥 Bonfire · HP Boost</summary>${renderBonfirePanel()}</details>`;
  if(skill==='enchanting'){
   const soulTotal=SOUL_GEMS.reduce((sum,x)=>sum+x.weight,0);
   html+=`<details class="info-box skill-guide"><summary>💠 Soulbound Soul Gems and drop rates</summary><p>Gathering: ${pct(GAME_CONFIG.soulGemGatherChance)} per action · Combat: ${pct(GAME_CONFIG.soulGemCombatChance)} per kill. Soul Gems cannot be traded.</p><div class="stat-grid">${SOUL_GEMS.map(x=>`<div class="stat-tile"><small>${x.color} ${esc(x.tier)}</small><strong>${fmt(count(x.name))} owned</strong><div class="extra-small subdued">${esc(x.name)} · ${x.weight} / ${soulTotal}</div></div>`).join('')}</div><p>🌈 Prismatic: <b>1 in 10,000 Soul Gems</b>.</p></details>`;
@@ -4584,8 +4605,8 @@ function raidPanelHtml(){
  <div class="raid-current"><div><strong>${isBoss?'👑':'⚔️'} Wave ${raid.wave+1}/${waves.length} · ${esc(wave.name)}</strong>
  <div class="raid-details">${fmt(wave.hp)} HP · Defence ${wave.def} · Max hit ${wave.maxHit} · <b>Weakness: ${weaknessLabel(wave.weakness)}</b></div></div>
  <div class="monster-actions"><button data-inspect-raid="${raid.wave}">🔎 Inspect</button><button data-raid-start ${canStart?'':'disabled'}>${playing?'Fighting…':isBoss?(rift?'⚔️ Face Nyxara':'⚔️ Face Belroth'):'Enter wave '+(raid.wave+1)}</button></div></div>
- ${!unlocked?`<div class="raid-warning">🔒 Requires Combat Level ${config.unlockCombatLevel} to enter.</div>`:isBoss&&bossMissing.length?`<div class="raid-warning">🔒 Final boss requires ${esc(bossMissing.join(', '))}. Complete the previous raid and equip near-BiS pre-Rift gear.</div>`:supplies?`<div class="raid-warning">${esc(supplies)}</div>`:''}
- <div class="raid-tip">🗡️ Melee · 🏹 Ranged · 🪄 Magic — use the correct style, change weapons in Equipment, and restock food between waves. Belroth requires strong gear. Nyxara is tougher and requires a Deep Mountain clear, its raid weapon and pre-Rift endgame armour.</div>
+ ${!unlocked?`<div class="raid-warning">🔒 Requires Combat Level ${config.unlockCombatLevel} to enter.</div>`:isBoss&&bossMissing.length?`<div class="raid-warning">🔒 Final boss requires ${esc(bossMissing.join(', '))}. Gear is not restricted, but previous best-in-slot equipment and plenty of food are strongly recommended.</div>`:supplies?`<div class="raid-warning">${esc(supplies)}</div>`:''}
+ <div class="raid-tip">🗡️ Melee · 🏹 Ranged · 🪄 Magic — use the correct style, change weapons in Equipment, and restock food between waves. Belroth requires strong gear. Nyxara requires a Deep Mountain clear, but has NO equipment requirement. Nyxara hits up to 1,600 raw damage before armour. Auto Eat remains enabled, but its threshold can leave you vulnerable to a lethal hit; manual eating and careful timing are essential.</div>
  <details class="raid-guide"><summary>🗺️ All ${waves.length} raid waves and weaknesses</summary><div class="raid-guide-list">${waves.map((m,i)=>`<div class="${i===raid.wave?'active':''}"><span>${i+1}. ${esc(m.name)}</span><b>${weaknessLabel(m.weakness)}</b><button data-inspect-raid="${i}" type="button">Inspect</button></div>`).join('')}</div></details>
  <div class="raid-loot"><strong>🎁 ${config.chest}</strong><p>${rift?'Nyxara awards a cache with a chance at the Sovereign hybrid set (10% per piece), rare herbs and Prismatic Soul Gems. Full set boosts melee, ranged and magic.':'The final boss awards a chest with Coins, Soul Shards, rare weapons and jewellery cores.'}</p>
  <div class="raid-chest-row"><span>🎁 Chests owned: <b>${fmt(count(config.chest))}</b></span>
@@ -5530,6 +5551,7 @@ function handleClick(e){
  if(b.hasAttribute('data-shop-cat')){ui.shopCategory=b.dataset.shopCat;ui.shopPage=0;renderMain();refreshDynamic();return}
  if(b.hasAttribute('data-shop-qty')){ui.shopQty=Number(b.dataset.shopQty);renderShopMain();return}
  if(b.hasAttribute('data-buy'))return buy(b.dataset.buy,ui.shopQty);
+ if(b.hasAttribute('data-bonfire'))return fuelBonfire(b.dataset.bonfire,Number(b.dataset.bonfireQty));
  if(b.hasAttribute('data-burn'))return lightFire(b.dataset.burn);
  if(b.hasAttribute('data-gear-slot'))return openGearSlot(b.dataset.gearSlot);
  if(b.hasAttribute('data-equip'))return equip(b.dataset.equip);

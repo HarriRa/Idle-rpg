@@ -1215,9 +1215,11 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
 .region-visit{padding:15px;background:linear-gradient(145deg,#1d3538,#101e29);text-align:center}.region-visit-back{float:left}.region-visit-icon{font-size:44px;clear:both;padding-top:6px}.region-visit h3{color:#f4d9a4;font-size:23px;margin:4px 0}.region-visit p{color:#d2dfda;max-width:580px;margin:8px auto 15px}.region-visit-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.region-visit-actions button,.region-visit-back,.region-description button{padding:9px 12px;border-radius:8px;border:1px solid #b29b6c;background:#274544;color:#ffe6b1;cursor:pointer}.region-visit-mobs{margin:15px auto 10px;max-width:650px;background:#112a31;padding:12px;border-radius:9px}.region-visit-mobs strong{color:#f1d9a6}.region-visit-mobs>div{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px}.region-visit-mobs span{font-size:11px;border:1px solid #4d6a67;padding:5px 8px;border-radius:6px}.region-visit>small{display:block;color:#aebeb9}
 
 .landmark-activities{max-width:850px;margin:14px auto;text-align:left}.landmark-activities h4{color:#f5d9a4;font-size:17px;margin:12px 0}.landmark-skill{background:#132d32;border:1px solid #526e68;border-radius:9px;padding:12px;margin:9px 0}.landmark-skill>div:first-child{display:flex;justify-content:space-between;align-items:center;gap:8px}.landmark-skill strong{color:#e9d4a6}.landmark-skill button{border:1px solid #8c7955;background:#24433f;color:#f7e5bd;border-radius:7px;padding:7px 9px;cursor:pointer}.landmark-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px;margin-top:8px}.landmark-actions button{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left}.landmark-actions small{color:#aebfb9}.landmark-status{font-size:12px;color:#c8dcb7;margin:6px}.world-atlas-overview[hidden]{display:none!important}
+
+.online-launch{position:fixed;bottom:18px;right:18px;z-index:90;border:1px solid #d2b477;border-radius:10px;background:#1b393c;color:#ffe6ae;padding:10px 15px;cursor:pointer;box-shadow:0 5px 20px #0008}.online-overlay{position:fixed;inset:0;z-index:300;background:#000c;display:flex;justify-content:center;align-items:center;padding:16px}.online-overlay[hidden],#onlineSetup[hidden],#onlineAuth[hidden],#onlineLogged[hidden]{display:none!important}.online-dialog{width:min(100%,510px);max-height:90vh;overflow:auto;background:#152d33;color:#e8eee7;border:1px solid #b49b6b;border-radius:14px;padding:22px;box-shadow:0 18px 65px #000c}.online-heading{display:flex;justify-content:space-between;align-items:center}.online-heading h2{margin:0;color:#f7daa0}.online-heading button,.online-dialog button{background:#284a47;color:#f6e1b3;border:1px solid #a58a58;border-radius:8px;padding:9px 12px;cursor:pointer}.online-intro,.online-help{color:#b8cbc7;font-size:13px;line-height:1.5}.online-dialog label{display:block;margin:12px 0;font-size:13px;color:#e5d7b5}.online-dialog input{display:block;width:100%;margin-top:5px;box-sizing:border-box;border-radius:7px;border:1px solid #647b78;background:#0e242b;color:white;padding:10px;font:inherit}.online-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.online-status{font-size:13px;min-height:1.2em;color:#f2d7a0;white-space:pre-wrap}
 </style></head>
-<body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.51 · Combat Target Sync</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<body><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Create a real account and optionally back up your Main character to Supabase. Your existing local save is kept.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p class="online-help">Cloud saves are an early test feature. Upload and download are manual; the server does not yet validate earned XP or loot. Never use Dev saves for public rankings.</p><div class="online-actions"><button type="button" id="onlineUpload">☁️ Upload Main save</button><button type="button" id="onlineDownload">⬇️ Restore cloud save</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p></div></div>
+<header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v4.0 · Online Accounts</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -5743,6 +5745,86 @@ el('devOverlay').addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('devOverlay').hidden)el('devOverlay').hidden=true});
 buildDevOptions();
 
+
+// Overnia Online v4.0: auth and explicitly initiated Main-only cloud backup.
+// This is not an authoritative game server. Do not use client-supplied XP for competitive rankings.
+const ONLINE_CONFIG_KEY='overnia-online-public-config-v1';
+let onlineClient=null,onlineUser=null,onlineBusy=false;
+const onlineStatus=msg=>{el('onlineStatus').textContent=msg};
+const onlineSetView=()=>{
+ el('onlineSetup').hidden=!!onlineClient;
+ el('onlineAuth').hidden=!onlineClient||!!onlineUser;
+ el('onlineLogged').hidden=!onlineUser;
+ el('onlineIdentity').textContent=onlineUser?'Signed in as '+onlineUser.email:'';
+};
+async function onlineConnect(url,key){
+ const parsed=new URL(url);
+ if(parsed.protocol!=='https:'||!parsed.hostname.endsWith('.supabase.co'))throw Error('Enter your Supabase HTTPS project URL.');
+ if(!key||key.length<20||key.toLowerCase().includes('service_role')||key.startsWith('sb_secret_'))throw Error('Use only the public publishable / anon key.');
+ if(!window.supabase?.createClient)throw Error('Supabase library could not load. Check your internet connection.');
+ onlineClient=window.supabase.createClient(parsed.origin,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ const {data,error}=await onlineClient.auth.getUser();if(error&&error.name!=='AuthSessionMissingError')console.warn(error);
+ onlineUser=data?.user||null;
+ onlineClient.auth.onAuthStateChange((_event,session)=>{onlineUser=session?.user||null;onlineSetView()});
+ localStorage.setItem(ONLINE_CONFIG_KEY,JSON.stringify({url:parsed.origin,key}));
+ onlineSetView();onlineStatus('Connected. '+(onlineUser?'Welcome back!':'Sign in or create your account.'));
+}
+async function onlineAction(fn){
+ if(onlineBusy)return;onlineBusy=true;
+ try{await fn()}catch(err){onlineStatus('Error: '+(err?.message||String(err)))}finally{onlineBusy=false}
+}
+function onlineMainSave(){
+ const raw=localStorage.getItem(SAVE_KEY);
+ if(!raw)throw Error('No local Main save found. Play a little first.');
+ const data=JSON.parse(raw);
+ if(!data?.xp||!data?.bank)throw Error('Local Main save is invalid.');
+ return data;
+}
+async function onlineUpload(){
+ if(!onlineUser)throw Error('Sign in first.');
+ if(!inDev())save(); // Never upload a Dev profile.
+ const payload=onlineMainSave();
+ const {data:existing,error:lookupError}=await onlineClient.from('character_saves').select('updated_at').eq('user_id',onlineUser.id).maybeSingle();
+ if(lookupError)throw lookupError;
+ const question=existing?'Replace your existing CLOUD save with this LOCAL Main save?':'Upload your local Main character as your first cloud backup?';
+ if(!confirm(question))return;
+ const {error}=await onlineClient.from('character_saves').upsert({user_id:onlineUser.id,save_data:payload,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+ if(error)throw error;
+ onlineStatus('✓ Main character uploaded. Your local save was not deleted.');
+}
+async function onlineDownload(){
+ if(!onlineUser)throw Error('Sign in first.');
+ const {data,error}=await onlineClient.from('character_saves').select('save_data,updated_at').eq('user_id',onlineUser.id).maybeSingle();
+ if(error)throw error;
+ if(!data?.save_data?.xp||!data?.save_data?.bank)throw Error('No valid cloud save found. Upload Main first.');
+ if(!confirm('Replace LOCAL Main with your CLOUD save from '+new Date(data.updated_at).toLocaleString()+'? This cannot be undone unless you exported a backup.'))return;
+ // Main-only write; Dev save remains untouched. Restore via existing migration logic.
+ localStorage.setItem(SAVE_KEY,JSON.stringify(data.save_data));
+ if(!inDev()){state=newGame();restore();render();}
+ onlineStatus('✓ Cloud Main restored locally. Dev profile was not changed.');
+}
+function setupOnlineUI(){
+ el('onlineOpen').onclick=()=>{el('onlineOverlay').hidden=false;onlineSetView()};
+ el('onlineClose').onclick=()=>el('onlineOverlay').hidden=true;
+ el('onlineOverlay').addEventListener('click',e=>{if(e.target===el('onlineOverlay'))el('onlineOverlay').hidden=true});
+ el('onlineConnect').onclick=()=>onlineAction(()=>onlineConnect(el('onlineUrl').value.trim(),el('onlineKey').value.trim()));
+ el('onlineSignUp').onclick=()=>onlineAction(async()=>{
+  const email=el('onlineEmail').value.trim(),password=el('onlinePassword').value;
+  const {data,error}=await onlineClient.auth.signUp({email,password});if(error)throw error;
+  onlineStatus(data.session?'✓ Account created and signed in.':'Account created. Check your email to confirm your address, then sign in.');
+ });
+ el('onlineSignIn').onclick=()=>onlineAction(async()=>{
+  const {error}=await onlineClient.auth.signInWithPassword({email:el('onlineEmail').value.trim(),password:el('onlinePassword').value});if(error)throw error;
+  onlineStatus('✓ Signed in.');
+ });
+ el('onlineSignOut').onclick=()=>onlineAction(async()=>{const {error}=await onlineClient.auth.signOut();if(error)throw error;onlineStatus('Signed out. Local saves remain available.')});
+ el('onlineUpload').onclick=()=>onlineAction(onlineUpload);
+ el('onlineDownload').onclick=()=>onlineAction(onlineDownload);
+ try{const config=JSON.parse(localStorage.getItem(ONLINE_CONFIG_KEY)||'null');if(config?.url&&config?.key){el('onlineUrl').value=config.url;el('onlineKey').value=config.key;onlineAction(()=>onlineConnect(config.url,config.key))}}catch(e){console.warn(e)}
+ onlineSetView();
+}
+window.addEventListener('load',setupOnlineUI,{once:true});
+
 // Persist the precise time of the last simulated game tick when leaving.
 window.addEventListener('pagehide',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
@@ -5754,4 +5836,4 @@ boot();
 // Expose test helpers for regression checks.
 window.IdleRPGDebug={enemyReferenceMaxHit,enemyDamageIdentity,combatXpMultiplier,OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,OVERNIA_REGION_LORE,OVERNIA_RECRUITMENT_QUESTS,hireOverniaHelper,worldQuestReady,worldQuestProgress,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,activeOverniaHires,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
-</script></body></html>
+</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script></body></html>

@@ -5776,7 +5776,7 @@ function cloudOfferChoice(message,options,saveLabels=null){
  for(const [label,fn] of options){
   const wrapper=document.createElement('div');wrapper.className='cloud-choice-item';
   const button=document.createElement('button');button.type='button';button.textContent=label;
-  button.onclick=()=>onlineAction(async()=>{await fn();cloudHideChoice()});wrapper.append(button);
+  button.onclick=()=>onlineAction(async()=>{await fn();if(el('onlineConflict')===area && area.contains(button)){cloudHideChoice();el('onlineOverlay').hidden=true;}});wrapper.append(button);
   const age=saveLabels?.[label];
   if(age){const caption=document.createElement('small');caption.className='cloud-save-age';caption.textContent=age;wrapper.append(caption)}
   area.append(wrapper);

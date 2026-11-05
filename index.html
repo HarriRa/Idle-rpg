@@ -1011,7 +1011,7 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 @media(prefers-reduced-motion:reduce){.over-hp-fill,.over-action-track span{transition:none}}
 </style></head>
 <body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.36 · Battle HUD</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.38 · Combat XP Rebalance</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -1386,6 +1386,15 @@ registerGear('Ranger Bow',{slot:'weapon',combatType:'ranged',requiredSkill:'rang
 registerGear('Trollbone Bow',{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:55,rangedAccuracy:38,rangedPower:19});
 registerGear('Dragonbone Bow',{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:85,rangedAccuracy:79,rangedPower:38});
 registerGear('Abyssal Quiver',{slot:'quiver',requiredSkill:'ranged',requiredLevel:80,rangedAccuracy:30,rangedPower:14,xpBonus:.11});
+// Unique ranged identity: a deliberate double-shot weapon. Both strikes roll
+// accuracy independently and consume one arrow each (two per completed volley).
+SKILLS.fletching.actions.push(A('Build Twinstrike Crossbow','Twinstrike Crossbow',96,850,
+ {'Elder Logs':3,'Dragonite Bar':3,'Ancient Crystal':5,'Dragon Bowstring':2},'Rare Bows'));
+registerGear('Twinstrike Crossbow',{
+ slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:90,
+ rangedAccuracy:118,rangedPower:102,doubleHit:true
+});
+
 
 // Magic robes and offhand foci are crafted separately from the staff.
 const MAGIC_ARMOUR=[
@@ -1608,6 +1617,16 @@ const OVERNIA_NEW_MONSTERS=[
 ];
 for(const [name,level,hp,def,atk,maxHit,weakness,area,loot] of OVERNIA_NEW_MONSTERS)
  MONSTERS.push({name,level,hp,def,atk,maxHit,weakness,area,loot,unique:null});
+// Reforged combat: low level foes stay fragile, so a trained hero can finish
+// them in one blow. Higher tiers gain health and more meaningful counterattacks.
+// Mutate in place: save files and quest goals rely on stable monster IDs/indices.
+for(const foe of MONSTERS){
+ const above=Math.max(0,foe.level-25);
+ const hpFactor=1+6*Math.pow(above/80,1.35);
+ foe.hp=Math.round(foe.hp*hpFactor*(foe.boss?1.3:1));
+ foe.maxHit=Math.max(1,Math.round(foe.maxHit*(1+above/125)));
+}
+
 
 const SPECIAL_COMPONENT_DROPS={
  Goblin:{item:'Goblin Ember',chance:.10},
@@ -1727,6 +1746,12 @@ const RAID_WAVES=[
  {name:'Belroth’s Warden',level:115,hp:1150,def:125,atk:141,maxHit:94,weakness:'melee'},
  {name:'Belroth',level:120,hp:9000,def:170,atk:190,maxHit:411,weakness:'magic',boss:true}
 ];
+// Raids remain sustained fights with powerful weapons and higher player damage.
+// Preserve Belroth's signature 411 max hit, but let his HP withstand BiS bursts.
+RAID_WAVES.forEach((wave,i)=>{
+ wave.hp=Math.round(wave.hp*(wave.boss?5.5:7+i*.2));
+ if(!wave.boss)wave.maxHit=Math.round(wave.maxHit*(1.2+i*.045));
+});
 const RAID_GEAR={
  'Deepmountain Greatsword':{slot:'weapon',requiredSkill:'attack',requiredLevel:95,attack:130,strength:93},
  'Deepmountain Warbow':{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:95,rangedAccuracy:179,rangedPower:115},
@@ -1807,7 +1832,7 @@ function belrothEntryRequirement(equipment=state.equipment){
  if(gearMods(equipment).defence<RAID_CONFIG.belrothArmourDefence)problems.push(RAID_CONFIG.belrothArmourDefence+'+ armour defence');
  const weapon=equipment.weapon;
  const style=equippedCombatStyle(equipment);
- const adequate={melee:['Dragonite Sword','Abyssal Blade','Deepmountain Greatsword'],ranged:['Dragonbone Bow','Deepmountain Warbow'],magic:['Dragonfire Staff','Voidcaller Staff','Deepmountain Soulstaff']}[style];
+ const adequate={melee:['Dragonite Sword','Abyssal Blade','Deepmountain Greatsword'],ranged:['Dragonbone Bow','Deepmountain Warbow','Twinstrike Crossbow'],magic:['Dragonfire Staff','Voidcaller Staff','Deepmountain Soulstaff']}[style];
  if(!adequate.includes(weapon))problems.push('near-endgame '+style+' weapon');
  return problems;
 }
@@ -3248,7 +3273,7 @@ function combatSupplyError(equipment=state.equipment){
   const bow=equipment.weapon;
   if(EQUIPMENT[bow]?.combatType!=='ranged')return 'Equip a Bow from your bank to use Ranged.';
   const ammo=RANGED_AMMO[state.rangedAmmo];
-  if(!ammo||count(state.rangedAmmo)<1)return 'No selected arrows in your bank. Fletch or buy arrows.';
+  if(!ammo||count(state.rangedAmmo)<(EQUIPMENT[equipment.weapon]?.doubleHit?2:1))return 'Not enough selected arrows. Twinstrike Crossbow uses 2 per attack.';
   if(levelFromXp(state.xp.ranged||0)<ammo.level)return `Need Ranged level ${ammo.level} for ${state.rangedAmmo}.`;
  }
  if(equippedCombatStyle(equipment)==='magic'){
@@ -3278,22 +3303,45 @@ function chargeStaff(shardsRequested){
 function combatPreview(style,equipment=state.equipment,enemy=null,ammoName=state.rangedAmmo){
  const mods=gearMods(equipment);
  const level=skill=>levelFromXp(state.xp[skill]||0);
- let accuracy,baseMax;
+ const weapon=EQUIPMENT[equipment?.weapon]||{};
+ let accuracy,baseMax,strikeMaxes=null;
  if(style==='ranged'){
   const ammo=RANGED_AMMO[ammoName]||{accuracy:0,power:0};
-  accuracy=(.62+.008*(level('ranged')+mods.rangedAccuracy+ammo.accuracy-(enemy?.def||0)))*(1+mods.rangedPct);
-  baseMax=Math.max(1,Math.floor((2+Math.floor((level('ranged')-1)/6)+mods.rangedPower+ammo.power)*(1+mods.rangedPct)));
+  const rangedLevel=level('ranged');
+  accuracy=(.62+.008*(rangedLevel+mods.rangedAccuracy+ammo.accuracy-(enemy?.def||0)))*(1+mods.rangedPct);
+  const scaling=Math.pow((rangedLevel+20)/84,1.7);
+  const shotPower=Math.max(1,Math.floor(1.45*rangedLevel+3+(mods.rangedPower+ammo.power)*scaling*.67*(1+.32*mods.rangedPct)));
+  if(weapon.doubleHit){
+   // Two independently rolled shots. Total max damage is lower than melee BiS,
+   // but each shot has its own chance to land (two arrows per round).
+   strikeMaxes=[Math.max(1,Math.floor(shotPower*.78)),Math.max(1,Math.floor(shotPower*.62))];
+   baseMax=strikeMaxes[0]+strikeMaxes[1];
+  }else{baseMax=shotPower;strikeMaxes=[baseMax]}
  }else if(style==='magic'){
-  accuracy=(.64+.008*(level('magic')+mods.magicAccuracy-(enemy?.def||0)))*(1+mods.magicPct);
-  baseMax=Math.max(1,Math.floor((3+Math.floor((level('magic')-1)/6)+mods.magicPower)*(1+mods.magicPct)));
+  const magicLevel=level('magic');
+  accuracy=(.64+.008*(magicLevel+mods.magicAccuracy-(enemy?.def||0)))*(1+mods.magicPct);
+  baseMax=Math.max(1,Math.floor(2*magicLevel+3+mods.magicPower*Math.pow((magicLevel+20)/84,1.8)*.65*(1+.32*mods.magicPct)));
+  strikeMaxes=[baseMax];
  }else{
+  const strengthLevel=level('strength');
   accuracy=(.62+.008*(level('attack')+mods.attack-(enemy?.def||0)))*(1+mods.attackPct);
-  baseMax=Math.max(1,Math.floor((2+Math.floor((level('strength')-1)/7)+mods.strength)*(1+mods.strengthPct)));
+  // Unarmed: Strength 64 => 130, Strength 99 => 200.
+  // Late-game gear scales WITH Strength, not as a flat bonus. 64 + BiS ~400;
+  // 99 + BiS ~700–800 before a weakness bonus.
+  const unarmed=2*strengthLevel+2;
+  const weaponScaling=Math.max(.50,.65*Math.pow((strengthLevel+20)/84,2));
+  baseMax=Math.max(1,Math.floor(unarmed+mods.strength*weaponScaling*(1+mods.strengthPct)));
+  strikeMaxes=[baseMax];
  }
  accuracy=clamp(accuracy,.12,.98);
- if(!enemy)return {baseMax,maxHit:baseMax,accuracy};
+ if(!enemy)return {baseMax,maxHit:baseMax,accuracy,strikeMaxes};
  const matching=combatType(style)===enemy.weakness;
- return {baseMax,maxHit:Math.max(1,Math.floor(baseMax*(matching?1.30:.35))),accuracy:clamp(accuracy*(matching?1.16:.56),.035,.99),matching};
+ const damageFactor=matching?1.30:.35;
+ const adjusted=strikeMaxes.map(h=>Math.max(1,Math.floor(h*damageFactor)));
+ return {baseMax,maxHit:adjusted.reduce((sum,n)=>sum+n,0),accuracy:clamp(accuracy*(matching?1.16:.56),.035,.99),matching,strikeMaxes:adjusted};
+}
+function combatXpMultiplier(enemy,raidFight=false){
+ return raidFight?2:Number(enemy?.level||0)>=60?1.5:1;
 }
 function completeCombat(){
  const m=currentEnemy(),mods=gearMods(),raidFight=state.active?.type==='raid';
@@ -3301,17 +3349,22 @@ function completeCombat(){
  const supplyError=combatSupplyError();
  if(supplyError){note('⏹ '+supplyError);stop(true);return}
  const style=equippedCombatStyle(),defence=levelFromXp(state.xp.defence||0);
- const {accuracy,maxHit}=combatPreview(style,state.equipment,m);
+ const {accuracy,strikeMaxes}=combatPreview(style,state.equipment,m);
+ const arrowsNeeded=style==='ranged'&&EQUIPMENT[state.equipment.weapon]?.doubleHit?2:1;
  if(style==='ranged'){
-  add(state.rangedAmmo,-1);state.stats.arrowsFired=(state.stats.arrowsFired||0)+1;
+  add(state.rangedAmmo,-arrowsNeeded);state.stats.arrowsFired=(state.stats.arrowsFired||0)+arrowsNeeded;
  }else if(style==='magic'){
   const staff=magicStaffEquipped();state.staffCharges[staff]--;state.stats.magicCasts=(state.stats.magicCasts||0)+1;
  }
- const damage=Math.random()<accuracy?1+Math.floor(Math.random()*maxHit):0;
+ // Single-hit weapons roll once; crossbow rolls each strike separately.
+ const rolledStrikes=strikeMaxes.map(hitMax=>Math.random()<accuracy?1+Math.floor(Math.random()*hitMax):0);
+ const damage=rolledStrikes.reduce((sum,hit)=>sum+hit,0);
  let incoming=0,countered=false;
  const actualDamage=Math.min(damage,state.monsterHp);
  state.monsterHp=Math.max(0,state.monsterHp-damage);
- const combatXp=actualDamage*5;
+ // Restore the original damage-based XP for early monsters without a tier cap.
+ // Strong creatures award a bonus; expeditions grant an even larger 2x bonus.
+ const combatXp=actualDamage*2.1*combatXpMultiplier(m,raidFight);
  if(combatXp>0){
   const targets=combatXpTargets(style),share=combatXp/targets.length;
   for(const skill of targets)gainXp(skill,share);
@@ -3334,7 +3387,7 @@ function completeCombat(){
   incoming=Math.max(0,rawHit-Math.floor(mitigation));
   state.hp=Math.max(0,state.hp-incoming);
  }
- if(!offlineRunning)ui.combatLastHit={mode:raidFight?'raid':'combat',enemy:m.name,dealt:actualDamage,taken:incoming,countered,at:performance.now()};
+ if(!offlineRunning)ui.combatLastHit={mode:raidFight?'raid':'combat',enemy:m.name,dealt:actualDamage,strikes:rolledStrikes.length>1?rolledStrikes:null,taken:incoming,countered,at:performance.now()};
  tryAutoEat();
  if(state.hp<=0){state.hp=maxHp();note(`💔 Defeated by ${m.name}! ${raidFight?'Wave checkpoint saved. ':''}Respawned at full HP.`);stop(true)}
 }
@@ -4108,7 +4161,7 @@ function combatArenaHtml(mode){
     <div class="over-last-hit" data-arena-enemy-last aria-live="off">Last hit · —</div>
    </article>
   </div>
-  <div class="over-arena-footer"><span data-arena-tip>${active?'Your attack resolves first; the enemy counters if still alive.':'Choose a monster to start fighting.'}</span><span data-arena-interval>${active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':''}</span></div>
+  <div class="over-arena-footer"><span data-arena-tip>${active?'Your attack resolves first; the enemy counters if still alive.':'Choose a monster to start fighting.'}</span><span data-arena-interval>${combatXpMultiplier(enemy,raid)>1?`Combat XP ×${combatXpMultiplier(enemy,raid).toFixed(1)} · `:''}${active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':''}</span></div>
  </section>`;
 }
 function refreshCombatArena(){
@@ -4145,11 +4198,12 @@ function refreshCombatArena(){
   const bar=root.querySelector(`[data-arena-${which}-action-fill]`);if(bar)bar.style.width=elapsed.toFixed(2)+'%';
  }
  set('data-arena-tip',active?'Your attack resolves first; the enemy counters if still alive.':'Choose a monster to start fighting.');
- set('data-arena-interval',active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':'');
+ const xpRate=combatXpMultiplier(enemy,raid);
+ set('data-arena-interval',(xpRate>1?'Combat XP ×'+xpRate.toFixed(1)+(active?' · ':''):'')+(active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':''));
  const round=root.querySelector('.over-arena-round');if(round)round.textContent=raid?'Wave '+(raidState().wave+1)+' / '+RAID_WAVES.length:'Overnia · '+(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness');
  const last=ui.combatLastHit;
  const matching=last?.mode===mode&&last?.enemy===enemy.name&&performance.now()-last.at<12000;
- set('data-arena-player-last',matching?(last.dealt?'Last hit · '+fmt(last.dealt)+' damage':'Last hit · Miss'):'Last hit · —');
+ set('data-arena-player-last',matching?(last.strikes?'Double strike · '+last.strikes.map(fmt).join(' + ')+' = '+fmt(last.dealt):last.dealt?'Last hit · '+fmt(last.dealt)+' damage':'Last hit · Miss'):'Last hit · —');
  set('data-arena-enemy-last',matching?(last.countered?(last.taken?'Last hit · '+fmt(last.taken)+' damage':'Last hit · Miss / blocked'):'No counterattack'):'Last hit · —');
  root.classList.toggle('is-active',active);
 }
@@ -4237,7 +4291,7 @@ function renderCombatResources(){
  }
  if(el('rangedStatus')){
   const bow=state.equipment.weapon,info=EQUIPMENT[bow];
-  el('rangedStatus').textContent=`Bow: ${info?.combatType==='ranged'?bow:'none equipped'} · ${state.rangedAmmo}: ×${fmt(count(state.rangedAmmo))}`;
+  el('rangedStatus').textContent=`Weapon: ${info?.combatType==='ranged'?bow:'none equipped'} · ${state.rangedAmmo}: ×${fmt(count(state.rangedAmmo))}${info?.doubleHit?' · 2 arrows per volley':''}`;
  }
  if(el('magicStaffStatus')){
   const staff=magicStaffEquipped();
@@ -4411,7 +4465,7 @@ function gearDescription(info){
  if(!info)return 'Equipment';
  const rows=[];
  for(const [key,val] of Object.entries(info)){
-  if(['slot','requiredLevel','requiredSkill','combatType','maxCharges'].includes(key))continue;
+  if(['slot','requiredLevel','requiredSkill','combatType','maxCharges','doubleHit'].includes(key))continue;
   const names={rangedAccuracy:'Ranged accuracy',rangedPower:'Ranged strength',magicAccuracy:'Magic accuracy',magicPower:'Magic strength',rangedPct:'Ranged bonus',magicPct:'Magic bonus',attack:'Melee accuracy',strength:'Melee strength',defence:'Defence',block:'Block',attackPct:'Accuracy',strengthPct:'Strength',defencePct:'Defence',xpBonus:'All skill XP',luckBonus:'Treasure & unique luck',gatherBonus:'Gathering bonus',woodcuttingYield:'Woodcutting yield',miningYield:'Mining yield',fishingYield:'Fishing yield',agricultureYield:'Agriculture yield',soulDropBonus:'Soul Gem find chance',fletchingXpBonus:'Fletching XP',craftingXpBonus:'Crafting XP',smithingXpBonus:'Smithing XP',alchemyXpBonus:'Alchemy XP',enchantingXpBonus:'Enchanting XP',miningXpBonus:'Mining XP'};
   if(names[key])rows.push(`${names[key]} +${key.endsWith('Pct')||key.endsWith('Bonus')||key.endsWith('Yield')?pct(val):val}`);
  }
@@ -4430,7 +4484,8 @@ function itemTooltipHtml(item){
  if(info){
   const properties=[['attack','Melee accuracy'],['strength','Melee strength'],['defence','Defence'],['block','Block'],['rangedAccuracy','Ranged accuracy'],['rangedPower','Ranged strength'],['magicAccuracy','Magic accuracy'],['magicPower','Magic strength'],['attackPct','Melee accuracy'],['strengthPct','Melee damage'],['defencePct','Defence'],['rangedPct','Ranged damage & accuracy'],['magicPct','Magic damage & accuracy']];
   for(const [key,name] of properties)if(Number(info[key]))rows.push(`<div><span>${name}</span><b>+${key.endsWith('Pct')?pct(info[key]):fmt(info[key])}</b></div>`);
-  for(const [key,value] of Object.entries(info))if(!properties.some(([k])=>k===key)&&!['slot','requiredLevel','requiredSkill','combatType','maxCharges'].includes(key)&&Number(value)){
+  if(info.doubleHit)rows.push('<div><span>Double strike</span><b>2 hits · 2 arrows</b></div>');
+  for(const [key,value] of Object.entries(info))if(!properties.some(([k])=>k===key)&&!['slot','requiredLevel','requiredSkill','combatType','maxCharges','doubleHit'].includes(key)&&Number(value)){
    const text=gearDescription({[key]:value});if(text!=='Equipment')rows.push(`<div><span>${esc(text.split(' +')[0])}</span><b>${esc(text.includes(' +')?'+'+text.split(' +').slice(1).join(' +'):'')}</b></div>`);
   }
  }else if(ammo){rows.push(`<div><span>Ranged accuracy</span><b>+${fmt(ammo.accuracy)}</b></div><div><span>Ranged strength</span><b>+${fmt(ammo.power)}</b></div>`)}
@@ -5226,6 +5281,6 @@ async function boot(){
 }
 boot();
 // Expose test helpers for regression checks.
-window.IdleRPGDebug={OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,OVERNIA_REGION_LORE,OVERNIA_RECRUITMENT_QUESTS,hireOverniaHelper,worldQuestReady,worldQuestProgress,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,activeOverniaHires,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
+window.IdleRPGDebug={combatXpMultiplier,OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,OVERNIA_REGION_LORE,OVERNIA_RECRUITMENT_QUESTS,hireOverniaHelper,worldQuestReady,worldQuestProgress,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,activeOverniaHires,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
 </script></body></html>

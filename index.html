@@ -122,6 +122,10 @@ input[type=search],input[type=number],input[type=text],select{width:100%;backgro
 @media(max-width:650px){header{padding:12px}.layout{grid-template-columns:1fr;gap:8px;padding:8px}.left{position:relative;top:auto;max-height:none;padding:9px}.left .nav,.left .nav-divider{display:none}.mobile-nav{display:block}.right{grid-column:1}.main{padding:10px;min-height:240px}.heading h2{font-size:21px}.combat-choices{grid-template-columns:1fr}.combat-choice{flex-direction:row;flex-wrap:wrap;align-items:center}.combat-choice .xpbar{flex:1 1 100%}#activityPanel{top:4px;padding:10px}.skill-cards{grid-template-columns:1fr}.bank-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr))}.bank-grid.compact{grid-template-columns:repeat(5,minmax(0,1fr))}.right .panel{padding:10px}}
 @media(min-width:921px){.right .bank-tools{grid-template-columns:1fr}.right .bank-tools select{grid-column:auto}}@media(prefers-reduced-motion:reduce){.fill,button{transition:none}}
 
+/* v4.7 boss collection */
+.collection-pet{padding:10px;background:#2b2525;border:1px solid #665047;border-radius:8px;color:#bdaea0;font-size:12px}
+.collection-pet.owned{border-color:#7dbd91;background:#233c2e;color:#d6ffde}
+.collection-items{display:grid;gap:5px}.collection-item{display:flex;justify-content:space-between;gap:9px;padding:7px 9px;background:#241f1c;border:1px solid #564633;border-radius:6px;color:#a99a88;font-size:11px}.collection-item.owned{border-color:#648b68;color:#b7e8bb}
 /* v3.12 visual refresh: warmer vanilla tabs, richer colors, subtle life */
 :root{--paper:#ead7b1;--paper-2:#dcc18e;--ink:#4a3318;--gold:#ddb25a;--forest:#355d46;--berry:#6a4256;--ocean:#2d5d73;--ember:#7b4b2c;--mist:#c7dfef}
 body{background:radial-gradient(circle at top,#5a4127 0%,#2b2119 34%,#15161b 82%)}
@@ -1815,6 +1819,33 @@ const HUNT_BOSSES=[
  {name:'Astral Hierophant',level:99,hp:2300,def:116,atk:122,maxHit:78,weakness:'magic',boss:true,bossTier:'late',gearSet:'Astral',
   loot:{Coins:510,'Void Residue':2},bossGearDrops:[['Astral Crown',.018],['Astral Vestments',.018],['Astral Legwraps',.018]]}
 ];
+// Distinct companion names; pets are permanent unlocks, never bank items.
+const BOSS_PETS={
+ 'Hillbreaker Giant':['Pebblefist',1/650,'🪨'],
+ 'Broodmother Vesha':['Silkwhisper',1/700,'🕷️'],
+ 'Hollow Magister':['Wispwick',1/750,'👻'],
+ 'Ashen Warlord':['Cinderclaw',1/1600,'🔥'],
+ 'Stormwing Matriarch':['Galecrest',1/1700,'🦅'],
+ 'Astral Hierophant':['Starling',1/1900,'✨'],
+ 'Belroth':['Duskling',1/2500,'🐉']
+};
+function collectionLog(){
+ if(!state.collectionLog||typeof state.collectionLog!=='object')state.collectionLog={};
+ return state.collectionLog;
+}
+function recordBossDrop(boss,item){
+ const log=collectionLog();
+ if(!log[boss]||typeof log[boss]!=='object')log[boss]={};
+ log[boss][item]=(Number(log[boss][item])||0)+1;
+}
+function rollBossPet(m){
+ const pet=BOSS_PETS[m.name];if(!pet||state.pets?.[m.name])return;
+ if(Math.random()>=pet[1])return;
+ state.pets??={};state.pets[m.name]=pet[0];
+ recordBossDrop(m.name,pet[0]);
+ note(`🐾 PET UNLOCKED! ${pet[0]} — companion of ${m.name}!`);
+ toast(`🐾 New pet: ${pet[0]}!`);
+}
 MONSTERS.push(...HUNT_BOSSES);
 // Appended only: old saves reference monsterIndex by numeric index.
 const OVERNIA_NEW_MONSTERS=[
@@ -2137,6 +2168,7 @@ function openRaidChest(){
  if(bankUsed()-freed+needed>GAME_CONFIG.bankSlots){note('🏦 Free bank space before opening the chest.');toast('Not enough bank slots');return}
  add(chest,-1);
  for(const [name,n] of gained)add(name,n);
+ recordBossDrop('Belroth',unique);
  state.stats.coinsEarned=(state.stats.coinsEarned||0)+6000;
  note(`🎁 Belroth's chest: ${quantity} ${unique}, 6,000 Coins and 100 Soul Shards!`);
  toast('Raid reward: '+unique);
@@ -2152,6 +2184,7 @@ function finishRaidWave(m){
   if(add('Soul Shard',n))state.stats.soulShardsFound=(state.stats.soulShardsFound||0)+n;
  }
  if(m.boss){
+  rollBossPet(m);
   awardRaidChest();raid.completions++;raid.wave=0;
   note(`⛰️ ${RAID_CONFIG.name} completed ${raid.completions} time(s). A new run begins at Wave 1.`);
  }else{
@@ -2953,7 +2986,7 @@ function newGame(){return {
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
  loadouts:defaultLoadouts(),autoSwitchWeakness:false,raidAutoRun:true,
  recipeLayoutVersion:25,
- hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
+ pets:{},collectionLog:{},hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
  active:null,progress:0,actionMs:GAME_CONFIG.actionMs,
  fireUntil:0,fireLastFuel:null,buffs:{},stats:emptyStats(),claimed:[],
@@ -3565,7 +3598,7 @@ function applyMonsterLoot(m){
  for(const [item,baseChance] of m.bossGearDrops||[]){
   const chance=clamp(baseChance*(1+gearMods().luckBonus),0,.95);
   if(Math.random()<chance){
-   if(add(item,1)){drops.push(`🌟 ${item}`);note(`🌟 BOSS DROP! ${item}`)}
+   if(add(item,1)){drops.push(`🌟 ${item}`);recordBossDrop(m.name,item);note(`🌟 BOSS DROP! ${item}`)}
    else note(`🏦 Bank full; missed boss gear ${item}.`);
   }
  }
@@ -3693,6 +3726,7 @@ function completeCombat(){
   else{
    state.stats.kills[m.name]=(state.stats.kills[m.name]||0)+1;
    const drops=applyMonsterLoot(m);
+   rollBossPet(m);
    note(`🏆 Defeated ${m.name}! Loot: ${drops.join(', ')||'Nothing'}`);
    state.monsterHp=m.hp;
   }
@@ -4233,8 +4267,8 @@ function refreshWorldLive(){
 }
 
 // ── Presentation / navigation ─────────────────────────────────────────────────
-const NAV_VIEWS=['world','skills','combat','raid',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
-const NAV_META={world:['🗺️','World Map'],skills:['📊','Skills Overview'],combat:['⚔️','Combat'],raid:['⛰️','Raid'],bank:['🏦','Bank'],shop:['🛒','Shop'],journal:['📜','Journal']};
+const NAV_VIEWS=['world','skills','combat','raid','collection',...Object.keys(SKILLS).filter(k=>!SKILLS[k].combat).sort((a,b)=>label(a).localeCompare(label(b),'en')),'bank','shop','journal'];
+const NAV_META={world:['🗺️','World Map'],skills:['📊','Skills Overview'],combat:['⚔️','Combat'],raid:['⛰️','Raid'],collection:['🐾','Collection Log'],bank:['🏦','Bank'],shop:['🛒','Shop'],journal:['📜','Journal']};
 function viewLabel(v){return NAV_META[v]?.[1]||label(v)}
 function navIcon(v){return NAV_META[v]?.[0]||SKILLS[v]?.icon||'🔹'}
 function journalReadyCount(){return QUESTS.filter(q=>!state.claimed.includes(q.id)&&journalTierUnlocked(q,state)&&q.test(state)).length}
@@ -4242,7 +4276,7 @@ const NAV_GROUPS=[
  {id:'adventure',label:'Adventure',icon:'🧭',views:['world','skills','combat','raid']},
  {id:'gathering',label:'Gathering',icon:'🌲',views:['agriculture','fishing','mining','woodcutting']},
  {id:'production',label:'Crafting & Production',icon:'⚒️',views:['alchemy','cooking','crafting','enchanting','fletching','smithing']},
- {id:'goals',label:'Items & Goals',icon:'🎒',views:['bank','shop','journal']}
+ {id:'goals',label:'Items & Goals',icon:'🎒',views:['bank','shop','journal','collection']}
 ];
 function navLevelText(v){
  return v==='world'?'Overnia':v==='skills'?'Lv '+totalSkillLevel():v==='combat'?'Lv '+combatLevel():
@@ -5174,6 +5208,22 @@ function renderRaidLive(){
  renderFood();renderAutoEatOptions();renderCombatResources();refreshRaidPanel();
 }
 
+function renderCollectionMain(){
+ const log=collectionLog();
+ const bosses=[...HUNT_BOSSES,RAID_WAVES.find(w=>w.name==='Belroth')];
+ const cards=bosses.map(b=>{
+  const pet=BOSS_PETS[b.name],items=[...(b.bossGearDrops||[]).map(row=>row[0]),...(b.name==='Belroth'?RAID_CONFIG.chestRewards.map(row=>row[0]):[]),pet[0]];
+  const found=items.filter(item=>(log[b.name]?.[item]||0)>0).length;
+  const petUnlocked=!!state.pets?.[b.name];
+  return `<article class="recipe-card"><div class="between"><strong class="recipe-title">${esc(b.name)}</strong><span class="recipe-badge">${found}/${items.length}</span></div>
+   <div class="small muted">Combat Lv ${b.level} · ${fmt(state.stats.kills[b.name]||0)} kills</div>
+   <div class="collection-pet ${petUnlocked?'owned':''}">${pet[2]} <strong>${esc(pet[0])}</strong> · ${petUnlocked?'Unlocked':'Not obtained'} <span class="muted">(1 in ${fmt(Math.round(1/pet[1]))})</span></div>
+   <div class="collection-items">${items.filter(x=>x!==pet[0]).map(item=>`<div class="collection-item ${log[b.name]?.[item]?'owned':''}"><span>${log[b.name]?.[item]?'✓':'◇'} ${esc(item)}</span><strong>${fmt(log[b.name]?.[item]||0)}</strong></div>`).join('')}</div>
+  </article>`;
+ }).join('');
+ const total=Object.keys(state.pets||{}).length;
+ el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">Boss hunting</div><h2>🐾 Collection Log</h2><p class="section-description">Track unique boss loot and unlock named companions. Pets are permanent collectibles and do not take bank space.</p></div></div><div class="info-box">🐾 Pets unlocked: <strong>${total}/${bosses.length}</strong> · Collection starts tracking drops from this version onward.</div><div class="skill-cards">${cards}</div>`;
+}
 function renderMain(){
  el('main').dataset.currentView=ui.view;
  document.body.dataset.currentView=ui.view;
@@ -5181,6 +5231,7 @@ function renderMain(){
  else if(ui.view==='world')renderWorldMain();
  else if(ui.view==='combat')renderCombatMain();
  else if(ui.view==='raid')renderRaidMain();
+ else if(ui.view==='collection')renderCollectionMain();
  else if(ui.view==='bank')renderBankMain();
  else if(ui.view==='shop')renderShopMain();
  else if(ui.view==='journal')renderJournalMain();

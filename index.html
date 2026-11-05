@@ -1009,9 +1009,61 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 .over-arena-footer span:last-child{color:#d9c59c;font-variant-numeric:tabular-nums}
 @media(max-width:650px){.over-arena{padding:8px;margin:8px 0 12px}.over-arena-grid{gap:7px}.over-fighter{padding:8px;gap:7px}.over-fighter-head{gap:5px;flex-wrap:wrap}.over-fighter-avatar{width:27px;height:27px;font-size:18px;border-radius:6px}.over-fighter-identity small{font-size:8px}.over-fighter-identity strong{font-size:11px}.over-combat-style{font-size:8px;padding:2px 4px}.over-health-numbers{font-size:9px;flex-wrap:wrap;gap:1px}.over-health-numbers strong{font-size:12px}.over-fighter-metrics{font-size:9px;gap:3px}.over-action-meta{font-size:9px}.over-arena-versus{height:23px;width:23px;font-size:8px}.over-arena-round{font-size:9px}.over-arena-footer{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.over-hp-fill,.over-action-track span{transition:none}}
+
+/* v3.42 — ordinary page scrolling must win over gestures on the atlas. */
+.world-map-shell{touch-action:pan-y;overscroll-behavior:auto}
+.world-map-shell.is-pan-mode{touch-action:none;cursor:grab}
+.world-map-zoom [aria-pressed="true"]{border-color:#d8c58d!important;background:#655739!important;color:#fff0cc!important}
+/* Local combat console: keep the fight visible, move configuration into light panels. */
+.combat-console-nav{display:flex;gap:5px;align-items:center;margin:10px 0 9px;padding:4px;background:#162635;border:1px solid #3d5262;border-radius:10px}
+.combat-console-nav button{flex:1;min-width:0;padding:8px 7px;font-size:12px;font-weight:750;border-radius:7px;background:transparent;color:#c4d3dc;border:1px solid transparent}
+.combat-console-nav button.is-active{background:#33564e;color:#f0e8d3;border-color:#789987}
+.combat-panel-section[hidden],.monster-compact[hidden]{display:none!important}
+.combat-panel-section{min-width:0}
+.combat-panel-section .section-title{margin-top:10px;margin-bottom:8px}
+.combat-panel-helper{font-size:11px;color:#bbd0c7;margin:4px 0 8px}
+.combat-monster-toolbar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;margin:10px 0 7px}
+.combat-monster-toolbar h3{margin:0;font-size:15px}
+.combat-monster-filters{display:flex;gap:4px;flex-wrap:wrap}
+.combat-monster-filters button{padding:5px 10px;font-size:11px;border-radius:7px}
+.combat-monster-filters button.is-active{background:#43654b;border-color:#a4bd92;color:#fff1d2}
+.combat-monsters.monster-quick-list{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;margin-bottom:10px}
+.monster.monster-compact{padding:6px 9px;border-radius:8px;min-width:0}
+.monster-compact .monster-quick-row{display:flex;align-items:center;gap:9px;min-width:0}
+.monster-compact .monster-quick-title{display:flex;align-items:center;gap:7px;flex:1 1 190px;min-width:0}
+.monster-compact .monster-name{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.monster-compact .recipe-badge{white-space:nowrap;flex:none}
+.monster-compact .monster-quick-stats{display:flex;align-items:center;gap:8px;flex:1 1 180px;color:#b7c8d5;font-size:11px;white-space:nowrap}
+.monster-compact .monster-quick-stats .monster-weakness{font-size:11px}
+.monster-compact .monster-actions{margin-left:auto;flex:none;flex-wrap:nowrap}
+.monster-compact .monster-actions button{padding:5px 9px;font-size:11px}
+.monster-compact .monster-quick-kills{font-size:10px;color:#a8c0cd;white-space:nowrap}
+.combat-fight-utilities{display:grid;grid-template-columns:1fr;gap:7px}
+.combat-fight-utilities .world-combat-shortcut{margin:0}
+.combat-fight-utilities .food-controls{margin:0 0 4px}
+.combat-food-foldout{margin:4px 0;padding:8px 10px;border-radius:8px;background:#192b39;border:1px solid #395466}
+.combat-food-foldout summary{font-size:12px;font-weight:700;cursor:pointer}
+.combat-food-foldout .info-box{margin:9px 0 0}
+@media(max-width:700px){.combat-console-nav button{font-size:11px}.monster-compact .monster-quick-row{flex-wrap:wrap;gap:4px 7px}.monster-compact .monster-quick-title{flex:1 1 100%}.monster-compact .monster-quick-stats{flex:1 1 auto}.monster-compact .monster-actions{margin-left:auto}.monster-compact .monster-quick-kills{display:none}.combat-monster-filters button{padding:5px 8px}}
+
+
+.over-arena-target{display:flex;align-items:center;gap:6px;margin:0 0 10px;position:relative;min-width:0}
+.over-arena-target label{color:#d8c49c;font-size:11px;font-weight:750;white-space:nowrap}
+.over-arena-target select{min-width:0;flex:1;height:30px;padding:4px 7px;font-size:11px;background:#1b2928;border-color:#587364;color:#e6e9d6}
+.over-arena-target button{font-size:11px;padding:5px 9px;white-space:nowrap}
+@media(max-width:650px){.over-arena-target{gap:4px;margin:0 0 8px}.over-arena-target label{font-size:10px}.over-arena-target select{font-size:10px}.over-arena-target button{font-size:10px;padding:5px 7px}}
+
+
+.world-console-nav{display:flex;gap:5px;padding:4px;margin:8px 0 10px;background:#1d302a;border:1px solid #566c59;border-radius:10px}
+.world-console-nav button{flex:1;padding:8px 5px;background:transparent;border:1px solid transparent;border-radius:7px;font-size:12px;font-weight:750;color:#c7d3bf}
+.world-console-nav button.is-active{color:#f0e8ce;background:#3e5c45;border-color:#7eaa83}
+.world-panel-section[hidden]{display:none!important}
+.world-panel-section{min-width:0}
+@media(max-width:650px){.world-console-nav button{font-size:11px;padding:7px 4px}}
+
 </style></head>
 <body>
-<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.41 · Food Progression</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>🌄 Overnia Idle RPG <span class="version">v3.42 · Compact Combat & Map Controls</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -2729,7 +2781,7 @@ function newGame(){return {
  log:['🌄 Welcome to Overnia. The village bells ring beneath the mountain.'],lastSaved:Date.now(),lastProcessedAt:Date.now()
 }}
 let state=newGame();
-const ui={worldMapExpanded:false,worldMapPanX:0,worldMapPanY:0,overniaRumor:0,view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},skillSelection:{},focusExpanded:false,sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null,loadoutTab:0};
+const ui={worldSection:'atlas',worldMapExpanded:false,worldMapPanMode:false,worldMapPanX:0,worldMapPanY:0,combatPanel:'fight',combatMonsterFilter:'all',combatTargetIndex:null,overniaRumor:0,view:'combat',skillsFilter:'All',skillsSort:'level',navSearch:'',navGroups:{adventure:true,gathering:true,production:true,goals:true},skillSearch:{},skillMode:{},skillTab:{},skillSelection:{},focusExpanded:false,sidebarTab:'bank',shopCategory:'All',shopQty:1,bank:{main:{search:'',tab:'all',page:0,selected:null},side:{search:'',tab:'all',page:0,selected:null}},journalCategory:'All',gearSlot:null,loadoutTab:0};
 let lastTick=performance.now(),lastUiPulse=0,lastSavedFrame=0;
 let offlineRunning=false,simulatedTime=null,offlineLogCount=0;
 const ACTIVITY_FEED_CONFIG={lifetimeMs:5000,fadeMs:1100,maxRowsDesktop:6,maxRowsMobile:3};
@@ -3173,6 +3225,8 @@ function startCombat(index){
  autoEquipForEnemy(MONSTERS[index]);
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
  clearActivityFeed();ui.combatLastHit=null;state.monsterIndex=index;state.monsterHp=MONSTERS[index].hp;
+ ui.combatTargetIndex=index;
+ const target=el('combatTarget');if(target&&target.querySelector(`option[value="${index}"]`))target.value=String(index);
  state.active={type:'combat'};state.progress=0;note(`⚔️ Fighting ${MONSTERS[index].name}`);renderProgress();refreshDynamic();save();
 }
 function stop(silent=false){state.active=null;state.progress=0;if(!silent)note('⏹ Activity stopped.');refreshDynamic();renderProgress();save()}
@@ -3845,8 +3899,11 @@ function renderWorldMain(){
  const availableHelpers=OVERNIA_HIRELINGS.filter(h=>h.area===place.id&&!hires.some(active=>active.id===h.id));
  const rumor=(OVERNIA_RUMORS[place.id]||OVERNIA_RUMORS.hearthwick)[(Number(ui.overniaRumor)||0)%(OVERNIA_RUMORS[place.id]?.length||3)];
  el('main').innerHTML=`<div class="heading"><div><div class="eyebrow">The realm of Overnia</div><h2>🗺️ World Atlas</h2><p class="section-description">One vast realm — forests, trading roads, dwarven holds and the Highspire mountain range.</p></div><span class="recipe-badge">${world.visited.length} / ${OVERNIA_PLACES.length} explored</span></div>
- <div class="world-map-toolbar"><div class="world-map-zoom"><button data-world-zoom="out" aria-label="Zoom out">−</button><button data-world-zoom="reset" title="Fit all of Overnia">Full map</button><button data-world-zoom="in" aria-label="Zoom in">＋</button><button data-world-zoom="focus" title="Focus your present region">⌖ Focus</button><button data-world-zoom="expand" title="Make the map taller">${ui.worldMapExpanded?'↙ Normal view':'⤢ Expand'}</button></div><small>≈160 × 90 km · ${zoom.toFixed(2)}× · Drag to explore</small></div>
- <div class="world-map-shell ${zoom>=1.75?'atlas-detail':''} ${ui.worldMapExpanded?'is-expanded':''}" data-world-map-shell aria-label="Map of Overnia; drag to pan and scroll to zoom" tabindex="0">
+ <nav class="world-console-nav" aria-label="World sections">
+ ${[['atlas','🗺️ Atlas'],['stories','📜 Quests'],['helpers','🤝 Hirelings']].map(([tab,title])=>`<button type="button" data-world-section-tab="${tab}" class="${ui.worldSection===tab?'is-active':''}" aria-pressed="${ui.worldSection===tab}">${title}</button>`).join('')}
+ </nav><section class="world-panel-section" data-world-section="atlas" ${ui.worldSection==='atlas'?'':'hidden'}>
+ <div class="world-map-toolbar"><div class="world-map-zoom"><button data-world-zoom="out" aria-label="Zoom out">−</button><button data-world-zoom="reset" title="Fit all of Overnia">Full map</button><button data-world-zoom="in" aria-label="Zoom in">＋</button><button data-world-zoom="focus" title="Focus your present region">⌖ Focus</button><button data-world-zoom="pan" aria-pressed="${ui.worldMapPanMode}" title="Enable map dragging with your finger">${ui.worldMapPanMode?'✓ Move map':'✋ Move map'}</button><button data-world-zoom="expand" title="Make the map taller">${ui.worldMapExpanded?'↙ Normal view':'⤢ Expand'}</button></div><small>≈160 × 90 km · ${zoom.toFixed(2)}× · Scroll page normally; Ctrl + wheel to zoom</small></div>
+ <div class="world-map-shell ${zoom>=1.75?'atlas-detail':''} ${ui.worldMapExpanded?'is-expanded':''} ${ui.worldMapPanMode?'is-pan-mode':''}" data-world-map-shell aria-label="Map of Overnia; use zoom buttons, or Ctrl plus mouse wheel to zoom" tabindex="0">
   <div class="world-map-inner" id="worldMapStage" style="transform:translate(${offset.x}%,${offset.y}%) scale(${zoom})">
    ${OVERNIA_ATLAS_SVG}${pins}
   </div>
@@ -3855,14 +3912,14 @@ function renderWorldMain(){
   <div class="world-map-caption">Map distances are approximate · Click a marker to travel instantly (prototype)</div>
  </div>
  <div class="world-location-grid">${OVERNIA_PLACES.map(p=>`<button data-world-travel="${p.id}" class="world-location ${p.id===place.id?'is-current':''}"><span>${p.icon}</span><b>${esc(p.short)}</b><small>${esc(p.kind)}${p.id!==place.id?' · ≈'+overniaDistanceKm(place,p)+' km away':' · You are here'}</small></button>`).join('')}</div>
- <section class="world-scene"><div class="world-scene-head"><div><div class="eyebrow">Now exploring</div><h3>${place.icon} ${esc(place.name)}</h3></div><span class="recipe-badge">${esc(place.kind)}</span></div><p>${esc(place.description)}</p><p class="world-lore">${esc(place.detail)}</p><div class="world-npcs">🗣️ ${esc(place.people)}</div><details class="world-lore-deep"><summary>📖 ${esc(regionLore.head)} · history and life</summary><div class="world-lore-columns"><section><h4>How this place came to be</h4><p>${esc(regionLore.history)}</p></section><section><h4>Life here</h4><p>${esc(regionLore.daily)}</p></section><section><h4>The trouble beneath the surface</h4><p>${esc(regionLore.conflict)}</p></section></div><div class="world-lore-landmarks">📍 ${esc(regionLore.landmarks)}</div></details><div class="world-rumor" id="worldRumor"><b>${esc(rumor[0])}:</b> “${esc(rumor[1])}”</div><div class="world-scene-actions"><button data-world-rumor>💬 Hear another tale</button><button data-nav="combat">⚔️ Hunt ${areaMobs.length} local creatures</button>${place.id==='hearthwick'?'<button data-nav="shop">🛒 Village market</button>':''}</div></section>
+ <section class="world-scene"><div class="world-scene-head"><div><div class="eyebrow">Now exploring</div><h3>${place.icon} ${esc(place.name)}</h3></div><span class="recipe-badge">${esc(place.kind)}</span></div><p>${esc(place.description)}</p><p class="world-lore">${esc(place.detail)}</p><div class="world-npcs">🗣️ ${esc(place.people)}</div><details class="world-lore-deep"><summary>📖 ${esc(regionLore.head)} · history and life</summary><div class="world-lore-columns"><section><h4>How this place came to be</h4><p>${esc(regionLore.history)}</p></section><section><h4>Life here</h4><p>${esc(regionLore.daily)}</p></section><section><h4>The trouble beneath the surface</h4><p>${esc(regionLore.conflict)}</p></section></div><div class="world-lore-landmarks">📍 ${esc(regionLore.landmarks)}</div></details><div class="world-rumor" id="worldRumor"><b>${esc(rumor[0])}:</b> “${esc(rumor[1])}”</div><div class="world-scene-actions"><button data-world-rumor>💬 Hear another tale</button><button data-nav="combat">⚔️ Hunt ${areaMobs.length} local creatures</button>${place.id==='hearthwick'?'<button data-nav="shop">🛒 Village market</button>':''}</div></section></section><section class="world-panel-section" data-world-section="stories" ${ui.worldSection==='stories'?'':'hidden'}>
  <div class="world-section-head"><h3>📜 Local stories</h3><small>${quests.filter(q=>world.completed.includes(q.id)).length}/${quests.length} finished</small></div>
  <div class="world-quests">${quests.map(overniaMiniQuest).join('')}</div>
- <details class="world-recruit-quests" id="worldRecruitmentQuests" open><summary>🤝 Recruitment stories · ${recruitQuests.filter(q=>world.completed.includes(q.id)).length}/${recruitQuests.length} helpers befriended</summary><p class="small subdued">Earn a specialist's trust through their personal quest. Rewards are granted once, then their paid two-hour contracts become available.</p><div class="world-quests">${recruitQuests.map(overniaMiniQuest).join('')}</div></details>
+ <details class="world-recruit-quests" id="worldRecruitmentQuests" open><summary>🤝 Recruitment stories · ${recruitQuests.filter(q=>world.completed.includes(q.id)).length}/${recruitQuests.length} helpers befriended</summary><p class="small subdued">Earn a specialist's trust through their personal quest. Rewards are granted once, then their paid two-hour contracts become available.</p><div class="world-quests">${recruitQuests.map(overniaMiniQuest).join('')}</div></details></section><section class="world-panel-section" data-world-section="helpers" ${ui.worldSection==='helpers'?'':'hidden'}>
  <section class="world-hire-panel"><div class="world-section-head"><h3>🤝 Hire local help</h3><small>${hires.length}/2 active · helpers work for 2 hours</small></div>
  ${hires.length?`<div class="world-hired-list">${hires.map(h=>{const helper=OVERNIA_HIRE_BY_ID[h.id],mins=Math.max(0,Math.ceil((h.until-Date.now())/60000));return `<div class="world-hired"><div><b>${helper.icon} ${esc(helper.name)}</b><div class="subdued small">${OVERNIA_PLACE_BY_ID[helper.area]?.short||'Unknown'} · ${esc(helper.item)} · about 1 every ${Math.round(helper.every/1000)}s</div></div><div class="world-hired-actions"><span data-world-hire-time="${esc(h.id)}">${mins} min left</span><button data-world-hire-end="${esc(h.id)}">End contract</button></div></div>`;}).join('')}</div>`:''}
  ${availableHelpers.length?`<div class="world-hire-grid">${availableHelpers.map(h=>{const unlocked=world.completed.includes('hire-'+h.id),quest=OVERNIA_WORLD_QUESTS.find(q=>q.id==='hire-'+h.id);return `<div class="world-worker ${unlocked?'':'world-worker-locked'}"><div class="between"><b>${h.icon} ${esc(h.name)}</b><span class="world-worker-status">${unlocked?'✓ Trusted':'🔒 Locked'}</span></div><small>${esc(h.desc)}</small><div class="world-helper-output">${itemArt(h.item)} <strong>${esc(h.item)}</strong> · 1 / ${Math.round(h.every/1000)}s</div><div class="between"><span>Fee: ${fmt(h.fee)} GP / 2h</span><span>+${fmt(h.xp)} ${label(h.skill)} XP</span></div>${unlocked?`<button data-world-hire="${h.id}" ${hires.length>=2||count('Coins')<h.fee?'disabled':''}>Hire ${esc(h.name.split(' ')[0])}</button>`:`<button data-world-quest-focus="${esc(quest.id)}">📜 Unlock quest: ${esc(quest.title)}</button>`}</div>`}).join('')}</div>`:'<p class="subdued small">No more local specialists are available here. Travel to another region.</p>'}</section>
- <details class="world-chronicle"><summary>📖 Chronicles of Overnia · The Seven Lost Bells</summary><p>Old songs say the mountain once held seven bells, forged by the first dwarven clans to warn forest, village and sky of what slept below. One by one, their voices went silent. The elves believe the roots of Elderbough swallowed the echoes; the dwarves say something below Ironhollow has begun to ring them from inside the stone.</p><p>Hearthwick still celebrates the Lantern Feast each autumn. Between the laughter of tavern regulars, frightened merchants speak of missing stars over Starfall and a crown buried under Highspire. Nobody agrees who wore that crown—only that Belroth remembers.</p></details>`;
+ <details class="world-chronicle"><summary>📖 Chronicles of Overnia · The Seven Lost Bells</summary><p>Old songs say the mountain once held seven bells, forged by the first dwarven clans to warn forest, village and sky of what slept below. One by one, their voices went silent. The elves believe the roots of Elderbough swallowed the echoes; the dwarves say something below Ironhollow has begun to ring them from inside the stone.</p><p>Hearthwick still celebrates the Lantern Feast each autumn. Between the laughter of tavern regulars, frightened merchants speak of missing stars over Starfall and a crown buried under Highspire. Nobody agrees who wore that crown—only that Belroth remembers.</p></details></section>`;
 }
 function refreshWorldLive(){
  document.querySelectorAll('[data-world-hire-time]').forEach(node=>{const id=node.getAttribute('data-world-hire-time');const hire=activeOverniaHires().find(h=>h.id===id);node.textContent=hire?Math.max(0,Math.ceil((hire.until-Date.now())/60000))+' min left':'Finished';});
@@ -4172,8 +4229,11 @@ function combatArenaHtml(mode){
  const playerMax=maxHp(),playerHp=clamp(Number(state.hp)||0,0,playerMax);
  const enemyHp=active?clamp(Number(state.monsterHp)||0,0,enemy.hp):enemy.hp;
  const hit=combatPreview(style,state.equipment,enemy);
+ const choices=raid?[]:MONSTERS.map((m,i)=>({m,i})).filter(({m})=>m.area===state.world.location).sort((a,b)=>a.m.level-b.m.level||a.m.name.localeCompare(b.m.name,'en'));
+ const selected=choices.some(({i})=>i===ui.combatTargetIndex)?ui.combatTargetIndex:(choices.some(({i})=>i===state.monsterIndex)?state.monsterIndex:choices[0]?.i);
  return `<section class="over-arena" id="combatArena" data-arena-mode="${mode}" aria-label="${raid?'Raid':'Combat'} battle overview">
   <div class="over-arena-heading"><span class="over-arena-kicker">⚔️ BATTLE</span><b data-arena-status>${active?'● In combat':'○ Ready to fight'}</b><span class="over-arena-round">${raid?'Wave '+(raidState().wave+1)+' / '+RAID_WAVES.length:'Overnia · '+esc(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Wilderness')}</span></div>
+  ${raid?'':`<div class="over-arena-target"><label for="combatTarget">Target</label><select id="combatTarget" aria-label="Choose monster to fight">${choices.map(({m,i})=>`<option value="${i}" ${selected===i?'selected':''}>Lv ${m.level} · ${esc(m.name)}</option>`).join('')}</select><button type="button" data-quick-inspect title="Inspect selected monster">🔎</button><button type="button" data-quick-fight>⚔️ Fight</button></div>`}
   <div class="over-arena-grid">
    <article class="over-fighter over-fighter-player">
     <div class="over-fighter-head"><span class="over-fighter-avatar" aria-hidden="true">🛡️</span><div class="over-fighter-identity"><small>YOU · LEVEL <span data-arena-player-level>${combatLevel()}</span></small><strong>Adventurer</strong></div><span class="over-combat-style" data-arena-style>${styleIcon} ${style.toUpperCase()}</span></div>
@@ -4245,6 +4305,9 @@ function renderCombatMain(){
  const mods=gearMods();
  let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2></div></div>`;
  html+=combatArenaHtml('combat');
+ html+=`<nav class="combat-console-nav" aria-label="Combat controls">
+  ${[['fight','⚔️ Hunt'],['setup','⚙️ Loadout & XP'],['info','📊 Details']].map(([tab,name])=>`<button type="button" data-combat-panel="${tab}" class="${ui.combatPanel===tab?'is-active':''}" aria-pressed="${ui.combatPanel===tab}">${name}</button>`).join('')}
+ </nav><section class="combat-panel-section" data-combat-section="setup" ${ui.combatPanel==='setup'?'':'hidden'}>`;
  html+=equipmentLoadoutsHtml(true);
  html+=combatAutoSwitchHtml();
  html+=combatTrainingHtml();
@@ -4260,26 +4323,25 @@ function renderCombatMain(){
  html+=`<div class="health-box"><div class="between"><h3>❤️ Hitpoints · Level <span id="hitpointsLevel">${levelFromXp(state.xp.hitpoints)}</span></h3><b id="combatHp">${state.hp}/${maxHp()} HP</b></div><div class="subdued small" id="hitpointsXpText">${xpText('hitpoints')}</div><div class="xpbar"><div class="fill" id="hitpointsXpFill" style="width:${xpFill('hitpoints')}%"></div></div><small class="subdued">Each Hitpoints level adds 10 HP.</small></div>`;
  html+=`<div class="stat-grid"><div class="stat-tile"><small>Accuracy bonus</small><strong id="boostAccuracy">+${pct(mods.attackPct)}</strong></div><div class="stat-tile"><small>Strength bonus</small><strong id="boostStrength">+${pct(mods.strengthPct)}</strong></div><div class="stat-tile"><small>Defence bonus</small><strong id="boostDefence">+${pct(mods.defencePct)}</strong></div><div class="stat-tile"><small>Treasure per kill</small><strong id="boostTreasure">${pct(treasureChance())}</strong></div></div>`;
  html+=`<div class="combat-max-row"><span>⚔️ Max hits <small>(before enemy weakness)</small></span>${[['attack','Melee'],['ranged','Ranged'],['magic','Magic']].map(([style,name])=>`<b>${name} <strong data-current-max="${style}">${fmt(combatPreview(style).baseMax)}</strong></b>`).join('')}</div>`;
- html+=`<h3 class="section-title">🍽️ Food & Auto Eat</h3><div class="food-controls" id="combatFood"></div>
- <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote"></small></div>`;
- html+=`<div class="world-combat-shortcut">📍 Hunting in <b>${esc(OVERNIA_PLACE_BY_ID[state.world.location].name)}</b><button data-nav="world">🗺️ Travel</button></div>`;
+ html+=`</section><section class="combat-panel-section" data-combat-section="fight" ${ui.combatPanel==='fight'?'':'hidden'}>
+ <div class="combat-fight-utilities"><div class="world-combat-shortcut">📍 Hunting in <b>${esc(OVERNIA_PLACE_BY_ID[state.world.location].name)}</b><button data-nav="world">🗺️ Travel</button></div>
+ <details class="combat-food-foldout"><summary>🍽️ Food & Auto Eat</summary><div class="food-controls" id="combatFood"></div>
+ <div class="info-box"><label class="checkbox-row"><input type="checkbox" id="autoEatEnabled" ${state.autoEat.enabled?'checked':''}> Enable Auto Eat</label><div class="stat-grid"><label><span class="form-label">Food in your bank</span><select id="autoEatFood"></select></label><label><span class="form-label">Eat below</span><select id="autoEatThreshold">${[15,30,50].map(x=>`<option value="${x}" ${Number(state.autoEat.threshold)===x?'selected':''}>${x}% HP</option>`).join('')}</select></label></div><small class="subdued" id="autoEatFoodNote"></small></div></details><div class="combat-quick-food" id="combatQuickFood"></div></div>`;
+ const localMonsters=MONSTERS.map((m,i)=>({m,i})).filter(({m})=>m.area===state.world.location)
+  .sort((a,b)=>Number(a.m.level)-Number(b.m.level)||a.m.name.localeCompare(b.m.name,'en'));
+ html+=`<div class="combat-monster-toolbar"><h3>⚔️ Local monsters · ${localMonsters.length}</h3><div class="combat-monster-filters" role="group" aria-label="Filter monsters">
+ ${[['all','All'],['regular','Regular'],['boss','Bosses']].map(([key,word])=>`<button type="button" data-combat-monster-filter="${key}" class="${ui.combatMonsterFilter===key?'is-active':''}" aria-pressed="${ui.combatMonsterFilter===key}">${word}</button>`).join('')}
+ </div></div><div class="combat-monsters monster-quick-list">${localMonsters.map(({m,i})=>{const tier=m.boss?'boss':'regular';return `<div class="monster monster-compact ${m.boss?'boss-'+m.bossTier:''}" data-combat-monster-tier="${tier}" ${ui.combatMonsterFilter!=='all'&&ui.combatMonsterFilter!==tier?'hidden':''}>
+ <div class="monster-quick-row"><div class="monster-quick-title"><span class="recipe-badge level">Lv ${m.level}</span><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span></div>
+ <div class="monster-quick-stats"><span>${fmt(m.hp)} HP</span><span>Hit ${fmt(m.maxHit)}</span><span class="monster-weakness">${weaknessLabel(m.weakness)}</span></div>
+ <small class="monster-quick-kills">Kills <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small>
+ <div class="monster-actions"><button data-inspect-monster="${i}" title="Monster info and drops">🔎</button><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div></div>`}).join('')}</div>`;
+ html+=`</section><section class="combat-panel-section" data-combat-section="info" ${ui.combatPanel==='info'?'':'hidden'}>`;
  html+=`<div class="info-box"><div class="between"><div><strong>⛰️ Deep Mountain Expedition</strong><p>12 waves. Defeat Belroth for rare rewards.</p></div><button data-nav="raid">Open Raid →</button></div></div>`;
- const grouped=[
-  ['⚔️ Regular monsters',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>!m.boss&&m.area===state.world.location)],
-  ['👑 Early bosses · accessible rare power gear',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>m.bossTier==='early'&&m.area===state.world.location)],
-  ['🌟 Late-game boss hunts · rare power sets',MONSTERS.map((m,i)=>[m,i]).filter(([m])=>m.bossTier==='late'&&m.area===state.world.location)]
- ];
- for(const [heading,entries] of grouped){
-  if(!entries.length)continue;
-  html+=`<h3 class="section-title">${heading}</h3><div class="combat-monsters">${entries.map(([m,i])=>`<div class="monster ${m.boss?'boss-'+m.bossTier:''}"><div class="between"><span class="monster-name">${monsterIcon(m)} ${esc(m.name)}</span><span class="recipe-badge level">Lv ${m.level}</span></div>
-   ${m.boss?`<span class="monster-type">${m.bossTier==='early'?'EARLY BOSS':'ENDGAME BOSS'} · ${esc(m.gearSet)} set</span>`:''}
-   <p>${fmt(m.hp)} HP · Max hit ${m.maxHit}<br><span class="monster-weakness">Weak to ${weaknessLabel(m.weakness)}</span>${m.boss?`<br>🌟 Exclusive armour: ${m.bossGearDrops.length} drops`:''}</p>
-   <div class="between"><small class="subdued">Kills: <span data-kill-count="${esc(m.name)}">${fmt(state.stats.kills[m.name]||0)}</span></small><div class="monster-actions"><button data-inspect-monster="${i}">🔎 Inspect</button><button data-monster="${i}">${state.active?.type==='combat'&&state.monsterIndex===i?'✓ Fighting':'Fight'}</button></div></div></div>`).join('')}</div>`;
- }
  const total=TREASURE_TABLE.reduce((sum,r)=>sum+r[1],0);
  html+=`<details class="info-box"><summary>💠 Soul Gems</summary><p>${pct(GAME_CONFIG.soulGemCombatChance)} Soul Gem chance per kill · ${pct(GAME_CONFIG.soulShardCombatChance)} Soul Shard chance. Prismatic: 1 in 10,000 Soul Gems.</p></details>`;
  html+=`<details class="info-box"><summary>💎 Treasure Table · <strong id="treasureRateText">${pct(TREASURE_CHANCE)} base chance per kill</strong></summary><p>Each kill rolls for a gem. If successful, gem type is selected by relative weight. Luck gear and potions raise the initial treasure chance and unique drop rates.</p><div class="bank-count">Current effective treasure chance: <b id="treasureCurrent">${pct(treasureChance())}</b>. Conditional gem odds below add up to 100%.</div>${TREASURE_TABLE.map(([gem,weight])=>`<div class="between" style="padding:5px 0;border-bottom:1px solid #39526a"><span>${itemIcon(gem)} ${esc(gem)}</span><span class="small">${pct(weight/total)} of gems · <span data-gem-chance="${weight}">${pct(treasureChance()*weight/total)}</span> per kill</span></div>`).join('')}</details>`;
- html+=`<h3 class="section-title">🧪 Active buffs</h3><div id="buffList"></div>`;
+ html+=`<h3 class="section-title">🧪 Active buffs</h3><div id="buffList"></div></section>`;
  el('main').innerHTML=html;renderFood();renderAutoEatOptions();renderBuffs();
 }
 function renderAutoEatOptions(){
@@ -4828,7 +4890,7 @@ let atlasDrag=null;
 document.addEventListener('pointerdown',event=>{
  const shell=event.target.closest?.('[data-world-map-shell]');
  if(!shell||event.target.closest('button'))return;
- if((event.pointerType==='mouse'&&event.button!==0)||Number(state.world.mapZoom)<=1)return;
+ if((event.pointerType==='mouse'&&event.button!==0)||(event.pointerType!=='mouse'&&!ui.worldMapPanMode)||Number(state.world.mapZoom)<=1)return;
  atlasDrag={id:event.pointerId,shell,startX:event.clientX,startY:event.clientY,panX:ui.worldMapPanX||0,panY:ui.worldMapPanY||0};
  shell.setPointerCapture?.(event.pointerId);
  shell.classList.add('is-dragging');
@@ -4846,6 +4908,8 @@ for(const name of ['pointerup','pointercancel'])document.addEventListener(name,e
 });
 document.addEventListener('wheel',event=>{
  if(!event.target.closest?.('[data-world-map-shell]'))return;
+ // The wheel should scroll the page normally. Map zoom requires a modifier.
+ if(!(event.ctrlKey||event.metaKey||event.altKey))return;
  event.preventDefault();
  const current=clamp(Number(state.world.mapZoom)||1,1,3.5);
  const next=clamp(Math.round((current+(event.deltaY<0?.20:-.20))*100)/100,1,3.5);
@@ -4860,11 +4924,36 @@ function handleClick(e){
  if(b.hasAttribute('data-nav-group')){
   const id=b.dataset.navGroup;ui.navGroups[id]=!ui.navGroups[id];renderNav();return;
  }
+ if(b.hasAttribute('data-world-section-tab')){
+  const section=b.dataset.worldSectionTab;
+  if(!['atlas','stories','helpers'].includes(section))return;
+  ui.worldSection=section;
+  for(const node of document.querySelectorAll('[data-world-section]'))node.hidden=node.dataset.worldSection!==section;
+  for(const node of document.querySelectorAll('[data-world-section-tab]')){const active=node.dataset.worldSectionTab===section;node.classList.toggle('is-active',active);node.setAttribute('aria-pressed',String(active));}
+  return;
+ }
+ if(b.hasAttribute('data-combat-panel')){
+  const choice=b.dataset.combatPanel;if(!['fight','setup','info'].includes(choice))return;
+  ui.combatPanel=choice;
+  for(const node of document.querySelectorAll('[data-combat-section]'))node.hidden=node.dataset.combatSection!==choice;
+  for(const node of document.querySelectorAll('[data-combat-panel]')){const selected=node.dataset.combatPanel===choice;node.classList.toggle('is-active',selected);node.setAttribute('aria-pressed',String(selected));}
+  return;
+ }
+ if(b.hasAttribute('data-combat-monster-filter')){
+  const choice=b.dataset.combatMonsterFilter;if(!['all','regular','boss'].includes(choice))return;
+  ui.combatMonsterFilter=choice;
+  for(const node of document.querySelectorAll('[data-combat-monster-tier]'))node.hidden=choice!=='all'&&node.dataset.combatMonsterTier!==choice;
+  for(const node of document.querySelectorAll('[data-combat-monster-filter]')){const selected=node.dataset.combatMonsterFilter===choice;node.classList.toggle('is-active',selected);node.setAttribute('aria-pressed',String(selected));}
+  return;
+ }
+ if(b.hasAttribute('data-quick-fight')){const value=Number(el('combatTarget')?.value);if(MONSTERS[value])return startCombat(value);return;}
+ if(b.hasAttribute('data-quick-inspect')){const value=Number(el('combatTarget')?.value);if(MONSTERS[value])return inspectMonster(value);return;}
  if(b.hasAttribute('data-nav'))return navigate(b.dataset.nav);
  if(b.hasAttribute('data-world-travel'))return travelToOvernia(b.dataset.worldTravel);
  if(b.hasAttribute('data-world-zoom')){
   const action=b.dataset.worldZoom;
   if(action==='expand'){ui.worldMapExpanded=!ui.worldMapExpanded;renderWorldMain();return}
+  if(action==='pan'){ui.worldMapPanMode=!ui.worldMapPanMode;renderWorldMain();return}
   const levels=[1,1.4,1.85,2.5,3.5],current=clamp(Number(state.world.mapZoom)||1,1,3.5);
   let next=current;
   if(action==='in')next=levels.find(v=>v>current+0.01)||3.5;
@@ -4876,7 +4965,7 @@ function handleClick(e){
  }
  if(b.hasAttribute('data-world-accept'))return acceptWorldQuest(b.dataset.worldAccept);
  if(b.hasAttribute('data-world-claim'))return claimWorldQuest(b.dataset.worldClaim);
- if(b.hasAttribute('data-world-quest-focus')){const details=el('worldRecruitmentQuests');if(details)details.open=true;const card=el('main')?.querySelector(`[data-world-quest-card="${CSS.escape(b.dataset.worldQuestFocus)}"]`);if(card){if(card.tagName==='DETAILS')card.open=true;card.scrollIntoView({behavior:'smooth',block:'center'});card.classList.add('world-quest-highlight');setTimeout(()=>card.classList.remove('world-quest-highlight'),1600);}return;}
+ if(b.hasAttribute('data-world-quest-focus')){ui.worldSection='stories';for(const node of document.querySelectorAll('[data-world-section]'))node.hidden=node.dataset.worldSection!=='stories';for(const node of document.querySelectorAll('[data-world-section-tab]')){const selected=node.dataset.worldSectionTab==='stories';node.classList.toggle('is-active',selected);node.setAttribute('aria-pressed',String(selected));}const details=el('worldRecruitmentQuests');if(details)details.open=true;const card=el('main')?.querySelector(`[data-world-quest-card="${CSS.escape(b.dataset.worldQuestFocus)}"]`);if(card){if(card.tagName==='DETAILS')card.open=true;card.scrollIntoView({behavior:'smooth',block:'center'});card.classList.add('world-quest-highlight');setTimeout(()=>card.classList.remove('world-quest-highlight'),1600);}return;}
  if(b.hasAttribute('data-world-hire'))return hireOverniaHelper(b.dataset.worldHire);
  if(b.hasAttribute('data-world-hire-end'))return endOverniaHire(b.dataset.worldHireEnd);
  if(b.hasAttribute('data-world-rumor'))return overhearOverniaRumor();
@@ -4985,6 +5074,7 @@ function handleInput(e){
   bankMoveItem(t.dataset.item,t.value);
  }
  if(t.id==='shopQty'){ui.shopQty=Number(t.value);renderShopItems()}
+ if(t.id==='combatTarget'&&MONSTERS[Number(t.value)]){ui.combatTargetIndex=Number(t.value);return;}
  if(t.id==='rangedAmmo'&&RANGED_AMMO[t.value]&&count(t.value)>0){state.rangedAmmo=t.value;renderCombatResources();save()}
  if(t.id==='autoEatEnabled'){state.autoEat.enabled=t.checked;save()}
  if(t.id==='autoEatFood'){if(count(t.value)>0&&Object.hasOwn(FOOD,t.value)){state.autoEat.food=t.value;renderAutoEatOptions();save()}}
@@ -5225,7 +5315,7 @@ function buildDevOptions(){
  el('devSkill').innerHTML=Object.keys(SKILLS).map(k=>`<option value="${esc(k)}">${esc(label(k))}</option>`).join('');
  const all=new Set([...Object.keys(ITEM_META),...Object.keys(EQUIPMENT),...Object.keys(POTIONS),...Object.keys(FOOD),...SHOP_ITEMS.map(x=>x.name),'Coins',RAID_CONFIG.chest]);
  el('devItemList').innerHTML=[...all].sort().map(x=>`<option value="${esc(x)}"></option>`).join('');
- el('devMonster').innerHTML=MONSTERS.map((m,i)=>`<option value="${i}">Lv ${m.level} · ${esc(m.name)}</option>`).join('');
+ el('devMonster').innerHTML=MONSTERS.map((m,i)=>({m,i})).sort((a,b)=>a.m.level-b.m.level||a.m.name.localeCompare(b.m.name,'en')).map(({m,i})=>`<option value="${i}">Lv ${m.level} · ${esc(m.name)}</option>`).join('');
  el('devWave').innerHTML=RAID_WAVES.map((m,i)=>`<option value="${i}">${i+1}. ${esc(m.name)}</option>`).join('');
 }
 function devPositiveNumber(id,max){

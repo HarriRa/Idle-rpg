@@ -773,9 +773,30 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 .combat-xp-details .combat-choices{margin-top:12px}
 .combat-xp-details .combat-choice{padding:8px;border:1px solid #47606c;border-radius:8px;background:#162c35}
 @media(max-width:650px){.combat-train-options{grid-template-columns:1fr}.combat-training{padding:11px}}
+
+/* v3.29: quick swap presets + optional weakness switching */
+.loadout-panel{padding:10px;border:1px solid #5b655b;border-radius:12px;margin-bottom:12px;background:linear-gradient(160deg,#193127,#172334)}
+.loadout-panel h3{margin:0!important;font-size:15px}
+.loadout-panel>p{margin:6px 0 10px;line-height:1.35}
+.loadout-toggle{background:#203f34;border-radius:8px;padding:8px;margin:9px 0 3px;font-weight:650}
+.loadout-list{display:grid;gap:7px}
+.loadout-card{padding:8px;border:1px solid #466052;background:#182c2c;border-radius:9px;min-width:0}
+.loadout-card-heading,.loadout-card-options,.loadout-actions{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.loadout-card-heading strong{font-size:12px}.loadout-card-options{margin:6px 0;flex-wrap:wrap}
+.loadout-card-options input{width:98px;min-width:0;flex:1;padding:5px;font-size:12px;background:#112b32;border:1px solid #4a6565;border-radius:6px;color:#e9f7ff}
+.loadout-role-label{font-size:10px;color:#b9cfcb;display:flex;align-items:center;gap:4px}
+.loadout-role-label select{max-width:116px;font-size:11px;padding:5px 3px;border-radius:6px;background:#102935}
+.loadout-actions button{padding:6px 8px;font-size:11px;flex:1}
+.loadout-mini-items{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;font-size:15px}
+.loadout-mini-items span{border:1px solid #52624b;background:#243a39;padding:1px 3px;border-radius:5px}
+.loadout-shortcuts{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.loadout-quick{font-size:11px;padding:5px 7px;border-radius:7px}
+.raid-auto-config{background:#182d2b;border:1px solid #4b7162;border-radius:9px;padding:9px;margin:10px 0}
+.raid-auto-config small{display:block;color:#b2c9bf;margin-top:4px}
+@media(max-width:650px){.loadout-quick{padding:5px 6px}.loadout-card-options input{width:90px}}
 </style></head>
 <body>
-<header><div><h1>⚔️ Idle RPG <span class="version">v3.28 · Weapon Combat & XP</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
+<header><div><h1>⚔️ Idle RPG <span class="version">v3.29 · Loadouts & Endless Raids</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div></header>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -821,7 +842,7 @@ body[data-profile="dev"] h1:after{content:' · DEV';display:inline-block;font-si
 <div class="afk-overlay" id="afkOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="afkTitle"><div class="afk-dialog"><h2 id="afkTitle">🌙 Welcome back!</h2><div id="afkReport" aria-live="polite"></div><button class="afk-continue" id="afkContinue">Continue adventure →</button></div></div><script>
 'use strict';
 // ──────────────────────────────────────────────────────────────────────────────
-// IDLE RPG v3.28 · WEAPON COMBAT & XP · CHANGE GAME SETTINGS HERE
+// IDLE RPG v3.29 · LOADOUTS & ENDLESS RAIDS · CHANGE GAME SETTINGS HERE
 const GAME_CONFIG = {
   actionMs: 1000,            // Base action duration in milliseconds
   bankSlots: 1000,           // 1000 UNIQUE item stacks, not 1000 individual items
@@ -1438,7 +1459,7 @@ const RAID_WAVES=[
  {name:'Abyssal Cave Serpent',level:110,hp:820,def:112,atk:128,maxHit:81,weakness:'ranged'},
  {name:'Deepmountain Hexweaver',level:112,hp:900,def:122,atk:137,maxHit:87,weakness:'ranged'},
  {name:'Belroth’s Warden',level:115,hp:1150,def:125,atk:141,maxHit:94,weakness:'melee'},
- {name:'Belroth',level:120,hp:9000,def:170,atk:190,maxHit:155,weakness:'magic',boss:true}
+ {name:'Belroth',level:120,hp:9000,def:170,atk:190,maxHit:411,weakness:'magic',boss:true}
 ];
 const RAID_GEAR={
  'Deepmountain Greatsword':{slot:'weapon',requiredSkill:'attack',requiredLevel:95,attack:130,strength:93},
@@ -1512,14 +1533,14 @@ function raidState(){
  return state.raid;
 }
 function currentEnemy(){return state.active?.type==='raid'?RAID_WAVES[raidState().wave]:MONSTERS[state.monsterIndex]}
-function belrothEntryRequirement(){
+function belrothEntryRequirement(equipment=state.equipment){
  const problems=[];
  if(combatLevel()<RAID_CONFIG.belrothCombatLevel)problems.push('Combat Level '+RAID_CONFIG.belrothCombatLevel);
  if(levelFromXp(state.xp.defence||0)<RAID_CONFIG.belrothDefenceLevel)problems.push('Defence '+RAID_CONFIG.belrothDefenceLevel);
  if(levelFromXp(state.xp.hitpoints||0)<RAID_CONFIG.belrothHitpointsLevel)problems.push('Hitpoints '+RAID_CONFIG.belrothHitpointsLevel);
- if(gearMods().defence<RAID_CONFIG.belrothArmourDefence)problems.push(RAID_CONFIG.belrothArmourDefence+'+ armour defence');
- const weapon=state.equipment.weapon;
- const style=equippedCombatStyle();
+ if(gearMods(equipment).defence<RAID_CONFIG.belrothArmourDefence)problems.push(RAID_CONFIG.belrothArmourDefence+'+ armour defence');
+ const weapon=equipment.weapon;
+ const style=equippedCombatStyle(equipment);
  const adequate={melee:['Dragonite Sword','Abyssal Blade','Deepmountain Greatsword'],ranged:['Dragonbone Bow','Deepmountain Warbow'],magic:['Dragonfire Staff','Voidcaller Staff','Deepmountain Soulstaff']}[style];
  if(!adequate.includes(weapon))problems.push('near-endgame '+style+' weapon');
  return problems;
@@ -1527,6 +1548,7 @@ function belrothEntryRequirement(){
 function startRaidWave(){
  const raid=raidState(),wave=RAID_WAVES[raid.wave];
  if(combatLevel()<RAID_CONFIG.unlockCombatLevel){toast('Reach Combat '+RAID_CONFIG.unlockCombatLevel+' to enter');return}
+ autoEquipForEnemy(wave);
  if(wave.boss){const needs=belrothEntryRequirement();if(needs.length){note('🔒 Belroth requires '+needs.join(', '));toast('Belroth requires stronger gear and levels');return}}
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
  clearActivityFeed();state.active={type:'raid'};state.monsterHp=wave.hp;state.progress=0;
@@ -1584,7 +1606,20 @@ function finishRaidWave(m){
   raid.wave++;
   note(`✅ ${m.name} defeated! Checkpoint saved · Wave ${raid.wave+1}/${RAID_WAVES.length} unlocked.`);
  }
- state.active=null;state.progress=0;state.monsterHp=null;
+ state.progress=0;state.monsterHp=null;
+ if(state.raidAutoRun){
+  const upcoming=RAID_WAVES[raid.wave];
+  autoEquipForEnemy(upcoming);
+  const requirements=upcoming.boss?belrothEntryRequirement():[];
+  const supplyError=combatSupplyError();
+  if(!requirements.length&&!supplyError){
+   state.active={type:'raid'};state.monsterHp=upcoming.hp;
+   if(!offlineRunning)note(`▶ Auto-running wave ${raid.wave+1}/${RAID_WAVES.length}: ${upcoming.name}`);
+  }else{
+   state.active=null;
+   note(`⏹ Auto-raid paused: ${requirements.length?requirements.join(', '):supplyError}`);
+  }
+ }else state.active=null;
 }
 
 const SHOP_ITEMS=[
@@ -2245,10 +2280,14 @@ let currentProfile='main';
 const profileSaveKey=()=>currentProfile==='dev'?DEV_SAVE_KEY:SAVE_KEY;
 const inDev=()=>currentProfile==='dev';
 const EQUIP_SLOTS=['weapon','shield','head','body','legs','gloves','cape','quiver','amulet','ring','axe','pickaxe'];
+const LOADOUT_ROLES=['melee','ranged','magic','other'];
+const LOADOUT_DEFAULTS=[['Melee','melee'],['Ranged','ranged'],['Magic','magic'],['Skilling','other'],['Custom','other']];
+const defaultLoadouts=()=>LOADOUT_DEFAULTS.map(([name,role])=>({name,role,equipment:null}));
 const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,coinsEarned:0,potionsUsed:0,soulsCollected:0,soulsBySource:{},soulsByTier:{},soulShardsFound:0,arrowsFired:0,magicCasts:0});
 function newGame(){return {
  xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
  bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
+ loadouts:defaultLoadouts(),autoSwitchWeakness:false,raidAutoRun:true,
  recipeLayoutVersion:25,
  hp:10,monsterIndex:0,monsterHp:null,raid:{wave:0,completions:0,pendingChests:0},combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
  autoEat:{enabled:false,food:'Cooked Shrimp',threshold:30},
@@ -2411,6 +2450,7 @@ function restore(){
   if(migratedStats.bySkill.herblore!==undefined&&migratedStats.bySkill.alchemy===undefined)migratedStats.bySkill.alchemy=migratedStats.bySkill.herblore;
   state={...base,...raw,xp:{...base.xp,...raw.xp},
    bank:{...raw.bank},potions:{...(raw.potions||{})},raid:{...base.raid,...(raw.raid||{})},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
+   loadouts:normalizeLoadouts(raw.loadouts),autoSwitchWeakness:raw.autoSwitchWeakness===true,raidAutoRun:raw.raidAutoRun!==false,
    rangedAmmo:raw.rangedAmmo||'Bronze Arrows',staffCharges:{...(raw.staffCharges||{})},
    autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
    stats:{...emptyStats(),...migratedStats,bySkill:{...migratedStats.bySkill},produced:{...(stats.produced||{})},kills:{...(stats.kills||{})},soulsBySource:{...(stats.soulsBySource||{})},soulsByTier:{...(stats.soulsByTier||Object.fromEntries(SOUL_GEMS.map(g=>[g.name,Math.max(0,Number(raw.bank[g.name]||0))]))) }},
@@ -2475,6 +2515,87 @@ function restore(){
   delete state.journalTierBases;
   // Offline catch-up runs after restore, before the live animation starts.
  }catch(e){console.warn('Could not restore game',e)}
+}
+// Saved sets are equipment blueprints. Saving an item in 5 presets never moves,
+// duplicates, locks or consumes it. A single physical item can be shared across all.
+function normalizeLoadouts(raw){
+ return LOADOUT_DEFAULTS.map(([name,role],i)=>{
+  const src=Array.isArray(raw)?raw[i]:null;
+  const equipment=src?.equipment&&typeof src.equipment==='object'?
+   Object.fromEntries(EQUIP_SLOTS.map(slot=>{
+    const item=src.equipment[slot];return [slot,typeof item==='string'&&EQUIPMENT[item]?.slot===slot?item:null];
+   })):null;
+  return {name:typeof src?.name==='string'&&src.name.trim()?src.name.trim().slice(0,24):name,
+   role:LOADOUT_ROLES.includes(src?.role)?src.role:role,equipment};
+ });
+}
+function saveEquipmentLoadout(index){
+ const row=state.loadouts?.[index];if(!row)return;
+ row.equipment=Object.fromEntries(EQUIP_SLOTS.map(slot=>[slot,state.equipment[slot]||null]));
+ note(`💾 Saved ${row.name}. Shared gear stays available to all five loadouts.`);
+ save();refreshDynamic();
+}
+function loadoutAvailability(index){
+ const row=state.loadouts?.[index];
+ if(!row?.equipment)return {ok:false,error:'Save a loadout first.'};
+ const wanted=Object.fromEntries(EQUIP_SLOTS.map(slot=>[slot,row.equipment[slot]||null]));
+ const inventory={...state.bank};
+ for(const slot of EQUIP_SLOTS){const item=state.equipment[slot];if(item)inventory[item]=(Number(inventory[item])||0)+1}
+ for(const slot of EQUIP_SLOTS){
+  const item=wanted[slot];if(!item)continue;
+  if(EQUIPMENT[item]?.slot!==slot)return {ok:false,error:`${item} cannot use the ${slot} slot.`};
+  const requirement=gearRequirement(item);
+  if(!requirement.met)return {ok:false,error:`${item} requires ${label(requirement.skill)} ${requirement.level}.`};
+  if((inventory[item]||0)<1)return {ok:false,error:`Missing ${item}.`};
+  inventory[item]--;
+ }
+ for(const [item,qty] of Object.entries(inventory))if(qty<=0)delete inventory[item];
+ if(Object.keys(inventory).length>GAME_CONFIG.bankSlots)return {ok:false,error:'Not enough bank space to swap this set.'};
+ return {ok:true,bank:inventory,equipment:wanted};
+}
+function equipEquipmentLoadout(index,{automatic=false}={}){
+ const row=state.loadouts?.[index],ready=loadoutAvailability(index);
+ if(!ready.ok){if(!automatic){note('⚠️ '+ready.error);toast(ready.error)}return false}
+ if(automatic&&EQUIP_SLOTS.every(slot=>state.equipment[slot]===ready.equipment[slot]))return true;
+ // All validations are finished before either the bank or the equipment changes.
+ state.bank=ready.bank;
+ state.equipment=ready.equipment;
+ if(!automatic){note(`🛡️ Equipped ${row.name} · ${equippedCombatStyle()} combat style.`);save();refreshDynamic()}
+ else if(!offlineRunning)note(`🔁 ${row.name} set equipped for ${row.role} weakness.`);
+ return true;
+}
+function matchingAutoEquipment(enemy){
+ if(!state.autoSwitchWeakness||!enemy)return null;
+ for(let i=0;i<state.loadouts.length;i++){
+  const row=state.loadouts[i];
+  if(row.role!==enemy.weakness||!row.equipment||equippedCombatStyle(row.equipment)!==enemy.weakness)continue;
+  const ready=loadoutAvailability(i);
+  if(ready.ok)return {index:i,equipment:ready.equipment};
+ }
+ return null;
+}
+function autoEquipForEnemy(enemy){
+ const chosen=matchingAutoEquipment(enemy);
+ return chosen?equipEquipmentLoadout(chosen.index,{automatic:true}):false;
+}
+function equipmentLoadoutsHtml(compact=false){
+ const presets=state.loadouts||defaultLoadouts();
+ const buttons=presets.map((row,i)=>{
+  const ready=loadoutAvailability(i),weapon=row.equipment?.weapon;
+  if(compact)return `<button type="button" class="loadout-quick" data-loadout-equip="${i}" ${ready.ok?'':'disabled'} title="${esc(ready.ok?'Equip '+row.name:ready.error)}">${i+1}. ${esc(row.name)} <span>${row.role==='melee'?'⚔️':row.role==='ranged'?'🏹':row.role==='magic'?'🪄':'🛠️'}</span></button>`;
+  const count=row.equipment?Object.values(row.equipment).filter(Boolean).length:0;
+  return `<div class="loadout-card"><div class="loadout-card-heading"><strong>${i+1}. ${esc(row.name)}</strong><span class="small subdued">${row.equipment?count+' pieces saved':'Not saved yet'}</span></div>
+    <div class="loadout-card-options"><label class="loadout-role-label">Role <select data-loadout-role="${i}">${[['melee','⚔️ Melee'],['ranged','🏹 Ranged'],['magic','🪄 Magic'],['other','🛠️ Other']].map(([k,v])=>`<option value="${k}" ${row.role===k?'selected':''}>${v}</option>`).join('')}</select></label>
+    <input type="text" aria-label="Name for set ${i+1}" data-loadout-name="${i}" maxlength="24" value="${esc(row.name)}" placeholder="Set name"></div>
+    <div class="loadout-actions"><button type="button" data-loadout-save="${i}">💾 Save current</button><button type="button" data-loadout-equip="${i}" ${ready.ok?'':'disabled'} title="${esc(ready.ok?'Equip saved items':ready.error)}">🛡️ Equip</button></div>
+    ${row.equipment?`<div class="loadout-mini-items">${EQUIP_SLOTS.filter(slot=>row.equipment[slot]).map(slot=>`<span title="${esc(row.equipment[slot])}">${itemIcon(row.equipment[slot])}</span>`).join('')}</div>`:''}</div>`;
+ }).join('');
+ if(compact)return `<div class="loadout-shortcuts" aria-label="Quick equipment sets"><span class="small subdued">Equipment sets</span>${buttons}</div>`;
+ return `<section class="loadout-panel"><div class="between"><h3>⚙️ Equipment Sets</h3><span class="small subdued">5 saved sets</span></div>
+ <p class="small subdued">An item can be saved in every set. You only need to own one copy to switch between them.</p>
+ <label class="checkbox-row loadout-toggle"><input type="checkbox" data-auto-loadouts ${state.autoSwitchWeakness?'checked':''}> Auto-switch to enemy weakness</label>
+ <p class="small subdued">Optional: uses only your saved Melee, Ranged and Magic sets. Other is manual only.</p>
+ <div class="loadout-list">${buttons}</div></section>`;
 }
 function gearMods(equipment=state.equipment){
  const mods={attackPct:0,strengthPct:0,defencePct:0,rangedPct:0,magicPct:0,rangedAccuracy:0,rangedPower:0,magicAccuracy:0,magicPower:0,xpBonus:0,luckBonus:0,soulDropBonus:0,gatherBonus:0,woodcuttingYield:0,miningYield:0,fishingYield:0,agricultureYield:0,
@@ -2549,6 +2670,7 @@ function startAction(skill,index){
 }
 function startCombat(index){
  if(!MONSTERS[index])return;
+ autoEquipForEnemy(MONSTERS[index]);
  const problem=combatSupplyError();if(problem){note('⏹ '+problem);toast(problem);return}
  clearActivityFeed();state.monsterIndex=index;state.monsterHp=MONSTERS[index].hp;
  state.active={type:'combat'};state.progress=0;note(`⚔️ Fighting ${MONSTERS[index].name}`);renderProgress();refreshDynamic();save();
@@ -2676,16 +2798,16 @@ function magicStaffEquipped(){
  const name=state.equipment.weapon;
  return name&&MAGIC_STAVES[name]?name:null;
 }
-function combatSupplyError(){
- if(equippedCombatStyle()==='ranged'){
-  const bow=state.equipment.weapon;
+function combatSupplyError(equipment=state.equipment){
+ if(equippedCombatStyle(equipment)==='ranged'){
+  const bow=equipment.weapon;
   if(EQUIPMENT[bow]?.combatType!=='ranged')return 'Equip a Bow from your bank to use Ranged.';
   const ammo=RANGED_AMMO[state.rangedAmmo];
   if(!ammo||count(state.rangedAmmo)<1)return 'No selected arrows in your bank. Fletch or buy arrows.';
   if(levelFromXp(state.xp.ranged||0)<ammo.level)return `Need Ranged level ${ammo.level} for ${state.rangedAmmo}.`;
  }
- if(equippedCombatStyle()==='magic'){
-  const staff=magicStaffEquipped();
+ if(equippedCombatStyle(equipment)==='magic'){
+  const staff=MAGIC_STAVES[equipment.weapon]?equipment.weapon:null;
   if(!staff)return 'Equip a Magic Staff to use Magic.';
   if((state.staffCharges[staff]||0)<1)return `${staff} is out of charges. Use Soul Shards to recharge it.`;
  }
@@ -3176,12 +3298,15 @@ function filterRecipeCards(){
 function raidPanelHtml(){
  const raid=raidState(),wave=RAID_WAVES[raid.wave],isBoss=!!wave.boss,playing=state.active?.type==='raid';
  const unlocked=combatLevel()>=RAID_CONFIG.unlockCombatLevel;
- const bossMissing=isBoss?belrothEntryRequirement():[];
- const supplies=combatSupplyError();
+ const planned=matchingAutoEquipment(wave);
+ const plannedEquipment=planned?.equipment||state.equipment;
+ const bossMissing=isBoss?belrothEntryRequirement(plannedEquipment):[];
+ const supplies=combatSupplyError(plannedEquipment);
  const canStart=unlocked&&!playing&&!bossMissing.length&&!supplies;
  return `<section class="raid-panel" aria-label="Deep Mountain Expedition">
  <div class="raid-heading"><div><div class="eyebrow">⛰️ ENDGAME RAID · SAVED CHECKPOINTS</div><h3>Deep Mountain Expedition</h3>
  <p>12 waves · Fight your way to Belroth. Each completed wave is saved, even if you die, log out or change equipment. Use each enemy's weakness.</p></div><span class="raid-score">🏆 ${fmt(raid.completions)} clears</span></div>
+ <div class="raid-auto-config"><label class="checkbox-row"><input type="checkbox" data-raid-auto-run ${state.raidAutoRun?'checked':''}> Auto-continue waves & repeat raids</label><small>Stops if you die, run out of supplies or cannot enter Belroth.</small></div>
  <div class="raid-progress"><div style="width:${raid.wave/RAID_WAVES.length*100}%"></div></div>
  <div class="raid-waves">${RAID_WAVES.map((m,i)=>`<span class="raid-wave ${i<raid.wave?'raid-cleared':i===raid.wave?'raid-current':'raid-locked'}" title="Wave ${i+1}: ${esc(m.name)} · Weak to ${m.weakness}">${i<raid.wave?'✓':i===raid.wave?'⚔️':'🔒'} ${i+1}</span>`).join('')}</div>
  <div class="raid-current"><div><strong>${isBoss?'👑':'⚔️'} Wave ${raid.wave+1}/${RAID_WAVES.length} · ${esc(wave.name)}</strong>
@@ -3269,6 +3394,7 @@ function refreshCombatTraining(){
 function renderCombatMain(){
  const mods=gearMods();
  let html=`<div class="heading"><div><div class="eyebrow">Adventure & Monsters</div><h2>⚔️ Combat Level <span id="combatLevelDisplay">${combatLevel()}</span> / ${COMBAT_CONFIG.maxLevel}</h2></div></div>`;
+ html+=equipmentLoadoutsHtml(true);
  html+=combatTrainingHtml();
  html+=`<details class="info-box combat-xp-details"><summary>Combat skill progress</summary><div class="combat-choices">${['attack','strength','defence','ranged','magic'].map(skill=>`<div class="combat-choice"><b>${SKILLS[skill].icon} ${label(skill)}</b><span data-combat-xp="${skill}">${xpText(skill)}</span><div class="xpbar" style="width:100%"><div class="fill" style="width:${xpFill(skill)}%"></div></div></div>`).join('')}</div></details>`;
  html+=`<div class="combat-resource-grid">
@@ -3642,6 +3768,7 @@ function renderGearSidebar(){
  const mods=gearMods();
  const paperSlots=['head','cape','amulet','quiver','weapon','body','shield','legs','gloves','ring'];
  el('sidebar').innerHTML=`<div class="between"><h3 style="margin:0 0 10px">🛡️ Equipment</h3><span class="small subdued">${EQUIP_SLOTS.filter(slot=>!!state.equipment[slot]).length}/${EQUIP_SLOTS.length} equipped</span></div>
+ ${equipmentLoadoutsHtml()}
  <p class="gear-intro">Click any equipment slot to choose items from your bank, or use × to unequip.</p>
  <div class="gear-doll"><div class="gear-paper-grid">${paperSlots.map(gearSlotButton).join('')}</div><div class="gear-tools-title">Toolbelt</div><div class="gear-toolbelt">${['axe','pickaxe'].map(gearSlotButton).join('')}</div></div>
  <div class="gear-small-note"></div>
@@ -3762,6 +3889,7 @@ function renderJournalMain(){
 
 function renderRaidMain(){
  let html=`<div class="heading"><div><div class="eyebrow">⛰️ Adventure · Endgame</div><h2>Deep Mountain Expedition</h2><p class="section-description">Prepare your equipment, defeat 12 increasingly powerful waves, and claim Belroth's loot chest. Each completed wave saves your checkpoint. Change your weapon to change combat style between waves.</p></div><span class="recipe-badge level">Combat Lv ${combatLevel()} / ${COMBAT_CONFIG.maxLevel}</span></div>`;
+ html+=equipmentLoadoutsHtml(true);
  html+=combatTrainingHtml();
  html+=`<div class="combat-resource-grid" style="margin:14px 0">
  <section class="info-box"><h3>🏹 Ranged Ammo</h3><label class="form-label" for="rangedAmmo">Your arrows</label><select id="rangedAmmo"></select><div id="rangedStatus" class="small subdued"></div></section>
@@ -3816,6 +3944,7 @@ function refreshSummary(){
 }
 function refreshDynamic(){
  refreshSummary();refreshNavLevels();
+ const quick=el('main')?.querySelector('.loadout-shortcuts');if(quick){const tpl=document.createElement('div');tpl.innerHTML=equipmentLoadoutsHtml(true);quick.replaceWith(tpl.firstElementChild)}
  if(ui.view==='skills')refreshSkillsOverview();
  else if(ui.view==='combat')renderCombatLive();
  else if(ui.view==='raid')renderRaidLive();
@@ -3826,7 +3955,10 @@ function refreshDynamic(){
  if(ui.sidebarTab==='bank')renderBankGrid('side');
  else{
   const parent=el('sidebar').closest('.right');const scroll=parent.scrollTop;
-  if(ui.sidebarTab==='gear')renderGearSidebar();else renderPotionPouch();
+  if(ui.sidebarTab==='gear'){
+   // Preserve focused loadout name while an action completes.
+   if(!document.activeElement?.hasAttribute('data-loadout-name'))renderGearSidebar();
+  }else renderPotionPouch();
   parent.scrollTop=scroll;
  }
  if(!el('gearOverlay').hidden)renderGearPicker();
@@ -3861,6 +3993,8 @@ function handleClick(e){
  if(b.hasAttribute('data-action'))return startAction(ui.view,Number(b.dataset.action));
  if(b.hasAttribute('data-inspect-monster'))return inspectMonster(Number(b.dataset.inspectMonster));
  if(b.hasAttribute('data-inspect-raid'))return inspectMonster(Number(b.dataset.inspectRaid),true);
+ if(b.hasAttribute('data-loadout-save'))return saveEquipmentLoadout(Number(b.dataset.loadoutSave));
+ if(b.hasAttribute('data-loadout-equip'))return equipEquipmentLoadout(Number(b.dataset.loadoutEquip));
  if(b.hasAttribute('data-monster'))return startCombat(Number(b.dataset.monster));
  if(b.hasAttribute('data-raid-start'))return startRaidWave();
  if(b.hasAttribute('data-open-raid-chest'))return openRaidChest();
@@ -3904,6 +4038,21 @@ function handleClick(e){
 }
 function handleInput(e){
  const t=e.target;
+ if(t.hasAttribute('data-auto-loadouts')){
+  state.autoSwitchWeakness=!!t.checked;
+  if(state.autoSwitchWeakness&&state.active&&['combat','raid'].includes(state.active.type))autoEquipForEnemy(currentEnemy());
+  save();refreshDynamic();return;
+ }
+ if(t.hasAttribute('data-raid-auto-run')){state.raidAutoRun=!!t.checked;save();refreshRaidPanel();return;}
+ if(t.hasAttribute('data-loadout-role')){
+  const row=state.loadouts[Number(t.dataset.loadoutRole)];if(!row||!LOADOUT_ROLES.includes(t.value))return;
+  row.role=t.value;save();refreshDynamic();return;
+ }
+ if(t.hasAttribute('data-loadout-name')){
+  const row=state.loadouts[Number(t.dataset.loadoutName)];if(!row)return;
+  row.name=t.value.trim().slice(0,24)||LOADOUT_DEFAULTS[Number(t.dataset.loadoutName)][0];
+  save();if(e.type!=='input')refreshDynamic();return;
+ }
  if(t.hasAttribute('data-combat-xp-select')){
   const ok=toggleCombatXpSkill(t.dataset.combatXpSelect,t.checked);
   if(!ok){t.checked=true;toast('Choose at least one combat skill.');}

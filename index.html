@@ -1539,6 +1539,26 @@ button:not(:disabled):active{transform:translateY(1px)}
  #afkOverlay .afk-list {grid-template-columns:minmax(0,1fr)}
 }
 </style>
+<style id="overnia-mobile-action-directory-v60">
+@media(max-width:700px){
+ .mobile-action-directory{margin-top:12px;border:1px solid #657c60;border-radius:10px;background:#182b23;overflow:hidden}
+ .mobile-action-directory>summary{padding:12px;cursor:pointer;font-weight:800;color:#f1dbab;display:flex;justify-content:space-between;gap:10px;align-items:center;list-style:none}
+ .mobile-action-directory>summary::-webkit-details-marker{display:none}
+ .mobile-action-directory>summary span{font-size:11px;color:#bdd3b9;font-weight:500}
+ .mobile-action-search{display:flex;align-items:center;gap:7px;padding:0 10px 10px}
+ .mobile-action-search input{width:100%;font-size:16px!important;padding:9px 10px!important;background:#25372c!important;color:#fff1d0!important;border:1px solid #819a76!important}
+ .mobile-directory-scroll{max-height:56dvh;overflow-y:auto;overscroll-behavior:contain;padding:0 8px 9px;scrollbar-width:thin}
+ .mobile-directory-group{margin:8px 0}.mobile-directory-group[hidden]{display:none!important}
+ .mobile-directory-group h4{font-size:12px;margin:6px 3px;padding:7px 3px;color:#dec898;border-bottom:1px solid #52654e}
+ .mobile-directory-item{width:100%;display:flex;align-items:center;text-align:left;gap:10px;padding:9px 7px;margin:3px 0;background:#293a2f;border:1px solid #526a51;border-radius:8px;min-width:0}
+ .mobile-directory-item[hidden]{display:none!important}
+ .mobile-directory-item.is-current{background:#435d44;border-color:#b3d18a}
+ .mobile-directory-item>.item-art{flex:none;width:38px;height:38px;font-size:25px}
+ .mobile-dir-name{flex:1;min-width:0}.mobile-dir-name strong{display:block;color:#f5e9c8;font-size:12px;overflow-wrap:anywhere}.mobile-dir-name small{display:block;color:#b9cbb2;font-size:10px;margin-top:3px}
+ .mobile-dir-status{flex:none;color:#d9c18c;font-size:15px}.mobile-directory-empty{font-size:12px;padding:12px;color:#ddcaa3}
+}
+@media(min-width:701px){.mobile-action-directory{display:none!important}}
+</style>
 </head>
 <body class="mobile-menu-home"><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
 <header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v5.6 · Polish & Stability</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div><span id="petStatus" class="pet-status" aria-live="polite" style="display:block;width:max-content;max-width:95%;margin:6px 14px">🐾 No pet summoned</span></header>
@@ -4830,7 +4850,11 @@ function refreshNavLevels(){
 function navigate(view){
  if(!NAV_VIEWS.includes(view))return;
  document.body.classList.remove('mobile-menu-home','mobile-equipment');
- hideItemTooltip();closeFocusDrawer();ui.view=view;renderNav();renderMain();refreshDynamic();
+ hideItemTooltip();closeFocusDrawer();
+ // Each new visit focuses the running activity, or the highest unlocked recipe.
+ if(SKILLS[view]&&!SKILLS[view].combat)delete ui.skillSelection[view];
+ if(view==='combat')ui.combatTargetIndex=state.active?.type==='combat'?state.monsterIndex:null;
+ ui.view=view;renderNav();renderMain();refreshDynamic();
  // Always begin a new page at its top; previous scroll position was confusing in Classic View.
  if(focusModeEnabled){const panel=document.querySelector('.panel.main');if(panel)panel.scrollTop=0;}
  else window.scrollTo({top:0,behavior:'instant'});
@@ -4875,6 +4899,36 @@ function recipeCard(action,index,skill){
  </article>`;
 }
 // Mobile action carousel: desktop activity list and inspector remain unchanged.
+function renderMobileActionDirectory(skill){
+ const actions=SKILLS[skill].actions;
+ const level=levelFromXp(state.xp[skill]||0);
+ const groups=[...new Set(actions.map(a=>a.category||'Activities'))];
+ return `<details class="mobile-action-directory" id="mobileActionDirectory"><summary>☷ Browse all activities <span>${actions.length} items ▾</span></summary>
+  <label class="mobile-action-search">🔎 <input type="search" data-mobile-action-search placeholder="Find item or recipe…" autocomplete="off" aria-label="Search all activities"></label>
+  <div class="mobile-directory-scroll">${groups.map(cat=>`<section class="mobile-directory-group" data-mobile-dir-group><h4>${esc(cat)}</h4>${actions.map((a,i)=>({a,i})).filter(x=>(x.a.category||'Activities')===cat).sort((x,y)=>x.a.level-y.a.level||x.a.name.localeCompare(y.a.name)).map(({a,i})=>`<button type="button" class="mobile-directory-item ${i===ui.skillSelection[skill]?'is-current':''}" data-mobile-action-pick="${i}" data-mobile-dir-search="${esc([a.name,a.output,a.category,...Object.keys(a.cost||{})].join(' ').toLowerCase())}">${itemArt(a.output)}<span class="mobile-dir-name"><strong>${esc(a.name)}</strong><small>Lv ${a.level} · +${fmt(a.xp)} XP${a.cost&&Object.keys(a.cost).length?' · Materials':''}</small></span><span class="mobile-dir-status">${i===ui.skillSelection[skill]?'●':a.level>level?'🔒':'›'}</span></button>`).join('')}</section>`).join('')}</div>
+  <p class="mobile-directory-empty" hidden>No matching activities.</p>
+ </details>`;
+}
+document.addEventListener('input',event=>{
+ if(event.target?.matches?.('[data-mobile-action-search]'))filterMobileActionDirectory(event.target.value);
+});
+function filterMobileActionDirectory(query){
+ const root=el('mobileActionDirectory');if(!root)return;
+ const q=String(query||'').trim().toLowerCase();let visible=0;
+ for(const group of root.querySelectorAll('[data-mobile-dir-group]')){
+  let shown=0;
+  for(const button of group.querySelectorAll('[data-mobile-action-pick]')){
+   const matches=button.dataset.mobileDirSearch.includes(q);
+   button.hidden=!matches;if(matches){shown++;visible++;}
+  }
+  group.hidden=!shown;
+ }
+ const empty=root.querySelector('.mobile-directory-empty');if(empty)empty.hidden=visible!==0;
+}
+function updateMobileActionSelection(skill){
+ const card=el('mobileActionCard');if(card)card.outerHTML=renderMobileAction(skill);
+ const focus=el('skillFocus');if(focus)focus.outerHTML=renderSkillFocus(skill);
+}
 function renderMobileAction(skill){
  const actions=SKILLS[skill]?.actions||[];
  if(!actions.length)return '';
@@ -4894,10 +4948,13 @@ function renderMobileAction(skill){
   ${a.requiresFire?'<div class="mobile-action-fire">🔥 Requires a fire</div>':''}
   <div class="mobile-action-xp"><span>Skill progress · Lv ${lvl}</span><span>${lvl>=99?'MAX':fmt(xpForLevel(lvl+1)-(state.xp[skill]||0))+' XP to next'}</span></div><div class="xpbar"><div class="fill" style="width:${xpFill(skill)}%"></div></div>
   <button type="button" class="mobile-action-start" data-action="${i}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'🔒 Level '+a.level+' required':fireNeeded?'🔥 Fire required':missing?'Missing materials':active?'✓ Currently training':'▶ Start activity'}</button>
+  ${renderMobileActionDirectory(skill)}
  </section>`;
 }
 function refreshMobileAction(skill){
  const node=el('mobileActionCard');if(!node||!SKILLS[skill])return;
+ // Do not interrupt searching/scrolling the directory while training ticks update XP.
+ if(node.querySelector('#mobileActionDirectory')?.open)return;
  // Only update when the displayed values change; keep the carousel and buttons stable.
  const a=SKILLS[skill].actions[ui.skillSelection[skill]];
  if(!a)return;
@@ -5239,7 +5296,7 @@ function renderMobileCombat(){
  const choices=mobileCombatChoices();
  if(!choices.length)return `<section id="mobileCombatCard" class="mobile-combat-card">No monsters in this area. Change your hunting area in Combat Settings.</section>`;
  const selected=choices.some(({i})=>i===ui.combatTargetIndex)?ui.combatTargetIndex:
-  (choices.some(({i})=>i===state.monsterIndex)?state.monsterIndex:choices[0].i);
+  (state.active?.type==='combat'&&choices.some(({i})=>i===state.monsterIndex)?state.monsterIndex:choices[0].i);
  ui.combatTargetIndex=selected;
  const pos=choices.findIndex(x=>x.i===selected),m=MONSTERS[selected];
  const isFighting=state.active?.type==='combat'&&state.monsterIndex===selected;
@@ -6092,6 +6149,14 @@ function handleClick(e){
   const extra=el('skillFocus')?.querySelector('.focus-expandable');if(extra)extra.classList.toggle('expanded',ui.focusExpanded);
   b.setAttribute('aria-expanded',String(ui.focusExpanded));
   b.textContent=ui.focusExpanded?'▴ Hide materials and bank details':'▾ Show materials and bank details';
+  return;
+ }
+ if(b.hasAttribute('data-mobile-action-pick')){
+  const skill=ui.view,actions=SKILLS[skill]?.actions||[];
+  const index=Number(b.dataset.mobileActionPick);
+  if(!Number.isInteger(index)||index<0||index>=actions.length)return;
+  ui.skillSelection[skill]=index;
+  updateMobileActionSelection(skill);
   return;
  }
  if(b.hasAttribute('data-mobile-step')){

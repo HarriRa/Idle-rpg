@@ -4885,15 +4885,20 @@ function xpText(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return `L
 function xpFill(skill){const xp=state.xp[skill]||0,lvl=levelFromXp(xp);return lvl>=99?100:clamp((xp-xpForLevel(lvl))/(xpForLevel(lvl+1)-xpForLevel(lvl))*100,0,100)}
 function xpStrip(skill){return `<div class="subdued" id="skillXpText">${xpText(skill)}</div><div class="xpbar"><div class="fill" id="skillXpFill" style="width:${xpFill(skill)}%"></div></div>`}
 function selectedSkillAction(skill,candidates){
- const actions=SKILLS[skill].actions;
- const active=state.active?.type==='skill'&&state.active.skill===skill?state.active.index:null;
+ const all=SKILLS[skill].actions;
+ const active=state.active?.type==='skill'&&state.active.skill===skill?Number(state.active.index):null;
  const own=Number.isInteger(ui.skillSelection[skill])?ui.skillSelection[skill]:null;
- const available=(candidates||actions.map((a,i)=>({a,i}))).map(x=>x.i);
- if(own!==null&&available.includes(own))return own;
- if(active!==null&&available.includes(active))return active;
+ // Mobile carousel must never inherit a filtered desktop category. The active action
+ // always takes priority on entering a skill, even when outside the current tab.
+ if(active!==null&&Number.isInteger(active)&&active>=0&&active<all.length){
+  ui.skillSelection[skill]=active;
+  return active;
+ }
+ if(own!==null&&own>=0&&own<all.length)return own;
  const level=levelFromXp(state.xp[skill]||0);
- const unlocked=(candidates||actions.map((a,i)=>({a,i}))).filter(x=>x.a.level<=level);
- const chosen=(unlocked.length?unlocked[unlocked.length-1]:candidates?.[0]||{i:0}).i;
+ const ranked=all.map((a,i)=>({a,i})).filter(({a})=>a.level<=level)
+  .sort((x,y)=>y.a.level-x.a.level||x.i-y.i);
+ const chosen=ranked.length?ranked[0].i:0;
  ui.skillSelection[skill]=chosen;
  return chosen;
 }

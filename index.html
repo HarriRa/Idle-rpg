@@ -2613,17 +2613,17 @@ function openRaidChest(chestName,mode='one'){
  rewards.Coins=(rewards.Coins||0)+6000*quantity;
  rewards['Soul Shard']=(rewards['Soul Shard']||0)+100*quantity;
  const freed=available===quantity?1:0;
- const needed=Object.keys(rewards).filter(name=>count(name)===0&&!isPotion(name)).length;
+ const needed=Object.keys(rewards).filter(name=>name!=='Coins'&&count(name)===0&&!isPotion(name)).length;
  if(bankUsed()-freed+needed>GAME_CONFIG.bankSlots){
   toast('Not enough bank slots for all rewards');
   note('🏦 Free bank space before opening '+quantity+' chest(s).');
   return;
  }
- const snapshotBank={...state.bank},snapshotPotions={...state.potions};
+ const snapshotBank={...state.bank},snapshotPotions={...state.potions},snapshotCoins=state.coins;
  add(chestName,-quantity);
  for(const [name,amount] of Object.entries(rewards)){
   if(!add(name,amount)){
-   state.bank=snapshotBank;state.potions=snapshotPotions;
+   state.bank=snapshotBank;state.potions=snapshotPotions;state.coins=snapshotCoins;
    toast('Could not open chest. No items consumed.');return;
   }
  }
@@ -3469,7 +3469,7 @@ const defaultLoadouts=()=>LOADOUT_DEFAULTS.map(([name,role])=>({name,role,equipm
 const emptyStats=()=>({bySkill:{},produced:{},kills:{},logsBurned:0,treasures:0,coinsEarned:0,potionsUsed:0,soulsCollected:0,soulsBySource:{},soulsByTier:{},soulShardsFound:0,arrowsFired:0,magicCasts:0});
 function newGame(){return {
  xp:Object.fromEntries(Object.keys(SKILLS).map(x=>[x,0])),
- bank:{'Coins':250,'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
+ coins:250,bank:{'Soul Shard':10},potions:{},bankTabs:[],bankAssignments:{},equipment:Object.fromEntries(EQUIP_SLOTS.map(x=>[x,null])),
   loadouts:defaultLoadouts(),favoriteViews:[],autoSwitchWeakness:false,raidAutoRun:true,
  recipeLayoutVersion:25,
  pets:{},activePet:null,collectionLog:{},hp:10,monsterIndex:0,monsterHp:null,world:{location:'hearthwick',visited:['hearthwick'],started:{},completed:[],hires:[],mapZoom:1},raid:{wave:0,completions:0,pendingChests:0},riftRaid:{wave:0,completions:0,pendingChests:0},raidChoice:'mountain',combatStyle:'attack',combatTraining:{melee:['attack'],ranged:['ranged'],magic:['magic']},rangedAmmo:'Bronze Arrows',staffCharges:{},
@@ -3632,13 +3632,18 @@ function combatLevel(){
 }
 // Potions use a dedicated pouch, freeing bank slots and preserving existing recipes.
 const isPotion=item=>Object.hasOwn(POTIONS,item);
-const count=item=>Math.max(0,Number((isPotion(item)?state.potions:state.bank)[item])||0);
-const bankUsed=()=>Object.values(state.bank).filter(x=>Number(x)>0).length;
-const bankCanHold=item=>isPotion(item)||count(item)>0||bankUsed()<GAME_CONFIG.bankSlots;
+const count=item=>item==='Coins'?Math.max(0,Number(state.coins)||0):Math.max(0,Number((isPotion(item)?state.potions:state.bank)[item])||0);
+const bankUsed=()=>Object.entries(state.bank).filter(([item,qty])=>item!=='Coins'&&Number(qty)>0).length;
+const bankCanHold=item=>item==='Coins'||isPotion(item)||count(item)>0||bankUsed()<GAME_CONFIG.bankSlots;
 function add(item,n=1){
  if(!item||!Number.isFinite(Number(n)))return false;
  n=Number(n);
  if(n>0&&!bankCanHold(item))return false;
+ if(item==='Coins'){
+  state.coins=Math.max(0,count('Coins')+n);
+  if(n>0)queueActivityReward('item','Coins',n);
+  return true;
+ }
  const store=isPotion(item)?state.potions:state.bank;
  const result=Math.max(0,count(item)+n);
  if(result)store[item]=result;else delete store[item];
@@ -3648,9 +3653,9 @@ function add(item,n=1){
 const canPay=cost=>Object.entries(cost||{}).every(([item,n])=>count(item)>=n);
 function buyOrCraft(cost,output,amount){
  if(!canPay(cost))return false;
- const beforeBank={...state.bank},beforePotions={...state.potions};
+ const beforeBank={...state.bank},beforePotions={...state.potions},beforeCoins=state.coins;
  for(const [item,n] of Object.entries(cost||{}))add(item,-n);
- if(!add(output,amount)){state.bank=beforeBank;state.potions=beforePotions;return false}
+ if(!add(output,amount)){state.bank=beforeBank;state.potions=beforePotions;state.coins=beforeCoins;return false}
  return true;
 }
 function note(msg){if(offlineRunning){offlineLogCount++;return}state.log.unshift(msg);state.log=state.log.slice(0,80);renderLog()}
@@ -3726,7 +3731,7 @@ function restore(){
   if(migratedStats.bySkill.herblore!==undefined&&migratedStats.bySkill.alchemy===undefined)migratedStats.bySkill.alchemy=migratedStats.bySkill.herblore;
   const migratedHires=Array.isArray(raw.world?.hires)?raw.world.hires:(raw.world?.hire?[raw.world.hire]:[]);
   state={...base,...raw,xp:{...base.xp,...raw.xp},
-   bank:{...raw.bank},potions:{...(raw.potions||{})},raid:{...base.raid,...(raw.raid||{})},world:{...base.world,...(raw.world||{}),visited:Array.isArray(raw.world?.visited)?raw.world.visited.filter(id=>OVERNIA_PLACE_BY_ID[id]):['hearthwick'],started:{...(raw.world?.started||{})},completed:Array.isArray(raw.world?.completed)?raw.world.completed:[],hires:migratedHires.filter(h=>h&&typeof h.id==='string'),mapZoom:Math.min(3.5,Math.max(1,Number(raw.world?.mapZoom)||1))},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
+   coins:Math.max(0,Number(raw.coins??raw.bank.Coins??base.coins)||0),bank:{...raw.bank},potions:{...(raw.potions||{})},raid:{...base.raid,...(raw.raid||{})},world:{...base.world,...(raw.world||{}),visited:Array.isArray(raw.world?.visited)?raw.world.visited.filter(id=>OVERNIA_PLACE_BY_ID[id]):['hearthwick'],started:{...(raw.world?.started||{})},completed:Array.isArray(raw.world?.completed)?raw.world.completed:[],hires:migratedHires.filter(h=>h&&typeof h.id==='string'),mapZoom:Math.min(3.5,Math.max(1,Number(raw.world?.mapZoom)||1))},bankTabs:Array.isArray(raw.bankTabs)?raw.bankTabs.filter(t=>t&&typeof t.id==='string'&&typeof t.name==='string').slice(0,30).map(t=>({id:t.id,name:t.name.slice(0,25)})):[],bankAssignments:{...(raw.bankAssignments||{})},equipment:{...base.equipment,...(raw.equipment||{})},
    loadouts:normalizeLoadouts(raw.loadouts),favoriteViews:Array.isArray(raw.favoriteViews)?[...new Set(raw.favoriteViews.filter(v=>typeof v==='string'))].slice(0,5):[],autoSwitchWeakness:raw.autoSwitchWeakness===true,raidAutoRun:raw.raidAutoRun!==false,
    rangedAmmo:raw.rangedAmmo||'Bronze Arrows',staffCharges:{...(raw.staffCharges||{})},
    autoEat:{...base.autoEat,...(raw.autoEat||{})},buffs:{...(raw.buffs||{})},
@@ -3783,6 +3788,8 @@ function restore(){
   state.fireUntil=Math.max(0,Number(state.fireUntil)||0);
   if(!Number.isFinite(state.fireUntil))state.fireUntil=0;
   // Upgrade v3.12 saves: transfer any existing potions into their independent pouch.
+  delete state.bank.Coins; // Coins live on the character, never in bank inventory.
+  delete state.bankAssignments.Coins;
   for(const [item,n] of Object.entries(state.bank))if(isPotion(item)){
    const amount=Math.max(0,Number(n)||0);
    state.potions[item]=Math.max(0,Number(state.potions[item])||0)+amount;
@@ -4334,8 +4341,8 @@ function sell(item,qty){
  if(!count(item)||item==='Coins')return;
  if(!isTradeable(item)){note(`🔒 ${item} is soulbound and cannot be sold or traded.`);return;}
  qty=qty==='all'?count(item):Math.min(count(item),Math.max(1,Math.floor(Number(qty)||1)));
- const old={...state.bank},oldPotions={...state.potions};add(item,-qty);
- if(!add('Coins',sellPrice(item)*qty)){state.bank=old;state.potions=oldPotions;note('🏦 No space for Coins.');return}
+ add(item,-qty);
+ add('Coins',sellPrice(item)*qty);
  const coins=sellPrice(item)*qty;state.stats.coinsEarned+=coins;
  note(`🪙 Sold ${qty} ${item} for ${fmt(coins)} Coins.`);refreshDynamic();save();
 }
@@ -4365,17 +4372,17 @@ function claimQuest(id){
  const quest=QUESTS.find(x=>x.id===id);
  if(!quest||state.claimed.includes(id)||!quest.test(state))return;
  const items=questItemRewards(quest);
- const newStacks=Object.entries(items).filter(([item,n])=>n>0&&!isPotion(item)&&count(item)===0).length;
+ const newStacks=Object.entries(items).filter(([item,n])=>n>0&&item!=='Coins'&&!isPotion(item)&&count(item)===0).length;
  if(bankUsed()+newStacks>GAME_CONFIG.bankSlots){
   note(`🏦 Need ${bankUsed()+newStacks-GAME_CONFIG.bankSlots} free bank slot(s) to claim all rewards.`);
   toast('Free a bank slot for quest rewards');
   return;
  }
- const beforeBank={...state.bank},beforePotions={...state.potions};
+ const beforeBank={...state.bank},beforePotions={...state.potions},beforeCoins=state.coins;
  for(const [item,n] of Object.entries(items)){
   if(n<=0)continue;
   if(!add(item,n)){
-   state.bank=beforeBank;state.potions=beforePotions;
+   state.bank=beforeBank;state.potions=beforePotions;state.coins=beforeCoins;
    note('🏦 Could not claim all rewards. Inventory unchanged.');
    return;
   }
@@ -4546,12 +4553,12 @@ function claimWorldQuest(id){
  const deliveries={};
  for(const obj of worldQuestObjectives(quest))if(obj.type==='deliver')deliveries[obj.name]=(deliveries[obj.name]||0)+obj.amount;
  if(!canPay(deliveries))return toast('You need the requested supplies to finish this quest');
- const oldBank={...state.bank},oldPotions={...state.potions};
+ const oldBank={...state.bank},oldPotions={...state.potions},oldCoins=state.coins;
  for(const [item,n] of Object.entries(deliveries))add(item,-n);
  const rewards={...(quest.items||{})};if(quest.coins)rewards.Coins=(rewards.Coins||0)+quest.coins;
  let credited=true;
  for(const [item,qty] of Object.entries(rewards))if(qty>0&&!add(item,qty)){credited=false;break}
- if(!credited){state.bank=oldBank;state.potions=oldPotions;toast('Free a bank slot for the quest rewards');return}
+ if(!credited){state.bank=oldBank;state.potions=oldPotions;state.coins=oldCoins;toast('Free a bank slot for the quest rewards');return}
  for(const [skill,amount] of Object.entries(quest.xp||{}))gainXp(skill,amount,false);
  state.world.completed.push(id);
  note(`🏅 ${quest.title} completed · +${fmt(quest.coins||0)} GP!${quest.unlocksHire?' '+OVERNIA_HIRE_BY_ID[quest.unlocksHire].name+' can now be hired.':''}`);
@@ -5539,7 +5546,6 @@ function renderSkillLive(){
 // All items auto-sort into these folders until the player manually assigns them elsewhere.
 const BANK_DEFAULT_TABS=[
  {id:'all',name:'All',icon:'🏦'},
- {id:'currency',name:'Currency',icon:'🪙'},
  {id:'food',name:'Food',icon:'🍗'},
  {id:'farming',name:'Farming',icon:'🌾'},
  {id:'seeds',name:'Seeds',icon:'🌱'},
@@ -5564,12 +5570,12 @@ function bankTabForItem(item){
 }
 function bankItems(scope){
  const filter=ui.bank[scope];
- return Object.entries(state.bank).filter(([item,qty])=>qty>0&&
+ return Object.entries(state.bank).filter(([item,qty])=>item!=='Coins'&&qty>0&&
   (filter.tab==='all'||bankTabForItem(item)===filter.tab)&&
   item.toLowerCase().includes(filter.search.toLowerCase()))
   .sort(([a],[b])=>a.localeCompare(b,'en'));
 }
-function bankTabCount(tab){return Object.entries(state.bank).filter(([name,n])=>n>0&&(tab==='all'||bankTabForItem(name)===tab)).length}
+function bankTabCount(tab){return Object.entries(state.bank).filter(([name,n])=>name!=='Coins'&&n>0&&(tab==='all'||bankTabForItem(name)===tab)).length}
 function bankSelectTab(scope,tab){
  if(!bankAllTabs().some(t=>t.id===tab))return;
  const settings=ui.bank[scope];settings.tab=tab;settings.page=0;settings.selected=null;
@@ -5630,7 +5636,7 @@ function renderBankTabs(scope){
   `<span>Auto-sorted folders · drag items onto tabs, or select Move to tab below.</span>`;
 }
 function renderBankShell(scope){
- const filters=ui.bank[scope];return `<div class="between"><h3 style="margin:0">🏦 ${scope==='side'?'Bank':'Your Bank'}</h3><span class="bank-count" id="${scope}BankCapacity">${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks</span><button type="button" class="bank-create-top" data-bank-new title="Create bank folder">＋ Tab</button></div>
+ const filters=ui.bank[scope];return `<div class="between"><h3 style="margin:0">🏦 ${scope==='side'?'Bank':'Your Bank'}</h3><span class="bank-count">🪙 ${fmt(count('Coins'))} GP · Account</span><span class="bank-count" id="${scope}BankCapacity">${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks</span><button type="button" class="bank-create-top" data-bank-new title="Create bank folder">＋ Tab</button></div>
  <div class="bank-folders" id="${scope}BankFolders" aria-label="Bank folders"></div><div class="bank-tab-manager" id="${scope}BankManager"></div>
  <div class="bank-tools" style="margin-top:8px"><input type="search" id="${scope}BankSearch" data-bank-search="${scope}" placeholder="Search this tab..." value="${esc(filters.search)}"></div>
  <div class="small subdued" id="${scope}BankCount" style="margin-top:8px"></div><div id="${scope}BankGrid" class="bank-grid ${scope==='side'?'compact':''}"></div><div class="pager" id="${scope}BankPager"></div><div id="${scope}BankDetail"></div>`;
@@ -5643,7 +5649,7 @@ function renderBankGrid(scope){
  const slice=items.slice(settings.page*per,(settings.page+1)*per);
  grid.innerHTML=slice.length?slice.map(([item,amount])=>`<button type="button" draggable="true" class="bank-tile ${settings.selected===item?'active':''}" data-bank-select="${scope}" data-item="${esc(item)}" data-item-preview="${esc(item)}" aria-label="${esc(item)}, ${fmt(amount)} owned. Select to inspect; drag onto a tab to move">${itemArt(item)}<span class="item-name">${esc(item)}</span><span class="stack">×${fmt(amount)}</span></button>`).join(''):'<p class="subdued small">Nothing here yet. Items appear automatically, or move items here from another tab.</p>';
  const pager=el(scope+'BankPager');if(pager)pager.innerHTML=`<button data-bank-page="${scope}" data-delta="-1" ${settings.page<=0?'disabled':''}>←</button><span>Page ${settings.page+1} / ${maxPage+1}</span><button data-bank-page="${scope}" data-delta="1" ${settings.page>=maxPage?'disabled':''}>→</button>`;
- const counter=el(scope+'BankCount');if(counter)counter.textContent=`${items.length} unique stacks in this view · ${fmt(Object.values(state.bank).reduce((a,b)=>a+Number(b),0))} total bank items`;
+ const counter=el(scope+'BankCount');if(counter)counter.textContent=`${items.length} unique stacks in this view · ${fmt(Object.entries(state.bank).reduce((a,[item,qty])=>a+(item==='Coins'?0:Number(qty)||0),0))} total bank items`;
  const capacity=el(scope+'BankCapacity');if(capacity)capacity.textContent=`${bankUsed()} / ${GAME_CONFIG.bankSlots} stacks`;
  renderBankDetail(scope);
 }

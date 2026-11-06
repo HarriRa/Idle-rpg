@@ -1300,9 +1300,31 @@ button:not(:disabled):active{transform:translateY(1px)}
 @media(max-width:900px){.combat-level-strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:420px){.combat-level-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
+<style>
+#mobileHomeNav{display:none}
+@media(max-width:700px){
+ #mobileHomeNav{display:block;padding:10px 12px}
+ .mobile-home-links{display:none}
+ body.mobile-menu-home .mobile-home-links{display:flex;flex-direction:column;gap:7px}
+ #mobileHomeNav button{width:100%;min-height:44px;text-align:left;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:9px}
+ #mobileHomeNav .mobile-menu-back{margin-bottom:8px}
+ body.mobile-menu-home .mobile-menu-back{display:none}
+ body.mobile-menu-home>header,body.mobile-menu-home>.layout,body.mobile-menu-home #focusDock,body.mobile-menu-home #focusScrim{display:none!important}
+ body.mobile-menu-home,body.focus-mode.mobile-menu-home{height:auto!important;overflow:auto!important;padding:0!important}
+ body.mobile-menu-home #mobileHomeNav{max-width:560px;margin:0 auto;padding:12px}
+ body:not(.mobile-menu-home) .panel.left,body:not(.mobile-menu-home) #quickNav,body:not(.mobile-menu-home) #focusToolbar,body:not(.mobile-menu-home) #focusDock{display:none!important}
+ body.focus-mode{height:100dvh;display:flex;flex-direction:column;padding-bottom:0!important}
+ body.focus-mode #mobileHomeNav{flex:none}
+ body.focus-mode .layout{flex:1;min-height:0;height:auto!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
+ body.mobile-equipment .panel.main{display:none!important}
+ body.mobile-equipment .panel.right,body.focus-mode.mobile-equipment .panel.right{display:block!important;position:static!important;transform:none!important;width:100%!important;max-height:none!important;height:100%!important;overflow:auto;grid-column:1!important;grid-row:1!important;visibility:visible!important}
+ body.mobile-equipment #activityLogDetails{display:none}
+}
+</style>
 </head>
-<body><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
+<body class="mobile-menu-home"><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
 <header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v5.6 · Polish & Stability</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div><span id="petStatus" class="pet-status" aria-live="polite" style="display:block;width:max-content;max-width:95%;margin:6px 14px">🐾 No pet summoned</span></header>
+<nav id="mobileHomeNav" aria-label="Game menu"></nav>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
 <main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
@@ -4533,7 +4555,24 @@ function navLevelText(v){
  v==='bank'?bankUsed()+'/'+GAME_CONFIG.bankSlots:v==='shop'?fmt(count('Coins'))+'🪙':
  v==='journal'&&journalReadyCount()?'🎁 '+journalReadyCount():'';
 }
+function renderMobileHomeNav(){
+ const box=el('mobileHomeNav');if(!box)return;
+ const skills=Object.keys(SKILLS).sort((a,b)=>Number(!!SKILLS[b].combat)-Number(!!SKILLS[a].combat)||label(a).localeCompare(label(b)));
+ box.innerHTML=`<button type="button" class="mobile-menu-back" data-mobile-home>☰ All skills & menus</button><div class="mobile-home-links">${skills.map(skill=>`<button type="button" data-mobile-view="${SKILLS[skill].combat?'combat':skill}"><span>${SKILLS[skill].icon} ${esc(label(skill))}</span><small data-nav-lvl="${skill}">Lv ${levelFromXp(state.xp[skill]||0)}</small></button>`).join('')}${[['bank','🏦 Bank'],['journal','📜 Journal'],['equipment','🛡️ Equipment']].map(([view,name])=>`<button type="button" data-mobile-view="${view}"><span>${name}</span><span aria-hidden="true">›</span></button>`).join('')}</div>`;
+}
+document.addEventListener('click',event=>{
+ const button=event.target.closest('[data-mobile-home],[data-mobile-view]');if(!button)return;
+ if(button.hasAttribute('data-mobile-home')){
+  closeFocusDrawer();document.body.classList.remove('mobile-equipment');document.body.classList.add('mobile-menu-home');renderMobileHomeNav();window.scrollTo(0,0);return;
+ }
+ document.body.classList.remove('mobile-menu-home','mobile-equipment');
+ if(button.dataset.mobileView==='equipment'){
+  closeFocusDrawer();ui.sidebarTab='gear';renderSidebar();document.body.classList.add('mobile-equipment');
+ }else navigate(button.dataset.mobileView);
+ window.scrollTo(0,0);
+});
 function renderNav(){
+ renderMobileHomeNav();
  const query=ui.navSearch.toLowerCase().trim();
  const groupHtml=NAV_GROUPS.map(group=>{
   const views=group.views.filter(v=>NAV_VIEWS.includes(v));
@@ -4572,6 +4611,7 @@ function refreshNavLevels(){
 }
 function navigate(view){
  if(!NAV_VIEWS.includes(view))return;
+ document.body.classList.remove('mobile-menu-home','mobile-equipment');
  hideItemTooltip();closeFocusDrawer();ui.view=view;renderNav();renderMain();refreshDynamic();
  // Always begin a new page at its top; previous scroll position was confusing in Classic View.
  if(focusModeEnabled){const panel=document.querySelector('.panel.main');if(panel)panel.scrollTop=0;}

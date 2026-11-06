@@ -1430,6 +1430,16 @@ button:not(:disabled):active{transform:translateY(1px)}
  body:has(#mobileCombatCard) #main>.heading,body:has(#mobileCombatCard) .combat-region-picker,body:has(#mobileCombatCard) #combatArena,body:has(#mobileCombatCard) .combat-console-nav,body:has(#mobileCombatCard) .combat-panel-section{display:none!important}
  body:has(#mobileCombatCard) .panel.right{display:none!important}
  body.mobile-combat-settings-open:has(#mobileCombatCard) .combat-region-picker,body.mobile-combat-settings-open:has(#mobileCombatCard) [data-combat-section="setup"]{display:block!important}
+ /* Reveal the EXISTING Auto Eat controls inside Combat Settings on phones.
+    Reuses the desktop form and its save/change handlers, avoiding duplicate IDs. */
+ body.mobile-combat-settings-open:has(#mobileCombatCard) [data-combat-section="fight"]{display:block!important}
+ body.mobile-combat-settings-open:has(#mobileCombatCard) [data-combat-section="fight"] > :not(.combat-fight-utilities){display:none!important}
+ body.mobile-combat-settings-open:has(#mobileCombatCard) .combat-fight-utilities{display:block!important;margin-top:5px}
+ body.mobile-combat-settings-open:has(#mobileCombatCard) .combat-food-foldout{display:block!important;background:#25382b;border:1px solid #728b64;border-radius:11px;padding:11px}
+ body.mobile-combat-settings-open:has(#mobileCombatCard) .combat-food-foldout > summary{font-size:14px;color:#f5dfac;padding:4px 0}
+ body.mobile-combat-settings-open:has(#mobileCombatCard) .combat-food-foldout .info-box{display:block!important;margin-top:8px;padding:10px}
+ body.mobile-combat-settings-open:has(#mobileCombatCard) #autoEatFood,body.mobile-combat-settings-open:has(#mobileCombatCard) #autoEatThreshold{min-height:43px}
+
  .mobile-combat-card{display:block;background:linear-gradient(155deg,#253b2e,#182b26);border:1px solid #728b64;border-radius:13px;padding:12px;box-shadow:0 3px 18px #0004;color:#f3eed9}
  .mobile-combat-top{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:11px;color:#dbc68c;font-weight:700}
  .mobile-combat-controls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:11px 0 4px}
@@ -5893,6 +5903,9 @@ function handleClick(e){
  if(b.hasAttribute('data-mobile-combat-settings')){
   const open=document.body.classList.toggle('mobile-combat-settings-open');
   b.setAttribute('aria-expanded',String(open));
+  const autoEatDetails=document.querySelector('.combat-food-foldout');
+  if(autoEatDetails)autoEatDetails.open=open;
+  if(open)renderAutoEatOptions();
   return;
  }
  if(b.hasAttribute('data-mobile-combat-step')){

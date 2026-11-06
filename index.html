@@ -1288,6 +1288,18 @@ button:not(:disabled):active{transform:translateY(1px)}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
+
+<style>
+.combat-level-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:12px 0}
+.combat-level-skill{min-width:0;padding:10px;border:1px solid #39526a;border-radius:10px;background:#152536}
+.combat-level-skill.is-training{border-color:#d4b46a;background:#29352f}
+.combat-level-skill header{display:flex;justify-content:space-between;gap:5px;align-items:center;font-size:12px;flex-wrap:wrap}
+.combat-level-skill strong{color:#f1d58f;font-size:16px;white-space:nowrap}
+.combat-level-skill .xpbar{width:100%;margin:7px 0 5px;height:5px}
+.combat-level-skill small{display:block;font-size:10px;color:#b9c9d9}
+@media(max-width:900px){.combat-level-strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:420px){.combat-level-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
 </head>
 <body><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
 <header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v5.6 · Polish & Stability</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div><span id="petStatus" class="pet-status" aria-live="polite" style="display:block;width:max-content;max-width:95%;margin:6px 14px">🐾 No pet summoned</span></header>
@@ -2218,6 +2230,15 @@ const GEAR_SETS=[
 function setPieceCount(set,equipment=state.equipment){return set.items.filter(name=>Object.values(equipment).includes(name)).length}
 function setBonusEntries(equipment=state.equipment){return GEAR_SETS.map(set=>({...set,count:setPieceCount(set,equipment)})).filter(set=>set.count>0)}
 function activeSetBonuses(equipment=state.equipment){return setBonusEntries(equipment).filter(set=>set.count>=2)}
+// Weapon damage is a flat max-hit contribution, independent of Ranged level.
+// Core bows and rare upgrades; each tier adds 30 weapon max damage.
+const RANGED_WEAPON_PROGRESSION=[
+ 'Normal Bow','Oak Bow','Willow Bow','Ranger Bow','Maple Bow','Yew Bow',
+ 'Trollbone Bow','Magic Bow','Redwood Bow','Dragonbone Bow','Elder Bow',
+ 'Twinstrike Crossbow','Deepmountain Warbow'
+];
+RANGED_WEAPON_PROGRESSION.forEach((name,tier)=>{EQUIPMENT[name].rangedPower=5+30*tier});
+
 const SET_STAT_LABELS={attackPct:'Melee accuracy',strengthPct:'Melee strength',defencePct:'Defence',rangedPct:'Ranged accuracy & damage',magicPct:'Magic accuracy & damage',attack:'Melee accuracy',strength:'Melee damage',defence:'Armour defence',block:'Block',rangedAccuracy:'Ranged accuracy',rangedPower:'Ranged damage',magicAccuracy:'Magic accuracy',magicPower:'Magic damage'};
 function describeSetBonus(bonus){return Object.entries(bonus).map(([key,value])=>`+${key.endsWith('Pct')?Math.round(value*100)+'%':value} ${SET_STAT_LABELS[key]||key}`).join(' · ')}
 SKILLS.crafting.actions.push(
@@ -3876,10 +3897,12 @@ function combatPreview(style,equipment=state.equipment,enemy=null,ammoName=state
   const rangedLevel=level('ranged');
   accuracy=(.62+.008*(rangedLevel+mods.rangedAccuracy+ammo.accuracy-(enemy?.def||0)))*(1+mods.rangedPct);
   const scaling=Math.pow((rangedLevel+20)/84,1.7);
-  const shotPower=Math.max(1,Math.floor(1.45*rangedLevel+3+(mods.rangedPower+ammo.power)*scaling*.67*(1+.32*mods.rangedPct)));
+  const weaponPower=weapon.combatType==='ranged'?(weapon.rangedPower||0):0;
+  // Double-shot weapon power is a total-volley bonus, split across both hits.
+  const weaponShotPower=weaponPower/(weapon.doubleHit?1.4:1);
+  const shotPower=Math.max(1,Math.floor(1.45*rangedLevel+3+((mods.rangedPower-weaponPower+ammo.power)*scaling*.67+weaponShotPower)*(1+.32*mods.rangedPct)));
   if(weapon.doubleHit){
-   // Two independently rolled shots. Total max damage is lower than melee BiS,
-   // but each shot has its own chance to land (two arrows per round).
+   // Two independently rolled shots, consuming two arrows per round.
    strikeMaxes=[Math.max(1,Math.floor(shotPower*.78)),Math.max(1,Math.floor(shotPower*.62))];
    baseMax=strikeMaxes[0]+strikeMaxes[1];
   }else{baseMax=shotPower;strikeMaxes=[baseMax]}
@@ -4816,6 +4839,13 @@ function refreshCombatTraining(){
   if(level)level.textContent='Lv '+levelFromXp(state.xp[opt.dataset.combatXpSelect]||0);
  }
 }
+function combatLevelStripHtml(mode){
+ const active=state.active?.type===mode,targets=combatXpTargets();
+ return `<div class="combat-level-strip" aria-label="Combat skill levels">${['attack','strength','defence','ranged','magic','hitpoints'].map(skill=>{
+  const training=active&&(skill==='hitpoints'||targets.includes(skill));
+  return `<div class="combat-level-skill ${training?'is-training':''}" data-arena-skill="${skill}" title="${esc(xpText(skill))}"><header><span>${SKILLS[skill].icon} ${esc(label(skill))}</span><strong data-skill-level>Lv ${levelFromXp(state.xp[skill]||0)}</strong></header><div class="xpbar" role="progressbar" aria-label="${esc(label(skill))} progress to next level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${xpFill(skill)}"><div class="fill" style="width:${xpFill(skill)}%"></div></div><small data-skill-status>${training?'● Training · ':''}${xpFill(skill).toFixed(1)}%${levelFromXp(state.xp[skill]||0)>=99?' · MAX':''}</small></div>`;
+ }).join('')}</div>`;
+}
 // Battle HUD: the two bars share one actual Overnia action tick. They are not independent timers.
 function combatArenaHtml(mode){
  const raid=mode==='raid',enemy=raid?selectedRaidWaves()[raidState().wave]:MONSTERS[state.monsterIndex];
@@ -4850,6 +4880,7 @@ function combatArenaHtml(mode){
     <div class="over-last-hit" data-arena-enemy-last aria-live="off">Last hit · —</div>
    </article>
   </div>
+  ${combatLevelStripHtml(mode)}
   <div class="over-arena-quick-eat" id="arenaQuickEat" aria-label="Quick manual healing"></div>
   <div class="over-arena-footer"><span data-arena-tip>${active?'Your attack resolves first; the enemy counters if still alive.':'Choose a monster to start fighting.'}</span><span data-arena-interval>${combatXpMultiplier(enemy,raid)>1?`Combat XP ×${combatXpMultiplier(enemy,raid).toFixed(1)} · `:''}${active?'1 combat exchange / '+(actionDurationMs()/1000).toFixed(1)+'s':''}</span></div>
  </section>`;
@@ -4859,6 +4890,16 @@ function refreshCombatArena(){
  const mode=root.dataset.arenaMode,raid=mode==='raid',enemy=raid?selectedRaidWaves()[raidState().wave]:MONSTERS[state.monsterIndex];
  if(!enemy)return;
  const active=state.active?.type===mode;
+ const targets=combatXpTargets();
+ for(const card of root.querySelectorAll('[data-arena-skill]')){
+  const skill=card.dataset.arenaSkill,lvl=levelFromXp(state.xp[skill]||0),progress=xpFill(skill);
+  const training=active&&(skill==='hitpoints'||targets.includes(skill));
+  card.classList.toggle('is-training',training);card.title=xpText(skill);
+  card.querySelector('[data-skill-level]').textContent='Lv '+lvl;
+  card.querySelector('.fill').style.width=progress+'%';
+  card.querySelector('[role="progressbar"]').setAttribute('aria-valuenow',String(progress));
+  card.querySelector('[data-skill-status]').textContent=(training?'● Training · ':'')+progress.toFixed(1)+'%'+(lvl>=99?' · MAX':'');
+ }
  const set=(attr,value)=>{const node=root.querySelector(`[${attr}]`);if(node&&node.textContent!==String(value))node.textContent=value;return node};
  const playerMax=Math.max(1,maxHp()),pHp=clamp(Number(state.hp)||0,0,playerMax);
  const eHp=active?clamp(Number(state.monsterHp)||0,0,enemy.hp):enemy.hp;

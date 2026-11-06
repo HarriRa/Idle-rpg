@@ -1366,6 +1366,49 @@ button:not(:disabled):active{transform:translateY(1px)}
   #activityPanel .activity-reward-more { display: none; }
 }
 </style>
+<style id="overnia-three-panel-mobile-v57">
+@media(max-width:700px){
+ /* Three-panel focused skill interface. Other game screens remain usable. */
+ body:has(#mobileActionCard):not(.mobile-menu-home)>header{display:none!important}
+ body:has(#mobileActionCard) #mobileHomeNav{padding:10px 10px 0!important}
+ body:has(#mobileActionCard) #mobileHomeNav .mobile-menu-back{margin:0!important;min-height:51px;border:1px solid #6f896b;border-radius:11px;background:#304b39;color:#f4f1d7;font-size:17px;padding:12px 15px}
+ body:has(#mobileActionCard) .layout{display:block!important;padding:7px 10px!important;margin:0!important}
+ body:has(#mobileActionCard) .panel.main{display:flex!important;flex-direction:column;min-height:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important;gap:9px}
+ body:has(#mobileActionCard) #activityPanel{order:0!important;position:relative!important;top:auto!important;margin:0!important;padding:5px 8px!important;border-radius:9px!important;z-index:3}
+ body:has(#mobileActionCard) #activityPanel .activity-head{gap:5px!important;min-height:21px}
+ body:has(#mobileActionCard) #activityPanel .activity-kicker{font-size:0!important}
+ body:has(#mobileActionCard) #activityPanel .activity-kicker:before{content:'⚡';font-size:13px}
+ body:has(#mobileActionCard) #activityPanel .activity-name{font-size:11px!important}
+ body:has(#mobileActionCard) #activityPanel .activity-percent{font-size:10px!important}
+ body:has(#mobileActionCard) #activityPanel #stopBtn{font-size:10px!important;padding:2px 7px!important}
+ body:has(#mobileActionCard) #activityPanel .activity-track{height:3px!important;margin:3px 0 0!important}
+ body:has(#mobileActionCard) #activityFeed{display:none!important}
+ body:has(#mobileActionCard) #main{order:1!important;display:flex;flex-direction:column;gap:0;min-width:0}
+ body:has(#mobileActionCard) .skill-stage,body:has(#mobileActionCard) .skill-workspace,body:has(#mobileActionCard) .mastery-titles,body:has(#mobileActionCard) .perk-status,body:has(#mobileActionCard) .skill-guide{display:none!important}
+ body:has(#mobileActionCard) .panel.right{display:none!important}
+ body:has(#mobileActionCard) .skill-fire-drawer{order:2;margin-top:9px}
+ .mobile-action-card{display:block;background:linear-gradient(155deg,#253b2e,#182b26);border:1px solid #728b64;border-radius:13px;padding:12px;box-shadow:0 3px 18px #0004;color:#f3eed9}
+ .mobile-action-top{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#dbc68c;font-size:11px;font-weight:700}
+ .mobile-action-top span:last-child{font-size:10px;color:#d2ddc5;text-align:right}
+ .mobile-action-switch{display:grid;grid-template-columns:45px minmax(0,1fr) 45px;gap:5px;align-items:center;margin:12px 0}
+ .mobile-action-switch button{height:46px;padding:0;font-size:33px;line-height:1;background:#385742;border-color:#7da079;border-radius:9px}
+ .mobile-action-title{text-align:center;min-width:0}.mobile-action-title strong{display:block;font-size:19px;overflow-wrap:anywhere;color:#ffe1a5}.mobile-action-title small{display:block;font-size:11px;color:#b6cbb6;margin-top:4px}
+ .mobile-action-hero{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px 12px;border:1px solid #4d745a;background:radial-gradient(circle at center,#355443,#1b3029 70%);border-radius:11px}
+ .mobile-action-hero .item-art{width:100px!important;height:100px!important;font-size:67px!important;border-radius:18px;display:grid;place-items:center}
+ .mobile-action-owned{text-align:center}.mobile-action-owned strong{display:block;font-size:25px;color:#b8e7ad;font-variant-numeric:tabular-nums}.mobile-action-owned small{display:block;color:#c3d4c2;font-size:11px}
+ .mobile-action-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:10px}
+ .mobile-action-facts>span{background:#172a23;border:1px solid #45624b;border-radius:8px;text-align:center;padding:9px 3px}
+ .mobile-action-facts small{display:block;font-size:10px;color:#b9c7b2}.mobile-action-facts b{display:block;font-size:14px;margin-top:4px;color:#f3ddb0}
+ .mobile-action-materials{margin-top:12px;padding:9px;background:#1a2c25;border-radius:8px;border:1px solid #49694f}.mobile-action-materials>strong{display:block;font-size:11px;color:#e5d29b;margin-bottom:5px}
+ .mobile-action-material{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px}.mobile-action-material .item-art{width:25px;height:25px;font-size:18px;flex:none}.mobile-action-material span{flex:1}.mobile-action-material b{font-variant-numeric:tabular-nums;color:#a6e4a9}.mobile-action-material.missing b{color:#ffaaa1}
+ .mobile-action-bonus,.mobile-action-fire{margin-top:8px;font-size:11px;color:#e2cba4}
+ .mobile-action-xp{display:flex;justify-content:space-between;gap:10px;margin-top:14px;font-size:11px;color:#e4d9b6}.mobile-action-xp span:last-child{text-align:right;font-size:10px;color:#b6ceb9}
+ .mobile-action-card .xpbar{height:7px;margin:7px 0 11px}
+ .mobile-action-start{display:block;width:100%;padding:13px 8px!important;background:#416e4f!important;border:1px solid #94c28f!important;font-weight:800;font-size:14px;border-radius:9px}
+ .mobile-action-start:disabled{background:#344038!important;color:#9fa99d!important;border-color:#5b6a5a!important}
+}
+@media(min-width:701px){.mobile-action-card{display:none!important}}
+</style>
 </head>
 <body class="mobile-menu-home"><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
 <header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v5.6 · Polish & Stability</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div><span id="petStatus" class="pet-status" aria-live="polite" style="display:block;width:max-content;max-width:95%;margin:6px 14px">🐾 No pet summoned</span></header>
@@ -4701,6 +4744,39 @@ function recipeCard(action,index,skill){
   <button type="button" class="recipe-quick-start" data-action="${index}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'Locked':fireNeeded?'Need fire':missing?'Materials':already?'✓ Active':'Start'}</button>
  </article>`;
 }
+// Mobile action carousel: desktop activity list and inspector remain unchanged.
+function renderMobileAction(skill){
+ const actions=SKILLS[skill]?.actions||[];
+ if(!actions.length)return '';
+ const i=Math.max(0,Math.min(actions.length-1,Number(ui.skillSelection[skill])||0));
+ const a=actions[i],lvl=levelFromXp(state.xp[skill]||0);
+ const locked=lvl<a.level,missing=!canPay(a.cost),fireNeeded=a.requiresFire&&!fireBurning()&&!nextAutoFuel();
+ const active=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===i;
+ const materials=Object.entries(a.cost||{}).map(([item,n])=>`<div class="mobile-action-material ${count(item)<n?'missing':''}">${itemArt(item)}<span>${esc(item)}</span><b>${fmt(count(item))} / ${fmt(n)}</b></div>`).join('');
+ const bonus=Object.keys(a.bonus||{}).filter(item=>item!==a.output);
+ return `<section class="mobile-action-card" id="mobileActionCard" aria-label="Selected ${esc(label(skill))} activity">
+  <div class="mobile-action-top"><span>${SKILLS[skill].icon} ${esc(label(skill))}</span><span>Lv ${lvl} · ${fmt(state.xp[skill]||0)} XP</span></div>
+  <div class="mobile-action-switch"><button type="button" data-mobile-step="-1" aria-label="Previous activity" ${i===0?'disabled':''}>‹</button><div class="mobile-action-title"><strong>${esc(a.name)}</strong><small>${i+1} / ${actions.length} · Requires Lv ${a.level}${locked?' 🔒':''}</small></div><button type="button" data-mobile-step="1" aria-label="Next activity" ${i===actions.length-1?'disabled':''}>›</button></div>
+  <div class="mobile-action-hero">${itemArt(a.output,true)}<div class="mobile-action-owned"><strong>${fmt(count(a.output))}</strong><small>${esc(a.output)} owned</small></div></div>
+  <div class="mobile-action-facts"><span><small>Required level</small><b>${a.level}</b></span><span><small>XP / action</small><b>+${fmt(a.xp)}</b></span><span><small>Received / action</small><b>×${a.quantity||1}</b></span></div>
+  ${materials?`<div class="mobile-action-materials"><strong>Required materials</strong>${materials}</div>`:''}
+  ${bonus.length?`<div class="mobile-action-bonus">Bonus: ${bonus.map(item=>`${esc(item)} ×${fmt(count(item))} owned`).join(' · ')}</div>`:''}
+  ${a.requiresFire?'<div class="mobile-action-fire">🔥 Requires a fire</div>':''}
+  <div class="mobile-action-xp"><span>Skill progress · Lv ${lvl}</span><span>${lvl>=99?'MAX':fmt(xpForLevel(lvl+1)-(state.xp[skill]||0))+' XP to next'}</span></div><div class="xpbar"><div class="fill" style="width:${xpFill(skill)}%"></div></div>
+  <button type="button" class="mobile-action-start" data-action="${i}" ${locked||missing||fireNeeded?'disabled':''}>${locked?'🔒 Level '+a.level+' required':fireNeeded?'🔥 Fire required':missing?'Missing materials':active?'✓ Currently training':'▶ Start activity'}</button>
+ </section>`;
+}
+function refreshMobileAction(skill){
+ const node=el('mobileActionCard');if(!node||!SKILLS[skill])return;
+ // Only update when the displayed values change; keep the carousel and buttons stable.
+ const a=SKILLS[skill].actions[ui.skillSelection[skill]];
+ if(!a)return;
+ const values=[levelFromXp(state.xp[skill]||0),state.xp[skill]||0,count(a.output),...Object.keys(a.cost||{}).map(item=>count(item)),state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===ui.skillSelection[skill],fireBurning(),!!nextAutoFuel(),...Object.keys(a.bonus||{}).map(item=>count(item))].join('|');
+ if(node.dataset.live===values)return;
+ const newer=document.createElement('div');newer.innerHTML=renderMobileAction(skill);
+ newer.firstElementChild.dataset.live=values;
+ node.replaceWith(newer.firstElementChild);
+}
 function renderSkillFocus(skill){
  const a=SKILLS[skill].actions[ui.skillSelection[skill]],i=ui.skillSelection[skill];
  if(!a)return '';
@@ -4779,6 +4855,7 @@ function renderSkillMain(skill){
   const index=actions.findIndex(({i})=>i===ui.skillSelection[skill]);
   ui.skillPage[skill]=Math.max(0,Math.floor(Math.max(0,index)/skillPageSize()));
  }
+ html+=renderMobileAction(skill);
  html+=`<div class="skill-workspace"><section class="skill-browser" aria-label="${esc(label(skill))} available activities">
   <div class="workspace-title"><h3>Activities</h3></div>`;
  if(categories.length>1)html+=`<div class="tabs skill-category-tabs" id="skillTabs">${['All',...categories].map(cat=>`<button class="${chosen===cat?'selected':''}" data-skill-tab="${esc(cat)}">${esc(cat)}</button>`).join('')}</div>`;
@@ -5187,6 +5264,7 @@ function renderSkillLive(){
  }
  if(ui.view==='cooking')updateFireUi();
  refreshSkillFocus(ui.view);
+ refreshMobileAction(ui.view);
  filterRecipeCards();
 }
 // All items auto-sort into these folders until the player manually assigns them elsewhere.
@@ -5799,6 +5877,13 @@ function handleClick(e){
   const extra=el('skillFocus')?.querySelector('.focus-expandable');if(extra)extra.classList.toggle('expanded',ui.focusExpanded);
   b.setAttribute('aria-expanded',String(ui.focusExpanded));
   b.textContent=ui.focusExpanded?'▴ Hide materials and bank details':'▾ Show materials and bank details';
+  return;
+ }
+ if(b.hasAttribute('data-mobile-step')){
+  const skill=ui.view,actions=SKILLS[skill]?.actions;if(!actions)return;
+  ui.skillSelection[skill]=clamp((Number(ui.skillSelection[skill])||0)+Number(b.dataset.mobileStep),0,actions.length-1);
+  const mobile=el('mobileActionCard');if(mobile)mobile.outerHTML=renderMobileAction(skill);
+  const focus=el('skillFocus');if(focus)focus.outerHTML=renderSkillFocus(skill);
   return;
  }
  if(b.hasAttribute('data-recipe-pick')){

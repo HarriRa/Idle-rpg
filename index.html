@@ -4996,17 +4996,41 @@ function renderMobileAction(skill){
 }
 function refreshMobileAction(skill){
  const node=el('mobileActionCard');if(!node||!SKILLS[skill])return;
- // Do not interrupt searching/scrolling the directory while training ticks update XP.
- if(el('mobileActionDirectory')?.open)return;
- // Only update when the displayed values change; keep the carousel and buttons stable.
- const a=SKILLS[skill].actions[ui.skillSelection[skill]];
- if(!a)return;
- const values=[levelFromXp(state.xp[skill]||0),state.xp[skill]||0,count(a.output),...Object.keys(a.cost||{}).map(item=>count(item)),state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===ui.skillSelection[skill],fireBurning(),!!nextAutoFuel(),...Object.keys(a.bonus||{}).map(item=>count(item))].join('|');
- if(node.dataset.live===values)return;
- const newer=document.createElement('div');newer.innerHTML=renderMobileAction(skill);
- newer.firstElementChild.dataset.live=values;
- node.replaceWith(newer.firstElementChild);
+ // Update numbers in place, including while Browse All Items is expanded.
+ // Never replace the card on a game tick: doing so can interrupt mobile taps and scrolling.
+ const index=Number(ui.skillSelection[skill]);
+ const a=SKILLS[skill].actions[index];if(!a)return;
+ const lvl=levelFromXp(state.xp[skill]||0),xp=state.xp[skill]||0;
+ const locked=lvl<a.level,missing=!canPay(a.cost),fireNeeded=a.requiresFire&&!fireBurning()&&!nextAutoFuel();
+ const active=state.active?.type==='skill'&&state.active.skill===skill&&state.active.index===index;
+ const top=node.querySelector('.mobile-action-top span:last-child');
+ if(top)top.textContent=`Lv ${lvl} · ${fmt(xp)} XP`;
+ const own=node.querySelector('.mobile-action-owned strong');
+ if(own)own.textContent=fmt(count(a.output));
+ const materials=Object.entries(a.cost||{});
+ const rows=node.querySelectorAll('.mobile-action-material');
+ materials.forEach(([item,needed],i)=>{
+  const row=rows[i];if(!row)return;
+  const amount=count(item),number=row.querySelector('b');
+  if(number)number.textContent=`${fmt(amount)} / ${fmt(needed)}`;
+  row.classList.toggle('missing',amount<needed);
+ });
+ const bonus=node.querySelector('.mobile-action-bonus');
+ if(bonus)bonus.textContent='Bonus: '+Object.keys(a.bonus||{}).filter(item=>item!==a.output).map(item=>`${item} ×${fmt(count(item))} owned`).join(' · ');
+ const xpLine=node.querySelector('.mobile-action-xp');
+ if(xpLine){
+  const parts=xpLine.querySelectorAll('span');
+  if(parts[0])parts[0].textContent=`Skill progress · Lv ${lvl}`;
+  if(parts[1])parts[1].textContent=lvl>=99?'MAX':`${fmt(xpForLevel(lvl+1)-xp)} XP to next`;
+ }
+ const fill=node.querySelector('.xpbar .fill');if(fill)fill.style.width=xpFill(skill)+'%';
+ const button=node.querySelector('.mobile-action-start');
+ if(button){
+  button.disabled=locked||missing||fireNeeded;
+  button.textContent=locked?'🔒 Level '+a.level+' required':fireNeeded?'🔥 Fire required':missing?'Missing materials':active?'✓ Currently training':'▶ Start activity';
+ }
 }
+
 function renderSkillFocus(skill){
  const a=SKILLS[skill].actions[ui.skillSelection[skill]],i=ui.skillSelection[skill];
  if(!a)return '';

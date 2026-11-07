@@ -1,5 +1,5 @@
 /* Overnia PWA: network-first HTML so deployed game updates are not hidden by old caches. */
-const CACHE = 'overnia-app-v1-20261107';
+const CACHE = 'overnia-app-v2-home-20261107';
 const APP_FILES = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(APP_FILES)).then(() => self.skipWaiting()));

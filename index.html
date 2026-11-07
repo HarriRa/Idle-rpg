@@ -1188,7 +1188,7 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
  body.focus-mode .focus-drawer-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 7px;padding:3px 2px 9px;border-bottom:1px solid #576c52;font-size:14px;color:#eddba7}
  body.focus-mode #focusCloseBtn{padding:5px 9px;font-size:15px}
  body.focus-mode .right>.tabs{top:0}
- body.focus-mode .focus-dock{position:fixed;bottom:0;left:0;right:0;z-index:68;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:5px 6px calc(5px + env(safe-area-inset-bottom));gap:5px;border-top:1px solid #6b8164;background:#17261fee;box-shadow:0 -5px 25px #0008;backdrop-filter:blur(10px)}
+ body.focus-mode .focus-dock{position:fixed;bottom:0;left:0;right:0;z-index:68;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));padding:5px 6px calc(5px + env(safe-area-inset-bottom));gap:5px;border-top:1px solid #6b8164;background:#17261fee;box-shadow:0 -5px 25px #0008;backdrop-filter:blur(10px)}
  body.focus-mode .focus-dock button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;font-size:17px;line-height:1.05;padding:5px 3px;background:#2b4031;border:1px solid #4d6850;border-radius:7px}
  body.focus-mode .focus-dock button span{font-size:10px;white-space:nowrap}
  body.focus-mode .focus-dock button.selected{background:#456c54!important;border-color:#c6dc9e!important}
@@ -1259,6 +1259,30 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
 .loadout-actions button[data-loadout-equip]{background:#2e6e4d;border-color:#83bf92;color:#f0fff0}
 .loadout-actions button[data-loadout-equip]:disabled{opacity:.5}
 .gear-preview-notice{font-size:11px;color:#f0d69f;margin:0 0 9px;line-height:1.4}
+
+
+/* Overnia app home screen and mobile-friendly controls */
+#overniaHome{position:fixed;inset:0;z-index:240;overflow:auto;overscroll-behavior:contain;background:radial-gradient(circle at 50% -15%,#47644d 0%,#1e3029 31%,#13191c 72%);color:#f8ead0;padding:calc(22px + env(safe-area-inset-top)) 15px calc(26px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+#overniaHome[hidden],#homeSettings[hidden]{display:none!important}
+.home-wrap{max-width:660px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.home-brand{text-align:center;padding:15px 5px 3px}.home-mark{width:88px;height:88px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 6px 18px #0007)}
+.home-brand h2{font-family:Georgia,serif;letter-spacing:.065em;font-weight:800;font-size:clamp(29px,7vw,47px);color:#f3d69a;margin:0;text-shadow:0 3px 12px #0008}
+.home-brand p{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#bad5b5;margin:8px 0 0}
+.home-card{background:linear-gradient(160deg,#293b31,#1b2826 82%);border:1px solid #8a8458;border-radius:16px;padding:16px;box-shadow:0 10px 30px #0004}
+.home-character{display:flex;justify-content:space-between;gap:12px;align-items:center}.home-character strong{font-size:17px;color:#f9e6bf}.home-character small{color:#b9cdbb;font-size:11px;display:block;margin-top:5px}
+.home-active{font-size:12px;color:#ddd7bc;line-height:1.5;margin:12px 0 0;padding-top:11px;border-top:1px solid #66806d55}
+#overniaHome button{touch-action:manipulation;-webkit-user-select:none;user-select:none;min-height:45px;border-radius:10px;font-weight:750}
+#homeContinue{width:100%;min-height:61px;font-size:18px;background:linear-gradient(180deg,#80b77e,#396d50)!important;border:1px solid #b7e1a7!important;color:#102419!important;box-shadow:0 5px 18px #13291d99}
+.home-section-label{margin:0 0 9px;font-weight:800;font-size:12px;color:#e4cf9c;letter-spacing:.1em;text-transform:uppercase}
+.home-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.home-actions button{background:#324638;border-color:#738c70;color:#f4e9cf;padding:11px 6px}
+.home-actions button small{display:block;margin-top:3px;font-size:10px;color:#b8cdb7;font-weight:500}
+.home-secondary{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}.home-secondary button{font-size:12px;padding:8px 13px;background:#293a37;border-color:#6a7665}
+.home-settings{display:grid;gap:12px}.home-settings p{font-size:12px;color:#c9d4be;line-height:1.55;margin:0}.home-settings label{font-size:12px;color:#e4d9ba;display:flex;align-items:center;gap:8px}.home-settings label input{width:18px;height:18px}
+#homeStatus{font-size:12px;text-align:center;color:#abdcb1;min-height:1.5em}
+.home-launch{position:fixed;right:12px;top:calc(10px + env(safe-area-inset-top));z-index:69;background:#2a4c3d!important;border:1px solid #a4c79d!important;border-radius:22px!important;padding:8px 12px!important;font-size:12px!important;color:#f8edcf!important;box-shadow:0 3px 10px #0006}
+@media(max-width:650px){body:not(.mobile-menu-home) #homeLaunch{display:block!important}body.mobile-menu-home #homeLaunch{display:none!important}.home-wrap{gap:12px}.home-card{padding:13px}.home-brand{padding-top:5px}body:not(.mobile-menu-home) .layout{padding-bottom:calc(66px + env(safe-area-inset-bottom))}#overniaHome{padding-top:calc(16px + env(safe-area-inset-top))}}
+@media(min-width:651px){#homeLaunch{display:block}#overniaHome{display:block}}
+
 </style><style id="overnia-v53-quick-eat-style">
 .over-arena-quick-eat{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;padding:9px 8px;margin-top:9px;background:#252a25;border:1px solid #776b4d;border-radius:9px}
 .over-arena-quick-eat .over-quick-eat-label{color:#f2d6a3;font-size:12px;font-weight:750}
@@ -1641,17 +1665,35 @@ button,[role="button"],.bank-tile,.bank-folder,.gear-paper-slot{-webkit-user-sel
 input,textarea,[contenteditable="true"]{-webkit-user-select:text;user-select:text}
 </style>
 </head>
-<body class="mobile-menu-home"><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
+<body class="mobile-menu-home"><section id="overniaHome" role="dialog" aria-modal="true" aria-labelledby="homeTitle">
+ <div class="home-wrap">
+  <div class="home-brand"><img class="home-mark" src="./icon-192.png" alt="Overnia crest"><h2 id="homeTitle">OVERNIA</h2><p>Idle RPG · A Living World</p></div>
+  <div class="home-card"><div class="home-character"><div><strong id="homeCharacter">Your Adventure</strong><small id="homeStats">Loading character…</small></div><span aria-hidden="true" style="font-size:30px">⚔️</span></div><p class="home-active" id="homeActivity">Loading current activity…</p></div>
+  <button id="homeContinue" type="button">▶ Continue Playing</button>
+  <div class="home-card"><p class="home-section-label">💾 Save & Account</p><div class="home-actions">
+   <button type="button" data-home-action="save">💾 Save Now<small>Save on this device</small></button>
+   <button type="button" data-home-action="cloud">☁️ Cloud Save<small>Save your Main character</small></button>
+   <button type="button" data-home-action="export">⬇️ Export Save<small>Download backup</small></button>
+   <button type="button" data-home-action="import">⬆️ Import Save<small>Restore from file</small></button>
+   <button type="button" data-home-action="account">🌐 Account<small>Sign in / cloud sync</small></button>
+   <button type="button" data-home-action="settings">⚙️ Settings<small>App preferences</small></button>
+  </div></div>
+  <div id="homeSettings" class="home-card home-settings" hidden><p class="home-section-label">⚙️ App Settings</p><label><input type="checkbox" id="homeFocusMode"> Focus mode (compact workspace)</label><p>To install Overnia: open it in Safari or Chrome and choose Add to Home Screen. Your local save may be separate between the browser and installed app, so use your online account or export a backup before switching.</p><button type="button" data-home-action="settings-close">Close Settings</button></div>
+  <div class="home-secondary"><button type="button" data-home-action="skills">📊 Skills</button><button type="button" data-home-action="combat">⚔️ Combat</button><button type="button" data-home-action="world">🗺️ World</button><button type="button" data-home-action="menu">☰ All menus</button></div>
+  <p id="homeStatus" role="status" aria-live="polite"></p>
+ </div>
+</section><button type="button" id="homeLaunch" class="home-launch" aria-label="Open main menu">⌂ Home</button>
+<div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
 <header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v5.6 · Polish & Stability</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div><span id="petStatus" class="pet-status" aria-live="polite" style="display:block;width:max-content;max-width:95%;margin:6px 14px">🐾 No pet summoned</span></header>
 <nav id="mobileHomeNav" aria-label="Game menu"></nav>
 <div class="layout">
 <aside class="panel left"><div class="nav" id="nav"></div><div class="mobile-nav"><label class="form-label" for="mobileSelect">Navigate</label><select id="mobileSelect"></select></div></aside>
-<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation">
+<main class="panel main"><section id="activityPanel" aria-label="Current activity"><div class="activity-head"><span class="activity-kicker">⚡ Current Activity</span><span id="activityName" class="activity-name">Idle · Choose an action</span><span id="progressText" class="activity-percent">0%</span><button id="stopBtn">Stop</button></div><div class="bar activity-track"><div class="fill" id="progressFill"></div></div><div id="activityFeed" class="activity-feed" aria-label="Recent activity rewards" aria-live="off" hidden><div id="activityFeedList" class="activity-feed-list"></div></div></section><nav id="quickNav" class="quick-nav" aria-label="Quick navigation"><button type="button" data-home-open>⌂ Home</button>
 <button type="button" data-nav="world">🗺️ World</button><button type="button" data-nav="skills">📊 Skills</button><button type="button" data-nav="combat">⚔️ Combat</button><button type="button" data-nav="raid">⛰️ Raid</button><button type="button" data-nav="bank">🏦 Bank</button><button type="button" data-nav="journal">📜 Journal <span id="quickReady"></span></button>
  <span class="quick-nav-divider" aria-hidden="true"></span><div id="favoriteQuickNav" class="quick-favorites" aria-label="Pinned pages"></div><button type="button" id="pinCurrentView" data-pin-current title="Pin the current page to quick navigation" aria-pressed="false">☆ Pin page</button>
 </nav><div id="focusToolbar" class="focus-toolbar" hidden><label for="focusViewSelect">🧭 Menu</label><select id="focusViewSelect" aria-label="Choose game menu"></select><button type="button" id="focusOpenGear" title="Open equipment panel">⚔️ Gear</button></div><div id="main"></div></main>
 <aside class="panel right" id="focusSidebar" aria-label="Bank, Equipment and Potions"><div class="focus-drawer-heading"><strong id="focusDrawerTitle">🏦 Your Bank</strong><button id="focusCloseBtn" type="button" aria-label="Close side panel">✕</button></div><button id="mobileEquipmentBack" type="button" hidden>‹ Back to Combat</button><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">⚔️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><details id="activityLogDetails" class="activity-log-details" open><summary>📜 Activity log</summary><div class="log" id="log" aria-live="polite"></div></details></aside>
-</div><div id="focusScrim" class="focus-scrim" hidden></div><nav id="focusDock" class="focus-dock" aria-label="Focus Mode shortcuts" hidden><button type="button" data-focus-nav="skills">📊<span>Skills</span></button><button type="button" data-focus-nav="combat">⚔️<span>Combat</span></button><button type="button" data-focus-sidebar="bank">🏦<span>Bank</span></button><button type="button" data-focus-sidebar="gear">🛡️<span>Gear</span></button><button type="button" data-focus-sidebar="potions">🧪<span>Potions</span></button></nav><div class="toast" id="toast" role="status"></div>
+</div><div id="focusScrim" class="focus-scrim" hidden></div><nav id="focusDock" class="focus-dock" aria-label="Focus Mode shortcuts" hidden><button type="button" data-home-open>⌂<span>Home</span></button><button type="button" data-focus-nav="skills">📊<span>Skills</span></button><button type="button" data-focus-nav="combat">⚔️<span>Combat</span></button><button type="button" data-focus-sidebar="bank">🏦<span>Bank</span></button><button type="button" data-focus-sidebar="gear">🛡️<span>Gear</span></button><button type="button" data-focus-sidebar="potions">🧪<span>Potions</span></button></nav><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="monster-inspect-overlay" id="monsterInspectOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="monsterInspectTitle"><div class="monster-inspect-dialog"><div class="between"><h2 id="monsterInspectTitle">Monster details</h2><button type="button" data-inspect-close aria-label="Close monster details">×</button></div><div id="monsterInspectContent"></div></div></div>
 <div class="dev-overlay" id="devOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="devTitle">
@@ -4903,7 +4945,7 @@ function navLevelText(v){
 function renderMobileHomeNav(){
  const box=el('mobileHomeNav');if(!box)return;
  const skills=Object.keys(SKILLS).sort((a,b)=>Number(!!SKILLS[b].combat)-Number(!!SKILLS[a].combat)||label(a).localeCompare(label(b)));
- box.innerHTML=`<button type="button" class="mobile-menu-back" data-mobile-home>☰ All skills & menus</button><div class="mobile-home-links">${skills.map(skill=>`<button type="button" data-mobile-view="${SKILLS[skill].combat?'combat':skill}"><span>${SKILLS[skill].icon} ${esc(label(skill))}</span><small data-nav-lvl="${skill}">Lv ${levelFromXp(state.xp[skill]||0)}</small></button>`).join('')}${[['bank','🏦 Bank'],['shop','🛒 Shop'],['journal','📜 Journal'],['equipment','🛡️ Equipment']].map(([view,name])=>`<button type="button" data-mobile-view="${view}"><span>${name}</span><span aria-hidden="true">›</span></button>`).join('')}</div>`;
+ box.innerHTML=`<button type="button" class="mobile-menu-back" data-mobile-home>☰ All skills & menus</button><div class="mobile-home-links"><button type="button" data-home-open>⌂ Main Menu · Save & Account</button>${skills.map(skill=>`<button type="button" data-mobile-view="${SKILLS[skill].combat?'combat':skill}"><span>${SKILLS[skill].icon} ${esc(label(skill))}</span><small data-nav-lvl="${skill}">Lv ${levelFromXp(state.xp[skill]||0)}</small></button>`).join('')}${[['bank','🏦 Bank'],['shop','🛒 Shop'],['journal','📜 Journal'],['equipment','🛡️ Equipment']].map(([view,name])=>`<button type="button" data-mobile-view="${view}"><span>${name}</span><span aria-hidden="true">›</span></button>`).join('')}</div>`;
 }
 document.addEventListener('click',event=>{
  const button=event.target.closest('[data-mobile-home],[data-mobile-view]');if(!button)return;
@@ -6988,7 +7030,56 @@ boot();
 // Expose test helpers for regression checks.
 window.IdleRPGDebug={enemyReferenceMaxHit,enemyDamageIdentity,combatXpMultiplier,OVERNIA_PLACES,OVERNIA_WORLD_QUESTS,OVERNIA_HIRELINGS,OVERNIA_REGION_LORE,OVERNIA_RECRUITMENT_QUESTS,hireOverniaHelper,worldQuestReady,worldQuestProgress,travelToOvernia,acceptWorldQuest,claimWorldQuest,processHireling,equippedCombatStyle,combatXpTargets,toggleCombatXpSkill,normalizeCombatTraining,combatPreview,itemTooltipHtml,showItemTooltip,hideItemTooltip,GEAR_SETS,MONSTERS,BOSS_ARMOUR,activeSetBonuses,inspectMonster,closeMonsterInspect,gearMods,applyMonsterLoot,activeOverniaHires,getState:()=>state,levelFromXp,xpForLevel,combatLevel,bankUsed,fireRemaining,treasureChance,add,lightFire,buy,sell,equip,complete,stop,navigate,rollSoulGem,soulGemChance,rollMonsterGroup,isTradeable,raidState,startRaidWave,finishRaidWave,openRaidChest,belrothEntryRequirement,combatType,currentEnemy,RAID_WAVES,RAID_CONFIG,renderRaidMain};
 
-</script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script><script id="overnia-pwa-registration">
+</script>
+<script id="overnia-home-controller">
+(() => {
+ const $=id=>document.getElementById(id);
+ const home=$('overniaHome');
+ function setStatus(message){$('homeStatus').textContent=message||'';}
+ function currentActivity(){
+  const a=state?.active;
+  if(!a)return 'Your adventure is ready. Choose a skill or explore Overnia.';
+  if(a.type==='skill')return '⚡ Currently training '+(SKILLS[a.skill]?.actions?.[a.index]?.name||a.skill)+' · '+Math.floor(state.progress||0)+'%';
+  if(a.type==='raid')return '⛰️ Raid in progress';
+  if(a.type==='combat')return '⚔️ Fighting '+(MONSTERS[state.monsterIndex]?.name||'a monster');
+  return 'Continue your adventure';
+ }
+ function showHome(){
+  try{save()}catch(e){console.warn('Home save:',e)}
+  $('homeCharacter').textContent=inDev()?'🧪 Dev Character':'🛡️ Main Character';
+  $('homeStats').textContent='Total level '+totalSkillLevel()+' · Combat level '+combatLevel()+' · '+fmt(count('Coins'))+' GP';
+  $('homeActivity').textContent=currentActivity();
+  $('homeFocusMode').checked=!!focusModeEnabled;
+  $('homeSettings').hidden=true;
+  setStatus('');home.hidden=false;document.body.classList.add('home-screen-open');
+ }
+ function closeHome(){home.hidden=true;document.body.classList.remove('home-screen-open')}
+ function gameView(view){closeHome();document.body.classList.remove('mobile-menu-home','mobile-equipment');navigate(view)}
+ function resume(){const a=state?.active;gameView(a?.type==='skill'?a.skill:a?.type==='combat'?'combat':a?.type==='raid'?'raid':'skills')}
+ $('homeLaunch').addEventListener('click',showHome);
+ $('homeContinue').addEventListener('click',resume);
+ document.addEventListener('click',e=>{if(e.target.closest('[data-home-open]')){e.preventDefault();showHome()}});
+ $('homeFocusMode').addEventListener('change',e=>{if(!!focusModeEnabled!==e.target.checked)toggleFocusMode();setStatus('Settings updated.')});
+ home.addEventListener('click',e=>{
+  const b=e.target.closest('[data-home-action]');if(!b)return;
+  const act=b.dataset.homeAction;
+  switch(act){
+   case 'save':$('saveBtn').click();setStatus('✓ Local character saved.');break;
+   case 'cloud':if($('cloudSaveBtn').hidden){$('onlineOpen').click();setStatus('Sign in to use cloud saves.');}else{$('cloudSaveBtn').click();setStatus('Cloud save requested. Check the account sync status.');}break;
+   case 'export':$('exportBtn').click();setStatus('Backup download requested.');break;
+   case 'import':$('importBtn').click();setStatus('Choose a saved .json backup to import.');break;
+   case 'account':$('onlineOpen').click();break;
+   case 'settings':$('homeSettings').hidden=false;$('homeSettings').scrollIntoView({block:'nearest',behavior:'smooth'});break;
+   case 'settings-close':$('homeSettings').hidden=true;break;
+   case 'menu':closeHome();document.body.classList.remove('mobile-equipment');document.body.classList.add('mobile-menu-home');renderMobileHomeNav();if(innerWidth>650)navigate('skills');window.scrollTo(0,0);break;
+   case 'skills':case 'combat':case 'world':gameView(act);break;
+  }
+ });
+ // Welcome screen appears on every fresh app launch. Game state has already been restored by boot().
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',showHome,{once:true});else showHome();
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script><script id="overnia-pwa-registration">
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(err =>

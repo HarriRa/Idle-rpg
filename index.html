@@ -1581,6 +1581,25 @@ button:not(:disabled):active{transform:translateY(1px)}
  body:has(#mobileActionCard) #mobileActionDirectory .mobile-directory-scroll{max-height:45dvh}
 }
 </style>
+<style id="overnia-mobile-combat-equipment-fix">
+@media(max-width:700px){
+ /* The combat card hides the normal sidebar. Equipment intentionally takes over the view. */
+ body.mobile-equipment:has(#mobileCombatCard) .panel.main{display:none!important}
+ body.mobile-equipment:has(#mobileCombatCard) .panel.right,
+ body.focus-mode.mobile-equipment:has(#mobileCombatCard) .panel.right{
+  display:block!important;position:relative!important;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important;
+  width:100%!important;height:100%!important;max-height:none!important;overflow:auto!important;
+  grid-column:1!important;grid-row:1!important;transform:none!important;visibility:visible!important;
+  pointer-events:auto!important;z-index:3!important;border-radius:12px!important;
+ }
+ body.mobile-equipment #mobileEquipmentBack{display:block!important;width:100%;margin:0 0 9px;padding:11px!important;text-align:left;
+  border:1px solid #809c73;background:#354e3c;color:#f5e6c7;border-radius:9px;font-weight:800}
+ body.mobile-equipment #mobileEquipmentBack[hidden]{display:block!important}
+ body.mobile-equipment .panel.right{overscroll-behavior:auto}
+ .mobile-combat-controls{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+ .mobile-combat-controls button{font-size:11px!important;padding:10px 3px!important;min-width:0}
+}
+</style>
 </head>
 <body class="mobile-menu-home"><div id="onlineOverlay" class="online-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onlineTitle"><div class="online-dialog"><div class="online-heading"><h2 id="onlineTitle">🌐 Overnia Online</h2><button type="button" id="onlineClose" aria-label="Close">✕</button></div><p class="online-intro">Play freely as a guest, or sign in to sync your Main character. Guest saves remain on this device.</p><div id="onlineSetup"><label>Supabase Project URL<input id="onlineUrl" type="url" placeholder="https://your-project.supabase.co" autocomplete="off"></label><label>Supabase publishable / anon key<input id="onlineKey" type="text" placeholder="sb_publishable_... or anon key" autocomplete="off"></label><button id="onlineConnect" type="button">Connect project</button><p class="online-help">Only use the public publishable/anon key. NEVER paste a service_role or secret key here.</p></div><div id="onlineAuth" hidden><label>Email<input id="onlineEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="onlinePassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password"></label><div class="online-actions"><button type="button" id="onlineSignUp">Create account</button><button type="button" id="onlineSignIn">Sign in</button></div></div><div id="onlineLogged" hidden><p id="onlineIdentity"></p><p id="onlineSyncState" class="online-help">Checking cloud save…</p><p class="online-help">Main auto-sync runs while signed in. Dev is always local. If local and cloud saves differ, choose which one to keep. The server does not yet validate XP or loot.</p><div class="online-actions"><button type="button" id="onlineDownload">⬇️ Restore cloud manually</button><button type="button" id="onlineSignOut">Sign out</button></div></div><p id="onlineStatus" class="online-status" role="status"></p><div id="onlineConflict" class="online-conflict" hidden></div></div></div>
 <header><button type="button" id="onlineOpen" class="online-launch">🌐 Account</button><div><h1>🌄 Overnia Idle RPG <span class="version">v5.6 · Polish & Stability</span></h1><div class="stats" id="summary"></div></div><div class="top-controls"><div class="profile-switch" role="group" aria-label="Character profile"><button type="button" id="mainProfileBtn" class="active" aria-pressed="true">🛡️ Main</button><button type="button" id="devProfileBtn" aria-pressed="false">🧪 Dev</button></div><button id="focusModeBtn" type="button" aria-pressed="false" title="Switch between fixed workspace and classic scrolling layout">🎯 Focus Mode</button><button id="devToolsBtn" type="button" hidden>🛠 Dev Tools</button><button id="saveBtn">💾 Save</button><button id="cloudSaveBtn" type="button" hidden title="Save Main to cloud">☁️ Cloudsave</button><button id="exportBtn">⬇ Export</button><button id="importBtn">⬆ Import</button><button id="resetBtn">↺ Reset</button><input type="file" id="fileInput" accept=".json,application/json" hidden></div><span id="petStatus" class="pet-status" aria-live="polite" style="display:block;width:max-content;max-width:95%;margin:6px 14px">🐾 No pet summoned</span></header>
@@ -1591,7 +1610,7 @@ button:not(:disabled):active{transform:translateY(1px)}
 <button type="button" data-nav="world">🗺️ World</button><button type="button" data-nav="skills">📊 Skills</button><button type="button" data-nav="combat">⚔️ Combat</button><button type="button" data-nav="raid">⛰️ Raid</button><button type="button" data-nav="bank">🏦 Bank</button><button type="button" data-nav="journal">📜 Journal <span id="quickReady"></span></button>
  <span class="quick-nav-divider" aria-hidden="true"></span><div id="favoriteQuickNav" class="quick-favorites" aria-label="Pinned pages"></div><button type="button" id="pinCurrentView" data-pin-current title="Pin the current page to quick navigation" aria-pressed="false">☆ Pin page</button>
 </nav><div id="focusToolbar" class="focus-toolbar" hidden><label for="focusViewSelect">🧭 Menu</label><select id="focusViewSelect" aria-label="Choose game menu"></select><button type="button" id="focusOpenGear" title="Open equipment panel">⚔️ Gear</button></div><div id="main"></div></main>
-<aside class="panel right" id="focusSidebar" aria-label="Bank, Equipment and Potions"><div class="focus-drawer-heading"><strong id="focusDrawerTitle">🏦 Your Bank</strong><button id="focusCloseBtn" type="button" aria-label="Close side panel">✕</button></div><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">⚔️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><details id="activityLogDetails" class="activity-log-details" open><summary>📜 Activity log</summary><div class="log" id="log" aria-live="polite"></div></details></aside>
+<aside class="panel right" id="focusSidebar" aria-label="Bank, Equipment and Potions"><div class="focus-drawer-heading"><strong id="focusDrawerTitle">🏦 Your Bank</strong><button id="focusCloseBtn" type="button" aria-label="Close side panel">✕</button></div><button id="mobileEquipmentBack" type="button" hidden>‹ Back to Combat</button><div class="tabs"><button id="bankTab" class="selected">🏦 Bank</button><button id="gearTab">⚔️ Equipment</button><button id="potionTab">🧪 Potions</button></div><div id="sidebar"></div><details id="activityLogDetails" class="activity-log-details" open><summary>📜 Activity log</summary><div class="log" id="log" aria-live="polite"></div></details></aside>
 </div><div id="focusScrim" class="focus-scrim" hidden></div><nav id="focusDock" class="focus-dock" aria-label="Focus Mode shortcuts" hidden><button type="button" data-focus-nav="skills">📊<span>Skills</span></button><button type="button" data-focus-nav="combat">⚔️<span>Combat</span></button><button type="button" data-focus-sidebar="bank">🏦<span>Bank</span></button><button type="button" data-focus-sidebar="gear">🛡️<span>Gear</span></button><button type="button" data-focus-sidebar="potions">🧪<span>Potions</span></button></nav><div class="toast" id="toast" role="status"></div>
 <div class="gear-dialog-overlay" id="gearOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="gearDialogTitle"><div class="gear-dialog"><div class="gear-dialog-heading"><div><div class="eyebrow">Equipment manager</div><h2 id="gearDialogTitle">Choose equipment</h2></div><button type="button" class="gear-dialog-close" data-gear-close aria-label="Close equipment picker">×</button></div><div id="gearDialogContent"></div></div></div>
 <div class="monster-inspect-overlay" id="monsterInspectOverlay" hidden role="dialog" aria-modal="true" aria-labelledby="monsterInspectTitle"><div class="monster-inspect-dialog"><div class="between"><h2 id="monsterInspectTitle">Monster details</h2><button type="button" data-inspect-close aria-label="Close monster details">×</button></div><div id="monsterInspectContent"></div></div></div>
@@ -5373,7 +5392,7 @@ function renderMobileCombat(){
  const healing=food&&state.hp<maxHp();
  return `<section class="mobile-combat-card" id="mobileCombatCard" aria-label="Selected combat target">
   <div class="mobile-combat-top"><span>⚔️ Combat · Level ${combatLevel()}</span><span>📍 ${esc(OVERNIA_PLACE_BY_ID[state.world.location]?.short||'Overnia')}</span></div>
-  <div class="mobile-combat-controls"><button type="button" data-mobile-combat-settings aria-expanded="${document.body.classList.contains('mobile-combat-settings-open')}">⚙️ Combat Settings</button><button type="button" data-mobile-insta-eat ${healing?'':'disabled'}>${food?`🍗 Insta Eat · ×${fmt(count(food[0]))}`:'🍗 No food'}</button></div>
+  <div class="mobile-combat-controls"><button type="button" data-mobile-combat-settings aria-expanded="${document.body.classList.contains('mobile-combat-settings-open')}">⚙️ Combat Settings</button><button type="button" data-mobile-combat-equipment>🛡️ Equipment</button><button type="button" data-mobile-insta-eat ${healing?'':'disabled'}>${food?`🍗 Insta Eat · ×${fmt(count(food[0]))}`:'🍗 No food'}</button></div>
   <div class="mobile-combat-switch"><button type="button" data-mobile-combat-step="-1" aria-label="Previous monster" ${pos===0?'disabled':''}>‹</button><div class="mobile-combat-title"><strong>${esc(m.name)}</strong><small>${pos+1} / ${choices.length} · Monster Lv ${m.level}</small></div><button type="button" data-mobile-combat-step="1" aria-label="Next monster" ${pos===choices.length-1?'disabled':''}>›</button></div>
   <div class="mobile-combat-hero"><span class="mobile-combat-icon" role="img" aria-label="${esc(m.name)}">${monsterIcon(m)}</span><div class="mobile-combat-hp"><div><b>☠️ Monster HP</b><b data-mobile-monster-hp>${fmt(Math.ceil(hp))} / ${fmt(m.hp)}</b></div><div class="mobile-combat-hp-track"><span class="mobile-combat-hp-fill" data-mobile-monster-fill style="width:${(hp/m.hp*100).toFixed(2)}%"></span></div></div></div>
   <div class="mobile-combat-facts"><span><small>Monster level</small><b>${m.level}</b></span><span><small>Max hit</small><b>${fmt(m.maxHit)}</b></span><span><small>Weakness</small><b>${weaknessLabel(m.weakness)}</b></span></div>
@@ -6117,6 +6136,11 @@ function handleClick(e){
   for(const node of document.querySelectorAll('[data-world-section-tab]')){const active=node.dataset.worldSectionTab===section;node.classList.toggle('is-active',active);node.setAttribute('aria-pressed',String(active));}
   return;
  }
+ if(b.hasAttribute('data-mobile-combat-equipment')){
+  closeFocusDrawer();document.body.classList.remove('mobile-combat-settings-open');
+  ui.sidebarTab='gear';renderSidebar();document.body.classList.add('mobile-equipment');
+  window.scrollTo(0,0);return;
+ }
  if(b.hasAttribute('data-mobile-combat-settings')){
   const open=document.body.classList.toggle('mobile-combat-settings-open');
   b.setAttribute('aria-expanded',String(open));
@@ -6406,6 +6430,11 @@ el('sidebar').addEventListener('change',handleInput);
 el('mobileSelect').onchange=ev=>navigate(ev.target.value);
 el('stopBtn').onclick=()=>stop();
 el('bankTab').onclick=()=>openFocusSidebar('bank');
+el('mobileEquipmentBack').onclick=()=>{
+ document.body.classList.remove('mobile-equipment');
+ if(ui.view!=='combat')navigate('combat');
+ window.scrollTo(0,0);
+};
 el('gearTab').onclick=()=>openFocusSidebar('gear');
 el('potionTab').onclick=()=>openFocusSidebar('potions');
 el('focusModeBtn').onclick=toggleFocusMode;

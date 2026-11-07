@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#101827">
-<title>Overnia Idle RPG – A Living World</title>
+<meta name="overnia-content-sha256" content="24de5dcd6d1801853b9cca846ac4405b51dc67f53eeeb7f84bf5a91792c88043"><title>Overnia Idle RPG – A Living World</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
@@ -1282,6 +1282,14 @@ body.focus-mode #toast{z-index:150;pointer-events:none}
 .home-launch{position:fixed;right:12px;top:calc(10px + env(safe-area-inset-top));z-index:69;background:#2a4c3d!important;border:1px solid #a4c79d!important;border-radius:22px!important;padding:8px 12px!important;font-size:12px!important;color:#f8edcf!important;box-shadow:0 3px 10px #0006}
 @media(max-width:650px){body:not(.mobile-menu-home) #homeLaunch{display:block!important}body.mobile-menu-home #homeLaunch{display:none!important}.home-wrap{gap:12px}.home-card{padding:13px}.home-brand{padding-top:5px}body:not(.mobile-menu-home) .layout{padding-bottom:calc(66px + env(safe-area-inset-bottom))}#overniaHome{padding-top:calc(16px + env(safe-area-inset-top))}}
 @media(min-width:651px){#homeLaunch{display:block}#overniaHome{display:block}}
+
+
+/* Optional in-game update alert; does not interrupt gameplay or force reload. */
+#overniaUpdateNotice[hidden]{display:none!important}
+#overniaUpdateNotice{position:fixed;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:210;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 24px);border:1px solid #a4c799;border-radius:12px;background:#263b30;color:#f5efda;padding:9px 10px 9px 14px;box-shadow:0 8px 24px #0009;font-size:12px;font-weight:750}
+#overniaUpdateRefresh{display:grid;place-items:center;width:42px;height:42px;min-height:42px;flex:none;font-size:25px;line-height:1;border:1px solid #92b88b;border-radius:10px;background:#385b43;color:#f4ffea;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+#overniaUpdateRefresh:disabled{opacity:.5}
+@media(max-width:650px){#overniaUpdateNotice{bottom:calc(70px + env(safe-area-inset-bottom));left:12px;right:12px;justify-content:space-between}}
 
 </style><style id="overnia-v53-quick-eat-style">
 .over-arena-quick-eat{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;padding:9px 8px;margin-top:9px;background:#252a25;border:1px solid #776b4d;border-radius:9px}
@@ -7088,4 +7096,67 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.
   });
 }
 </script>
-</body></html>
+<aside id="overniaUpdateNotice" hidden aria-live="polite"><span>A new version available</span><button id="overniaUpdateRefresh" type="button" aria-label="Save and refresh to new version" title="Save and refresh">↻</button></aside><script id="overnia-update-checker">
+(() => {
+  'use strict';
+  // Compare bytes of the deployed game (with digest field normalized) to this loaded build.
+  // Unlike a manual version label, this detects *any* future change to index.html.
+  const HASH_PLACEHOLDER = '__OVERNIA_SHA256__';
+  const hashTag = /(<meta\s+name="overnia-content-sha256"\s+content=")[^"]*(")/i;
+  const currentHash = document.querySelector('meta[name="overnia-content-sha256"]')?.content;
+  const notice = document.getElementById('overniaUpdateNotice');
+  const refresh = document.getElementById('overniaUpdateRefresh');
+  let pending = false;
+  let checking = false;
+  let lastChecked = 0;
+  function hex(buffer){return Array.from(new Uint8Array(buffer),b=>b.toString(16).padStart(2,'0')).join('');}
+  async function checkForUpdate(){
+    if(pending || checking || document.hidden || !navigator.onLine || !crypto?.subtle) return;
+    checking = true;
+    try {
+      const url = new URL('./index.html',location.href);
+      url.searchParams.set('overnia_update_check','1');
+      const response = await fetch(url.href,{cache:'no-store',credentials:'same-origin'});
+      if(!response.ok) return;
+      const html = await response.text();
+      if(!hashTag.test(html)) return; // Never prompt for unrelated/error HTML.
+      const canonical = html.replace(hashTag, '$1'+HASH_PLACEHOLDER+'$2');
+      const digest = await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical));
+      if(hex(digest) !== currentHash){ pending = true;notice.hidden = false; }
+    }catch(err){console.debug('Overnia update check skipped:',err)}
+    finally{checking=false;lastChecked=Date.now()}
+  }
+  function safeSaveAndRefresh(){
+    if(!pending || refresh.disabled) return;
+    // We must not reload during offline catch-up or while a new save is being loaded.
+    if(typeof offlineRunning !== 'undefined' && offlineRunning){
+      if(typeof toast === 'function') toast('Finishing offline progress. Try again shortly.');
+      return;
+    }
+    refresh.disabled = true;
+    try {
+      if(typeof state === 'undefined' || !state || !state.xp || !state.bank) throw Error('Character is not ready.');
+      if(typeof profileSaveKey !== 'function') throw Error('Save system is not ready.');
+      const key = profileSaveKey();
+      const snapshot = JSON.stringify({...state,lastSaved:Date.now()});
+      localStorage.setItem(key,snapshot);
+      if(localStorage.getItem(key)!==snapshot) throw Error('Could not verify saved progress.');
+      // Do not remove local save data or alter cloud ownership; the existing cloud sync stays intact.
+      // Page reload only after successful, verified synchronous storage write.
+      location.reload();
+    }catch(err){
+      console.error('Overnia refresh cancelled to protect progress:',err);
+      if(typeof toast==='function') toast('Could not save progress. Update cancelled.');
+      refresh.disabled=false;
+    }
+  }
+  refresh.addEventListener('click',safeSaveAndRefresh);
+  // Check on launch, when returning to the app, and occasionally during long sessions.
+  setTimeout(checkForUpdate,25000);
+  setInterval(checkForUpdate,300000);
+  document.addEventListener('visibilitychange',()=>{
+    if(!document.hidden && Date.now()-lastChecked>20000) checkForUpdate();
+  });
+  window.addEventListener('online',()=>{if(Date.now()-lastChecked>20000)checkForUpdate()});
+})();
+</script></body></html>

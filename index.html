@@ -6940,7 +6940,7 @@ async function cloudAutoSync(){
   if(remote?.updated_at!==cloudRemoteUpdated){cloudReadyUser=null;cloudSyncLabel('⚠ Cloud changed on another device. Choose which save to keep.');await cloudPrepare();return}
   const ok=await cloudWrite(payload,remote?.updated_at||null);
   if(!ok){cloudReadyUser=null;await cloudPrepare();return}
-  cloudLastSync=Date.now();cloudSyncLabel('✓ Main synced '+new Date().toLocaleTimeString()+' · Dev stays local');
+  cloudLastSync=Date.now();cloudSyncLabel('✓ Main synced '+new Date().toLocaleTimeString()+' · Dev stays local');return true;
  }catch(err){cloudSyncLabel('⚠ Sync failed. Local Main is safe; retrying later.');console.warn('Cloud sync failed',err)}finally{cloudUploadBusy=false}
 }
 setInterval(()=>{cloudAutoSync().catch(console.warn)},15000);
@@ -6991,8 +6991,17 @@ async function cloudSaveNow(){
  // Uses the same remote revision check as auto-sync. Never silently overwrite
  // a cloud save changed on another device.
  cloudLastSync=0;
- await cloudAutoSync();
- onlineStatus(cloudReadyUser===onlineUser?.id?'✓ Cloudsave complete.':'Cloud save needs attention. Check the save selection.');
+ const completed=await cloudAutoSync();
+ if(completed===true){
+  onlineStatus('✓ Cloudsave completed');
+  toast('Cloudsave completed');
+  const homeStatus=document.getElementById('homeStatus');
+  if(homeStatus)homeStatus.textContent='✓ Cloudsave completed';
+ }else{
+  onlineStatus('Cloud save needs attention. Check the account sync status.');
+  const homeStatus=document.getElementById('homeStatus');
+  if(homeStatus)homeStatus.textContent='Cloud save needs attention. Check the account sync status.';
+ }
 }
 async function onlineDownload(){
  if(!onlineUser)throw Error('Sign in first.');
@@ -7073,7 +7082,7 @@ window.IdleRPGDebug={enemyReferenceMaxHit,enemyDamageIdentity,combatXpMultiplier
   const act=b.dataset.homeAction;
   switch(act){
    case 'save':$('saveBtn').click();setStatus('✓ Local character saved.');break;
-   case 'cloud':if($('cloudSaveBtn').hidden){$('onlineOpen').click();setStatus('Sign in to use cloud saves.');}else{$('cloudSaveBtn').click();setStatus('Cloud save requested. Check the account sync status.');}break;
+   case 'cloud':if($('cloudSaveBtn').hidden){$('onlineOpen').click();setStatus('Sign in to use cloud saves.');}else{$('cloudSaveBtn').click();setStatus('Saving to cloud…');}break;
    case 'export':$('exportBtn').click();setStatus('Backup download requested.');break;
    case 'import':$('importBtn').click();setStatus('Choose a saved .json backup to import.');break;
    case 'account':$('onlineOpen').click();break;

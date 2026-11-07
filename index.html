@@ -1967,13 +1967,13 @@ SKILLS.fletching.actions.push(
 for(const [wood,logs,level,xp,power,shafts] of FLETCH_WOODS){
  const bow=wood+' Bow';
  SKILLS.fletching.actions.push(
-  A('Carve Shafts from '+wood+' Logs','Normal Arrow Shafts',level,xp,{[logs]:1},'Shafts',{quantity:shafts}),
+  A('Carve Shafts from '+wood+' Logs','Normal Arrow Shafts',level,xp*.45,{[logs]:1},'Shafts',{quantity:shafts}),
   A('Fletch '+bow,bow,Math.min(99,level+3),xp*2,{[logs]:2,[level>=40?'Reinforced Bowstring':'Bowstring']:1},'Bows')
  );
  registerGear(bow,{slot:'weapon',combatType:'ranged',requiredSkill:'ranged',requiredLevel:Math.max(1,level-3),rangedAccuracy:power,rangedPower:Math.ceil(power*.25)});
 }
 for(const [metal,level,xp] of [['Bronze',1,20],['Iron',15,45],['Steel',30,70],['Mithril',50,120],['Gallium',65,190],['Oxedo',80,270],['Dragonite',95,470]]){
- SKILLS.fletching.actions.push(A('Make '+metal+' Arrows',metal+' Arrows',level,xp,
+ SKILLS.fletching.actions.push(A('Make '+metal+' Arrows',metal+' Arrows',level,Math.round(xp*1.2),
   {'Normal Arrow Shafts':10,[metal+' Arrowheads']:10,'Feather':10},'Arrows',{quantity:10}));
 }
 SKILLS.fletching.actions.push(

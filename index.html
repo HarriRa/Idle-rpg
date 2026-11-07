@@ -3503,6 +3503,16 @@ const SAVE_KEY='idle-rpg-v2-save'; // IMPORTANT: preserve existing Main save key
 const DEV_SAVE_KEY='idle-rpg-v2-dev-save'; // Different slot: tools never write to Main.
 const PROFILE_PREF_KEY='idle-rpg-selected-profile';
 let currentProfile='main';
+// Local convenience lock only. A PIN embedded in browser JavaScript is not secure authentication.
+const DEV_ACCESS_PIN='4034';
+let devUnlocked=false;
+function requestDevPin(){
+ if(devUnlocked)return true;
+ const pin=prompt('🔒 Enter developer PIN to access Dev mode:');
+ if(pin===null)return false;
+ if(pin.trim()!==DEV_ACCESS_PIN){toast('Incorrect developer PIN.');return false;}
+ devUnlocked=true;return true;
+}
 const profileSaveKey=()=>currentProfile==='dev'?DEV_SAVE_KEY:SAVE_KEY;
 const inDev=()=>currentProfile==='dev';
 const EQUIP_SLOTS=['weapon','shield','head','body','legs','gloves','cape','quiver','amulet','ring','axe','pickaxe'];
@@ -6654,8 +6664,10 @@ function updateProfileUI(){
 }
 async function switchProfile(next){
  if(!['main','dev'].includes(next)||next===currentProfile||offlineRunning)return;
+ if(next==='dev'&&!requestDevPin())return;
  save(); // Save only the current profile before changing keys.
  currentProfile=next;
+ if(next==='main')devUnlocked=false;
  try{localStorage.setItem(PROFILE_PREF_KEY,next)}catch(e){console.warn(e)}
  clearActivityFeed();closeFocusDrawer();
  el('afkOverlay').hidden=true;el('devOverlay').hidden=true;
@@ -6669,7 +6681,7 @@ async function switchProfile(next){
 }
 function devStatus(message){el('devStatus').textContent=message;toast(message)}
 function showDevTools(){
- if(!inDev())return;
+ if(!inDev()||!requestDevPin())return;
  el('devSpeed').value=String([1000,500,250,100].includes(state.actionMs)?state.actionMs:1000);
  el('devStatus').textContent='';el('devOverlay').hidden=false;
 }
@@ -6689,7 +6701,7 @@ function devPositiveNumber(id,max){
  return Number.isSafeInteger(n)&&n>=1&&n<=max?n:null;
 }
 function handleDevAction(action){
- if(!inDev()||offlineRunning)return; // Developer controls must never mutate Main.
+ if(!inDev()||!devUnlocked||offlineRunning)return; // Developer controls must never mutate Main.
  const skill=el('devSkill').value;
  if(action==='set-level'){
   const lvl=devPositiveNumber('devLevel',99);
@@ -6953,7 +6965,7 @@ window.addEventListener('load',setupOnlineUI,{once:true});
 window.addEventListener('pagehide',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save();});
 async function boot(){
- try{currentProfile=localStorage.getItem(PROFILE_PREF_KEY)==='dev'?'dev':'main';focusModeEnabled=localStorage.getItem(FOCUS_UI_KEY)!=='off';}catch{currentProfile='main';focusModeEnabled=true}
+ try{currentProfile='main';localStorage.setItem(PROFILE_PREF_KEY,'main');focusModeEnabled=localStorage.getItem(FOCUS_UI_KEY)!=='off';}catch{currentProfile='main';focusModeEnabled=true}
  restore();processHireling(Date.now());render();applyFocusMode();if(state.active)await catchUpOffline();lastTick=performance.now();requestAnimationFrame(tick)
 }
 boot();
